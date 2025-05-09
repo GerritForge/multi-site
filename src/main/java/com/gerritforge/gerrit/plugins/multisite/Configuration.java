@@ -494,8 +494,12 @@ public class Configuration {
     private static final String RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS =
         "maxRandomWaitBeforeReloadLocalVersionMs";
 
-    private static final int MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT = 1000;
-    private static final int RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT = 1000;
+    private static final int FETCH_FILTER_MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT = 0;
+    private static final int
+        FETCH_FILTER_RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT = 0;
+    private static final int PUSH_FILTER_MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT = 1000;
+    private static final int
+        PUSH_FILTER_RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT = 1000;
     private final Supplier<Integer> fetchMinWaitBeforeReloadLocalVersionMs;
     private final Supplier<Integer> fetchWaitBeforeReloadLocalVersionMs;
     private final Supplier<Integer> pushMinWaitBeforeReloadLocalVersionMs;
@@ -510,7 +514,7 @@ public class Configuration {
                           REPLICATION_FILTER_SECTION,
                           REPLICATION_FETCH_FILTER_SUBSECTION,
                           MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS,
-                          MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
+                          FETCH_FILTER_MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
       fetchWaitBeforeReloadLocalVersionMs =
           memoize(
               () ->
@@ -519,7 +523,7 @@ public class Configuration {
                           REPLICATION_FILTER_SECTION,
                           REPLICATION_FETCH_FILTER_SUBSECTION,
                           RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS,
-                          RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
+                          FETCH_FILTER_RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
       pushMinWaitBeforeReloadLocalVersionMs =
           memoize(
               () ->
@@ -528,7 +532,7 @@ public class Configuration {
                           REPLICATION_FILTER_SECTION,
                           REPLICATION_PUSH_FILTER_SUBSECTION,
                           MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS,
-                          MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
+                          PUSH_FILTER_MIN_WAIT_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
       pushWaitBeforeReloadLocalVersionMs =
           memoize(
               () ->
@@ -537,7 +541,7 @@ public class Configuration {
                           REPLICATION_FILTER_SECTION,
                           REPLICATION_PUSH_FILTER_SUBSECTION,
                           RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS,
-                          RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
+                          PUSH_FILTER_RANDOM_WAIT_MAX_BOUND_BEFORE_RELOAD_LOCAL_VERSION_MS_DEFAULT));
     }
 
     public boolean isFetchFilterRandomSleepEnabled() {
