@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a226152b_cd840d51",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-08-11T19:23:26Z",
+      "side": 1,
+      "message": "Don\u0027t we need to add a new `copy_replication_remote_file` to each site for the new site3 + the site3 itself?",
+      "range": {
+        "startLine": 170,
+        "startChar": 2,
+        "endLine": 170,
+        "endChar": 30
+      },
+      "revId": "48ece7a503cf1af8c7497d57a39738d8d704672e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3be17a8_ed768784",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-08-11T19:23:26Z",
+      "side": 1,
+      "message": "```suggestion\nGERRIT_3_HTTPD_PORT\u003d${GERRIT_3_HTTPD_PORT:-\"18082\"}\n```",
+      "range": {
+        "startLine": 440,
+        "startChar": 44,
+        "endLine": 440,
+        "endChar": 49
+      },
+      "revId": "48ece7a503cf1af8c7497d57a39738d8d704672e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73013bc4_0b81a635",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-08-11T19:23:26Z",
+      "side": 1,
+      "message": "```suggestion\nGERRIT_3_SSHD_PORT\u003d${GERRIT_3_SSHD_PORT:-\"59418\"}\n```",
+      "range": {
+        "startLine": 443,
+        "startChar": 42,
+        "endLine": 443,
+        "endChar": 47
+      },
+      "revId": "48ece7a503cf1af8c7497d57a39738d8d704672e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
