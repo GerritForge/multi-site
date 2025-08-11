@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e03c050_9253904f",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T21:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afad4d4a_96bdf798",
+      "range": {
+        "startLine": 82,
+        "startChar": 2,
+        "endLine": 82,
+        "endChar": 6
+      },
+      "revId": "100df93395bc3128eb63200eb353e05dc208fc84",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "feba1f64_13751f94",
@@ -89,6 +113,30 @@
         "startChar": 12,
         "endLine": 83,
         "endChar": 39
+      },
+      "revId": "100df93395bc3128eb63200eb353e05dc208fc84",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab301dc_1874fc2c",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T21:47:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "feba1f64_13751f94",
+      "range": {
+        "startLine": 83,
+        "startChar": 2,
+        "endLine": 83,
+        "endChar": 11
       },
       "revId": "100df93395bc3128eb63200eb353e05dc208fc84",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
