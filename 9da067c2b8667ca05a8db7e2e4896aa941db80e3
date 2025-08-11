@@ -46,6 +46,29 @@
       },
       "revId": "9da067c2b8667ca05a8db7e2e4896aa941db80e3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ebb42d5_b27695b3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/validation/MultisiteReplicationFetchFilter.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2025-08-11T12:12:35Z",
+      "side": 1,
+      "message": "Nit: could use an immutable structure.\n\n`ImmutableSortedSet\u003cString\u003e sortedFetchRefs \u003d ImmutableSortedSet.copyOf(fetchRefs);`\n\nIt might be also useful to add a comment explaining why the ordering, something like: \"Lock refs in deterministic order to prevent deadlocks\"",
+      "range": {
+        "startLine": 100,
+        "startChar": 2,
+        "endLine": 101,
+        "endChar": 38
+      },
+      "revId": "9da067c2b8667ca05a8db7e2e4896aa941db80e3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
