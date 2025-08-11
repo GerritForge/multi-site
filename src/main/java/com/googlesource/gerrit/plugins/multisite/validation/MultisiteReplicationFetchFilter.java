@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
@@ -96,19 +97,21 @@ public class MultisiteReplicationFetchFilter extends AbstractMultisiteReplicatio
 
   @Override
   public Map<String, AutoCloseable> filterAndLock(String projectName, Set<String> fetchRefs) {
+    TreeSet<String> sortedFetchRefs = new TreeSet<>();
+    sortedFetchRefs.addAll(fetchRefs);
     Project.NameKey projectKey = Project.nameKey(projectName);
     Set<String> filteredRefs = new HashSet<>();
     Map<String, AutoCloseable> refLocks = new HashMap<>();
     try {
-      for (String ref : fetchRefs) {
+      for (String ref : sortedFetchRefs) {
         refLocks.put(ref, sharedRefDb.lockLocalRef(projectKey, ref));
       }
-      filteredRefs.addAll(filter(projectName, fetchRefs));
+      filteredRefs.addAll(filter(projectName, sortedFetchRefs));
     } catch (RefDbLockException lockException) {
       filteredRefs.clear();
       throw lockException;
     } finally {
-      for (String excludedRef : Sets.difference(fetchRefs, filteredRefs)) {
+      for (String excludedRef : Sets.difference(sortedFetchRefs, filteredRefs)) {
         AutoCloseable excludedLock = refLocks.remove(excludedRef);
         if (excludedLock != null) {
           try {
