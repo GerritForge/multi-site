@@ -26,6 +26,8 @@ import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.googlesource.gerrit.plugins.multisite.Configuration;
+import com.googlesource.gerrit.plugins.replication.pull.FetchOne;
+import com.googlesource.gerrit.plugins.replication.pull.FetchOne.LockFailureException;
 import com.googlesource.gerrit.plugins.replication.pull.ReplicationFetchFilter;
 import java.io.IOException;
 import java.util.Collections;
@@ -95,7 +97,7 @@ public class MultisiteReplicationFetchFilter extends AbstractMultisiteReplicatio
   }
 
   @Override
-  public Map<String, AutoCloseable> filterAndLock(String projectName, Set<String> fetchRefs) {
+  public Map<String, AutoCloseable> filterAndLock(String projectName, Set<String> fetchRefs) throws LockFailureException {
     Project.NameKey projectKey = Project.nameKey(projectName);
     Set<String> filteredRefs = new HashSet<>();
     Map<String, AutoCloseable> refLocks = new HashMap<>();
@@ -106,7 +108,7 @@ public class MultisiteReplicationFetchFilter extends AbstractMultisiteReplicatio
       filteredRefs.addAll(filter(projectName, fetchRefs));
     } catch (RefDbLockException lockException) {
       filteredRefs.clear();
-      throw lockException;
+      throw new LockFailureException(lockException.getMessage());
     } finally {
       for (String excludedRef : Sets.difference(fetchRefs, filteredRefs)) {
         AutoCloseable excludedLock = refLocks.remove(excludedRef);
