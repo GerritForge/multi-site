@@ -27,6 +27,8 @@ import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.googlesource.gerrit.plugins.multisite.Configuration;
+import com.googlesource.gerrit.plugins.replication.pull.FetchOne;
+import com.googlesource.gerrit.plugins.replication.pull.FetchOne.LockFailureException;
 import com.googlesource.gerrit.plugins.replication.pull.ReplicationFetchFilter;
 import java.io.IOException;
 import java.util.Collections;
@@ -97,7 +99,7 @@ public class MultisiteReplicationFetchFilter extends AbstractMultisiteReplicatio
   }
 
   @Override
-  public Map<String, AutoCloseable> filterAndLock(String projectName, Set<String> fetchRefs) {
+  public Map<String, AutoCloseable> filterAndLock(String projectName, Set<String> fetchRefs) throws LockFailureException {
     // Use a SortedSet to ensure that they are always locked in the same order and therefore
     // prevents potential deadlocks where multiple fetch tasks are mutually locking each other
     // by locking different refs in different orders.
@@ -112,7 +114,7 @@ public class MultisiteReplicationFetchFilter extends AbstractMultisiteReplicatio
       filteredRefs.addAll(filter(projectName, sortedFetchRefs));
     } catch (RefDbLockException lockException) {
       filteredRefs.clear();
-      throw lockException;
+      throw new LockFailureException("Unable to lock refs + " sortedFetchRefs + " for project " + projectName, lockException);
     } finally {
       for (String excludedRef : Sets.difference(sortedFetchRefs, filteredRefs)) {
         AutoCloseable excludedLock = refLocks.remove(excludedRef);
