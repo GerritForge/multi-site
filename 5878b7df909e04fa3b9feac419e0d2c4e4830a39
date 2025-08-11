@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5abf8e8_c7498ecf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T15:05:47Z",
+      "side": 1,
+      "message": "Also we should add the `Bug: Issue 437621330`",
+      "parentUuid": "830741f0_0c1a014b",
+      "revId": "5878b7df909e04fa3b9feac419e0d2c4e4830a39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "539feeef_b68569d9",
