@@ -78,6 +78,23 @@ function copy_config_files {
   done
 }
 
+function copy_replication_remote_file {
+  file=$SCRIPT_DIR/configs/replication.remote
+  file_name=$REPLICA_INSTANCE_ID.config
+
+  CONFIG_TEST_SITE=$1
+  export REPLICATION_HTTPD_PORT=$2
+  export REPLICATION_HOSTNAME=$3
+  export REPLICA_INSTANCE_ID=$4
+  export PULL_REPLICATION_URL=$(get_pull_replication_url $REPLICATION_HOSTNAME)
+  export PULL_REPLICATION_API_URL=$(get_pull_replication_api_url $REPLICATION_HOSTNAME)
+
+  echo "Replacing variables for file $file and copying to $CONFIG_TEST_SITE/replication/$file_name"
+
+  mkdir -p $CONFIG_TEST_SITE/replication
+  cat $file | envsubst | sed 's/#{name}#/${name}/g' > $CONFIG_TEST_SITE/replication/$file_name
+}
+
 function start_ha_proxy {
 
   export HA_GERRIT_CANONICAL_HOSTNAME=$GERRIT_CANONICAL_HOSTNAME
@@ -136,10 +153,11 @@ function deploy_config_files {
 
   # Set config SITE1
   copy_config_files $CONFIG_TEST_SITE_1 $GERRIT_SITE1_HTTPD_PORT $LOCATION_TEST_SITE_1 $GERRIT_SITE1_SSHD_PORT $GERRIT_SITE2_HTTPD_PORT $GERRIT_SITE1_HOSTNAME $GERRIT_SITE2_HOSTNAME $GERRIT_SITE1_REMOTE_DEBUG_PORT $GERRIT_SITE1_INSTANCE_ID $GERRIT_SITE2_INSTANCE_ID
-
+  copy_replication_remote_file $CONFIG_TEST_SITE_1 $GERRIT_SITE2_HTTPD_PORT $GERRIT_SITE2_HOSTNAME $GERRIT_SITE2_INSTANCE_ID
 
   # Set config SITE2
   copy_config_files $CONFIG_TEST_SITE_2 $GERRIT_SITE2_HTTPD_PORT $LOCATION_TEST_SITE_2 $GERRIT_SITE2_SSHD_PORT $GERRIT_SITE1_HTTPD_PORT $GERRIT_SITE1_HOSTNAME $GERRIT_SITE2_HOSTNAME $GERRIT_SITE2_REMOTE_DEBUG_PORT $GERRIT_SITE2_INSTANCE_ID $GERRIT_SITE1_INSTANCE_ID
+  copy_replication_remote_file $CONFIG_TEST_SITE_2 $GERRIT_SITE1_HTTPD_PORT $GERRIT_SITE1_HOSTNAME $GERRIT_SITE1_INSTANCE_ID
 }
 
 function is_docker_desktop {
