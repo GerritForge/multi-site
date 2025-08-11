@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "830741f0_0c1a014b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2025-08-11T15:00:45Z",
+      "side": 1,
+      "message": "Can you explain what is the issue if we don\u0027t do that?",
+      "revId": "5878b7df909e04fa3b9feac419e0d2c4e4830a39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f44fd15_aca3d208",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/validation/MultisiteReplicationFetchFilter.java",
         "patchSetId": 1
