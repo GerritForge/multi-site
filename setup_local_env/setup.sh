@@ -104,11 +104,14 @@ function start_ha_proxy {
 
   export HA_GERRIT_SITE1_HOSTNAME=$GERRIT_1_HOSTNAME
   export HA_GERRIT_SITE2_HOSTNAME=$GERRIT_2_HOSTNAME
+  export HA_GERRIT_SITE3_HOSTNAME=$GERRIT_3_HOSTNAME
   export HA_GERRIT_SITE1_HTTPD_PORT=$GERRIT_1_HTTPD_PORT
   export HA_GERRIT_SITE2_HTTPD_PORT=$GERRIT_2_HTTPD_PORT
+  export HA_GERRIT_SITE3_HTTPD_PORT=$GERRIT_3_HTTPD_PORT
 
   export HA_GERRIT_SITE1_SSHD_PORT=$GERRIT_1_SSHD_PORT
   export HA_GERRIT_SITE2_SSHD_PORT=$GERRIT_2_SSHD_PORT
+  export HA_GERRIT_SITE3_SSHD_PORT=$GERRIT_3_SSHD_PORT
 
   cat $SCRIPT_DIR/haproxy-config/haproxy.cfg | envsubst > $HA_PROXY_CONFIG_DIR/haproxy.cfg
 
@@ -150,6 +153,13 @@ function deploy_config_files {
   CONFIG_TEST_SITE_2=$LOCATION_TEST_SITE_2/etc
   GERRIT_SITE2_REMOTE_DEBUG_PORT="5006"
   GERRIT_SITE2_INSTANCE_ID="instance-2"
+  # SITE 3
+  GERRIT_SITE2_HOSTNAME=$7
+  GERRIT_SITE2_HTTPD_PORT=$8
+  GERRIT_SITE2_SSHD_PORT=$9
+  CONFIG_TEST_SITE_2=$LOCATION_TEST_SITE_3/etc
+  GERRIT_SITE2_REMOTE_DEBUG_PORT="5007"
+  GERRIT_SITE2_INSTANCE_ID="instance-3"
 
   # Set config SITE1
   copy_config_files $CONFIG_TEST_SITE_1 $GERRIT_SITE1_HTTPD_PORT $LOCATION_TEST_SITE_1 $GERRIT_SITE1_SSHD_PORT $GERRIT_SITE2_HTTPD_PORT $GERRIT_SITE1_HOSTNAME $GERRIT_SITE2_HOSTNAME $GERRIT_SITE1_REMOTE_DEBUG_PORT $GERRIT_SITE1_INSTANCE_ID $GERRIT_SITE2_INSTANCE_ID
@@ -424,10 +434,13 @@ export GERRIT_CANONICAL_HOSTNAME=${GERRIT_CANONICAL_HOSTNAME:-"localhost"}
 export GERRIT_CANONICAL_PORT=${GERRIT_CANONICAL_PORT:-"8080"}
 GERRIT_1_HOSTNAME=${GERRIT_1_HOSTNAME:-"localhost"}
 GERRIT_2_HOSTNAME=${GERRIT_2_HOSTNAME:-"localhost"}
+GERRIT_3_HOSTNAME=${GERRIT_3_HOSTNAME:-"localhost"}
 GERRIT_1_HTTPD_PORT=${GERRIT_1_HTTPD_PORT:-"18080"}
 GERRIT_2_HTTPD_PORT=${GERRIT_2_HTTPD_PORT:-"18081"}
+GERRIT_3_HTTPD_PORT=${GERRIT_3_HTTPD_PORT:-"18081"}
 GERRIT_1_SSHD_PORT=${GERRIT_1_SSHD_PORT:-"39418"}
 GERRIT_2_SSHD_PORT=${GERRIT_2_SSHD_PORT:-"49418"}
+GERRIT_3_SSHD_PORT=${GERRIT_3_SSHD_PORT:-"49418"}
 export REPLICATION_DELAY_SEC=${REPLICATION_DELAY_SEC:-"5"}
 export SSH_ADVERTISED_PORT=${SSH_ADVERTISED_PORT:-"29418"}
 HTTPS_ENABLED=${HTTPS_ENABLED:-"false"}
@@ -436,6 +449,7 @@ BROKER_TYPE=${BROKER_TYPE:-"kafka"}
 export COMMON_LOCATION=$DEPLOYMENT_LOCATION/gerrit_setup
 LOCATION_TEST_SITE_1=$COMMON_LOCATION/instance-1
 LOCATION_TEST_SITE_2=$COMMON_LOCATION/instance-2
+LOCATION_TEST_SITE_3=$COMMON_LOCATION/instance-3
 HA_PROXY_CONFIG_DIR=$COMMON_LOCATION/ha-proxy-config
 HA_PROXY_CERTIFICATES_DIR="$HA_PROXY_CONFIG_DIR/certificates"
 PROMETHEUS_CONFIG_DIR=$COMMON_LOCATION/prometheus-config
@@ -448,7 +462,7 @@ GLOBAL_REFDB_LIB_LOCATION=${GLOBAL_REFDB_LIB_LOCATION:-bazel-bin/plugins/global-
 export FAKE_NFS=$COMMON_LOCATION/fake_nfs
 
 if [ "$JUST_CLEANUP_ENV" = "true" ];then
-  cleanup_environment $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $COMMON_LOCATION
+  cleanup_environment $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $LOCATION_TEST_SITE_3 $COMMON_LOCATION
   exit 0
 fi
 
@@ -518,10 +532,10 @@ fi
 # New installation
 if [ $NEW_INSTALLATION = "true" ]; then
 
-  cleanup_environment $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $COMMON_LOCATION
+  cleanup_environment $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $LOCATION_TEST_SITE_3 $COMMON_LOCATION
 
   echo "Setting up directories"
-  mkdir -p $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $HA_PROXY_CERTIFICATES_DIR $FAKE_NFS
+  mkdir -p $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $LOCATION_TEST_SITE_3 $HA_PROXY_CERTIFICATES_DIR $FAKE_NFS
   java -jar $DEPLOYMENT_LOCATION/gerrit.war init --batch --no-auto-start --install-all-plugins --dev -d $LOCATION_TEST_SITE_1
 
   # Deploying TLS certificates
@@ -562,18 +576,19 @@ if [ $NEW_INSTALLATION = "true" ]; then
   # Replicating environment
   echo "Replicating environment"
   cp -fR $LOCATION_TEST_SITE_1/* $LOCATION_TEST_SITE_2
+  cp -fR $LOCATION_TEST_SITE_1/* $LOCATION_TEST_SITE_3
 
-  echo "Link pullreplication plugin"
-  ln -s $LOCATION_TEST_SITE_1/plugins/pull-replication.jar $LOCATION_TEST_SITE_1/lib/pull-replication.jar
-  ln -s $LOCATION_TEST_SITE_2/plugins/pull-replication.jar $LOCATION_TEST_SITE_2/lib/pull-replication.jar
+  for location_test_site in $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $LOCATION_TEST_SITE_3
+  do
+    echo "Link pullreplication plugin on $location_test_site"
+    ln -s $location_test_site/plugins/pull-replication.jar $location_test_site/lib/pull-replication.jar
 
-  echo "Link multi-site library to plugin directory"
-  ln -s $LOCATION_TEST_SITE_1/lib/multi-site.jar $LOCATION_TEST_SITE_1/plugins/multi-site.jar
-  ln -s $LOCATION_TEST_SITE_2/lib/multi-site.jar $LOCATION_TEST_SITE_2/plugins/multi-site.jar
+    echo "Link multi-site library to plugin directory on $location_test_site"
+    ln -s $location_test_site/lib/multi-site.jar $location_test_site/plugins/multi-site.jar
 
-  echo "Copy pull-replication plugin"
-  cp -f $DEPLOYMENT_LOCATION/pull-replication.jar $LOCATION_TEST_SITE_1/plugins/pull-replication.jar
-  cp -f $DEPLOYMENT_LOCATION/pull-replication.jar $LOCATION_TEST_SITE_2/plugins/pull-replication.jar
+    echo "Copy pull-replication plugin on $location_test_site"
+    cp -f $DEPLOYMENT_LOCATION/pull-replication.jar $location_test_site/plugins/pull-replication.jar
+  done
 
 fi
 
@@ -596,15 +611,14 @@ prepare_broker_data
 
 echo "Re-deploying configuration files"
 deploy_config_files $GERRIT_1_HOSTNAME $GERRIT_1_HTTPD_PORT $GERRIT_1_SSHD_PORT $GERRIT_2_HOSTNAME $GERRIT_2_HTTPD_PORT $GERRIT_2_SSHD_PORT
-echo "Move replication and delete-project plugins to /lib on gerrit site 1"
-mv $LOCATION_TEST_SITE_1/plugins/{replication,delete-project}.jar $LOCATION_TEST_SITE_1/lib/.
-echo "Starting gerrit site 1"
-$LOCATION_TEST_SITE_1/bin/gerrit.sh restart
-echo "Move replication plugin to /lib on gerrit site 2"
-mv $LOCATION_TEST_SITE_2/plugins/{replication,delete-project}.jar $LOCATION_TEST_SITE_2/lib/.
-echo "Starting gerrit site 2"
-$LOCATION_TEST_SITE_2/bin/gerrit.sh restart
 
+for location_test_site in $LOCATION_TEST_SITE_1 $LOCATION_TEST_SITE_2 $LOCATION_TEST_SITE_3
+do
+  echo "Move replication and delete-project plugins to /lib on gerrit $location_test_site"
+  mv $location_test_site/plugins/{replication,delete-project}.jar $location_test_site/lib/.
+  echo "Starting gerrit $location_test_site"
+  $location_test_site/bin/gerrit.sh restart
+done
 
 if [[ $(ps -ax | grep haproxy | grep "gerrit_setup/ha-proxy-config" | awk '{print $1}' | wc -l) -lt 1 ]];then
   echo "Starting haproxy"
@@ -622,10 +636,12 @@ echo
 echo "GERRIT HA-PROXY: $GERRIT_CANONICAL_WEB_URL"
 echo "GERRIT-1: http://$GERRIT_1_HOSTNAME:$GERRIT_1_HTTPD_PORT"
 echo "GERRIT-2: http://$GERRIT_2_HOSTNAME:$GERRIT_2_HTTPD_PORT"
+echo "GERRIT-3: http://$GERRIT_3_HOSTNAME:$GERRIT_3_HTTPD_PORT"
 echo "Prometheus: http://localhost:9090"
 echo
 echo "Site-1: $LOCATION_TEST_SITE_1"
 echo "Site-2: $LOCATION_TEST_SITE_2"
+echo "Site-3: $LOCATION_TEST_SITE_3"
 echo
 echo "$HTTPS_CLONE_MSG"
 echo
