@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce42f023_389747bb",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T21:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a226152b_cd840d51",
+      "range": {
+        "startLine": 170,
+        "startChar": 2,
+        "endLine": 170,
+        "endChar": 30
+      },
+      "revId": "48ece7a503cf1af8c7497d57a39738d8d704672e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3be17a8_ed768784",
@@ -47,6 +71,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5552ffad_8010ebba",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T21:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3be17a8_ed768784",
+      "range": {
+        "startLine": 440,
+        "startChar": 44,
+        "endLine": 440,
+        "endChar": 49
+      },
+      "revId": "48ece7a503cf1af8c7497d57a39738d8d704672e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73013bc4_0b81a635",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-08-11T19:23:26Z",
       "side": 1,
       "message": "```suggestion\nGERRIT_3_SSHD_PORT\u003d${GERRIT_3_SSHD_PORT:-\"59418\"}\n```",
+      "range": {
+        "startLine": 443,
+        "startChar": 42,
+        "endLine": 443,
+        "endChar": 47
+      },
+      "revId": "48ece7a503cf1af8c7497d57a39738d8d704672e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13bc5925_73c29ceb",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T21:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73013bc4_0b81a635",
       "range": {
         "startLine": 443,
         "startChar": 42,
