@@ -70,6 +70,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10c2cd32_19b5406c",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T21:44:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "672ede9e_a24df185",
+      "range": {
+        "startLine": 83,
+        "startChar": 12,
+        "endLine": 83,
+        "endChar": 39
+      },
+      "revId": "100df93395bc3128eb63200eb353e05dc208fc84",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1dc9e66_c2a865dc",
@@ -83,6 +107,30 @@
       "writtenOn": "2025-08-11T19:22:59Z",
       "side": 1,
       "message": "I believe this could just be `envsubst \u003c \"$template\"`",
+      "range": {
+        "startLine": 95,
+        "startChar": 2,
+        "endLine": 95,
+        "endChar": 22
+      },
+      "revId": "100df93395bc3128eb63200eb353e05dc208fc84",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f964289f_8c7260b8",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-11T21:44:53Z",
+      "side": 1,
+      "message": "Sure, they are equivalent. I\u0027d prefer to keep consistent with the previous one and there\u0027s no benefit in one vs. the other, they are the same thing.",
+      "parentUuid": "f1dc9e66_c2a865dc",
       "range": {
         "startLine": 95,
         "startChar": 2,
