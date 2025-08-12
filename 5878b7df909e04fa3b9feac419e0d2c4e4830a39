@@ -61,6 +61,48 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "af136ba0_32011ee3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1155599
+      },
+      "writtenOn": "2025-08-12T13:16:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69e205ef_c0608d0d",
+      "range": {
+        "startLine": 7,
+        "startChar": 6,
+        "endLine": 7,
+        "endChar": 26
+      },
+      "revId": "5878b7df909e04fa3b9feac419e0d2c4e4830a39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50bf7cf3_71cb4b3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1155599
+      },
+      "writtenOn": "2025-08-12T13:16:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5abf8e8_c7498ecf",
+      "revId": "5878b7df909e04fa3b9feac419e0d2c4e4830a39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "539feeef_b68569d9",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/validation/MultisiteReplicationFetchFilter.java",
         "patchSetId": 1
@@ -90,6 +132,30 @@
       "writtenOn": "2025-08-11T14:57:43Z",
       "side": 1,
       "message": "It would be best to also include the cause in the constructor.",
+      "range": {
+        "startLine": 111,
+        "startChar": 12,
+        "endLine": 111,
+        "endChar": 65
+      },
+      "revId": "5878b7df909e04fa3b9feac419e0d2c4e4830a39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81c3430e_f5812ee7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/validation/MultisiteReplicationFetchFilter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1155599
+      },
+      "writtenOn": "2025-08-12T13:16:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f44fd15_aca3d208",
       "range": {
         "startLine": 111,
         "startChar": 12,
