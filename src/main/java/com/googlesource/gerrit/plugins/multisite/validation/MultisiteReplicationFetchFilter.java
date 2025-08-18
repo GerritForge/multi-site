@@ -19,6 +19,7 @@ import static com.googlesource.gerrit.plugins.replication.pull.PullReplicationLo
 import com.gerritforge.gerrit.globalrefdb.GlobalRefDbLockException;
 import com.gerritforge.gerrit.globalrefdb.RefDbLockException;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDatabaseWrapper;
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Sets;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Project;
@@ -26,6 +27,7 @@ import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.googlesource.gerrit.plugins.multisite.Configuration;
+import com.googlesource.gerrit.plugins.replication.pull.FetchOne.LockFailureException;
 import com.googlesource.gerrit.plugins.replication.pull.ReplicationFetchFilter;
 import java.io.IOException;
 import java.util.Collections;
@@ -34,6 +36,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
@@ -96,20 +99,25 @@ public class MultisiteReplicationFetchFilter extends AbstractMultisiteReplicatio
 
   @Override
   public Map<String, AutoCloseable> filterAndLock(String projectName, Set<String> fetchRefs)
-      throws RefDbLockException {
+      throws LockFailureException {
+    // Use a SortedSet to ensure that they are always locked in the same order and therefore
+    // prevents potential deadlocks where multiple fetch tasks are mutually locking each other
+    // by locking different refs in different orders.
+    SortedSet<String> sortedFetchRefs = ImmutableSortedSet.copyOf(fetchRefs);
     Project.NameKey projectKey = Project.nameKey(projectName);
     Set<String> filteredRefs = new HashSet<>();
     Map<String, AutoCloseable> refLocks = new HashMap<>();
     try {
-      for (String ref : fetchRefs) {
+      for (String ref : sortedFetchRefs) {
         refLocks.put(ref, sharedRefDb.lockLocalRef(projectKey, ref));
       }
-      filteredRefs.addAll(filter(projectName, fetchRefs));
+      filteredRefs.addAll(filter(projectName, sortedFetchRefs));
     } catch (RefDbLockException lockException) {
       filteredRefs.clear();
-      throw lockException;
+      throw new LockFailureException(
+          "Unable to lock refs " + sortedFetchRefs + " for project " + projectName, lockException);
     } finally {
-      for (String excludedRef : Sets.difference(fetchRefs, filteredRefs)) {
+      for (String excludedRef : Sets.difference(sortedFetchRefs, filteredRefs)) {
         AutoCloseable excludedLock = refLocks.remove(excludedRef);
         if (excludedLock != null) {
           try {
