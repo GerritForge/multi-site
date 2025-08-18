@@ -1,0 +1,12 @@
+[remote]
+    $PULL_REPLICATION_URL
+    $PULL_REPLICATION_API_URL
+    fetch = +refs/*:refs/*
+    mirror = true
+    timeout = 600
+    rescheduleDelay = 15
+    replicationDelay = $REPLICATION_DELAY_SEC
+    createMissingRepositories = true
+    replicateProjectDeletions = true
+    replicateHiddenProjects = true
+    threads = 5
