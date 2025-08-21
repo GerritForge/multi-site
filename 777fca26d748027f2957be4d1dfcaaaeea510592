@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bbd820d_1d086c3e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/index/FetchRefReplicatedEventHandler.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2025-08-21T09:52:09Z",
+      "side": 1,
+      "message": "Avoid DRY in the merge up",
+      "range": {
+        "startLine": 77,
+        "startChar": 64,
+        "endLine": 77,
+        "endChar": 71
+      },
+      "revId": "777fca26d748027f2957be4d1dfcaaaeea510592",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
