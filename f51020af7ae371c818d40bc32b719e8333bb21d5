@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2773300d_ae583746",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-08-26T15:36:10Z",
+      "side": 1,
+      "message": "We also need to acquire the values",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 398,
+        "endChar": 4
+      },
+      "revId": "f51020af7ae371c818d40bc32b719e8333bb21d5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
