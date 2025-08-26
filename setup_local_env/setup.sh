@@ -302,6 +302,9 @@ function show_help {
   echo "[--gerrit2-httpd-port]          Gerrit Instance 2 http port; default 18081"
   echo "[--gerrit2-sshd-port]           Gerrit Instance 2 sshd port; default 49418"
   echo
+  echo "[--gerrit3-httpd-port]          Gerrit Instance 2 http port; default 18082"
+  echo "[--gerrit3-sshd-port]           Gerrit Instance 2 sshd port; default 59418"
+  echo
   echo "[--replication-delay]           Replication delay across the two instances in seconds"
   echo
   echo "[--just-cleanup-env]            Cleans up previous deployment; default false"
@@ -389,6 +392,11 @@ case "$1" in
     shift
     shift
   ;;
+  "--gerrit3-httpd-port" )
+         GERRIT_3_HTTPD_PORT=$2
+    shift
+    shift
+  ;;
   "--gerrit1-sshd-port" )
          GERRIT_1_SSHD_PORT=$2
     shift
@@ -396,6 +404,11 @@ case "$1" in
   ;;
   "--gerrit2-sshd-port" )
          GERRIT_2_SSHD_PORT=$2
+    shift
+    shift
+  ;;
+  "--gerrit3-sshd-port" )
+         GERRIT_3_SSHD_PORT=$2
     shift
     shift
   ;;
