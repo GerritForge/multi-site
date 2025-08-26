@@ -296,6 +296,9 @@ function show_help {
   echo "[--gerrit2-httpd-port]          Gerrit Instance 2 http port; default 18081"
   echo "[--gerrit2-sshd-port]           Gerrit Instance 2 sshd port; default 49418"
   echo
+  echo "[--gerrit3-httpd-port]          Gerrit Instance 2 http port; default 18082"
+  echo "[--gerrit3-sshd-port]           Gerrit Instance 2 sshd port; default 59418"
+  echo
   echo "[--replication-delay]           Replication delay across the two instances in seconds"
   echo
   echo "[--just-cleanup-env]            Cleans up previous deployment; default false"
