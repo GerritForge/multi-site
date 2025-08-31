@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b016947a_3c802e2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2025-08-31T07:28:28Z",
+      "side": 1,
+      "message": "```suggestion\nThe sleep was introduced as part of [1] and made configurable as part of\n```",
+      "revId": "faa815fe0cd6ff1519e50ba5373162d4e5819468",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
