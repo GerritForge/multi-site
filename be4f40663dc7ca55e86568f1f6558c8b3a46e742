@@ -22,6 +22,30 @@
       },
       "revId": "be4f40663dc7ca55e86568f1f6558c8b3a46e742",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4c8da63_1585ad94",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/Configuration.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-08-31T07:52:11Z",
+      "side": 1,
+      "message": "Ping @danielesassoli@gmail.com? We should check if we have push or pull replication installed and set the default to zero only for pull replication.",
+      "parentUuid": "8f023385_05f76fa9",
+      "range": {
+        "startLine": 453,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 94
+      },
+      "revId": "be4f40663dc7ca55e86568f1f6558c8b3a46e742",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
