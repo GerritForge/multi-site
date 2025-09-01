@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.multisite.forwarder.router;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.deleteproject.AllProjectChangesDeletedFromIndexEvent;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventHandler;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;
 import java.io.IOException;
@@ -42,6 +43,10 @@ public class StreamEventRouter implements ForwardedEventRouter<Event> {
        * It is better to risk to reindex once more rather than missing a reindexing event.
        */
       indexEventRouter.onRefReplicated((RefReplicationDoneEvent) sourceEvent);
+    }
+    if (AllProjectChangesDeletedFromIndexEvent.TYPE.equals(sourceEvent.getType())) {
+      streamEventHandler.handleAllProjectChangesDeletedFromIndexEvent(
+          ((AllProjectChangesDeletedFromIndexEvent) sourceEvent).getProjectNameKey());
     }
 
     streamEventHandler.dispatch(sourceEvent);

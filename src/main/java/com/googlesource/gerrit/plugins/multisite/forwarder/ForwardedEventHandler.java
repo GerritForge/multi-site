@@ -14,9 +14,11 @@
 
 package com.googlesource.gerrit.plugins.multisite.forwarder;
 
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventDispatcher;
+import com.google.gerrit.server.index.change.ChangeIndexCollection;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
@@ -36,12 +38,16 @@ public class ForwardedEventHandler {
 
   private final DynamicItem<EventDispatcher> dispatcher;
   private final OneOffRequestContext oneOffCtx;
+  private final ChangeIndexCollection indexes;
 
   @Inject
   public ForwardedEventHandler(
-      DynamicItem<EventDispatcher> dispatcher, OneOffRequestContext oneOffCtx) {
+      DynamicItem<EventDispatcher> dispatcher,
+      OneOffRequestContext oneOffCtx,
+      ChangeIndexCollection indexes) {
     this.dispatcher = dispatcher;
     this.oneOffCtx = oneOffCtx;
+    this.indexes = indexes;
   }
 
   /**
@@ -53,6 +59,16 @@ public class ForwardedEventHandler {
     try (ManualRequestContext ctx = oneOffCtx.open()) {
       log.debug("dispatching event {}", event.getType());
       dispatcher.get().postEvent(event);
+    }
+  }
+
+  public void handleAllProjectChangesDeletedFromIndexEvent(Project.NameKey projectNameKey) {
+    try (ManualRequestContext ctx = oneOffCtx.open()) {
+      Context.setForwardedEvent(true);
+      log.debug("Deleting all changes for project {}", projectNameKey.get());
+      indexes.getWriteIndexes().forEach(i -> i.deleteAllForProject(projectNameKey));
+    } finally {
+      Context.unsetForwardedEvent();
     }
   }
 }

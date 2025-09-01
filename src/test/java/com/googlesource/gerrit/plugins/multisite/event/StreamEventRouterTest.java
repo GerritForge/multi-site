@@ -19,8 +19,10 @@ import static org.mockito.Mockito.verify;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.util.time.TimeUtil;
+import com.googlesource.gerrit.plugins.deleteproject.AllProjectChangesDeletedFromIndexEvent;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
 import com.googlesource.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
@@ -47,6 +49,18 @@ public class StreamEventRouterTest {
     final CommentAddedEvent event = new CommentAddedEvent(aChange());
     router.route(event);
     verify(streamEventHandler).dispatch(event);
+  }
+
+  @Test
+  public void routerShouldSendEvent_AllProjectChangesDeletedFromIndexEvent() throws Exception {
+    String PROJECT_NAME = "foo";
+    AllProjectChangesDeletedFromIndexEvent allChangesDeletedFromIndexEvent =
+        new AllProjectChangesDeletedFromIndexEvent();
+    allChangesDeletedFromIndexEvent.projectName = PROJECT_NAME;
+
+    router.route(allChangesDeletedFromIndexEvent);
+    verify(streamEventHandler)
+        .handleAllProjectChangesDeletedFromIndexEvent(Project.nameKey(PROJECT_NAME));
   }
 
   private Change aChange() {
