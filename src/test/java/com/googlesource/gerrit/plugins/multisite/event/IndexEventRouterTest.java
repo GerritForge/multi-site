@@ -154,4 +154,16 @@ public class IndexEventRouterTest {
     verifyNoInteractions(
         indexAccountHandler, indexChangeHandler, indexGroupHandler, indexProjectHandler);
   }
+
+  @Test
+  public void routerShouldSendEventsToTheAppropriateHandler_allChangesDeletedForProject()
+      throws Exception {
+    ChangeIndexEvent event =
+        ChangeIndexEvent.allChangesDeletedForProject("projectName", INSTANCE_ID);
+    router.route(event);
+
+    verify(indexChangeHandler).deleteAllForProject(event.projectName);
+
+    verifyNoInteractions(indexAccountHandler, indexGroupHandler, indexProjectHandler);
+  }
 }
