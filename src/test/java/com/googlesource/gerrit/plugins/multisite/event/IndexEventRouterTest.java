@@ -26,6 +26,7 @@ import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexChangeH
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexGroupHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexProjectHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
+import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedProjectEventHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.googlesource.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.googlesource.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
@@ -51,6 +52,7 @@ public class IndexEventRouterTest {
   @Mock private ForwardedIndexGroupHandler indexGroupHandler;
   @Mock private ForwardedIndexProjectHandler indexProjectHandler;
   @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
+  @Mock private ForwardedProjectEventHandler projectEventHandler;
   private AllUsersName allUsersName = new AllUsersName("All-Users");
 
   @Before
@@ -79,7 +81,8 @@ public class IndexEventRouterTest {
   @Test
   public void streamEventRouterShouldTriggerAccountIndexFlush() throws Exception {
 
-    StreamEventRouter streamEventRouter = new StreamEventRouter(forwardedEventDispatcher, router);
+    StreamEventRouter streamEventRouter =
+        new StreamEventRouter(forwardedEventDispatcher, router, projectEventHandler);
 
     final AccountIndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
     router.route(event);
