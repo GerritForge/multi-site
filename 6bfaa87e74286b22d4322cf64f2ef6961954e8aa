@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfa6314d_3a00d37e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-09-02T15:21:19Z",
+      "side": 1,
+      "message": "Blocking the merge of this change: I believe we made a mistake in approving the I4c8a5362908. Can we talk so that I can explain the problem?",
+      "revId": "6bfaa87e74286b22d4322cf64f2ef6961954e8aa",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
