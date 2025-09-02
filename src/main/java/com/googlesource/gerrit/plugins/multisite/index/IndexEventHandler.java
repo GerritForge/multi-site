@@ -85,6 +85,11 @@ class IndexEventHandler
   }
 
   @Override
+  public void onAllChangesDeletedForProject(String projectName) {
+    currCtx.onlyWithContext((ctx) -> executeAllChangesDeletedForProject(projectName));
+  }
+
+  @Override
   public void onChangeDeleted(int id) {
     executeDeleteChangeTask(id);
   }
@@ -105,6 +110,16 @@ class IndexEventHandler
   public void onProjectIndexed(String projectName) {
     if (!Context.isForwardedEvent()) {
       IndexProjectTask task = new IndexProjectTask(new ProjectIndexEvent(projectName, instanceId));
+      if (queuedTasks.add(task)) {
+        executor.execute(task);
+      }
+    }
+  }
+
+  private void executeAllChangesDeletedForProject(String projectName) {
+    if (!Context.isForwardedEvent()) {
+      IndexChangeTask task =
+          new IndexChangeTask(ChangeIndexEvent.allDeletedForProject(projectName, instanceId));
       if (queuedTasks.add(task)) {
         executor.execute(task);
       }

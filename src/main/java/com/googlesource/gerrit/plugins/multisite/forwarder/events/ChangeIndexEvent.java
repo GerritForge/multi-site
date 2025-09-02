@@ -22,11 +22,21 @@ import java.time.format.DateTimeFormatter;
 
 public class ChangeIndexEvent extends IndexEvent {
   static final String TYPE = "change-index";
+  private static final int ALL_CHANGES_FOR_PROJECT = 0;
 
   public String projectName;
   public int changeId;
   public String targetSha;
   public boolean deleted;
+
+  public static ChangeIndexEvent allDeletedForProject(String projectName, String instanceId) {
+    return new ChangeIndexEvent(
+        projectName, ALL_CHANGES_FOR_PROJECT, /* deleted */ true, instanceId);
+  }
+
+  public static boolean isAllDeletedForProject(ChangeIndexEvent event) {
+    return event.deleted && event.changeId == ALL_CHANGES_FOR_PROJECT;
+  }
 
   public ChangeIndexEvent(String projectName, int changeId, boolean deleted, String instanceId) {
     super(TYPE, instanceId);
