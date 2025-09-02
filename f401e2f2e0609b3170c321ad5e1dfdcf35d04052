@@ -42,6 +42,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c87f44d4_04573f90",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/multisite/event/StreamEventRouterTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-09-02T09:54:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0307399d_226dcf3e",
+      "range": {
+        "startLine": 37,
+        "startChar": 41,
+        "endLine": 37,
+        "endChar": 59
+      },
+      "revId": "f401e2f2e0609b3170c321ad5e1dfdcf35d04052",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "710cbebf_907a5818",
@@ -55,6 +79,30 @@
       "writtenOn": "2025-09-02T09:43:11Z",
       "side": 1,
       "message": "nit: forwardedEventDispatcher for consistency with the other ?",
+      "range": {
+        "startLine": 40,
+        "startChar": 35,
+        "endLine": 40,
+        "endChar": 45
+      },
+      "revId": "f401e2f2e0609b3170c321ad5e1dfdcf35d04052",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "645d5814_787151b3",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/multisite/forwarder/ForwardedEventDispatcherTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-09-02T09:54:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "710cbebf_907a5818",
       "range": {
         "startLine": 40,
         "startChar": 35,
