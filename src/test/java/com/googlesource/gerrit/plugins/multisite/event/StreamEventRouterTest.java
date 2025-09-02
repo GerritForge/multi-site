@@ -19,11 +19,11 @@ import static org.mockito.Mockito.verify;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Change;
-import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.util.time.TimeUtil;
 import com.googlesource.gerrit.plugins.deleteproject.AllProjectChangesDeletedFromIndexEvent;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
+import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedProjectEventHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
 import com.googlesource.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import org.junit.Before;
@@ -38,10 +38,11 @@ public class StreamEventRouterTest {
   private StreamEventRouter router;
   @Mock private ForwardedEventDispatcher streamEventHandler;
   @Mock private IndexEventRouter indexEventRouter;
+  @Mock private ForwardedProjectEventHandler projectEventHandler;
 
   @Before
   public void setUp() {
-    router = new StreamEventRouter(streamEventHandler, indexEventRouter);
+    router = new StreamEventRouter(streamEventHandler, indexEventRouter, projectEventHandler);
   }
 
   @Test
@@ -52,15 +53,14 @@ public class StreamEventRouterTest {
   }
 
   @Test
-  public void routerShouldSendEvent_AllProjectChangesDeletedFromIndexEvent() throws Exception {
-    String PROJECT_NAME = "foo";
+  public void routerShouldHandle_AllProjectChangesDeletedFromIndexEvent() throws Exception {
     AllProjectChangesDeletedFromIndexEvent allChangesDeletedFromIndexEvent =
         new AllProjectChangesDeletedFromIndexEvent();
-    allChangesDeletedFromIndexEvent.projectName = PROJECT_NAME;
+    allChangesDeletedFromIndexEvent.projectName = "foo";
 
     router.route(allChangesDeletedFromIndexEvent);
-    verify(streamEventHandler)
-        .handleAllProjectChangesDeletedFromIndexEvent(Project.nameKey(PROJECT_NAME));
+    verify(projectEventHandler)
+        .handleAllProjectChangesDeletedFromIndexEvent(allChangesDeletedFromIndexEvent);
   }
 
   private Change aChange() {
