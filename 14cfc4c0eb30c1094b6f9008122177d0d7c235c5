@@ -40,6 +40,30 @@
       },
       "revId": "14cfc4c0eb30c1094b6f9008122177d0d7c235c5",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d81c06af_16380b83",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/multisite/event/StreamEventRouterTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-09-02T09:35:59Z",
+      "side": 1,
+      "message": "yes, got messed up during refactoring, let me fix it.",
+      "parentUuid": "804be235_b2e30d7c",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 0
+      },
+      "revId": "14cfc4c0eb30c1094b6f9008122177d0d7c235c5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
