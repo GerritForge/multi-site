@@ -71,11 +71,16 @@ public class IndexEventRouter
   public void route(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ChangeIndexEvent) {
       ChangeIndexEvent changeIndexEvent = (ChangeIndexEvent) sourceEvent;
-      ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
-      indexChangeHandler.index(
-          changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
-          operation,
-          Optional.of(changeIndexEvent));
+
+      if (ChangeIndexEvent.isAllDeletedForProject(changeIndexEvent)) {
+        indexChangeHandler.deleteAllForProject(changeIndexEvent.projectName);
+      } else {
+        ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
+        indexChangeHandler.index(
+            changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
+            operation,
+            Optional.of(changeIndexEvent));
+      }
     } else if (sourceEvent instanceof AccountIndexEvent) {
       AccountIndexEvent accountIndexEvent = (AccountIndexEvent) sourceEvent;
       indexAccountHandler.indexAsync(Account.id(accountIndexEvent.accountId), INDEX);

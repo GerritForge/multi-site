@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.multisite.forwarder;
 
 import com.google.common.base.Splitter;
 import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -100,6 +101,16 @@ public class ForwardedIndexChangeHandler
                 : (changeIsConsistent ? "was" : "was not") + " consistent",
             retry.getEvent());
       }
+    }
+  }
+
+  public void deleteAllForProject(String projectName) {
+    try {
+      Context.setForwardedEvent(true);
+      log.debug("Deleting all change indexes for project {}", projectName);
+      indexer.deleteAllForProject(Project.nameKey(projectName));
+    } finally {
+      Context.unsetForwardedEvent();
     }
   }
 
