@@ -24,21 +24,22 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.googlesource.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 
 /**
  * Dispatch event to the {@link EventDispatcher}. This class is meant to be used on the receiving
- * side of the {@link StreamEventForwarder} since it will prevent dispatched event to be forwarded
+ * side of the {@link StreamEventRouter} since it will prevent dispatched event to be forwarded
  * again causing an infinite forwarding loop between the 2 nodes.
  */
 @Singleton
-public class ForwardedEventHandler {
-  private static final Logger log = LoggerFactory.getLogger(ForwardedEventHandler.class);
+public class ForwardedEventDispatcher {
+  private static final Logger log = LoggerFactory.getLogger(ForwardedEventDispatcher.class);
 
   private final DynamicItem<EventDispatcher> dispatcher;
   private final OneOffRequestContext oneOffCtx;
 
   @Inject
-  public ForwardedEventHandler(
+  public ForwardedEventDispatcher(
       DynamicItem<EventDispatcher> dispatcher, OneOffRequestContext oneOffCtx) {
     this.dispatcher = dispatcher;
     this.oneOffCtx = oneOffCtx;
