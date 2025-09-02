@@ -28,6 +28,14 @@ public class ChangeIndexEvent extends IndexEvent {
   public String targetSha;
   public boolean deleted;
 
+  public static ChangeIndexEvent allDeletedForProject(String projectName, String instanceId) {
+    return new ChangeIndexEvent(projectName, 0, true, instanceId);
+  }
+
+  public static boolean isAllDeletedForProject(ChangeIndexEvent event) {
+    return event.equals(allDeletedForProject(event.projectName, event.instanceId));
+  }
+
   public ChangeIndexEvent(String projectName, int changeId, boolean deleted, String instanceId) {
     super(TYPE, instanceId);
     this.projectName = projectName;
