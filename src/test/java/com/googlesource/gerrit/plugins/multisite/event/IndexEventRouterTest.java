@@ -22,7 +22,7 @@ import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.PrivateInternals_DynamicMapImpl;
 import com.google.gerrit.server.config.AllUsersName;
 import com.google.inject.util.Providers;
-import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventHandler;
+import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexChangeHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexGroupHandler;
@@ -51,7 +51,7 @@ public class IndexEventRouterTest {
   @Mock private ForwardedIndexChangeHandler indexChangeHandler;
   @Mock private ForwardedIndexGroupHandler indexGroupHandler;
   @Mock private ForwardedIndexProjectHandler indexProjectHandler;
-  @Mock private ForwardedEventHandler forwardedEventHandler;
+  @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
   private AllUsersName allUsersName = new AllUsersName("All-Users");
   PrivateInternals_DynamicMapImpl<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
 
@@ -77,7 +77,7 @@ public class IndexEventRouterTest {
 
   @Test
   public void streamEventRouterShouldTriggerAccountIndexFlush() throws Exception {
-    StreamEventRouter streamEventRouter = new StreamEventRouter(forwardedEventHandler, router);
+    StreamEventRouter streamEventRouter = new StreamEventRouter(forwardedEventDispatcher, router);
 
     final AccountIndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
     router.route(event);

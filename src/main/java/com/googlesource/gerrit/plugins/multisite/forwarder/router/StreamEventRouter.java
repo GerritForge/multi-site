@@ -17,18 +17,18 @@ package com.googlesource.gerrit.plugins.multisite.forwarder.router;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventHandler;
+import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;
 import java.io.IOException;
 
 public class StreamEventRouter implements ForwardedEventRouter<Event> {
-  private final ForwardedEventHandler streamEventHandler;
+  private final ForwardedEventDispatcher forwardedEventDispatcher;
   private final IndexEventRouter indexEventRouter;
 
   @Inject
   public StreamEventRouter(
-      ForwardedEventHandler streamEventHandler, IndexEventRouter indexEventRouter) {
-    this.streamEventHandler = streamEventHandler;
+      ForwardedEventDispatcher forwardedEventDispatcher, IndexEventRouter indexEventRouter) {
+    this.forwardedEventDispatcher = forwardedEventDispatcher;
     this.indexEventRouter = indexEventRouter;
   }
 
@@ -44,6 +44,6 @@ public class StreamEventRouter implements ForwardedEventRouter<Event> {
       indexEventRouter.onRefReplicated((RefReplicationDoneEvent) sourceEvent);
     }
 
-    streamEventHandler.dispatch(sourceEvent);
+    forwardedEventDispatcher.dispatch(sourceEvent);
   }
 }

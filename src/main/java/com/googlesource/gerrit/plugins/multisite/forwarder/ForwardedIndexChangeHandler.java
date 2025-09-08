@@ -19,6 +19,7 @@ import static com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndex
 
 import com.google.common.base.Splitter;
 import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -63,11 +64,15 @@ public class ForwardedIndexChangeHandler
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ChangeIndexEvent) {
       ChangeIndexEvent changeIndexEvent = (ChangeIndexEvent) sourceEvent;
-      ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
-      index(
-          changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
-          operation,
-          Optional.of(changeIndexEvent));
+      if (ChangeIndexEvent.isAllChangesDeletedForProject(changeIndexEvent)) {
+        indexer.deleteAllForProject(Project.nameKey(changeIndexEvent.projectName));
+      } else {
+        ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
+        index(
+            changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
+            operation,
+            Optional.of(changeIndexEvent));
+      }
     }
   }
 

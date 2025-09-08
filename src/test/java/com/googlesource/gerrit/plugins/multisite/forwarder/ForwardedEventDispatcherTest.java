@@ -31,24 +31,24 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ForwardedEventHandlerTest {
+public class ForwardedEventDispatcherTest {
 
   @Rule public ExpectedException exception = ExpectedException.none();
   @Mock private DynamicItem<EventDispatcher> dispatcherMockItem;
   @Mock private EventDispatcher dispatcherMock;
   @Mock OneOffRequestContext oneOffCtxMock;
-  private ForwardedEventHandler handler;
+  private ForwardedEventDispatcher forwardedEventDispatcher;
 
   @Before
   public void setUp() throws Exception {
     when(dispatcherMockItem.get()).thenReturn(dispatcherMock);
-    handler = new ForwardedEventHandler(dispatcherMockItem, oneOffCtxMock);
+    forwardedEventDispatcher = new ForwardedEventDispatcher(dispatcherMockItem, oneOffCtxMock);
   }
 
   @Test
   public void testSuccessfulDispatching() throws Exception {
     Event event = new ProjectCreatedEvent();
-    handler.dispatch(event);
+    forwardedEventDispatcher.dispatch(event);
     verify(dispatcherMock).postEvent(event);
   }
 }

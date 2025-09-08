@@ -37,6 +37,7 @@ import com.google.gerrit.server.util.time.TimeUtil;
 import com.googlesource.gerrit.plugins.multisite.Configuration;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.googlesource.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.googlesource.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.googlesource.gerrit.plugins.multisite.index.ChangeChecker;
 import com.googlesource.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import java.io.IOException;
@@ -201,6 +202,15 @@ public class ForwardedIndexChangeHandlerTest {
     assertThat(Context.isForwardedEvent()).isFalse();
 
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+  }
+
+  @Test
+  public void shouldDeleteAllForProject() throws IOException {
+    IndexEvent deleteAllChangesForProjectEvent =
+        ChangeIndexEvent.allChangesDeletedForProject(TEST_PROJECT, "some-instance-id");
+    handler.handle(deleteAllChangesForProjectEvent);
+
+    verify(indexerMock, times(1)).deleteAllForProject(Project.nameKey(TEST_PROJECT));
   }
 
   private void setupChangeAccessRelatedMocks(boolean changeExist, boolean changeUpToDate)

@@ -21,7 +21,7 @@ import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.util.time.TimeUtil;
-import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventHandler;
+import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.googlesource.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
 import com.googlesource.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import org.junit.Before;
@@ -34,19 +34,19 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class StreamEventRouterTest {
 
   private StreamEventRouter router;
-  @Mock private ForwardedEventHandler streamEventHandler;
+  @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
   @Mock private IndexEventRouter indexEventRouter;
 
   @Before
   public void setUp() {
-    router = new StreamEventRouter(streamEventHandler, indexEventRouter);
+    router = new StreamEventRouter(forwardedEventDispatcher, indexEventRouter);
   }
 
   @Test
   public void routerShouldSendEventsToTheAppropriateHandler_StreamEvent() throws Exception {
     final CommentAddedEvent event = new CommentAddedEvent(aChange());
     router.route(event);
-    verify(streamEventHandler).dispatch(event);
+    verify(forwardedEventDispatcher).dispatch(event);
   }
 
   private Change aChange() {
