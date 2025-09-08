@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ef193f_2cf13fd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-09-08T13:34:44Z",
+      "side": 1,
+      "message": "Tests are failing.\nI haven\u0027t checked them all, but at least some of them are failing because of the introduction of `indexEvent.ifPresent(` in `ForwardedIndexChangeHandler.java`, which now makes some stubbing redundant, see (changeIsIndexedWhenUpToDate) for example.",
+      "revId": "29bc7a554e3df3089e0e09b3b4a2ed30baa672bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
