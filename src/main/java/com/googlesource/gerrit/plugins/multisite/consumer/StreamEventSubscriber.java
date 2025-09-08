@@ -50,8 +50,8 @@ public class StreamEventSubscriber extends AbstractSubcriber {
 
   @Override
   protected Boolean shouldConsumeEvent(Event event) {
-    if (event instanceof ProjectEvent) {
-      return projectsFilter.matches(((ProjectEvent) event).getProjectNameKey().get());
+    if (event instanceof ProjectEvent projectEvent) {
+      return projectsFilter.matches(projectEvent.getProjectNameKey().get());
     }
     return true;
   }

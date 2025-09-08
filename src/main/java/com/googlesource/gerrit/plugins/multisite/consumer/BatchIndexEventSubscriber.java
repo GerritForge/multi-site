@@ -51,11 +51,11 @@ public class BatchIndexEventSubscriber extends AbstractSubcriber {
 
   @Override
   protected Boolean shouldConsumeEvent(Event event) {
-    if (event instanceof ChangeIndexEvent) {
-      return projectsFilter.matches(((ChangeIndexEvent) event).projectName);
+    if (event instanceof ChangeIndexEvent changeIndexEvent) {
+      return projectsFilter.matches(changeIndexEvent.projectName);
     }
-    if (event instanceof ProjectIndexEvent) {
-      return projectsFilter.matches(((ProjectIndexEvent) event).projectName);
+    if (event instanceof ProjectIndexEvent projectIndexEvent) {
+      return projectsFilter.matches(projectIndexEvent.projectName);
     }
     return true;
   }

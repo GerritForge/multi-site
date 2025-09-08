@@ -144,9 +144,7 @@ public class SubscriberMetrics extends MultiSiteMetrics {
         || event instanceof RefUpdatedEvent) {
       ProjectEvent projectEvent = (ProjectEvent) event;
       replicationStatus.updateReplicationLag(projectEvent.getProjectNameKey());
-    } else if (event instanceof ProjectDeletionReplicationSucceededEvent) {
-      ProjectDeletionReplicationSucceededEvent projectDeletion =
-          (ProjectDeletionReplicationSucceededEvent) event;
+    } else if (event instanceof ProjectDeletionReplicationSucceededEvent projectDeletion) {
       replicationStatus.removeProjectFromReplicationLagMetrics(projectDeletion.getProjectNameKey());
     }
   }

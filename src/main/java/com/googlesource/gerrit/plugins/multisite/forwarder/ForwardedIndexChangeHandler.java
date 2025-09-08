@@ -62,8 +62,7 @@ public class ForwardedIndexChangeHandler
 
   @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
-    if (sourceEvent instanceof ChangeIndexEvent) {
-      ChangeIndexEvent changeIndexEvent = (ChangeIndexEvent) sourceEvent;
+    if (sourceEvent instanceof ChangeIndexEvent changeIndexEvent) {
       ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
       index(
           changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
