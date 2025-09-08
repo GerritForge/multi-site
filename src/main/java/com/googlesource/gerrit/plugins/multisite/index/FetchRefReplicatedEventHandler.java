@@ -55,8 +55,7 @@ public class FetchRefReplicatedEventHandler implements EventListener {
     try {
       Context.setForwardedEvent(true);
 
-      if (event instanceof FetchRefReplicatedEvent && isLocalEvent(event)) {
-        FetchRefReplicatedEvent fetchRefReplicatedEvent = (FetchRefReplicatedEvent) event;
+      if (event instanceof FetchRefReplicatedEvent fetchRefReplicatedEvent && isLocalEvent(event)) {
         // This removal of the ':' prefix is needed because of Issue 426470297 in the
         // pull-replication plugin
         // that may leave the deleted refs notification as a ref-spec instead of the deleted

@@ -57,16 +57,15 @@ public class IndexEventSubscriber extends AbstractSubcriber {
 
   @Override
   protected Boolean shouldConsumeEvent(Event event) {
-    if (event instanceof ChangeIndexEvent) {
-      ChangeIndexEvent changeIndexEvent = (ChangeIndexEvent) event;
+    if (event instanceof ChangeIndexEvent changeIndexEvent) {
       String projectName = changeIndexEvent.projectName;
       if (isDeletedChangeWithEmptyProject(changeIndexEvent)) {
         projectName = findProjectFromChangeId(changeIndexEvent.changeId).orElse(projectName);
       }
       return projectsFilter.matches(projectName);
     }
-    if (event instanceof ProjectIndexEvent) {
-      return projectsFilter.matches(((ProjectIndexEvent) event).projectName);
+    if (event instanceof ProjectIndexEvent projectIndexEvent) {
+      return projectsFilter.matches(projectIndexEvent.projectName);
     }
     return true;
   }

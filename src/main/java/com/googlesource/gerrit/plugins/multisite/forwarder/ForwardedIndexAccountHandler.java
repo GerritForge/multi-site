@@ -52,8 +52,7 @@ public class ForwardedIndexAccountHandler
 
   @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
-    if (sourceEvent instanceof AccountIndexEvent) {
-      AccountIndexEvent accountIndexEvent = (AccountIndexEvent) sourceEvent;
+    if (sourceEvent instanceof AccountIndexEvent accountIndexEvent) {
       indexAsync(Account.id(accountIndexEvent.accountId), INDEX);
     }
   }

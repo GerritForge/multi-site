@@ -243,9 +243,9 @@ public class Configuration {
           null,
           SharedRefDbConfiguration.SharedRefDatabase.ENABLE_KEY,
           true);
-      if (cfg instanceof FileBasedConfig) {
+      if (cfg instanceof FileBasedConfig fileBasedConfig) {
         try {
-          ((FileBasedConfig) cfg).save();
+          fileBasedConfig.save();
         } catch (IOException e) {
           throw new IllegalStateException("Error while enabling global-refdb by default", e);
         }
@@ -255,10 +255,9 @@ public class Configuration {
   }
 
   private Supplier<Config> lazyLoad(Config config) {
-    if (config instanceof FileBasedConfig) {
+    if (config instanceof FileBasedConfig fileConfig) {
       return memoize(
           () -> {
-            FileBasedConfig fileConfig = (FileBasedConfig) config;
             String fileConfigFileName = fileConfig.getFile().getPath();
             try {
               log.info("Loading configuration from {}", fileConfigFileName);
@@ -273,8 +272,7 @@ public class Configuration {
   }
 
   private Supplier<Collection<Message>> lazyValidateReplicatioConfig(Config replicationConfig) {
-    if (replicationConfig instanceof FileBasedConfig) {
-      FileBasedConfig fileConfig = (FileBasedConfig) replicationConfig;
+    if (replicationConfig instanceof FileBasedConfig fileConfig) {
       try {
         fileConfig.load();
         return memoize(() -> validateReplicationConfig(replicationConfig));
