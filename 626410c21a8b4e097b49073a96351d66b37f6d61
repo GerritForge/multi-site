@@ -16,6 +16,24 @@
       "message": "This isn\u0027t needed here: it is now configured as a DynamicMap\u003c\u003e",
       "revId": "626410c21a8b4e097b49073a96351d66b37f6d61",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92e5b13f_7da6b1e1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/forwarder/router/IndexEventRouter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-09-08T08:53:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a7043f4_e6cb114c",
+      "revId": "626410c21a8b4e097b49073a96351d66b37f6d61",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
