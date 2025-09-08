@@ -19,6 +19,7 @@ import static com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndex
 
 import com.google.common.base.Splitter;
 import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -73,7 +74,14 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doIndex(String id, Optional<ChangeIndexEvent> indexEvent) {
-    scheduleIndexing(id, indexEvent, this::indexIfConsistent);
+    indexEvent.ifPresent(
+        indexChangeEvent -> {
+          if (ChangeIndexEvent.isAllChangesDeletedForProject(indexChangeEvent)) {
+            indexer.deleteAllForProject(Project.nameKey(indexChangeEvent.projectName));
+          } else {
+            scheduleIndexing(id, indexEvent, this::indexIfConsistent);
+          }
+        });
   }
 
   private void indexIfConsistent(String id) {
