@@ -19,6 +19,7 @@ import static com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndex
 
 import com.google.common.base.Splitter;
 import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -63,11 +64,15 @@ public class ForwardedIndexChangeHandler
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ChangeIndexEvent) {
       ChangeIndexEvent changeIndexEvent = (ChangeIndexEvent) sourceEvent;
-      ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
-      index(
-          changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
-          operation,
-          Optional.of(changeIndexEvent));
+      if (ChangeIndexEvent.isAllChangesDeletedForProject(changeIndexEvent)) {
+        indexChangeHandler.deleteAllForProject(changeIndexEvent.projectName);
+      } else {
+        ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
+        index(
+            changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
+            operation,
+            Optional.of(changeIndexEvent));
+      }
     }
   }
 
@@ -117,6 +122,28 @@ public class ForwardedIndexChangeHandler
                 : (changeIsConsistent ? "was" : "was not") + " consistent",
             retry.getEvent());
       }
+    }
+  }
+
+  /**
+   * Deletes all change index entries associated with the given project.
+   *
+   * <p>This method is invoked when a project-wide deletion event is received from a peer in a
+   * multi-site setup. It removes all changes for the specified project from the local index.
+   *
+   * <p>The method temporarily marks the execution context as a forwarded event to prevent the
+   * resulting index updates from being re-forwarded to other peers, which would otherwise create
+   * event loops.
+   *
+   * @param projectName the name of the project whose changes should be removed from the index
+   */
+  public void deleteAllForProject(String projectName) {
+    try {
+      Context.setForwardedEvent(true);
+      log.debug("Deleting all change indexes for project {}", projectName);
+      indexer.deleteAllForProject(Project.nameKey(projectName));
+    } finally {
+      Context.unsetForwardedEvent();
     }
   }
 
