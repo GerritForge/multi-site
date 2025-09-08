@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c2f4600_0d5f6af2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-09-08T11:19:08Z",
+      "side": 0,
+      "message": "@syntonyze@gmail.com this is the main difference of the merge-up compared to the incoming change from stable-3.12. The router does not have any specific knowledge anymore of what the index handler does, therefore is unable to call this method that is now therefore obsolete and unused.",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 3
+      },
+      "revId": "d0074dae3db9e065fcecf313e5d85cdacac4722c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
