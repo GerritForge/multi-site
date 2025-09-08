@@ -203,6 +203,13 @@ public class ForwardedIndexChangeHandlerTest {
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
   }
 
+  @Test
+  public void shouldDeleteAllForProject() {
+    handler.deleteAllForProject(TEST_PROJECT);
+
+    verify(indexerMock, times(1)).deleteAllForProject(Project.nameKey(TEST_PROJECT));
+  }
+
   private void setupChangeAccessRelatedMocks(boolean changeExist, boolean changeUpToDate)
       throws Exception {
     setupChangeAccessRelatedMocks(
