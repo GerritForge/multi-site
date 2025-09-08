@@ -225,9 +225,10 @@ function cleanup_environment {
   echo "Stopping GERRIT instances"
   $1/bin/gerrit.sh stop 2> /dev/null
   $2/bin/gerrit.sh stop 2> /dev/null
+  $3/bin/gerrit.sh stop 2> /dev/null
 
-  echo "REMOVING setup directory $3"
-  rm -rf $3 2> /dev/null
+  echo "REMOVING setup directory $4"
+  rm -rf $4 2> /dev/null
 }
 
 function check_if_container_is_running {
