@@ -57,12 +57,18 @@ public class IndexEventRouter
 
   @Override
   public void route(IndexEvent sourceEvent) throws IOException {
-    ForwardedIndexingHandler<?, ? extends IndexEvent> handler =
-        indexHandlers.get(GERRIT, sourceEvent.getType());
-    if (handler != null) {
-      handler.handle(sourceEvent);
+    if (sourceEvent instanceof ProjectIndexEvent) {
+      ProjectIndexEvent projectIndexEvent = (ProjectIndexEvent) sourceEvent;
+      indexProjectHandler.index(
+          projectIndexEvent.projectName, INDEX, Optional.of(projectIndexEvent));
     } else {
-      logger.atInfo().log("No registered handlers to route event %s", sourceEvent.getType());
+      ForwardedIndexingHandler<?, ? extends IndexEvent> handler =
+          indexHandlers.get(GERRIT, sourceEvent.getType());
+      if (handler != null) {
+        handler.handle(sourceEvent);
+      } else {
+        logger.atInfo().log("No registered handlers to route event %s", sourceEvent.getType());
+      }
     }
   }
 

@@ -22,11 +22,36 @@ import java.time.format.DateTimeFormatter;
 
 public class ChangeIndexEvent extends IndexEvent {
   public static final String TYPE = "change-index";
+  private static final int ALL_CHANGES_FOR_PROJECT = 0;
 
   public String projectName;
   public int changeId;
   public String targetSha;
   public boolean deleted;
+
+  /**
+   * Creates a {@link ChangeIndexEvent} that represents the deletion of all changes belonging to the
+   * given project.
+   *
+   * @param projectName the name of the project
+   * @param instanceId the originating instance identifier
+   * @return an event marking all project changes as deleted
+   */
+  public static ChangeIndexEvent allChangesDeletedForProject(
+      String projectName, String instanceId) {
+    return new ChangeIndexEvent(
+        projectName, ALL_CHANGES_FOR_PROJECT, /* deleted */ true, instanceId);
+  }
+
+  /**
+   * Checks whether the given event represents the deletion of all changes for a project.
+   *
+   * @param event the event to check
+   * @return {@code true} if the event signals a project-wide deletion, {@code false} otherwise
+   */
+  public static boolean isAllChangesDeletedForProject(ChangeIndexEvent event) {
+    return event.deleted && event.changeId == ALL_CHANGES_FOR_PROJECT;
+  }
 
   public ChangeIndexEvent(String projectName, int changeId, boolean deleted, String instanceId) {
     super(TYPE, instanceId);

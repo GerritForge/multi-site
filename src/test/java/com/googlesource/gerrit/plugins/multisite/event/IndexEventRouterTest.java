@@ -22,7 +22,7 @@ import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.PrivateInternals_DynamicMapImpl;
 import com.google.gerrit.server.config.AllUsersName;
 import com.google.inject.util.Providers;
-import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventHandler;
+import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexChangeHandler;
 import com.googlesource.gerrit.plugins.multisite.forwarder.ForwardedIndexGroupHandler;
@@ -51,7 +51,7 @@ public class IndexEventRouterTest {
   @Mock private ForwardedIndexChangeHandler indexChangeHandler;
   @Mock private ForwardedIndexGroupHandler indexGroupHandler;
   @Mock private ForwardedIndexProjectHandler indexProjectHandler;
-  @Mock private ForwardedEventHandler forwardedEventHandler;
+  @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
   private AllUsersName allUsersName = new AllUsersName("All-Users");
   PrivateInternals_DynamicMapImpl<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
 
@@ -140,5 +140,17 @@ public class IndexEventRouterTest {
     router.route(newEventType);
     verifyNoInteractions(
         indexAccountHandler, indexChangeHandler, indexGroupHandler, indexProjectHandler);
+  }
+
+  @Test
+  public void routerShouldSendEventsToTheAppropriateHandler_allChangesDeletedForProject()
+      throws Exception {
+    ChangeIndexEvent event =
+        ChangeIndexEvent.allChangesDeletedForProject("projectName", INSTANCE_ID);
+    router.route(event);
+
+    verify(indexChangeHandler).deleteAllForProject(event.projectName);
+
+    verifyNoInteractions(indexAccountHandler, indexGroupHandler, indexProjectHandler);
   }
 }
