@@ -11,8 +11,8 @@ gerrit_plugin(
     srcs = glob(["src/main/java/**/*.java"]),
     manifest_entries = [
         "Gerrit-PluginName: multi-site",
-        "Gerrit-Module: com.googlesource.gerrit.plugins.multisite.PluginModule",
-        "Gerrit-HttpModule: com.googlesource.gerrit.plugins.multisite.http.HttpModule",
+        "Gerrit-Module: com.gerritforge.gerrit.plugins.multisite.PluginModule",
+        "Gerrit-HttpModule: com.gerritforge.gerrit.plugins.multisite.http.HttpModule",
         "Implementation-Title: multi-site plugin",
         "Implementation-URL: https://review.gerrithub.io/admin/repos/GerritForge/plugins_multi-site",
     ],
@@ -104,8 +104,8 @@ sh_test(
     ],
     data = [
         "//plugins/multi-site",
-        "//plugins/multi-site:e2e_multi_site_test_dir",
         "//plugins/multi-site:e2e_multi_site_setup_local_env_dir",
+        "//plugins/multi-site:e2e_multi_site_test_dir",
     ] + glob(["setup_local_env/**/*"]) + glob(["e2e-tests/**/*"]),
     tags = [
         "e2e-multi-site",
