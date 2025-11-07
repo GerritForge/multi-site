@@ -1,0 +1,25 @@
+// Copyright (C) 2025 GerritForge, Inc.
+//
+// Licensed under the BSL 1.1 (the "License");
+// you may not use this file except in compliance with the License.
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package com.gerritforge.gerrit.plugins.multisite.index;
+
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
+import java.util.Optional;
+
+public interface UpToDateChecker<E extends IndexEvent> {
+  /**
+   * Check if the local Change is aligned with the indexEvent received.
+   *
+   * @param indexEvent indexing event
+   * @return true if the local Change is up-to-date, false otherwise.
+   */
+  boolean isUpToDate(Optional<E> indexEvent);
+}
