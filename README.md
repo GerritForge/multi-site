@@ -45,11 +45,11 @@ for a stable-3.11 build:
 
 ```
 git clone --recurse-submodules -b stable-3.11 https://gerrit.googlesource.com/gerrit
-git clone -b stable-3.11 https://gerrit.googlesource.com/plugins/multi-site
+git clone -b stable-3.11 https://github.com/GerritForge/multi-site
 git clone -b stable-3.11 https://gerrit.googlesource.com/modules/events-broker
 git clone -b stable-3.11 https://gerrit.googlesource.com/modules/global-refdb
 git clone -b stable-3.11 https://gerrit.googlesource.com/plugins/healthcheck
-git clone -b stable-3.11 https://gerrit.googlesource.com/plugins/pull-replication
+git clone -b stable-3.11 https://github.com/GerritForge/pull-replication
 
 cd gerrit/plugins
 ln -s ../../multi-site .
@@ -106,15 +106,15 @@ Add the multi-site module to `$GERRIT_SITE/etc/gerrit.config` as follows:
 
 ```
 [gerrit]
-  installDbModule = com.googlesource.gerrit.plugins.multisite.GitModule
-  installModule = com.googlesource.gerrit.plugins.multisite.Module
+  installDbModule = com.gerritforge.gerrit.plugins.multisite.GitModule
+  installModule = com.gerritforge.gerrit.plugins.multisite.Module
 ```
 
 For more details on the configuration settings, please refer to the
 [multi-site configuration documentation](src/main/resources/Documentation/config.md).
 
 You also need to setup the Git-level replication between nodes.
-This can be done with either [pull](https://gerrit.googlesource.com/plugins/pull-replication/+/refs/heads/master/src/main/resources/Documentation/config.md) or [push](https://gerrit.googlesource.com/plugins/replication/+/refs/heads/master/src/main/resources/Documentation/config.md) replication plugin.
+This can be done with either [pull](https://github.com/GerritForge/pull-replication/blob/master/src/main/resources/Documentation/config.md) or [push](https://gerrit.googlesource.com/plugins/replication/+/refs/heads/master/src/main/resources/Documentation/config.md) replication plugin.
 
 # HTTP endpoints
 
