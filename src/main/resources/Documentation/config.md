@@ -235,7 +235,7 @@ to `gerrit.config`:
 
 ```
 [gerrit]
-  installModule = com.googlesource.gerrit.plugins.replication.ReplicationExtensionPointModule
+  installModule = com.gerritforge.gerrit.plugins.replication.ReplicationExtensionPointModule
 ```
 
 The above configuration would be automatically detected by the @PLUGIN@ plugin which would then
@@ -249,13 +249,13 @@ on their global-refdb status:
 
 **Pull-replication plugin**
 
-When using the [pull-replication](https://gerrit.googlesource.com/plugins/pull-replication)
+When using the [pull-replication](https://github.com/GerritForge/pull-replication)
 plugin, link the `pull-replication.jar` to the `$GERRIT_SITE/lib` directory and add the following
 two libModules to `gerrit.config`:
 
 ```
 [gerrit]
-        installModule = com.googlesource.gerrit.plugins.replication.pull.ReplicationExtensionPointModule
+        installModule = com.gerritforge.gerrit.plugins.replication.pull.ReplicationExtensionPointModule
 ```
 
 The above configuration would be automatically detected by the @PLUGIN@ plugin which would then

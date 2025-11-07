@@ -11,10 +11,10 @@ gerrit_plugin(
     srcs = glob(["src/main/java/**/*.java"]),
     manifest_entries = [
         "Gerrit-PluginName: multi-site",
-        "Gerrit-Module: com.googlesource.gerrit.plugins.multisite.PluginModule",
-        "Gerrit-HttpModule: com.googlesource.gerrit.plugins.multisite.http.HttpModule",
+        "Gerrit-Module: com.gerritforge.gerrit.plugins.multisite.PluginModule",
+        "Gerrit-HttpModule: com.gerritforge.gerrit.plugins.multisite.http.HttpModule",
         "Implementation-Title: multi-site plugin",
-        "Implementation-URL: https://review.gerrithub.io/admin/repos/GerritForge/plugins_multi-site",
+        "Implementation-URL: https://github.com/GerritForge/multi-site",
     ],
     resources = glob(["src/main/resources/**/*"]),
     deps = [
