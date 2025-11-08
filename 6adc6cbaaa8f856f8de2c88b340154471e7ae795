@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e59b14bd_79e3a866",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/validation/MultisiteReplicationFetchFilter.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-11-08T11:46:03Z",
+      "side": 1,
+      "message": "These are now `gerritforge`.\n\n\n\n```suggestion\nimport com.gerritforge.gerrit.plugins.replication.pull.FetchOne.LockFailureException;\nimport com. gerritforge.gerrit.plugins.replication.pull.ReplicationFetchFilter;\n```",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 79
+      },
+      "revId": "6adc6cbaaa8f856f8de2c88b340154471e7ae795",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
