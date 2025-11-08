@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "882ddc6a_a7f4b7c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1019121
+      },
+      "writtenOn": "2025-11-08T08:29:50Z",
+      "side": 1,
+      "message": "I guess we need a `pull-replication` first, WDYT?",
+      "revId": "27f07c446fe4911dc21934362e6204e6ee03eddc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35574319_f5b14de4",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapperTest.java",
         "patchSetId": 4
