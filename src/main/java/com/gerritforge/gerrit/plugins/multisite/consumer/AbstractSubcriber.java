@@ -1,0 +1,89 @@
+// Copyright (C) 2025 GerritForge, Inc.
+//
+// Licensed under the BSL 1.1 (the "License");
+// you may not use this file except in compliance with the License.
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+package com.gerritforge.gerrit.plugins.multisite.consumer;
+
+import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
+import com.google.common.base.Strings;
+import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.server.config.GerritInstanceId;
+import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.permissions.PermissionBackendException;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
+import java.io.IOException;
+import java.util.function.Consumer;
+
+public abstract class AbstractSubcriber {
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
+  private final ForwardedEventRouter eventRouter;
+  private final DynamicSet<DroppedEventListener> droppedEventListeners;
+  private final String instanceId;
+  private final MessageLogger msgLog;
+  private SubscriberMetrics subscriberMetrics;
+  private final Configuration cfg;
+  private final String topic;
+
+  public AbstractSubcriber(
+      ForwardedEventRouter eventRouter,
+      DynamicSet<DroppedEventListener> droppedEventListeners,
+      @GerritInstanceId String gerritInstanceId,
+      MessageLogger msgLog,
+      SubscriberMetrics subscriberMetrics,
+      Configuration cfg) {
+    this.eventRouter = eventRouter;
+    this.droppedEventListeners = droppedEventListeners;
+    this.instanceId = gerritInstanceId;
+    this.msgLog = msgLog;
+    this.subscriberMetrics = subscriberMetrics;
+    this.cfg = cfg;
+    this.topic = getTopic().topic(cfg);
+  }
+
+  protected abstract EventTopic getTopic();
+
+  protected abstract Boolean shouldConsumeEvent(Event event);
+
+  public Consumer<Event> getConsumer() {
+    return this::processRecord;
+  }
+
+  private void processRecord(Event event) {
+    String sourceInstanceId = event.instanceId;
+
+    if ((Strings.isNullOrEmpty(sourceInstanceId) || instanceId.equals(sourceInstanceId))
+        || !shouldConsumeEvent(event)) {
+      if (Strings.isNullOrEmpty(sourceInstanceId)) {
+        logger.atWarning().log("Dropping event %s because sourceInstanceId cannot be null", event);
+      } else if (instanceId.equals(sourceInstanceId)) {
+        logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
+      }
+      droppedEventListeners.forEach(l -> l.onEventDropped(event));
+    } else {
+      try {
+        msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
+        eventRouter.route(event);
+        subscriberMetrics.incrementSubscriberConsumedMessage();
+      } catch (IOException e) {
+        logger.atSevere().withCause(e).log("Malformed event '%s'", event);
+        subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
+      } catch (PermissionBackendException | CacheNotFoundException e) {
+        logger.atSevere().withCause(e).log("Cannot handle message '%s'", event);
+        subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
+      }
+    }
+    subscriberMetrics.updateReplicationStatusMetrics(event);
+  }
+}

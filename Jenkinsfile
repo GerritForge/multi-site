@@ -1,2 +1,3 @@
-pluginPipeline(extraPlugins: [ 'pull-replication', 'healthcheck' ],
-               extraModules: [ 'events-broker', 'global-refdb' ])
+pluginPipeline(extraPlugins: [ 'healthcheck' ],
+               extraModules: [ 'events-broker', 'global-refdb' ],
+               extraGhRepos: [ 'pull-replication' ])

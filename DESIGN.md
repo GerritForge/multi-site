@@ -192,7 +192,7 @@ The only way to recover the data would be telling the users who pushed the commi
 to push them again. However, someone needs to manually detect the issue in the
 replication log and get in touch with the user.
 
-The [pull-replication plugin](https://gerrit.googlesource.com/plugins/pull-replication)
+The [pull-replication plugin](https://github.com/GerritForge/pull-replication)
 supports synchronous replication and has the structure to perform also the
 asynchronous variant in the future.
 
