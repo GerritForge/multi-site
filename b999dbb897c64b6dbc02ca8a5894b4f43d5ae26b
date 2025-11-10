@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "884da5fd_349f73d2",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-11-10T12:12:29Z",
+      "side": 0,
+      "message": "Arguably, removing the prefix as its never set could be a separate change. Let me know what you guys think.",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 27
+      },
+      "revId": "b999dbb897c64b6dbc02ca8a5894b4f43d5ae26b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
