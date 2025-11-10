@@ -22,6 +22,30 @@
       },
       "revId": "b999dbb897c64b6dbc02ca8a5894b4f43d5ae26b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51ab04b6_c912a734",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2025-11-10T13:53:36Z",
+      "side": 0,
+      "message": "Yes, it makes sense to do it in a followup",
+      "parentUuid": "884da5fd_349f73d2",
+      "range": {
+        "startLine": 265,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 27
+      },
+      "revId": "b999dbb897c64b6dbc02ca8a5894b4f43d5ae26b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

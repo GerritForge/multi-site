@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b42d8e1c_c5c98b73",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2025-11-10T13:53:36Z",
+      "side": 1,
+      "message": "I would rather add a variable called `$code_origin` or something along those lines.\nJust to tell if it is coming from GH or Gerrit. Defaulting it to empty for Gerrit.\n\n`build_path` for *-bazel values doesn\u0027t seem to me a build path.",
+      "range": {
+        "startLine": 268,
+        "startChar": 6,
+        "endLine": 268,
+        "endChar": 16
+      },
+      "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01a5b75c_cfa58cc5",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2025-11-10T13:53:36Z",
+      "side": 1,
+      "message": "I would call it `gh` to keep the concept of origin of the code.",
+      "range": {
+        "startLine": 278,
+        "startChar": 18,
+        "endLine": 278,
+        "endChar": 21
+      },
+      "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
