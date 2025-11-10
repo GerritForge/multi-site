@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b3c9d5d_eba296d6",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-11-10T14:21:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b42d8e1c_c5c98b73",
+      "range": {
+        "startLine": 268,
+        "startChar": 6,
+        "endLine": 268,
+        "endChar": 16
+      },
+      "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01a5b75c_cfa58cc5",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-11-10T13:53:36Z",
       "side": 1,
       "message": "I would call it `gh` to keep the concept of origin of the code.",
+      "range": {
+        "startLine": 278,
+        "startChar": 18,
+        "endLine": 278,
+        "endChar": 21
+      },
+      "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fad317d_d2b95842",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-11-10T14:21:57Z",
+      "side": 1,
+      "message": "Not 100% sure about this, the reason these plugins are on gh is because they\u0027re under licence.\nThe details of where the licenced plugins should be downloaded from can change (i.e. we might decide to move the to jfrog(we won\u0027t, but you get the point)), at that point we\u0027re still downloading bsl artifact, but from a hypotetical `jfrog` rather than `gh`. \n\nWDYT?",
+      "parentUuid": "01a5b75c_cfa58cc5",
       "range": {
         "startLine": 278,
         "startChar": 18,
