@@ -262,12 +262,12 @@ function prepare_broker_data {
 
 function download_artifact_from_ci {
   local artifact_name=$1
-  local prefix=${2:-plugin}
-  wget $GERRIT_CI/$prefix-$artifact_name-bazel-$GERRIT_BRANCH/$LAST_BUILD/$artifact_name/$artifact_name.jar \
+
+  wget $GERRIT_CI/plugin-$artifact_name-bazel-$GERRIT_BRANCH/$LAST_BUILD/$artifact_name/$artifact_name.jar \
   -O $DEPLOYMENT_LOCATION/$artifact_name.jar || \
-  wget $GERRIT_CI/$prefix-$artifact_name-bazel-master-$GERRIT_BRANCH/$LAST_BUILD/$artifact_name/$artifact_name.jar \
+  wget $GERRIT_CI/plugin-$artifact_name-bazel-master-$GERRIT_BRANCH/$LAST_BUILD/$artifact_name/$artifact_name.jar \
   -O $DEPLOYMENT_LOCATION/$artifact_name.jar || \
-  { echo >&2 "Cannot download $artifact_name $prefix: Check internet connection. Aborting"; exit 1; }
+  { echo >&2 "Cannot download $artifact_name plugin: Check internet connection. Aborting"; exit 1; }
 }
 
 function show_help {
