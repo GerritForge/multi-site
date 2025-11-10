@@ -117,6 +117,30 @@
       },
       "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53dad89b_e2991e47",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-11-10T15:15:54Z",
+      "side": 1,
+      "message": "That\u0027s a fair point. I\u0027ll amend",
+      "parentUuid": "fe32f187_b2ae96f9",
+      "range": {
+        "startLine": 278,
+        "startChar": 18,
+        "endLine": 278,
+        "endChar": 21
+      },
+      "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
