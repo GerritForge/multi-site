@@ -93,6 +93,30 @@
       },
       "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe32f187_b2ae96f9",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-11-10T15:10:06Z",
+      "side": 1,
+      "message": "I tend to agree with @ponch78@gmail.com, the fact that the *current* plugins on GitHub are licensed under BSL doesn\u0027t mean that *ALL* plugins on GitHub will be.",
+      "parentUuid": "7fad317d_d2b95842",
+      "range": {
+        "startLine": 278,
+        "startChar": 18,
+        "endLine": 278,
+        "endChar": 21
+      },
+      "revId": "69b947cab3da25e1758d34c611d6a1aba74ff72b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
