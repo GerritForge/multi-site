@@ -12,6 +12,6 @@ scrape_configs:
    bearer_token: token
    scrape_interval: 5s
    static_configs:
-      - targets: ['$GERRIT_SITE_HOST:18080','$GERRIT_SITE_HOST:18081']
+      - targets: ['$GERRIT_SITE_HOST:18080','$GERRIT_SITE_HOST:18081','$GERRIT_SITE_HOST:18082']
         labels:
           env: 'unit'
