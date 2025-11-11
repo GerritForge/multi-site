@@ -6,7 +6,7 @@ global:
 scrape_configs:
   - job_name: gerrit
     static_configs:
-      - targets: ['localhost:18080','localhost:18081']
+      - targets: ['localhost:18080','localhost:18081','localhost:18082']
     metrics_path: '/plugins/metrics-reporter-prometheus/metrics'
     params:
       format: ['prometheus']
