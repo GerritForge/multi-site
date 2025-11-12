@@ -24,8 +24,14 @@ to the [multi-site plugin DESIGN.md document](DESIGN.md)
 
 ## License
 
-This plugin is released under the same Apache 2.0 license and copyright holders
-as of the Gerrit Code Review project.
+This project is licensed under the **Business Source License 1.1** (BSL 1.1).
+This is a "source-available" license that balances free, open-source-style access to the code
+with temporary commercial restrictions.
+
+* The full text of the BSL 1.1 is available in the [LICENSE.md](LICENSE.md) file in this
+  repository.
+* If your intended use case falls outside the **Additional Use Grant** and you require a
+  commercial license, please contact [GerritForge Sales](https://gerritforge.com/contact).
 
 ## How to build
 
