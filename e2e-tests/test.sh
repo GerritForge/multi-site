@@ -30,7 +30,6 @@ COMMON_PLUGINS_LIST="websession-broker healthcheck zookeeper-refdb"
 function check_application_requirements {
   type java >/dev/null 2>&1 || { echo >&2 "Require java but it's not installed. Aborting."; exit 1; }
   type docker >/dev/null 2>&1 || { echo >&2 "Require docker but it's not installed. Aborting."; exit 1; }
-  type docker-compose >/dev/null 2>&1 || { echo >&2 "Require docker-compose but it's not installed. Aborting."; exit 1; }
   type wget >/dev/null 2>&1 || { echo >&2 "Require wget but it's not installed. Aborting."; exit 1; }
   type envsubst >/dev/null 2>&1 || { echo >&2 "Require envsubst but it's not installed. Aborting."; exit 1; }
   type openssl >/dev/null 2>&1 || { echo >&2 "Require openssl but it's not installed. Aborting."; exit 1; }
@@ -86,7 +85,7 @@ function setup_gerrit_config {
 
 function cleanup_tests_hook {
   echo "Shutting down the setup"
-  docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml down -v
+  docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml down -v
   echo "Removing setup dir"
   rm -rf ${DEPLOYMENT_LOCATION}
 }
@@ -102,8 +101,8 @@ function check_result {
   local RES_VAL=$(docker inspect -f '{{ .State.ExitCode }}' "${CONTAINER_ID}")
   # first check if RES_VAL (output) is a number
   if [[ -z "${RES_VAL##*[!0-9]*}" || $RES_VAL -ne 0 ]]; then
-    echo "Tests failed. Here is [docker-compose.yaml] content:"
-    cat "${DEPLOYMENT_LOCATION}/docker-compose.yaml"
+    echo "Tests failed. Here is [docker compose.yaml] content:"
+    cat "${DEPLOYMENT_LOCATION}/docker compose.yaml"
 
     echo "Docker logs:"
     cat "${DEPLOYMENT_LOCATION}/site.log"
@@ -312,7 +311,7 @@ ssh-keygen -b 2048 -t rsa -f ${COMMON_SSH}/id_rsa -q -N "" || { echo >&2 "Cannot
 SCENARIOS="$( cd "${LOCATION}" >/dev/null 2>&1 && pwd )/scenarios.sh"
 
 echo "Starting containers"
-COMPOSE_FILES="-f ${LOCATION}/docker-compose.yaml -f ${LOCATION}/docker-compose-kafka.yaml -f ${LOCATION}/docker-tester.yaml"
+COMPOSE_FILES="-f ${LOCATION}/docker compose.yaml -f ${LOCATION}/docker compose-kafka.yaml -f ${LOCATION}/docker-tester.yaml"
 
 # store setup in single file (under ${DEPLOYMENT_LOCATION}) with all variables resolved
 export GERRIT_IMAGE; \
@@ -320,17 +319,17 @@ export GERRIT_IMAGE; \
   export GERRIT_HEALTHCHECK_INTERVAL; \
   export GERRIT_HEALTHCHECK_TIMEOUT; \
   export GERRIT_HEALTHCHECK_RETRIES; \
-  docker-compose ${COMPOSE_FILES} config > ${DEPLOYMENT_LOCATION}/docker-compose.yaml
+  docker compose ${COMPOSE_FILES} config > ${DEPLOYMENT_LOCATION}/docker compose.yaml
 
 trap cleanup_tests_hook EXIT
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d zookeeper kafka
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml logs -f --no-color -t > ${DEPLOYMENT_LOCATION}/site.log &
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml up -d zookeeper kafka
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml ps -a
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml logs -f --no-color -t > ${DEPLOYMENT_LOCATION}/site.log &
 
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start gerrit1 gerrit2
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-GERRIT1_CONTAINER=$(docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit1 | awk '{print $1}')
-GERRIT2_CONTAINER=$(docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit2 | awk '{print $1}')
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml up --no-start gerrit1 gerrit2
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml ps -a
+GERRIT1_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml ps -a | grep gerrit1 | awk '{print $1}')
+GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml ps -a | grep gerrit2 | awk '{print $1}')
 
 #copy files to gerrit containers
 echo "Copying files to Gerrit containers"
@@ -345,16 +344,16 @@ docker cp "${GERRIT_2_LIBS}/" "${GERRIT2_CONTAINER}:/var/gerrit/libs"
 docker cp "${COMMON_SSH}/" "${GERRIT2_CONTAINER}:/var/gerrit/.ssh"
 
 echo "Starting Gerrit servers"
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d gerrit1 gerrit2
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml up -d gerrit1 gerrit2
 
 echo "Waiting for services to start (and being healthy) and calling e2e tests"
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start tester
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-TEST_CONTAINER=$(docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep tester | awk '{print $1}')
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml up --no-start tester
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml ps -a
+TEST_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml ps -a | grep tester | awk '{print $1}')
 docker cp "${COMMON_SSH}/" "${TEST_CONTAINER}:/var/gerrit/.ssh"
 docker cp "${SCENARIOS}" "${TEST_CONTAINER}:/var/gerrit/scenarios.sh"
 
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up tester
+docker compose -f ${DEPLOYMENT_LOCATION}/docker compose.yaml up tester
 
 # inspect test container exit code as 'up' always returns '0'
 check_result "${TEST_CONTAINER}" 0
