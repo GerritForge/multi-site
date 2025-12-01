@@ -20,6 +20,8 @@ GERRIT_BRANCH=stable-3.13
 GERRIT_CI=https://gerrit-ci.gerritforge.com/view/Plugins-$GERRIT_BRANCH/job
 LAST_BUILD=lastSuccessfulBuild/artifact/bazel-bin/plugins
 DEF_MULTISITE_LOCATION=${LOCATION}/../../../bazel-bin/plugins/multi-site/multi-site.jar
+DEF_GLOBAL_REFDB_LIB_LOCATION=${LOCATION}/../../../bazel-bin/plugins/global-refdb/global-refdb.jar
+DEF_EVENTS_BROKER_LIB_LOCATION=${LOCATION}/../../../bazel-bin/plugins/events-broker/events-broker.jar
 DEF_GERRIT_IMAGE=3.13.1
 DEF_GERRIT_HEALTHCHECK_START_PERIOD=60s
 DEF_GERRIT_HEALTHCHECK_INTERVAL=5s
@@ -161,6 +163,16 @@ case "$1" in
     shift
     shift
   ;;
+  "--global-refdb-lib-file" )
+    GLOBAL_REFDB_LIB_LOCATION=$2
+    shift
+    shift
+  ;;
+  "--events-broker-lib-file" )
+    EVENTS_BROKER_LIB_LOCATION=$2
+    shift
+    shift
+  ;;
   "--replication-lib-file" )
     REPLICATION_LIB_LOCATION=$2
     shift
@@ -216,6 +228,8 @@ done
 # Defaults
 DEPLOYMENT_LOCATION=$(mktemp -d || $(echo >&2 "Could not create temp dir" && exit 1))
 MULTISITE_LIB_LOCATION=${MULTISITE_LIB_LOCATION:-${DEF_MULTISITE_LOCATION}}
+GLOBAL_REFDB_LIB_LOCATION=${GLOBAL_REFDB_LIB_LOCATION:-${DEF_GLOBAL_REFDB_LIB_LOCATION}}
+EVENTS_BROKER_LIB_LOCATION=${EVENTS_BROKER_LIB_LOCATION:-${DEF_EVENTS_BROKER_LIB_LOCATION}}
 BROKER_TYPE=${BROKER_TYPE:-"kafka"}
 GERRIT_IMAGE=${GERRIT_IMAGE:-${DEF_GERRIT_IMAGE}}
 GERRIT_HEALTHCHECK_START_PERIOD=${GERRIT_HEALTHCHECK_START_PERIOD:-${DEF_GERRIT_HEALTHCHECK_START_PERIOD}}
@@ -265,10 +279,10 @@ docker cp ${CONTAINER_NAME}:/var/gerrit/plugins/replication.jar $COMMON_LIBS/
 docker rm -fv ${CONTAINER_NAME}
 
 echo "Copying global-refdb library $GERRIT_BRANCH"
-cp bazel-bin/plugins/global-refdb/global-refdb.jar $COMMON_LIBS/global-refdb.jar
+cp $GLOBAL_REFDB_LIB_LOCATION $COMMON_LIBS/global-refdb.jar
 
 echo "Downloading events-broker library $GERRIT_BRANCH"
-cp bazel-bin/plugins/events-broker/events-broker.jar $COMMON_LIBS/events-broker.jar
+cp $EVENTS_BROKER_LIB_LOCATION $COMMON_LIBS/events-broker.jar
 
 echo "Setting up directories"
 mkdir -p ${GERRIT_1_ETC} ${GERRIT_1_PLUGINS} ${GERRIT_1_LIBS} ${GERRIT_2_ETC} ${GERRIT_2_PLUGINS} ${GERRIT_2_LIBS}
