@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Copyright (C) 2021 The Android Open Source Project
 #
