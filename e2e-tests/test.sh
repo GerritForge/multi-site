@@ -324,6 +324,7 @@ mkdir -p ${COMMON_SSH}
 ssh-keygen -b 2048 -t rsa -f ${COMMON_SSH}/id_rsa -q -N "" || { echo >&2 "Cannot generate common SSH keys. Aborting"; exit 1; }
 
 SCENARIOS="$( cd "${LOCATION}" >/dev/null 2>&1 && pwd )/scenarios.sh"
+ENTRYPOINT="$( cd "${LOCATION}" >/dev/null 2>&1 && pwd )/entrypoint.sh"
 
 echo "Starting containers"
 COMPOSE_FILES="-f ${LOCATION}/docker-compose.yaml -f ${LOCATION}/docker-compose-kafka.yaml -f ${LOCATION}/docker-tester.yaml"
@@ -348,11 +349,13 @@ GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml
 
 #copy files to gerrit containers
 echo "Copying files to Gerrit containers"
+docker cp $ENTRYPOINT "${GERRIT1_CONTAINER}:/entrypoint.sh"
 docker cp "${GERRIT_1_ETC}/." "${GERRIT1_CONTAINER}:/var/gerrit/etc/"
 docker cp "${GERRIT_1_PLUGINS}/." "${GERRIT1_CONTAINER}:/var/gerrit/plugins/"
 docker cp "${GERRIT_1_LIBS}/." "${GERRIT1_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT1_CONTAINER}:/var/gerrit/.ssh"
 
+docker cp $ENTRYPOINT "${GERRIT2_CONTAINER}:/entrypoint.sh"
 docker cp "${GERRIT_2_ETC}/." "${GERRIT2_CONTAINER}:/var/gerrit/etc/"
 docker cp "${GERRIT_2_PLUGINS}/." "${GERRIT2_CONTAINER}:/var/gerrit/plugins/"
 docker cp "${GERRIT_2_LIBS}/." "${GERRIT2_CONTAINER}:/var/gerrit/lib/"
