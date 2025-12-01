@@ -288,11 +288,9 @@ echo "Downloading common libs"
 COMMON_LIBS=${DEPLOYMENT_LOCATION}/common_libs
 mkdir -p ${COMMON_LIBS}
 
-echo "Getting replication.jar / pull-replication.jar as libraries"
+echo "Copying replication.jar / pull-replication.jar as libraries"
 cp $COMMON_PLUGINS/pull-replication.jar $COMMON_LIBS/
-CONTAINER_NAME=$(docker create -ti --entrypoint /bin/bash gerritcodereview/gerrit:"${GERRIT_IMAGE}") && \
-docker cp ${CONTAINER_NAME}:/var/gerrit/plugins/replication.jar $COMMON_LIBS/
-docker rm -fv ${CONTAINER_NAME}
+cp $REPLICATION_LIB_LOCATION $COMMON_LIBS/
 
 echo "Copying global-refdb library $GERRIT_BRANCH"
 cp $GLOBAL_REFDB_LIB_LOCATION $COMMON_LIBS/global-refdb.jar
