@@ -335,12 +335,12 @@ GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml
 echo "Copying files to Gerrit containers"
 docker cp "${GERRIT_1_ETC}/" "${GERRIT1_CONTAINER}:/var/gerrit/etc"
 docker cp "${GERRIT_1_PLUGINS}/" "${GERRIT1_CONTAINER}:/var/gerrit/plugins"
-docker cp "${GERRIT_1_LIBS}/" "${GERRIT1_CONTAINER}:/var/gerrit/libs"
+docker cp "${GERRIT_1_LIBS}/." "${GERRIT1_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT1_CONTAINER}:/var/gerrit/.ssh"
 
 docker cp "${GERRIT_2_ETC}/" "${GERRIT2_CONTAINER}:/var/gerrit/etc"
 docker cp "${GERRIT_2_PLUGINS}/" "${GERRIT2_CONTAINER}:/var/gerrit/plugins"
-docker cp "${GERRIT_2_LIBS}/" "${GERRIT2_CONTAINER}:/var/gerrit/libs"
+docker cp "${GERRIT_2_LIBS}/." "${GERRIT2_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT2_CONTAINER}:/var/gerrit/.ssh"
 
 echo "Starting Gerrit servers"
