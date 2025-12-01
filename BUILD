@@ -96,6 +96,8 @@ sh_test(
     ],
     args = [
         "--multisite-lib-file $(location //plugins/multi-site)",
+        "--global-refdb-lib-file $(location //plugins/global-refdb)",
+        "--events-broker-lib-file $(location //plugins/events-broker)",
         "--healthcheck-interval 5s",
         "--healthcheck-timeout 10s",
         "--healthcheck-retries 30",
@@ -104,6 +106,8 @@ sh_test(
     ],
     data = [
         "//plugins/multi-site",
+        "//plugins/global-refdb",
+        "//plugins/events-broker",
         "//plugins/multi-site:e2e_multi_site_test_dir",
         "//plugins/multi-site:e2e_multi_site_setup_local_env_dir",
     ] + glob(["setup_local_env/**/*"]) + glob(["e2e-tests/**/*"]),
