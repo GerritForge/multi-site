@@ -27,7 +27,7 @@ DEF_GERRIT_HEALTHCHECK_START_PERIOD=60s
 DEF_GERRIT_HEALTHCHECK_INTERVAL=5s
 DEF_GERRIT_HEALTHCHECK_TIMEOUT=5s
 DEF_GERRIT_HEALTHCHECK_RETRIES=5
-COMMON_PLUGINS_LIST="websession-broker healthcheck zookeeper-refdb"
+COMMON_PLUGINS_LIST="websession-broker healthcheck zookeeper-refdb pull-replication"
 
 function check_application_requirements {
   type java >/dev/null 2>&1 || { echo >&2 "Require java but it's not installed. Aborting."; exit 1; }
@@ -272,7 +272,8 @@ echo "Downloading common libs"
 COMMON_LIBS=${DEPLOYMENT_LOCATION}/common_libs
 mkdir -p ${COMMON_LIBS}
 
-echo "Getting replication.jar as a library"
+echo "Getting replication.jar / pull-replication.jar as libraries"
+cp $COMMON_PLUGINS/pull-replication.jar $COMMON_LIBS/
 CONTAINER_NAME=$(docker create -ti --entrypoint /bin/bash gerritcodereview/gerrit:"${GERRIT_IMAGE}") && \
 docker cp ${CONTAINER_NAME}:/var/gerrit/plugins/replication.jar $COMMON_LIBS/
 docker rm -fv ${CONTAINER_NAME}
