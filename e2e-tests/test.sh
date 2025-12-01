@@ -328,8 +328,8 @@ docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml logs -f --no-color 
 
 docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start gerrit1 gerrit2
 docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-GERRIT1_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -q gerrit1)
-GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -q gerrit2)
+GERRIT1_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit1 | awk '{print $1}')
+GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit2 | awk '{print $1}')
 
 #copy files to gerrit containers
 echo "Copying files to Gerrit containers"
@@ -349,7 +349,7 @@ docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d gerrit1 gerri
 echo "Waiting for services to start (and being healthy) and calling e2e tests"
 docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start tester
 docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-TEST_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -q tester)
+TEST_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep tester | awk '{print $1}')
 docker cp "${COMMON_SSH}/" "${TEST_CONTAINER}:/var/gerrit/.ssh"
 docker cp "${SCENARIOS}" "${TEST_CONTAINER}:/var/gerrit/scenarios.sh"
 
