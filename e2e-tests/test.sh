@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash -e
+set -o pipefail
 
 # Copyright (C) 2021 The Android Open Source Project
 #
