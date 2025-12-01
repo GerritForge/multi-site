@@ -288,11 +288,16 @@ echo "Downloading common libs"
 COMMON_LIBS=${DEPLOYMENT_LOCATION}/common_libs
 mkdir -p ${COMMON_LIBS}
 
+<<<<<<< PATCH SET (a0902a697f2034be92ba79af9a6b8940b13e5f38 Copy replication.jar from the $REPLICATION_LIB_LOCATION in e)
+echo "Copying replication.jar as a library"
+cp $REPLICATION_LIB_LOCATION $COMMON_LIBS/
+=======
 echo "Getting replication.jar / pull-replication.jar as libraries"
 cp $COMMON_PLUGINS/pull-replication.jar $COMMON_LIBS/
 CONTAINER_NAME=$(docker create -ti --entrypoint /bin/bash gerritcodereview/gerrit:"${GERRIT_IMAGE}") && \
 docker cp ${CONTAINER_NAME}:/var/gerrit/plugins/replication.jar $COMMON_LIBS/
 docker rm -fv ${CONTAINER_NAME}
+>>>>>>> BASE      (ce8aba9d7c33299c09426c7f85ef34e6aa2b7f51 Fail E2E tests on command failures)
 
 echo "Copying global-refdb library $GERRIT_BRANCH"
 cp $GLOBAL_REFDB_LIB_LOCATION $COMMON_LIBS/global-refdb.jar
