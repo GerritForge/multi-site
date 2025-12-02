@@ -140,6 +140,30 @@
       },
       "revId": "ce8aba9d7c33299c09426c7f85ef34e6aa2b7f51",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "655989ec_99d36146",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-02T16:27:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3683cde_cb6b8351",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "ce8aba9d7c33299c09426c7f85ef34e6aa2b7f51",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
