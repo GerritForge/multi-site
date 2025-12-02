@@ -13,7 +13,7 @@ The environment is composed by:
 ## Requirements
 
 - java
-- docker and docker-compose
+- docker with docker-compose v2 plugin
 - wget
 - envsubst
 - git

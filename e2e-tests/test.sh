@@ -1,4 +1,6 @@
 #!/bin/bash
+set -o pipefail
+set -e
 
 # Copyright (C) 2021 The Android Open Source Project
 #
@@ -15,22 +17,23 @@
 # limitations under the License.
 
 LOCATION="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-LOCAL_ENV="$( cd "${LOCATION}/../setup_local_env" >/dev/null 2>&1 && pwd )"
-GERRIT_BRANCH=stable-3.8
+LOCAL_ENV="$( cd "${LOCATION}/setup_local_env" >/dev/null 2>&1 && pwd )"
+GERRIT_BRANCH=stable-3.13
 GERRIT_CI=https://gerrit-ci.gerritforge.com/view/Plugins-$GERRIT_BRANCH/job
 LAST_BUILD=lastSuccessfulBuild/artifact/bazel-bin/plugins
 DEF_MULTISITE_LOCATION=${LOCATION}/../../../bazel-bin/plugins/multi-site/multi-site.jar
-DEF_GERRIT_IMAGE=3.8.1
+DEF_GLOBAL_REFDB_LIB_LOCATION=${LOCATION}/../../../bazel-bin/plugins/global-refdb/global-refdb.jar
+DEF_EVENTS_BROKER_LIB_LOCATION=${LOCATION}/../../../bazel-bin/plugins/events-broker/events-broker.jar
+DEF_GERRIT_IMAGE=3.13.1
 DEF_GERRIT_HEALTHCHECK_START_PERIOD=60s
 DEF_GERRIT_HEALTHCHECK_INTERVAL=5s
 DEF_GERRIT_HEALTHCHECK_TIMEOUT=5s
 DEF_GERRIT_HEALTHCHECK_RETRIES=5
-COMMON_PLUGINS_LIST="websession-broker healthcheck zookeeper-refdb"
+COMMON_PLUGINS_LIST="websession-broker healthcheck zookeeper-refdb pull-replication"
 
 function check_application_requirements {
   type java >/dev/null 2>&1 || { echo >&2 "Require java but it's not installed. Aborting."; exit 1; }
   type docker >/dev/null 2>&1 || { echo >&2 "Require docker but it's not installed. Aborting."; exit 1; }
-  type docker-compose >/dev/null 2>&1 || { echo >&2 "Require docker-compose but it's not installed. Aborting."; exit 1; }
   type wget >/dev/null 2>&1 || { echo >&2 "Require wget but it's not installed. Aborting."; exit 1; }
   type envsubst >/dev/null 2>&1 || { echo >&2 "Require envsubst but it's not installed. Aborting."; exit 1; }
   type openssl >/dev/null 2>&1 || { echo >&2 "Require openssl but it's not installed. Aborting."; exit 1; }
@@ -86,7 +89,7 @@ function setup_gerrit_config {
 
 function cleanup_tests_hook {
   echo "Shutting down the setup"
-  docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml down -v
+  docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml down -v
   echo "Removing setup dir"
   rm -rf ${DEPLOYMENT_LOCATION}
 }
@@ -117,6 +120,10 @@ function download_plugin {
   local PLUGIN_NAME=$1
 
   echo "Downloading $PLUGIN_NAME plugin $GERRIT_BRANCH onto $TARGET_DIR"
+  wget $GERRIT_CI/plugin-$PLUGIN_NAME-gh-bazel-$GERRIT_BRANCH/$LAST_BUILD/$PLUGIN_NAME/$PLUGIN_NAME.jar \
+    -O $COMMON_PLUGINS/$PLUGIN_NAME.jar || \
+  wget $GERRIT_CI/plugin-$PLUGIN_NAME-gh-bazel-master-$GERRIT_BRANCH/$LAST_BUILD/$PLUGIN_NAME/$PLUGIN_NAME.jar \
+    -O $COMMON_PLUGINS/$PLUGIN_NAME.jar || \
   wget $GERRIT_CI/plugin-$PLUGIN_NAME-bazel-$GERRIT_BRANCH/$LAST_BUILD/$PLUGIN_NAME/$PLUGIN_NAME.jar \
     -O $COMMON_PLUGINS/$PLUGIN_NAME.jar || \
   wget $GERRIT_CI/plugin-$PLUGIN_NAME-bazel-master-$GERRIT_BRANCH/$LAST_BUILD/$PLUGIN_NAME/$PLUGIN_NAME.jar \
@@ -154,6 +161,16 @@ case "$1" in
   ;;
   "--multisite-lib-file" )
     MULTISITE_LIB_LOCATION=$2
+    shift
+    shift
+  ;;
+  "--global-refdb-lib-file" )
+    GLOBAL_REFDB_LIB_LOCATION=$2
+    shift
+    shift
+  ;;
+  "--events-broker-lib-file" )
+    EVENTS_BROKER_LIB_LOCATION=$2
     shift
     shift
   ;;
@@ -209,9 +226,27 @@ case "$1" in
 esac
 done
 
+echo "Test parameters:"
+echo "-----------------------------------------------------------------"
+echo "GERRIT_IMAGE=$GERRIT_IMAGE"
+echo "MULTISITE_LIB_LOCATION=$MULTISITE_LIB_LOCATION"
+echo "GLOBAL_REFDB_LIB_LOCATION=$GLOBAL_REFDB_LIB_LOCATION"
+echo "EVENTS_BROKER_LIB_LOCATION=$EVENTS_BROKER_LIB_LOCATION"
+echo "REPLICATION_LIB_LOCATION=$REPLICATION_LIB_LOCATION"
+echo "BROKER_TYPE=$BROKER_TYPE"
+echo "GERRIT_HEALTHCHECK_START_PERIOD=$GERRIT_HEALTHCHECK_START_PERIOD"
+echo "GERRIT_HEALTHCHECK_INTERVAL=$GERRIT_HEALTHCHECK_INTERVAL"
+echo "GERRIT_HEALTHCHECK_TIMEOUT=$GERRIT_HEALTHCHECK_TIMEOUT"
+echo "GERRIT_HEALTHCHECK_RETRIES=$GERRIT_HEALTHCHECK_RETRIES"
+echo "LOCATION=$LOCATION"
+echo "LOCAL_ENV=$LOCAL_ENV"
+echo "-----------------------------------------------------------------"
+
 # Defaults
 DEPLOYMENT_LOCATION=$(mktemp -d || $(echo >&2 "Could not create temp dir" && exit 1))
 MULTISITE_LIB_LOCATION=${MULTISITE_LIB_LOCATION:-${DEF_MULTISITE_LOCATION}}
+GLOBAL_REFDB_LIB_LOCATION=${GLOBAL_REFDB_LIB_LOCATION:-${DEF_GLOBAL_REFDB_LIB_LOCATION}}
+EVENTS_BROKER_LIB_LOCATION=${EVENTS_BROKER_LIB_LOCATION:-${DEF_EVENTS_BROKER_LIB_LOCATION}}
 BROKER_TYPE=${BROKER_TYPE:-"kafka"}
 GERRIT_IMAGE=${GERRIT_IMAGE:-${DEF_GERRIT_IMAGE}}
 GERRIT_HEALTHCHECK_START_PERIOD=${GERRIT_HEALTHCHECK_START_PERIOD:-${DEF_GERRIT_HEALTHCHECK_START_PERIOD}}
@@ -255,16 +290,15 @@ echo "Downloading common libs"
 COMMON_LIBS=${DEPLOYMENT_LOCATION}/common_libs
 mkdir -p ${COMMON_LIBS}
 
-echo "Getting replication.jar as a library"
-CONTAINER_NAME=$(docker create -ti --entrypoint /bin/bash gerritcodereview/gerrit:"${GERRIT_IMAGE}") && \
-docker cp ${CONTAINER_NAME}:/var/gerrit/plugins/replication.jar $COMMON_LIBS/
-docker rm -fv ${CONTAINER_NAME}
+echo "Copying replication.jar, pull-replication.jar as libraries"
+cp $COMMON_PLUGINS/pull-replication.jar $COMMON_LIBS/
+cp $REPLICATION_LIB_LOCATION $COMMON_LIBS/
 
 echo "Copying global-refdb library $GERRIT_BRANCH"
-cp bazel-bin/plugins/global-refdb/global-refdb.jar $COMMON_LIBS/global-refdb.jar
+cp $GLOBAL_REFDB_LIB_LOCATION $COMMON_LIBS/global-refdb.jar
 
 echo "Downloading events-broker library $GERRIT_BRANCH"
-cp bazel-bin/plugins/events-broker/events-broker.jar $COMMON_LIBS/events-broker.jar
+cp $EVENTS_BROKER_LIB_LOCATION $COMMON_LIBS/events-broker.jar
 
 echo "Setting up directories"
 mkdir -p ${GERRIT_1_ETC} ${GERRIT_1_PLUGINS} ${GERRIT_1_LIBS} ${GERRIT_2_ETC} ${GERRIT_2_PLUGINS} ${GERRIT_2_LIBS}
@@ -306,6 +340,7 @@ mkdir -p ${COMMON_SSH}
 ssh-keygen -b 2048 -t rsa -f ${COMMON_SSH}/id_rsa -q -N "" || { echo >&2 "Cannot generate common SSH keys. Aborting"; exit 1; }
 
 SCENARIOS="$( cd "${LOCATION}" >/dev/null 2>&1 && pwd )/scenarios.sh"
+ENTRYPOINT="$( cd "${LOCATION}" >/dev/null 2>&1 && pwd )/entrypoint.sh"
 
 echo "Starting containers"
 COMPOSE_FILES="-f ${LOCATION}/docker-compose.yaml -f ${LOCATION}/docker-compose-kafka.yaml -f ${LOCATION}/docker-tester.yaml"
@@ -316,41 +351,43 @@ export GERRIT_IMAGE; \
   export GERRIT_HEALTHCHECK_INTERVAL; \
   export GERRIT_HEALTHCHECK_TIMEOUT; \
   export GERRIT_HEALTHCHECK_RETRIES; \
-  docker-compose ${COMPOSE_FILES} config > ${DEPLOYMENT_LOCATION}/docker-compose.yaml
+  docker compose ${COMPOSE_FILES} config > ${DEPLOYMENT_LOCATION}/docker-compose.yaml
 
 trap cleanup_tests_hook EXIT
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d zookeeper kafka
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml logs -f --no-color -t > ${DEPLOYMENT_LOCATION}/site.log &
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d zookeeper kafka
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml logs -f --no-color -t > ${DEPLOYMENT_LOCATION}/site.log &
 
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start gerrit1 gerrit2
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-GERRIT1_CONTAINER=$(docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -q gerrit1)
-GERRIT2_CONTAINER=$(docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -q gerrit2)
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start gerrit1 gerrit2
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
+GERRIT1_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit1 | awk '{print $1}')
+GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit2 | awk '{print $1}')
 
 #copy files to gerrit containers
 echo "Copying files to Gerrit containers"
-docker cp "${GERRIT_1_ETC}/" "${GERRIT1_CONTAINER}:/var/gerrit/etc"
-docker cp "${GERRIT_1_PLUGINS}/" "${GERRIT1_CONTAINER}:/var/gerrit/plugins"
-docker cp "${GERRIT_1_LIBS}/" "${GERRIT1_CONTAINER}:/var/gerrit/libs"
+docker cp $ENTRYPOINT "${GERRIT1_CONTAINER}:/entrypoint.sh"
+docker cp "${GERRIT_1_ETC}/." "${GERRIT1_CONTAINER}:/var/gerrit/etc/"
+docker cp "${GERRIT_1_PLUGINS}/." "${GERRIT1_CONTAINER}:/var/gerrit/plugins/"
+docker cp "${GERRIT_1_LIBS}/." "${GERRIT1_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT1_CONTAINER}:/var/gerrit/.ssh"
 
-docker cp "${GERRIT_2_ETC}/" "${GERRIT2_CONTAINER}:/var/gerrit/etc"
-docker cp "${GERRIT_2_PLUGINS}/" "${GERRIT2_CONTAINER}:/var/gerrit/plugins"
-docker cp "${GERRIT_2_LIBS}/" "${GERRIT2_CONTAINER}:/var/gerrit/libs"
+docker cp $ENTRYPOINT "${GERRIT2_CONTAINER}:/entrypoint.sh"
+docker cp "${GERRIT_2_ETC}/." "${GERRIT2_CONTAINER}:/var/gerrit/etc/"
+docker cp "${GERRIT_2_PLUGINS}/." "${GERRIT2_CONTAINER}:/var/gerrit/plugins/"
+docker cp "${GERRIT_2_LIBS}/." "${GERRIT2_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT2_CONTAINER}:/var/gerrit/.ssh"
 
 echo "Starting Gerrit servers"
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d gerrit1 gerrit2
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d gerrit1 gerrit2
 
 echo "Waiting for services to start (and being healthy) and calling e2e tests"
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start tester
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-TEST_CONTAINER=$(docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -q tester)
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start tester
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
+TEST_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep tester | awk '{print $1}')
 docker cp "${COMMON_SSH}/" "${TEST_CONTAINER}:/var/gerrit/.ssh"
 docker cp "${SCENARIOS}" "${TEST_CONTAINER}:/var/gerrit/scenarios.sh"
 
-docker-compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up tester
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up tester
 
 # inspect test container exit code as 'up' always returns '0'
 check_result "${TEST_CONTAINER}" 0
