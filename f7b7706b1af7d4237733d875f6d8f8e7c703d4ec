@@ -22,6 +22,30 @@
       },
       "revId": "f7b7706b1af7d4237733d875f6d8f8e7c703d4ec",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f21cef18_0f074db9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2025-12-02T13:26:08Z",
+      "side": 1,
+      "message": "It also exists in 3.13: https://github.com/GerritForge/multi-site/tree/stable-3.13/setup_local_env",
+      "parentUuid": "d4c1dce4_e0cccab2",
+      "range": {
+        "startLine": 10,
+        "startChar": 46,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "f7b7706b1af7d4237733d875f6d8f8e7c703d4ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
