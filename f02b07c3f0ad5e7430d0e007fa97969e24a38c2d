@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9a89c70_1eb10752",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2025-12-02T13:35:16Z",
+      "side": 1,
+      "message": "Aren\u0027t we copying the pull-replication only here?",
+      "range": {
+        "startLine": 291,
+        "startChar": 14,
+        "endLine": 291,
+        "endChar": 29
+      },
+      "revId": "f02b07c3f0ad5e7430d0e007fa97969e24a38c2d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
