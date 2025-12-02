@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2771500_779e6a28",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-02T12:31:44Z",
+      "side": 1,
+      "message": "nit: consider replacing with `and` or `,` so that this doesn\u0027t look like an absolute path.",
+      "range": {
+        "startLine": 275,
+        "startChar": 29,
+        "endLine": 275,
+        "endChar": 32
+      },
+      "revId": "b600178475a49cf6eb832519684cf8b8663d5141",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
