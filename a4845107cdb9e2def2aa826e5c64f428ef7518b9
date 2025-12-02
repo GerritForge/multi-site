@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40f3da68_ddc31d6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-02T12:24:41Z",
+      "side": 1,
+      "message": "nit: mention this is true since Docker Compose V2 [1].\n\n[1] https://www.docker.com/blog/announcing-compose-v2-general-availability",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 16
+      },
+      "revId": "a4845107cdb9e2def2aa826e5c64f428ef7518b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de6437e9_bce58f96",
+        "filename": "e2e-tests/README.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-02T12:24:41Z",
+      "side": 1,
+      "message": "nit: could mention the minimum version here.\n\n[1] https://www.docker.com/blog/announcing-compose-v2-general-availability/",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 8
+      },
+      "revId": "a4845107cdb9e2def2aa826e5c64f428ef7518b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
