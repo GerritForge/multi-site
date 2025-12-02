@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6bd88e39_68af95bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2025-12-02T13:32:33Z",
+      "side": 1,
+      "message": "... and enable shell tracing for easier debugging.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "ce8aba9d7c33299c09426c7f85ef34e6aa2b7f51",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c3683cde_cb6b8351",
         "filename": "e2e-tests/test.sh",
         "patchSetId": 6
@@ -37,6 +60,30 @@
       "writtenOn": "2025-12-02T12:53:15Z",
       "side": 1,
       "message": "nit: should we set `-u: error on use of unset variables`?",
+      "range": {
+        "startLine": 1,
+        "startChar": 12,
+        "endLine": 1,
+        "endChar": 15
+      },
+      "revId": "ce8aba9d7c33299c09426c7f85ef34e6aa2b7f51",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65fbda86_7111bef8",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2025-12-02T13:32:33Z",
+      "side": 1,
+      "message": "Also consider adding `pipefail`",
+      "parentUuid": "ef5890e4_8f2386bd",
       "range": {
         "startLine": 1,
         "startChar": 12,
