@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4891e673_750e19da",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-02T16:21:31Z",
+      "side": 1,
+      "message": "It is used in https://review.gerrithub.io/c/GerritForge/multi-site/+/1227317/3",
+      "parentUuid": "e55d80e1_d374929f",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 28
+      },
+      "revId": "e6899ce78890daedab93a859676239a12e4ad338",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d66bd32_6b8b12b9",
@@ -37,6 +61,24 @@
       "writtenOn": "2025-12-02T13:23:14Z",
       "side": 1,
       "message": "In this section you are missing a part copying the `REPLICATION_LIB_LOCATION` to `COMMON_PLUGINS`",
+      "revId": "e6899ce78890daedab93a859676239a12e4ad338",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9ed7bee_317ed20a",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-02T16:21:31Z",
+      "side": 1,
+      "message": "Is is done in https://review.gerrithub.io/c/GerritForge/multi-site/+/1227317/3",
+      "parentUuid": "2d66bd32_6b8b12b9",
       "revId": "e6899ce78890daedab93a859676239a12e4ad338",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
