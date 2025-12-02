@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e55d80e1_d374929f",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-02T12:41:53Z",
+      "side": 1,
+      "message": "I don\u0027t see anywhere where this is used.",
+      "range": {
+        "startLine": 176,
+        "startChar": 4,
+        "endLine": 176,
+        "endChar": 28
+      },
+      "revId": "e6899ce78890daedab93a859676239a12e4ad338",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
