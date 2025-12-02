@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4c1dce4_e0cccab2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-02T12:47:47Z",
+      "side": 1,
+      "message": "Doesn\u0027t this exist at [1]?\n\n\n[1] https://github.com/GerritForge/multi-site/tree/master/setup_local_env",
+      "range": {
+        "startLine": 10,
+        "startChar": 46,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "f7b7706b1af7d4237733d875f6d8f8e7c703d4ec",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
