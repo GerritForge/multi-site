@@ -37,4 +37,10 @@ public class CacheEvictionEvent extends MultiSiteEvent {
     CacheEvictionEvent that = (CacheEvictionEvent) o;
     return Objects.equal(cacheName, that.cacheName) && Objects.equal(key, that.key);
   }
+
+  @Override
+  public String toString() {
+    return String.format("CacheEvictionEvent { cacheName='%s'. instanceId='%s', key=(%s) '%s' })",
+        cacheName, instanceId, key.getClass(), key);
+  }
 }
