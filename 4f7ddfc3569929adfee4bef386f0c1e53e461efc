@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddebb176_86d2341f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-18T10:37:22Z",
+      "side": 1,
+      "message": "This fixes the compilation issue shown by the CI:\n\nhttps://gerrit-ci.gerritforge.com/view/Plugins-master/job/plugin-multi-site-gh-bazel-master/15/console",
+      "revId": "4f7ddfc3569929adfee4bef386f0c1e53e461efc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
