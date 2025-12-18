@@ -22,6 +22,29 @@
       },
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0dc37fe_23576dee",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:14:38Z",
+      "side": 1,
+      "message": "Should this be more generic? We want to show that any complex type is lost, we can just create a TestComplexType here.",
+      "range": {
+        "startLine": 40,
+        "startChar": 68,
+        "endLine": 40,
+        "endChar": 173
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
