@@ -222,7 +222,7 @@ public class ProjectVersionRefUpdateImpl
 
   private Optional<Long> getLongValueOf(String longString) {
     try {
-      return Optional.ofNullable(Long.parseLong(longString));
+      return Optional.of(Long.parseLong(longString));
     } catch (NumberFormatException e) {
       logger.atSevere().withCause(e).log(
           "Unable to parse timestamp value %s into Long", longString);
