@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce1e9a02_a2bba96d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "4f1bf1c2_ed7822bf",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 68
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4a14fe0_8aff6818",
@@ -41,6 +65,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdbf27c8_56f87779",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "c4a14fe0_8aff6818",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f690cc49_3ae6e57e",
@@ -54,6 +96,24 @@
       "writtenOn": "2025-12-18T21:32:03Z",
       "side": 1,
       "message": "```suggestion\n  private final CacheKeyJsonParser gsonParser \u003d new CacheKeyJsonParser(gson);\n  \n  public record ComplexKeyType(String key) { }\n```",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "828e3d03_459e0428",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "f690cc49_3ae6e57e",
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -81,6 +141,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7885707_c9d04ec7",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "c7a47b1b_b6382b53",
+      "range": {
+        "startLine": 38,
+        "startChar": 14,
+        "endLine": 38,
+        "endChar": 38
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92308021_18242e6e",
@@ -94,6 +178,24 @@
       "writtenOn": "2025-12-18T21:37:30Z",
       "side": 1,
       "message": "You forgot to register the class types into Gson, with:\n\n```\nMultiSiteEvent.registerEventTypes();\n```",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc9716e7_3815b193",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "The event type is `cache-eviction` that\u0027s already registered. You don\u0027t need to register the key types.\n\nIf you want to use Event.class when deserialising, then I agree, but, as per comment below, I think that adds a layer of complexity to the test that isn\u0027t needed.",
+      "parentUuid": "92308021_18242e6e",
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -138,6 +240,48 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "adabaa6b_f2d4b055",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0dc37fe_23576dee",
+      "range": {
+        "startLine": 40,
+        "startChar": 68,
+        "endLine": 40,
+        "endChar": 173
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "163c930f_a11a9b14",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "451ae05c_85e9601b",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "408c2d53_40c3bf42",
@@ -163,6 +307,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "13c867ed_2162d32d",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "I think this expands the test more than it needs too and maybe explains the issue worse? I feel like using the specific type makes it even clearer that the \"limitation\" is specifically with gson serialization/deserialization.",
+      "parentUuid": "408c2d53_40c3bf42",
+      "range": {
+        "startLine": 42,
+        "startChar": 62,
+        "endLine": 42,
+        "endChar": 80
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5b3dfea_98dd8b41",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
         "patchSetId": 2
@@ -174,6 +342,30 @@
       "writtenOn": "2025-12-18T21:24:06Z",
       "side": 1,
       "message": "This assertion produces a failure which is very hard to understand. You should add an implementation fo the `CacheEvictionEvent.toString()` to make it more readable.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 45
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "200b6ad8_622dcb6a",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5b3dfea_98dd8b41",
       "range": {
         "startLine": 43,
         "startChar": 4,
@@ -215,6 +407,24 @@
       "side": 1,
       "message": "See an example below:\n\n```\n  @Test\n  public void serializeDeserializeCacheEvictionWithPrimitiveType() {\n    MultiSiteEvent.registerEventTypes();\n    CacheEvictionEvent event \u003d new CacheEvictionEvent(\"test-cache\", \"cache-key\", \"myinstance\");\n    assertThat(gson.fromJson(gson.toJson(event), Event.class)).isEqualTo(event);\n  }\n```",
       "parentUuid": "484c93e7_5b26461b",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a905bf8_f27c5ec4",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-18T23:53:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72f87c0f_574eb198",
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
