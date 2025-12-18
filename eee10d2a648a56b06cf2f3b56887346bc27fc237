@@ -26,6 +26,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7a47b1b_b6382b53",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:16:30Z",
+      "side": 1,
+      "message": "```suggestion\n  public void serializeDeserializeCacheEvictionEventWithComplexKeyType() {\n```",
+      "range": {
+        "startLine": 38,
+        "startChar": 14,
+        "endLine": 38,
+        "endChar": 38
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0dc37fe_23576dee",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
         "patchSetId": 2
@@ -43,6 +66,23 @@
         "endLine": 40,
         "endChar": 173
       },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "484c93e7_5b26461b",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:16:30Z",
+      "side": 1,
+      "message": "We should also add another test showing that the serialization/deserialization works if the key isn\u0027t a complex type.",
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
