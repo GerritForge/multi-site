@@ -14,11 +14,17 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.extensions.client.DiffPreferencesInfo;
 import com.google.gerrit.server.events.EventGsonProvider;
+import com.google.gerrit.server.patch.DiffSummaryKey;
+import com.google.gerrit.server.patch.IntraLineDiffKey;
+import com.google.gerrit.server.patch.PatchListKey;
 import com.google.gson.Gson;
+import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
 
 public class CacheKeyJsonParserTest {
@@ -27,6 +33,15 @@ public class CacheKeyJsonParserTest {
   private final Gson gson = new EventGsonProvider().get();
   private final CacheKeyJsonParser gsonParser = new CacheKeyJsonParser(gson);
 
+
+  @Test
+  public void deserialiseCacheEviction() {
+
+    CacheEvictionEvent event = new CacheEvictionEvent("test-cache", IntraLineDiffKey.create(ObjectId.zeroId(), ObjectId.zeroId(), DiffPreferencesInfo.Whitespace.IGNORE_NONE), "myinstance");
+    String jsonEvent = gson.toJson(event);
+    CacheEvictionEvent parsedEvent = gson.fromJson(jsonEvent, CacheEvictionEvent.class);
+    assertThat(parsedEvent).isEqualTo(event);
+  }
   @Test
   public void accountIDParse() {
     Account.Id accountId = Account.id(1);
