@@ -11,10 +11,10 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;
 import java.io.IOException;
 

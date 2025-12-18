@@ -13,13 +13,13 @@ package com.gerritforge.gerrit.plugins.multisite.http;
 
 import static com.google.gerrit.server.permissions.GlobalPermission.ADMINISTRATE_SERVER;
 
+import com.gerritforge.gerrit.plugins.multisite.consumer.ReplicationStatus;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.httpd.restapi.RestApiServlet;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.consumer.ReplicationStatus;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;

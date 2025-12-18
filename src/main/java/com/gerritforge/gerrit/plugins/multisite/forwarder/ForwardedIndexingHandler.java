@@ -11,8 +11,8 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
-import com.google.common.util.concurrent.Striped;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
+import com.google.common.util.concurrent.Striped;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;

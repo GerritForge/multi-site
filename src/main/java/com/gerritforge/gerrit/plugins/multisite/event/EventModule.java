@@ -13,15 +13,15 @@ package com.gerritforge.gerrit.plugins.multisite.event;
 
 import com.gerritforge.gerrit.eventbroker.publisher.StreamEventPublisherConfig;
 import com.gerritforge.gerrit.eventbroker.publisher.StreamEventPublisherModule;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
+import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate;
+import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdateImpl;
 import com.google.gerrit.extensions.events.GitBatchRefUpdateListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.lifecycle.LifecycleModule;
 import com.google.inject.Inject;
 import com.google.inject.multibindings.OptionalBinder;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
-import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate;
-import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdateImpl;
 
 public class EventModule extends LifecycleModule {
   private final Configuration configuration;

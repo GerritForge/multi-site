@@ -11,8 +11,8 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
-import com.google.common.base.Objects;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
+import com.google.common.base.Objects;
 
 /** Represents a cache entry to evict */
 public class CacheEntry {

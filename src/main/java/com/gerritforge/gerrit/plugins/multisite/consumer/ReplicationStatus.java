@@ -11,6 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
+import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.cache.Cache;
 import com.google.common.flogger.FluentLogger;
@@ -29,9 +32,6 @@ import com.google.inject.Module;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
-import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;

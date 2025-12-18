@@ -13,9 +13,9 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.google.gerrit.server.events.EventGsonProvider;
 import com.google.gson.Gson;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import java.util.UUID;
 import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;

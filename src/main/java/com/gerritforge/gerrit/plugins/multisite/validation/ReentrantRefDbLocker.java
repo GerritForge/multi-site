@@ -13,9 +13,9 @@ package com.gerritforge.gerrit.plugins.multisite.validation;
 
 import com.gerritforge.gerrit.globalrefdb.RefDbLockException;
 import com.gerritforge.gerrit.globalrefdb.validation.RefLocker;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.gerrit.entities.Project;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;

@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
 import com.google.gerrit.metrics.CallbackMetric1;
 import com.google.gerrit.metrics.Counter1;
 import com.google.gerrit.metrics.Description;
@@ -22,7 +23,6 @@ import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.logging.Metadata;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
 import com.googlesource.gerrit.plugins.replication.events.ProjectDeletionReplicationSucceededEvent;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicatedEvent;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;

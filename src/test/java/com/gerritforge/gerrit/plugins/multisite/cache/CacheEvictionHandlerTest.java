@@ -13,10 +13,10 @@ package com.gerritforge.gerrit.plugins.multisite.cache;
 
 import static org.mockito.Mockito.verifyNoInteractions;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.common.cache.RemovalCause;
 import com.google.common.cache.RemovalNotification;
 import com.google.gerrit.extensions.registration.DynamicSet;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import java.util.concurrent.Executor;
 import org.eclipse.jgit.lib.Config;
 import org.junit.Test;

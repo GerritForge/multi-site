@@ -11,7 +11,6 @@
 
 package com.gerritforge.gerrit.plugins.multisite;
 
-import static com.google.common.truth.Truth.assertThat;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Cache.CACHE_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Cache.PATTERN_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.DEFAULT_THREAD_POOL_SIZE;
@@ -22,6 +21,7 @@ import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.DEFAU
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.INDEX_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.SYNCHRONIZE_FORCED_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.THREAD_POOL_SIZE_KEY;
+import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.collect.ImmutableList;
 import org.eclipse.jgit.lib.Config;

@@ -13,15 +13,15 @@ package com.gerritforge.gerrit.plugins.multisite.event;
 
 import static org.mockito.Mockito.verify;
 
-import com.google.gerrit.entities.Project;
-import com.google.gerrit.server.events.EventGsonProvider;
-import com.google.gson.Gson;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEntry;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedCacheEvictionHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.CacheEvictionEventRouter;
+import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.events.EventGsonProvider;
+import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

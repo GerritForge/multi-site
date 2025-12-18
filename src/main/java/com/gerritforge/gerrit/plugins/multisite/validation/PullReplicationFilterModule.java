@@ -11,9 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.validation;
 
+import com.gerritforge.gerrit.plugins.replication.pull.ReplicationFetchFilter;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.inject.AbstractModule;
-import com.gerritforge.gerrit.plugins.replication.pull.ReplicationFetchFilter;
 
 public class PullReplicationFilterModule extends AbstractModule {
 

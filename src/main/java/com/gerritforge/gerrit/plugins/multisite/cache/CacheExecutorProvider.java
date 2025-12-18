@@ -11,11 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.cache;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 
 @Singleton
 class CacheExecutorProvider extends ExecutorProvider {

@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.AccountGroup;
@@ -19,7 +20,6 @@ import com.google.gerrit.server.config.AllUsersName;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import java.io.IOException;
 import java.util.Optional;
 import org.eclipse.jgit.errors.MissingObjectException;

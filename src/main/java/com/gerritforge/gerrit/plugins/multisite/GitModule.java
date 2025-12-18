@@ -12,12 +12,12 @@
 package com.gerritforge.gerrit.plugins.multisite;
 
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
+import com.gerritforge.gerrit.plugins.multisite.validation.ValidationModule;
 import com.google.gerrit.server.ModuleImpl;
 import com.google.gerrit.server.config.RepositoryConfig;
 import com.google.gerrit.server.git.GitRepositoryManagerModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.validation.ValidationModule;
 
 @ModuleImpl(name = GitRepositoryManagerModule.MANAGER_MODULE)
 public class GitModule extends AbstractModule {

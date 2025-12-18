@@ -19,13 +19,13 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.google.gerrit.entities.AccountGroup;
-import com.google.gerrit.server.index.group.GroupIndexer;
-import com.google.gerrit.server.util.OneOffRequestContext;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.TestGroupChecker;
+import com.google.gerrit.entities.AccountGroup;
+import com.google.gerrit.server.index.group.GroupIndexer;
+import com.google.gerrit.server.util.OneOffRequestContext;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;

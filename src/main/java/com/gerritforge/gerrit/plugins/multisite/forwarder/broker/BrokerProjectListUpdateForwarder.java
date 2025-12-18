@@ -13,13 +13,13 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder.broker;
 
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic.PROJECT_LIST_TOPIC;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ProjectListUpdateForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 @Singleton
 public class BrokerProjectListUpdateForwarder extends BrokerForwarder
