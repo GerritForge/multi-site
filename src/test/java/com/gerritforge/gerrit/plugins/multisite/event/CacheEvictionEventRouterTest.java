@@ -66,6 +66,6 @@ public class CacheEvictionEventRouterTest {
     router.route(event);
 
     verify(cacheEvictionHandler)
-        .evict(CacheEntry.from(event.cacheName, Project.nameKey((String) event.key)));
+        .evict(CacheEntry.from(event.cacheName, Project.nameKey(event.key.toString())));
   }
 }
