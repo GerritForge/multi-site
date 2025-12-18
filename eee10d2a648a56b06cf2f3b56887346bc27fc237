@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f1bf1c2_ed7822bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T20:40:32Z",
+      "side": 1,
+      "message": "```suggestion\nTest that Gson encoding/decoding works for complex types\n\nIntroduce a new test for ensuring that Gson encoding/decoding\nis able to treat complex types and does not introduce any data\nmanipulation.\n\nBug: Issue 465491615\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 68
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
