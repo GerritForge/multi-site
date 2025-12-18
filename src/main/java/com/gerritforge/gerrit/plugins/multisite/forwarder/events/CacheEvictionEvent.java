@@ -12,11 +12,13 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder.events;
 
 import com.google.common.base.Objects;
+import com.google.gson.annotations.JsonAdapter;
 
 public class CacheEvictionEvent extends MultiSiteEvent {
   static final String TYPE = "cache-eviction";
 
   public String cacheName;
+  @JsonAdapter(KeyObjectAdapter.class)
   public Object key;
 
   public CacheEvictionEvent(String cacheName, Object key, String instanceId) {
@@ -36,5 +38,11 @@ public class CacheEvictionEvent extends MultiSiteEvent {
     if (o == null || getClass() != o.getClass()) return false;
     CacheEvictionEvent that = (CacheEvictionEvent) o;
     return Objects.equal(cacheName, that.cacheName) && Objects.equal(key, that.key);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("CacheEvictionEvent { cacheName='%s'. instanceId='%s', key=(%s) '%s' })",
+        cacheName, instanceId, key.getClass(), key);
   }
 }
