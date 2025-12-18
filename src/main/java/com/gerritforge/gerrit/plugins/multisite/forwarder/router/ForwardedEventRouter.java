@@ -11,8 +11,8 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
-import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
+import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
 
 public interface ForwardedEventRouter<EventType> {

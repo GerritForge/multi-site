@@ -17,6 +17,7 @@ import static org.eclipse.jgit.lib.Constants.OBJ_BLOB;
 
 import com.gerritforge.gerrit.globalrefdb.GlobalRefDbSystemError;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDatabaseWrapper;
+import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.flogger.FluentLogger;
@@ -28,7 +29,6 @@ import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.update.context.RefUpdateContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;

@@ -11,11 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.broker;
 
-import com.google.gerrit.extensions.registration.DynamicSet;
-import com.google.gerrit.lifecycle.LifecycleModule;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEvictionForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.IndexEventForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ProjectListUpdateForwarder;
+import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.lifecycle.LifecycleModule;
 
 public class BrokerForwarderModule extends LifecycleModule {
   @Override

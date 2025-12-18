@@ -12,13 +12,13 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 
 @Singleton
 public class MultiSiteConsumerRunner implements LifecycleListener {

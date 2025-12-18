@@ -11,11 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.cache;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;

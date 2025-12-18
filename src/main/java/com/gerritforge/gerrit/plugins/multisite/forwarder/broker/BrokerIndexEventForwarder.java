@@ -11,13 +11,13 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.broker;
 
-import com.google.inject.Inject;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.IndexEventForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
+import com.google.inject.Inject;
 
 public class BrokerIndexEventForwarder extends BrokerForwarder implements IndexEventForwarder {
 

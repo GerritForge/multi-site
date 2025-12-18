@@ -13,14 +13,14 @@ package com.gerritforge.gerrit.plugins.multisite.event;
 
 import static org.mockito.Mockito.verify;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.server.events.CommentAddedEvent;
 import com.google.gerrit.server.util.time.TimeUtil;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

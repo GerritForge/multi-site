@@ -16,9 +16,9 @@ import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.project.ProjectCache;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

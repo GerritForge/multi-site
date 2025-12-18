@@ -11,11 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.broker;
 
+import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
 import com.google.gerrit.metrics.Counter1;
 import com.google.gerrit.metrics.MetricMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
 
 @Singleton
 public class BrokerMetrics extends MultiSiteMetrics {

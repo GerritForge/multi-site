@@ -15,11 +15,11 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
+import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.extensions.registration.DynamicMap;
-import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

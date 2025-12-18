@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventDispatcher;
@@ -19,7 +20,6 @@ import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

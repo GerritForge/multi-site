@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.MoreObjects;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
@@ -19,7 +20,6 @@ import com.google.gerrit.server.events.EventGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;

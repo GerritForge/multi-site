@@ -12,14 +12,14 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.CacheEvictionEventRouter;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.router.CacheEvictionEventRouter;
 
 @Singleton
 public class CacheEvictionEventSubscriber extends AbstractSubcriber {

@@ -11,9 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.lifecycle.LifecycleModule;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 
 public class SubscriberModule extends LifecycleModule {
 

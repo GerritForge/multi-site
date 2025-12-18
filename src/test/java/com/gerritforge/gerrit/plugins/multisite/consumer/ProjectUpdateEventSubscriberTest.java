@@ -13,11 +13,11 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import static org.mockito.Mockito.mock;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gerrit.server.events.Event;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ProjectListUpdateRouter;
+import com.google.common.collect.ImmutableList;
+import com.google.gerrit.server.events.Event;
 import java.util.List;
 
 public class ProjectUpdateEventSubscriberTest extends AbstractSubscriberTestBase {

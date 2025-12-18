@@ -11,6 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.gerrit.extensions.annotations.Exports;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.DynamicSet;
@@ -19,9 +22,6 @@ import com.google.gerrit.server.events.EventListener;
 import com.google.inject.Inject;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 
 public class RouterModule extends LifecycleModule {
 

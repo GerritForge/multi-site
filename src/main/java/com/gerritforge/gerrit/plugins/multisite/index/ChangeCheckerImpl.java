@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.server.change.ChangeFinder;
@@ -24,7 +25,6 @@ import com.google.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Optional;

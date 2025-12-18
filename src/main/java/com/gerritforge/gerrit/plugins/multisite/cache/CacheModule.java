@@ -11,13 +11,13 @@
 
 package com.gerritforge.gerrit.plugins.multisite.cache;
 
+import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gerrit.extensions.events.NewProjectCreatedListener;
 import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.lifecycle.LifecycleModule;
 import com.google.gerrit.server.cache.CacheRemovalListener;
-import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 import java.util.concurrent.Executor;
 
 public class CacheModule extends LifecycleModule {

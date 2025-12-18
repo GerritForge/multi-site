@@ -11,10 +11,10 @@
 
 package com.gerritforge.gerrit.plugins.multisite.broker;
 
+import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 
 @Singleton
 class BrokerExecutorProvider extends ExecutorProvider {

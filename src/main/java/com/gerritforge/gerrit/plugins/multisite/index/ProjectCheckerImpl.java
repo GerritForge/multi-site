@@ -11,10 +11,10 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import java.util.Optional;
 
 public class ProjectCheckerImpl implements ProjectChecker {

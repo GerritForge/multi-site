@@ -16,8 +16,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.google.gerrit.server.git.WorkQueue;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.google.gerrit.server.git.WorkQueue;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import org.junit.Before;
 import org.junit.Test;

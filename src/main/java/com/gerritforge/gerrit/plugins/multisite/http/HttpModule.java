@@ -11,9 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.http;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.inject.Inject;
 import com.google.inject.servlet.ServletModule;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 
 public class HttpModule extends ServletModule {
 

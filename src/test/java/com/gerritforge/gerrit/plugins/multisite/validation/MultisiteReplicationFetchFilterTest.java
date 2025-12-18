@@ -20,12 +20,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDatabaseWrapper;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.validation.dfsrefdb.RefFixture;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.testing.InMemoryRepositoryManager;
 import com.google.gerrit.testing.InMemoryTestEnvironment;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.validation.dfsrefdb.RefFixture;
 import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jgit.internal.storage.dfs.InMemoryRepository;

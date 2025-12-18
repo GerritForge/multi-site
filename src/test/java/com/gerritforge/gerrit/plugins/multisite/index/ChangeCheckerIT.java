@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestPlugin;
@@ -20,7 +21,6 @@ import com.google.gerrit.acceptance.config.GerritConfig;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.inject.AbstractModule;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import java.util.Optional;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;

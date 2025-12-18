@@ -14,13 +14,13 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.doReturn;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.google.gerrit.common.Nullable;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.server.config.AllUsersName;
 import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.gerrit.server.git.GitRepositoryManager;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;

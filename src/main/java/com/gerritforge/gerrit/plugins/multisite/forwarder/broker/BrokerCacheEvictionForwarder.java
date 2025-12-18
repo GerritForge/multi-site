@@ -11,14 +11,14 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.broker;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEvictionForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 @Singleton
 public class BrokerCacheEvictionForwarder extends BrokerForwarder
