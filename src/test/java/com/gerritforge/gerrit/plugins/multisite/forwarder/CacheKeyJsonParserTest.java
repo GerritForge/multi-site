@@ -12,13 +12,19 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.gerrit.testing.TestActionRefUpdateContext.openTestRefUpdateContext;
 
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventGsonProvider;
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CacheKeyJsonParserTest {
@@ -27,11 +33,70 @@ public class CacheKeyJsonParserTest {
   private final Gson gson = new EventGsonProvider().get();
   private final CacheKeyJsonParser gsonParser = new CacheKeyJsonParser(gson);
 
+  public record ComplexKeyType(String key) {}
+
+  @Before
+  public void setUp() throws Exception {
+    MultiSiteEvent.registerEventTypes();
+  }
+
+  @Test
+  public void serializeDeserializeCacheEvictionEventWithComplexKeyType() {
+    CacheEvictionEvent event =
+        new CacheEvictionEvent("test-cache", new ComplexKeyType("cache-key"), "myinstance");
+    String jsonEvent = gson.toJson(event);
+    Event parsedEvent = gson.fromJson(jsonEvent, Event.class);
+    assertThat(parsedEvent).isEqualTo(event);
+  }
+
+  @Test
+  public void serializeDeserializeCacheEvictionWithPrimitiveType() {
+    CacheEvictionEvent event = new CacheEvictionEvent("test-cache", "cache-key", "myinstance");
+    String jsonEvent = gson.toJson(event);
+    Event parsedEvent = gson.fromJson(jsonEvent, Event.class);
+    assertThat(parsedEvent).isEqualTo(event);
+  }
+
+  @Test
+  public void deserializeCacheEvictionSerializedWithoutKeyType() {
+    String oldEventString =
+        "{\n"
+            + "  \"cacheName\" : \"test-cache\","
+            + "  \"key\" : \"cache-key\","
+            + "  \"type\" : \"cache-eviction\","
+            + "  \"eventCreatedOn\" : 1767002059,"
+            + "  \"instanceId\" : \"myinstance\"}";
+
+    Event parsedEvent = gson.fromJson(oldEventString, Event.class);
+    assertThat(parsedEvent).isInstanceOf(CacheEvictionEvent.class);
+    CacheEvictionEvent event = (CacheEvictionEvent) parsedEvent;
+    assertThat(event.key).isInstanceOf(String.class);
+  }
+
+  @Test
+  public void deserializeCacheEvictionSerializedWithoutKeyTypeCompleKey() {
+    String oldEventString =
+        "{" +
+           "  \"cacheName\" : \"test-cache\"," +
+           "  \"key\" : {\"key\" : \"cache-key\"}," +
+           "  \"type\" : \"cache-eviction\"," +
+           "  \"eventCreatedOn\" : 1767010101," +
+           "  \"instanceId\" : \"myinstance\"}";
+
+    Event parsedEvent = gson.fromJson(oldEventString, Event.class);
+    assertThat(parsedEvent).isInstanceOf(CacheEvictionEvent.class);
+    CacheEvictionEvent event = (CacheEvictionEvent) parsedEvent;
+    assertThat(event.key).isInstanceOf(LinkedTreeMap.class);
+  }
+
+
+
   @Test
   public void accountIDParse() {
     Account.Id accountId = Account.id(1);
     String json = gson.toJson(accountId);
     assertThat(accountId).isEqualTo(gsonParser.from(Constants.ACCOUNTS, json));
+
   }
 
   @Test
