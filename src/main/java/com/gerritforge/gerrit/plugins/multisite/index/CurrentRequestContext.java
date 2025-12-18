@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
@@ -18,7 +19,6 @@ import com.google.gerrit.server.util.RequestContext;
 import com.google.gerrit.server.util.ThreadLocalRequestContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import java.util.function.Consumer;
 
 @Singleton

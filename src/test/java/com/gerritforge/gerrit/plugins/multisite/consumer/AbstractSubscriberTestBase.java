@@ -20,13 +20,13 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
-import com.google.gerrit.extensions.registration.DynamicSet;
-import com.google.gerrit.server.events.Event;
-import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration.Broker;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
+import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
 import java.util.List;
 import org.junit.Before;

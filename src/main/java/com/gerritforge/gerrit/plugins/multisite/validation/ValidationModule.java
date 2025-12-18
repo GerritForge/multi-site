@@ -23,6 +23,7 @@ import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbRefDatabase;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbRefUpdate;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbRepository;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefLogger;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.extensions.registration.DynamicSet;
@@ -31,7 +32,6 @@ import com.google.gerrit.server.config.RepositoryConfig;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 
 public class ValidationModule extends FactoryModule {
   private final Configuration cfg;

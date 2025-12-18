@@ -11,9 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.validation;
 
-import static com.google.common.truth.Truth.assertThat;
 import static com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate.MULTI_SITE_VERSIONING_REF;
 import static com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate.MULTI_SITE_VERSIONING_VALUE_REF;
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -25,6 +25,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDatabaseWrapper;
+import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
+import com.gerritforge.gerrit.plugins.multisite.validation.dfsrefdb.RefFixture;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.common.AccountInfo;
 import com.google.gerrit.extensions.events.GitBatchRefUpdateListener;
@@ -33,8 +35,6 @@ import com.google.gerrit.server.project.ProjectConfig;
 import com.google.gerrit.testing.InMemoryRepositoryManager;
 import com.google.gerrit.testing.InMemoryTestEnvironment;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
-import com.gerritforge.gerrit.plugins.multisite.validation.dfsrefdb.RefFixture;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

@@ -11,9 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
-import com.google.inject.Inject;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedProjectListUpdateHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
+import com.google.inject.Inject;
 import java.io.IOException;
 
 public class ProjectListUpdateRouter implements ForwardedEventRouter<ProjectListUpdateEvent> {

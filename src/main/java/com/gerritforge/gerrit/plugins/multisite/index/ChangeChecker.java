@@ -11,8 +11,8 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
-import com.google.gerrit.server.notedb.ChangeNotes;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.google.gerrit.server.notedb.ChangeNotes;
 import java.io.IOException;
 import java.util.Optional;
 

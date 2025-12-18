@@ -12,15 +12,15 @@
 package com.gerritforge.gerrit.plugins.multisite;
 
 import com.gerritforge.gerrit.globalrefdb.validation.LibModule;
-import com.google.gerrit.lifecycle.LifecycleModule;
-import com.google.inject.CreationException;
-import com.google.inject.Inject;
-import com.google.inject.spi.Message;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerModule;
 import com.gerritforge.gerrit.plugins.multisite.cache.CacheModule;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderModule;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.RouterModule;
 import com.gerritforge.gerrit.plugins.multisite.index.IndexModule;
+import com.google.gerrit.lifecycle.LifecycleModule;
+import com.google.inject.CreationException;
+import com.google.inject.Inject;
+import com.google.inject.spi.Message;
 import java.util.Collection;
 
 public class Module extends LifecycleModule {

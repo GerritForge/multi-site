@@ -11,6 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
+import com.gerritforge.gerrit.plugins.replication.pull.FetchRefReplicatedEvent;
+import com.gerritforge.gerrit.plugins.replication.pull.ReplicationState;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
@@ -22,9 +25,6 @@ import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
-import com.gerritforge.gerrit.plugins.replication.pull.FetchRefReplicatedEvent;
-import com.gerritforge.gerrit.plugins.replication.pull.ReplicationState;
 import java.io.IOException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.RefUpdate;

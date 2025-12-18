@@ -11,25 +11,14 @@
 
 package com.gerritforge.gerrit.plugins.multisite.http;
 
+import static com.gerritforge.gerrit.plugins.multisite.http.HttpModule.LAG_ENDPOINT_SEGMENT;
 import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static com.google.common.truth.Truth.assertThat;
-import static com.gerritforge.gerrit.plugins.multisite.http.HttpModule.LAG_ENDPOINT_SEGMENT;
 import static org.junit.Assume.assumeTrue;
 
 import com.gerritforge.gerrit.globalrefdb.validation.Log4jSharedRefLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefLogger;
-import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
-import com.google.gerrit.acceptance.RestResponse;
-import com.google.gerrit.acceptance.TestPlugin;
-import com.google.gerrit.acceptance.config.GerritConfig;
-import com.google.gerrit.entities.Project;
-import com.google.gerrit.httpd.restapi.RestApiServlet;
-import com.google.gerrit.server.git.WorkQueue;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Scopes;
-import com.google.inject.multibindings.OptionalBinder;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.Log4jProjectVersionLogger;
 import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
@@ -41,6 +30,17 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.router.RouterModule;
 import com.gerritforge.gerrit.plugins.multisite.index.IndexModule;
 import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate;
 import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdateImpl;
+import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
+import com.google.gerrit.acceptance.RestResponse;
+import com.google.gerrit.acceptance.TestPlugin;
+import com.google.gerrit.acceptance.config.GerritConfig;
+import com.google.gerrit.entities.Project;
+import com.google.gerrit.httpd.restapi.RestApiServlet;
+import com.google.gerrit.server.git.WorkQueue;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Scopes;
+import com.google.inject.multibindings.OptionalBinder;
 import java.io.IOException;
 import org.eclipse.jgit.lib.Config;
 import org.junit.Before;

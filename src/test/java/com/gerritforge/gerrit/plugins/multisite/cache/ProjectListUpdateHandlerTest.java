@@ -20,14 +20,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.gerrit.extensions.events.NewProjectCreatedListener;
-import com.google.gerrit.extensions.events.ProjectDeletedListener;
-import com.google.gerrit.extensions.registration.DynamicSet;
 import com.gerritforge.gerrit.plugins.multisite.cache.ProjectListUpdateHandler.ProjectListUpdateTask;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ProjectListUpdateForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
+import com.google.common.util.concurrent.MoreExecutors;
+import com.google.gerrit.extensions.events.NewProjectCreatedListener;
+import com.google.gerrit.extensions.events.ProjectDeletedListener;
+import com.google.gerrit.extensions.registration.DynamicSet;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

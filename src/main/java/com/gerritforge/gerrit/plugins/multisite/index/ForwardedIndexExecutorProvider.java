@@ -11,11 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 
 @Singleton
 class ForwardedIndexExecutorProvider extends ExecutorProvider {

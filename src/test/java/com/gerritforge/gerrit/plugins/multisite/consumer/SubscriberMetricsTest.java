@@ -16,6 +16,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
+import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate;
 import com.google.common.base.Suppliers;
 import com.google.common.cache.CacheBuilder;
 import com.google.gerrit.entities.Project;
@@ -25,8 +27,6 @@ import com.google.gerrit.server.data.RefUpdateAttribute;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.RefUpdatedEvent;
 import com.google.gerrit.server.project.ProjectCache;
-import com.gerritforge.gerrit.plugins.multisite.ProjectVersionLogger;
-import com.gerritforge.gerrit.plugins.multisite.validation.ProjectVersionRefUpdate;
 import com.googlesource.gerrit.plugins.replication.events.ProjectDeletionReplicationSucceededEvent;
 import java.net.URISyntaxException;
 import java.util.Optional;

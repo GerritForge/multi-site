@@ -11,15 +11,15 @@
 
 package com.gerritforge.gerrit.plugins.multisite.cache;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEvictionForwarder;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.google.common.cache.RemovalNotification;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.cache.CacheRemovalListener;
 import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEvictionForwarder;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import java.util.concurrent.Executor;
 
 class CacheEvictionHandler<K, V> implements CacheRemovalListener<K, V> {

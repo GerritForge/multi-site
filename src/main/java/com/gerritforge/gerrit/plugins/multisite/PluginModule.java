@@ -12,6 +12,12 @@
 package com.gerritforge.gerrit.plugins.multisite;
 
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectDeletedSharedDbCleanup;
+import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
+import com.gerritforge.gerrit.plugins.multisite.consumer.MultiSiteConsumerRunner;
+import com.gerritforge.gerrit.plugins.multisite.consumer.ReplicationStatusModule;
+import com.gerritforge.gerrit.plugins.multisite.consumer.SubscriberModule;
+import com.gerritforge.gerrit.plugins.multisite.event.EventModule;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.broker.BrokerForwarderModule;
 import com.google.common.collect.ImmutableList;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.ProjectDeletedListener;
@@ -23,12 +29,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
 import com.google.inject.Scopes;
-import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
-import com.gerritforge.gerrit.plugins.multisite.consumer.MultiSiteConsumerRunner;
-import com.gerritforge.gerrit.plugins.multisite.consumer.ReplicationStatusModule;
-import com.gerritforge.gerrit.plugins.multisite.consumer.SubscriberModule;
-import com.gerritforge.gerrit.plugins.multisite.event.EventModule;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.broker.BrokerForwarderModule;
 
 public class PluginModule extends LifecycleModule {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();

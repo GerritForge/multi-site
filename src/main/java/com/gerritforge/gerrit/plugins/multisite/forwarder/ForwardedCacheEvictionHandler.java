@@ -11,11 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.cache.Cache;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

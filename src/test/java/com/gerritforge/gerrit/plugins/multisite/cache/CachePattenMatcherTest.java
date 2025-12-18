@@ -15,8 +15,8 @@ import static com.google.common.truth.Truth.assertWithMessage;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.when;
 
-import com.google.common.collect.ImmutableList;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

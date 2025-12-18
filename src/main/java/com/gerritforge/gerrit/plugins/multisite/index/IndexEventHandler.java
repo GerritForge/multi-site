@@ -11,6 +11,13 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.IndexEventForwarder;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.base.Objects;
 import com.google.gerrit.extensions.events.AccountIndexedListener;
 import com.google.gerrit.extensions.events.ChangeIndexedListener;
@@ -19,13 +26,6 @@ import com.google.gerrit.extensions.events.ProjectIndexedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.IndexEventForwarder;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

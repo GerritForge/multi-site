@@ -11,9 +11,12 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
-import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
+import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.extensions.events.LifecycleListener;
@@ -24,9 +27,6 @@ import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
