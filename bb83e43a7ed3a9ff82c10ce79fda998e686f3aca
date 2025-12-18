@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a9741a9_3bd5efb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T20:21:26Z",
+      "side": 1,
+      "message": "Let\u0027s do it on stable-3.13 and merge it up.",
+      "revId": "bb83e43a7ed3a9ff82c10ce79fda998e686f3aca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
