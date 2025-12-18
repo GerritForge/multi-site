@@ -14,9 +14,12 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventGsonProvider;
 import com.google.gson.Gson;
 import org.junit.Test;
@@ -26,6 +29,43 @@ public class CacheKeyJsonParserTest {
 
   private final Gson gson = new EventGsonProvider().get();
   private final CacheKeyJsonParser gsonParser = new CacheKeyJsonParser(gson);
+
+  public record ComplexKeyType(String key) {}
+
+  @Test
+  public void serializeDeserializeCacheEvictionEventWithComplexKeyType() {
+    MultiSiteEvent.registerEventTypes();
+    CacheEvictionEvent event =
+        new CacheEvictionEvent("test-cache", new ComplexKeyType("cache-key"), "myinstance");
+    String jsonEvent = gson.toJson(event);
+    Event parsedEvent = gson.fromJson(jsonEvent, Event.class);
+    assertThat(parsedEvent).isEqualTo(event);
+  }
+
+  @Test
+  public void serializeDeserializeCacheEvictionWithPrimitiveType() {
+    MultiSiteEvent.registerEventTypes();
+    CacheEvictionEvent event = new CacheEvictionEvent("test-cache", "cache-key", "myinstance");
+    String jsonEvent = gson.toJson(event);
+    Event parsedEvent = gson.fromJson(jsonEvent, Event.class);
+    assertThat(parsedEvent).isEqualTo(event);
+  }
+
+  @Test
+  public void deserializeCacheEvictionSerializedWithoutKeyType() {
+    MultiSiteEvent.registerEventTypes();
+    String oldEventString =
+        "{\n"
+            + "  \"cacheName\" : \"test-cache\",\n"
+            + "  \"key\" : \"cache-key\",\n"
+            + "  \"type\" : \"cache-eviction\",\n"
+            + "  \"eventCreatedOn\" : 1767002059,\n"
+            + "  \"instanceId\" : \"myinstance\"\n"
+            + "}";
+
+    Event parsedEvent = gson.fromJson(oldEventString, Event.class);
+    assertThat(parsedEvent).isInstanceOf(CacheEvictionEvent.class);
+  }
 
   @Test
   public void accountIDParse() {
