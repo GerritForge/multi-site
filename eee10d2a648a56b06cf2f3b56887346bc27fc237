@@ -123,6 +123,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "408c2d53_40c3bf42",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:35:18Z",
+      "side": 1,
+      "message": "This should be similar to how we do in multi-site, passing the `Event.class` type.\n\n\n\n```suggestion\n    CacheEvictionEvent parsedEvent \u003d gson.fromJson(jsonEvent, Event.class);\n```",
+      "range": {
+        "startLine": 42,
+        "startChar": 62,
+        "endLine": 42,
+        "endChar": 80
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5b3dfea_98dd8b41",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
         "patchSetId": 2
