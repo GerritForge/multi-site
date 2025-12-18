@@ -20,18 +20,15 @@ import com.google.inject.Inject;
 
 public class CacheEvictionEventRouter implements ForwardedEventRouter<CacheEvictionEvent> {
   private final ForwardedCacheEvictionHandler cacheEvictionHanlder;
-  private final CacheKeyJsonParser gsonParser;
 
   @Inject
   public CacheEvictionEventRouter(
-      ForwardedCacheEvictionHandler cacheEvictionHanlder, CacheKeyJsonParser gsonParser) {
+      ForwardedCacheEvictionHandler cacheEvictionHanlder) {
     this.cacheEvictionHanlder = cacheEvictionHanlder;
-    this.gsonParser = gsonParser;
   }
 
   @Override
   public void route(CacheEvictionEvent cacheEvictionEvent) throws CacheNotFoundException {
-    Object parsedKey = gsonParser.from(cacheEvictionEvent.cacheName, cacheEvictionEvent.key);
-    cacheEvictionHanlder.evict(CacheEntry.from(cacheEvictionEvent.cacheName, parsedKey));
+    cacheEvictionHanlder.evict(CacheEntry.from(cacheEvictionEvent.cacheName, cacheEvictionEvent.key));
   }
 }
