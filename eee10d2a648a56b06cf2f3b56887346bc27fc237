@@ -43,6 +43,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f690cc49_3ae6e57e",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:32:03Z",
+      "side": 1,
+      "message": "```suggestion\n  private final CacheKeyJsonParser gsonParser \u003d new CacheKeyJsonParser(gson);\n  \n  public record ComplexKeyType(String key) { }\n```",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7a47b1b_b6382b53",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
         "patchSetId": 2
@@ -83,6 +100,23 @@
         "endLine": 40,
         "endChar": 173
       },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "451ae05c_85e9601b",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:32:03Z",
+      "side": 1,
+      "message": "```suggestion\n    CacheEvictionEvent event \u003d new CacheEvictionEvent(\"test-cache\", new ComplexKeyType(\"cache-key\"), \"myinstance\");\n```",
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
