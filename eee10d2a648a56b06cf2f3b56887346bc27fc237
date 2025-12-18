@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4a14fe0_8aff6818",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:24:06Z",
+      "side": 1,
+      "message": "Add a `toString()` method so that the assertion about the equality of cache eviction events would be more readable.\n\n```suggestion\n  }\n  \n  @Override\n  public String toString() {\n    return String.format(\"CacheEvictionEvent { cacheName\u003d\u0027%s\u0027. instanceId\u003d\u0027%s\u0027, key\u003d(%s) \u0027%s\u0027 })\",\n        cacheName, instanceId, key.getClass(), key);\n  }\n```",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7a47b1b_b6382b53",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
         "patchSetId": 2
@@ -65,6 +82,29 @@
         "startChar": 68,
         "endLine": 40,
         "endChar": 173
+      },
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5b3dfea_98dd8b41",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:24:06Z",
+      "side": 1,
+      "message": "This assertion produces a failure which is very hard to understand. You should add an implementation fo the `CacheEvictionEvent.toString()` to make it more readable.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 45
       },
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
