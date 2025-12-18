@@ -199,6 +199,24 @@
       "message": "We should also add another test showing that the serialization/deserialization works if the key isn\u0027t a complex type.",
       "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72f87c0f_574eb198",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-18T21:42:16Z",
+      "side": 1,
+      "message": "See an example below:\n\n```\n  @Test\n  public void serializeDeserializeCacheEvictionWithPrimitiveType() {\n    MultiSiteEvent.registerEventTypes();\n    CacheEvictionEvent event \u003d new CacheEvictionEvent(\"test-cache\", \"cache-key\", \"myinstance\");\n    assertThat(gson.fromJson(gson.toJson(event), Event.class)).isEqualTo(event);\n  }\n```",
+      "parentUuid": "484c93e7_5b26461b",
+      "revId": "eee10d2a648a56b06cf2f3b56887346bc27fc237",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
