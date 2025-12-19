@@ -11,15 +11,26 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.events;
 
-import com.google.gson.*;
-
 import java.lang.reflect.Type;
+
+import com.google.gerrit.server.events.EventGsonProvider;
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonObject;
+
 
 public class KeyObjectAdapter implements JsonSerializer<Object>, JsonDeserializer<Object> {
 
+  private Gson gson = new EventGsonProvider().get();
+
   @Override
   public JsonElement serialize(Object key, Type typeOfSrc, JsonSerializationContext context) {
-    JsonElement elem = new Gson().toJsonTree(key);
+    JsonElement elem = gson.toJsonTree(key);
     if (elem.isJsonPrimitive()) {
       return elem;
     }
@@ -36,7 +47,7 @@ public class KeyObjectAdapter implements JsonSerializer<Object>, JsonDeserialize
     String typeName = jsonObject.get("key-type").getAsString();
     try {
       Class<? extends Object> cls = Class.forName(typeName);
-      return new Gson().fromJson(jsonObject, cls);
+      return gson.fromJson(jsonObject, cls);
     } catch (ClassNotFoundException e) {
       throw new JsonParseException(e);
     }
