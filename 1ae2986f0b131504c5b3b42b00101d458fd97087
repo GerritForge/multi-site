@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ed86cb1_8864f32e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-19T16:11:42Z",
+      "side": 1,
+      "message": "Here I\u0027m making an assumption that a cache key, if its not a more complex type, it will always be a string(no booleans, no integers).\n\nLet me know if this assumption is wrong.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 5
+      },
+      "revId": "1ae2986f0b131504c5b3b42b00101d458fd97087",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
