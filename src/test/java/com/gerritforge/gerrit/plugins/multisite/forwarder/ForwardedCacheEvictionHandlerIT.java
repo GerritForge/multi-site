@@ -168,7 +168,7 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
   @GerritConfig(name = "gerrit.instanceId", value = "testInstanceId")
   public void shouldEvictProjectCache() throws Exception {
     objectUnderTest.route(
-        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, project.get(), "instance-id"));
+        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, project, "instance-id"));
     evictionsCacheTracker.waitForExpectedEvictions();
 
     assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))
@@ -216,7 +216,7 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
     restartCacheEvictionsTracking();
 
     objectUnderTest.route(
-        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, projectNameKey.get(), "instance-id"));
+        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, projectNameKey, "instance-id"));
 
     evictionsCacheTracker.waitForExpectedEvictions();
     assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))
