@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b62bf0f6_ccb6e9bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-19T00:24:51Z",
+      "side": 1,
+      "message": "The test is now failing for the *correct reason* and the output is meaningful:\n\n```\n1) serializeDeserializeCacheEvictionEventWithComplexKeyType(com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParserTest)\nexpected: …e\u0027, key\u003d(class com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParserTest$ComplexKeyType) \u0027ComplexKeyType[key\u003dcache-key]\u0027 })\nbut was : …e\u0027, key\u003d(class com.google.gson.internal.LinkedTreeMap) \u0027{key\u003dcache-key}\u0027 })\n```",
+      "revId": "bd33832e5f3ff9e2decc808b2a38873d58ba2d9b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
