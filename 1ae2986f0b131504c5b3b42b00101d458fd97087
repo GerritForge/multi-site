@@ -22,6 +22,30 @@
       },
       "revId": "1ae2986f0b131504c5b3b42b00101d458fd97087",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "708c25fd_27d9fa8a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-24T08:59:46Z",
+      "side": 1,
+      "message": "This assumption is no longer needed right?",
+      "parentUuid": "1ed86cb1_8864f32e",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 5
+      },
+      "revId": "1ae2986f0b131504c5b3b42b00101d458fd97087",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

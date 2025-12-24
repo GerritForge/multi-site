@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ff2302f_4a4c36e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-24T08:59:46Z",
+      "side": 1,
+      "message": "Formatting is off for this change, did you run GJF?",
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e481792_05eaffed",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-24T08:59:46Z",
+      "side": 1,
+      "message": "missing header",
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0addc53f_af0d956f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-24T08:59:46Z",
+      "side": 1,
+      "message": "Can you add a short javadocs explaining what the reason of existence of this class?",
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25a5a5ab_df3c878b",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/event/CacheEvictionEventRouterTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-24T08:59:46Z",
+      "side": 1,
+      "message": "unrelated change?",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 88
+      },
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28005d58_6ae8af3d",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-24T08:59:46Z",
+      "side": 1,
+      "message": "nit: if this is only needed (is it?), should we do it in a `@Before` call?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
