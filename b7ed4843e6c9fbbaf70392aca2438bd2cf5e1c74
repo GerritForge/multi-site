@@ -35,6 +35,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3add9e80_2898d728",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-24T16:20:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e481792_05eaffed",
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0addc53f_af0d956f",
@@ -48,6 +66,24 @@
       "writtenOn": "2025-12-24T08:59:46Z",
       "side": 1,
       "message": "Can you add a short javadocs explaining what the reason of existence of this class?",
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fb597db_7ed3561d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-24T16:20:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0addc53f_af0d956f",
       "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -75,6 +111,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aec09a6_df5dd94d",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/event/CacheEvictionEventRouterTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-24T16:20:53Z",
+      "side": 1,
+      "message": "At some point this was needed, but looks like not anymore.",
+      "parentUuid": "25a5a5ab_df3c878b",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 88
+      },
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28005d58_6ae8af3d",
@@ -88,6 +148,30 @@
       "writtenOn": "2025-12-24T08:59:46Z",
       "side": 1,
       "message": "nit: if this is only needed (is it?), should we do it in a `@Before` call?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 40
+      },
+      "revId": "b7ed4843e6c9fbbaf70392aca2438bd2cf5e1c74",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dadf6bf0_e980a18c",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-24T16:20:53Z",
+      "side": 1,
+      "message": "I need to think about what we do with these tests, we should either change them all so that they all require this to be called(which is the way I\u0027m leaning atm) or change these 2 tests back to behave like the other tests in the class.",
+      "parentUuid": "28005d58_6ae8af3d",
       "range": {
         "startLine": 37,
         "startChar": 0,
