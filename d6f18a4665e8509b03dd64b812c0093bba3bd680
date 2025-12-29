@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26755b69_5fb3cbc9",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "nit: this parenthesis doesn\u0027t close anything.",
+      "range": {
+        "startLine": 47,
+        "startChar": 78,
+        "endLine": 47,
+        "endChar": 79
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddea7210_7760e661",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "nit: these could be `final`",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df53dd08_248c4162",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "Can we not get Guice to inject this provider?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 52
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "645dc81c_3ab00e59",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "nit: this could be inlined",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 16
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b28583a4_56eefd06",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "Why not have these within the `try` block?",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc842ac2_17a73eab",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "Don\u0027t we want explicit support for older payloads without `keyType`?\nHow does this work when `keyType` is `null`? does this not throw an `NPE`?\n\nI think the test you have added passes because the string \"key\": \"cache-key\" (a JSON string), so `json.isJsonObject()` is `false`?",
+      "range": {
+        "startLine": 42,
+        "startChar": 24,
+        "endLine": 42,
+        "endChar": 49
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19c3a157_ca500a3f",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "can you add a test where the `key` is a complex type?",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 44
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9246497a_c461bbff",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:31:24Z",
+      "side": 1,
+      "message": "can we assert on what would be the type of the `key` in this case? I guess I\u0027ll be `Object`, correct?",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 67
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
