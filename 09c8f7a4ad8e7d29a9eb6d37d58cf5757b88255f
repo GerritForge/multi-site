@@ -1,0 +1,193 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f84b7745_817d6470",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "Can we also draft the _next step_ of when the class of the key is provided by another plugin? So that we can see both steps and ensure that one doesn\u0027t compromise the other and we don\u0027t have to change the format again?",
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb6cfefb_ac47e480",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "This isn\u0027t a generic \u0027type\u0027 but actually the full class name.\nI believe the name should reflect what it is.\n\n```suggestion\n  public final String keyClassName;\n```",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 29
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95020282_af29899a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "I\u0027d suggest to introduce the `wrap()` method which is more readable of what this object really does.\n\n\n\n```suggestion\n  }\n  \n  public KeyObject wrap(Object key) {\n     return new KeyObject(key);\n  }\n```",
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "083d40d1_dfe2a88a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "IMHO this is a wrapping pattern and we should make it explicit.\n\n\n\n```suggestion\n    return gson.toJsonTree(KeyObject.wrap(key));\n```",
+      "range": {
+        "startLine": 31,
+        "startChar": 27,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4f68084_678681e4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "```suggestion\n    if (json.isJsonObject() \u0026\u0026 json.getAsJsonObject().has(\"keyClassName\")) {\n```",
+      "range": {
+        "startLine": 38,
+        "startChar": 59,
+        "endLine": 38,
+        "endChar": 66
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96e93a04_4d3d2f42",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "```suggestion\n      String className \u003d jsonObject.get(\"keyClassName\").getAsString();\n```",
+      "range": {
+        "startLine": 40,
+        "startChar": 40,
+        "endLine": 40,
+        "endChar": 47
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95f93fa3_7e41624d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "```suggestion\n        Class\u003c? extends Object\u003e cls \u003d Class.forName(className);\n```",
+      "range": {
+        "startLine": 42,
+        "startChar": 52,
+        "endLine": 42,
+        "endChar": 60
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fd6f3ee_ec330920",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "This is an incorrect scenario, because the key is in the **new format** but the JSON is incomplete. Shouldn\u0027t this throw a Json parsing exception?",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 3
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d76d1ea_258740d9",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "We should also add a test on what to expect if the key class name cannot be found.",
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

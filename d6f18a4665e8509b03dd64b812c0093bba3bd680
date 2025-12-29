@@ -120,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69492b11_ede33676",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-29T14:10:39Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "df53dd08_248c4162",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 52
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "645dc81c_3ab00e59",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
         "patchSetId": 20
