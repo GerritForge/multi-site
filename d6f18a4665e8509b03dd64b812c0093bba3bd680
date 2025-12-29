@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57a5c7ed_aac665d1",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T10:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26755b69_5fb3cbc9",
+      "range": {
+        "startLine": 47,
+        "startChar": 78,
+        "endLine": 47,
+        "endChar": 79
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ddea7210_7760e661",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-12-29T10:31:24Z",
       "side": 1,
       "message": "nit: these could be `final`",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a381258_05d72dc5",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T10:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddea7210_7760e661",
       "range": {
         "startLine": 20,
         "startChar": 0,
@@ -83,6 +131,30 @@
       "writtenOn": "2025-12-29T10:31:24Z",
       "side": 1,
       "message": "nit: this could be inlined",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 16
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4405b8c3_95b60b37",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T10:38:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "645dc81c_3ab00e59",
       "range": {
         "startLine": 31,
         "startChar": 0,
@@ -158,6 +230,30 @@
         "startChar": 24,
         "endLine": 42,
         "endChar": 49
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b77a0435_1c959e9a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T10:38:54Z",
+      "side": 1,
+      "message": "Well `deserialize` signature only throws `JsonParseException`, which these 2 lines don\u0027t throw.\nWe can\u0027t change the signature so not sure there\u0027s much point?",
+      "parentUuid": "b28583a4_56eefd06",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 64
       },
       "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
