@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fecd078_df836d12",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb6cfefb_ac47e480",
+      "range": {
+        "startLine": 21,
+        "startChar": 22,
+        "endLine": 21,
+        "endChar": 29
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95020282_af29899a",
@@ -58,6 +82,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b9ee1f2_ba50bb36",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95020282_af29899a",
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "083d40d1_dfe2a88a",
@@ -71,6 +113,30 @@
       "writtenOn": "2025-12-29T14:10:39Z",
       "side": 1,
       "message": "IMHO this is a wrapping pattern and we should make it explicit.\n\n\n\n```suggestion\n    return gson.toJsonTree(KeyObject.wrap(key));\n```",
+      "range": {
+        "startLine": 31,
+        "startChar": 27,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef5feab_c1890548",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "083d40d1_dfe2a88a",
       "range": {
         "startLine": 31,
         "startChar": 27,
@@ -104,6 +170,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9657f29a_4bf32017",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4f68084_678681e4",
+      "range": {
+        "startLine": 38,
+        "startChar": 59,
+        "endLine": 38,
+        "endChar": 66
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96e93a04_4d3d2f42",
@@ -117,6 +207,30 @@
       "writtenOn": "2025-12-29T14:10:39Z",
       "side": 1,
       "message": "```suggestion\n      String className \u003d jsonObject.get(\"keyClassName\").getAsString();\n```",
+      "range": {
+        "startLine": 40,
+        "startChar": 40,
+        "endLine": 40,
+        "endChar": 47
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93a417cd_044bdaa2",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96e93a04_4d3d2f42",
       "range": {
         "startLine": 40,
         "startChar": 40,
@@ -150,6 +264,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97ee3ac3_75f729be",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95f93fa3_7e41624d",
+      "range": {
+        "startLine": 42,
+        "startChar": 52,
+        "endLine": 42,
+        "endChar": 60
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7fd6f3ee_ec330920",
@@ -173,6 +311,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89e81e59_277c67c8",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "The key is not in the new format, I\u0027ve updated the key value to show what it would look like.\n\nIn this test the key is in the old format, which would simply decode to a TreeMap.",
+      "parentUuid": "7fd6f3ee_ec330920",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 3
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2764849a_55bb7705",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Maybe the test is a bit confusing, it\u0027s not in the new format(there is no keyType...) it\u0027s just a \"complex\" type...",
+      "parentUuid": "7fd6f3ee_ec330920",
+      "range": {
+        "startLine": 88,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 3
+      },
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1d76d1ea_258740d9",
@@ -186,6 +372,24 @@
       "writtenOn": "2025-12-29T14:10:39Z",
       "side": 1,
       "message": "We should also add a test on what to expect if the key class name cannot be found.",
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be26b690_e6db2022",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-29T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d76d1ea_258740d9",
       "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
