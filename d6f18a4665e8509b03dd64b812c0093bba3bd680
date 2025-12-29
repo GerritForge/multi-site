@@ -259,6 +259,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e2341e2_c53c02c6",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:57:21Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b77a0435_1c959e9a",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 64
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cc1f7bc_d42cbc84",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2025-12-29T10:57:21Z",
+      "side": 1,
+      "message": "\u003e The string I\u0027m passing in that test is how messages where encoded before, keyType is not null, its not present at all and we don\u0027t receive a jsonObject but a jsonPrimitive.\n\u003e \n\u003e So that\u0027s why I added the isJsonObject check.\n\u003e \n\u003e Makes sense?\n\nYes, I understand what you mean.\nNevertheless, I think calling `jsonObject.get(\"keyType\").getAsString()` on a field that might not be there is a bit fragile.\n\nPerhaps checking if JSON is a primitive prevents us from getting to that line of code, but I see this as a patch rather than addressing the possibility that the field is not there.\n\nI was expecting a `null` check on that field. Would that not achieve what we want?\n\nLet\u0027s catch up f2f if that\u0027s easier.",
+      "parentUuid": "a15dcf79_4da0b76b",
+      "range": {
+        "startLine": 42,
+        "startChar": 24,
+        "endLine": 42,
+        "endChar": 49
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19c3a157_ca500a3f",
