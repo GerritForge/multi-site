@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
+import static com.google.gerrit.server.events.EventTypes.register;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
@@ -32,11 +33,26 @@ public class CacheKeyJsonParserTest {
 
   private final Gson gson = new EventGsonProvider().get();
 
-  public record ComplexKeyType(String aKey) {}
+  public static class ComplexKeyType extends MultiSiteEvent {
+    public static final String type = "aType";
+    public String aKey;
+    protected ComplexKeyType(String key) {
+      super(type, "testInstanceId");
+      this.aKey = key;
+    }
+
+    @Override
+    public String toString() {
+      return String.format(
+          "CacheEvictionEvent { cacheName='%s', instanceId='%s', key=(%s) }",
+          "ComplexKeyType", "testInstanceId", this.getClass().getName());
+    }
+  }
 
   @Before
   public void setUp() throws Exception {
     MultiSiteEvent.registerEventTypes();
+    register("com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParserTest$ComplexKeyType", ComplexKeyType.class);
   }
 
   @Test

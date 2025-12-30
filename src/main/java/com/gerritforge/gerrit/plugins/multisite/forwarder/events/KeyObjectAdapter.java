@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.events;
 
+import com.google.gerrit.server.events.EventTypes;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -39,12 +40,11 @@ public class KeyObjectAdapter implements JsonSerializer<Object>, JsonDeserialize
     if (json.isJsonObject() && json.getAsJsonObject().has(CLASS_NAME_FIELD)) {
       JsonObject jsonObject = json.getAsJsonObject();
       String typeName = jsonObject.get(CLASS_NAME_FIELD).getAsString();
-      try {
-        Class<? extends Object> cls = Class.forName(typeName);
-        return context.deserialize(jsonObject.get(KEY_VALUE_FIELD), cls);
-      } catch (ClassNotFoundException e) {
-        throw new JsonParseException(e);
+        Class<?> cls = EventTypes.getClass(typeName);
+      if (cls == null) {
+        throw new JsonParseException("Could not parse class of type:" + typeName);
       }
+      return context.deserialize(jsonObject.get(KEY_VALUE_FIELD), cls);
     } else {
       return context.deserialize(json, type);
     }
