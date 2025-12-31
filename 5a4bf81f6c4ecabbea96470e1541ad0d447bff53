@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48cafe78_c0609d9a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-31T10:59:54Z",
+      "side": 1,
+      "message": "`Object` is redundant and too generic IMHO.\n\nWhat about `KeyWrapper`?",
+      "range": {
+        "startLine": 18,
+        "startChar": 13,
+        "endLine": 18,
+        "endChar": 22
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45e23623_b74a1b4f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-31T10:59:54Z",
+      "side": 1,
+      "message": "```suggestion\npublic class KeyWrapperAdapter implements JsonSerializer\u003cObject\u003e, JsonDeserializer\u003cObject\u003e {\n```",
+      "range": {
+        "startLine": 24,
+        "startChar": 13,
+        "endLine": 24,
+        "endChar": 29
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2e87304_af3bf547",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-31T10:59:54Z",
+      "side": 1,
+      "message": "I believe this should be inside the body of the `if()` and if the `CLASS_NAME_FIELD` isn\u0027t in the fields of the JSON object, then we should fail the deserialisation.",
+      "range": {
+        "startLine": 40,
+        "startChar": 28,
+        "endLine": 40,
+        "endChar": 75
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98f57238_8c935a76",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2025-12-31T10:59:54Z",
+      "side": 1,
+      "message": "Why this fallback? I believe we should instead fail saying that there is no class registered to manage this type, so that the Gerrit admin can clearly understand what\u0027s going on.",
+      "range": {
+        "startLine": 46,
+        "startChar": 10,
+        "endLine": 46,
+        "endChar": 40
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
