@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4de9e5_1baafd4b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObject.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-31T11:42:42Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "48cafe78_c0609d9a",
+      "range": {
+        "startLine": 18,
+        "startChar": 13,
+        "endLine": 18,
+        "endChar": 22
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45e23623_b74a1b4f",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-12-31T10:59:54Z",
       "side": 1,
       "message": "```suggestion\npublic class KeyWrapperAdapter implements JsonSerializer\u003cObject\u003e, JsonDeserializer\u003cObject\u003e {\n```",
+      "range": {
+        "startLine": 24,
+        "startChar": 13,
+        "endLine": 24,
+        "endChar": 29
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ad37f1_262c6231",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-31T11:42:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45e23623_b74a1b4f",
       "range": {
         "startLine": 24,
         "startChar": 13,

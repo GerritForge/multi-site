@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0990ec6b_b6a54c81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-31T11:42:42Z",
+      "side": 1,
+      "message": "This was done and the current approach will work as long as the plugin registers their key type.",
+      "parentUuid": "f84b7745_817d6470",
+      "revId": "09c8f7a4ad8e7d29a9eb6d37d58cf5757b88255f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb6cfefb_ac47e480",
