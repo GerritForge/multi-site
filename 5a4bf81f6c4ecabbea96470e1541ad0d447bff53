@@ -72,6 +72,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c295e60_51f59ce2",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-31T11:07:38Z",
+      "side": 1,
+      "message": "This was added as backwards compatibility with messages encoded with the old version of multi-site.",
+      "parentUuid": "e2e87304_af3bf547",
+      "range": {
+        "startLine": 40,
+        "startChar": 28,
+        "endLine": 40,
+        "endChar": 75
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "98f57238_8c935a76",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
         "patchSetId": 27
@@ -83,6 +107,30 @@
       "writtenOn": "2025-12-31T10:59:54Z",
       "side": 1,
       "message": "Why this fallback? I believe we should instead fail saying that there is no class registered to manage this type, so that the Gerrit admin can clearly understand what\u0027s going on.",
+      "range": {
+        "startLine": 46,
+        "startChar": 10,
+        "endLine": 46,
+        "endChar": 40
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7490f5e_50194a19",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2025-12-31T11:07:38Z",
+      "side": 1,
+      "message": "It appears that EventTypes doesn\u0027t contain primitive types, like String, so thought this would be the best alternative.",
+      "parentUuid": "98f57238_8c935a76",
       "range": {
         "startLine": 46,
         "startChar": 10,
