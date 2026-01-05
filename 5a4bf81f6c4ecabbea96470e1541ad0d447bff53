@@ -211,6 +211,30 @@
       },
       "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ab04c10_ec24245c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-05T09:39:05Z",
+      "side": 1,
+      "message": "I believe we should send primitive types as-is, rather than wrapping them.",
+      "parentUuid": "a7490f5e_50194a19",
+      "range": {
+        "startLine": 46,
+        "startChar": 10,
+        "endLine": 46,
+        "endChar": 40
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
