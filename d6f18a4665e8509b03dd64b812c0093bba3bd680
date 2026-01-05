@@ -381,6 +381,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46cc3afe_dfa2bc48",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-05T09:35:03Z",
+      "side": 1,
+      "message": "\u003e Perhaps checking if JSON is a primitive prevents us from getting to that line of code, but I see this as a patch rather than addressing the possibility that the field is not there.\n\nThe field *should always be there* otherwise the payload is malformed and we must throw a parsing error.\n\nLegacy multi-site plugins would send a primitive type as key, not a JSON object without a `keyType`.\n\nIf `keyType` is `null`, then we must throw a specific exception.",
+      "parentUuid": "b3cc228e_53b6a556",
+      "range": {
+        "startLine": 42,
+        "startChar": 24,
+        "endLine": 42,
+        "endChar": 49
+      },
+      "revId": "d6f18a4665e8509b03dd64b812c0093bba3bd680",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "19c3a157_ca500a3f",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
         "patchSetId": 20
