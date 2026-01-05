@@ -166,6 +166,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f160e02_faf3fb9c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-05T15:25:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8707591_1eeed54d",
+      "range": {
+        "startLine": 40,
+        "startChar": 28,
+        "endLine": 40,
+        "endChar": 75
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98f57238_8c935a76",
@@ -227,6 +251,30 @@
       "side": 1,
       "message": "I believe we should send primitive types as-is, rather than wrapping them.",
       "parentUuid": "a7490f5e_50194a19",
+      "range": {
+        "startLine": 46,
+        "startChar": 10,
+        "endLine": 46,
+        "endChar": 40
+      },
+      "revId": "5a4bf81f6c4ecabbea96470e1541ad0d447bff53",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a8290e4_1d5c40c4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyObjectAdapter.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-05T15:25:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ab04c10_ec24245c",
       "range": {
         "startLine": 46,
         "startChar": 10,
