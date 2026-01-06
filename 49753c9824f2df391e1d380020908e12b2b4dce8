@@ -3,6 +3,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a8368f3_f505a76f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-06T10:06:08Z",
+      "side": 1,
+      "message": "```suggestion\n  private static final String KEY_TYPE_FIELD \u003d \"keyType\";\n```",
+      "range": {
+        "startLine": 25,
+        "startChar": 50,
+        "endLine": 25,
+        "endChar": 62
+      },
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4411ae8_dd9f0c07",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-06T10:06:08Z",
+      "side": 1,
+      "message": "```suggestion\n      wrapper.addProperty(KEY_TYPE_FIELD, typeForKey(key);\n```\n\nThe `typeForKey` should get the registered types with `EventTypes.getRegisteredEvents` and look for a type that implement that class.\n\nYou may want to also cache that resolution as a follow-up change.",
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01a95731_f5c4ea05",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
         "patchSetId": 33
@@ -19,6 +59,53 @@
         "startChar": 15,
         "endLine": 46,
         "endChar": 23
+      },
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "889fca9a_9f20d988",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-06T10:06:08Z",
+      "side": 1,
+      "message": "This is wrong: this is the *type name*, not the class name.\n\nSee how it is used at L47 and how `EventTypes.getClass` implements it:\n\n```\n  /**\n   * Get the class for an event type.\n   *\n   * @param type The type.\n   * @return The event class, or null if no class is registered with the given type\n   */\n  public static Class\u003c?\u003e getClass(String type) {\n    return typesByString.get(type);\n  }\n```",
+      "parentUuid": "01a95731_f5c4ea05",
+      "range": {
+        "startLine": 46,
+        "startChar": 15,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03ba5787_6a22924b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-06T10:06:08Z",
+      "side": 1,
+      "message": "If the type isn\u0027t primitive and isn\u0027t recognised, we should throw the exception here because of an unregistered type.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 9
       },
       "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
