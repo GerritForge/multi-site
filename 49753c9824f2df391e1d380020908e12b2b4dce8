@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6efffc5_393c5dc7",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-06T16:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a8368f3_f505a76f",
+      "range": {
+        "startLine": 25,
+        "startChar": 50,
+        "endLine": 25,
+        "endChar": 62
+      },
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4411ae8_dd9f0c07",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-01-06T10:06:08Z",
       "side": 1,
       "message": "```suggestion\n      wrapper.addProperty(KEY_TYPE_FIELD, typeForKey(key);\n```\n\nThe `typeForKey` should get the registered types with `EventTypes.getRegisteredEvents` and look for a type that implement that class.\n\nYou may want to also cache that resolution as a follow-up change.",
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ffb5026_38fb82ab",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-06T16:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4411ae8_dd9f0c07",
       "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -88,6 +130,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8887f123_17dbf5e2",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-06T16:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "889fca9a_9f20d988",
+      "range": {
+        "startLine": 46,
+        "startChar": 15,
+        "endLine": 46,
+        "endChar": 23
+      },
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03ba5787_6a22924b",
@@ -101,6 +167,30 @@
       "writtenOn": "2026-01-06T10:06:08Z",
       "side": 1,
       "message": "If the type isn\u0027t primitive and isn\u0027t recognised, we should throw the exception here because of an unregistered type.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 9
+      },
+      "revId": "49753c9824f2df391e1d380020908e12b2b4dce8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52803135_d9e1e0ef",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-06T16:44:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03ba5787_6a22924b",
       "range": {
         "startLine": 46,
         "startChar": 0,
