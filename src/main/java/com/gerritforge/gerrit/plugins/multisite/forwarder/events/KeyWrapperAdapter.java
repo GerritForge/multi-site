@@ -30,6 +30,7 @@ import java.util.Optional;
 public class KeyWrapperAdapter implements JsonSerializer<Object>, JsonDeserializer<Object> {
   private static final String KEY_TYPE = "keyType";
   private static final String KEY_VALUE_FIELD = "keyValue";
+  private static HashMap<Class<?>, String> keyClassesByName = new HashMap<>();
 
   private static DynamicMap<CacheDef<?, ?>> cacheMap;
 
@@ -79,10 +80,16 @@ public class KeyWrapperAdapter implements JsonSerializer<Object>, JsonDeserializ
   }
 
   private static Optional<String> getCacheKeyTypeByClass(Class<?> clazz) {
-    return getDynamicCacheDefs().entrySet().stream()
-        .filter(entry -> entry.getValue().isAssignableFrom(clazz))
-        .map(Map.Entry::getKey)
-        .findFirst();
+    if (keyClassesByName.containsKey(clazz)) {
+      return Optional.ofNullable(keyClassesByName.get(clazz));
+    } else {
+      Optional<String> keyClassName = getDynamicCacheDefs().entrySet().stream()
+          .filter(entry -> entry.getValue().equals(clazz))
+          .map(Map.Entry::getKey)
+          .findFirst();
+      keyClassName.ifPresent(name -> keyClassesByName.put(clazz, name));
+      return keyClassName;
+    }
   }
 
   private static Map<String, Class<?>> getDynamicCacheDefs() {
