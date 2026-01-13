@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1c0ec74_828c5e18",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-13T17:17:21Z",
+      "side": 1,
+      "message": "Should this live in `CacheKeyTypes.java` itself? So in Gerrit rather than in multi-site.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 5
+      },
+      "revId": "4662d28163b1b2c881cbfcef25085f3c2233bb61",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
