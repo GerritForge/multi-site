@@ -21,6 +21,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ import java.util.Optional;
 public class KeyWrapperAdapter implements JsonSerializer<Object>, JsonDeserializer<Object> {
   private static final String KEY_TYPE = "keyType";
   private static final String KEY_VALUE_FIELD = "keyValue";
+  private static HashMap<Class<?>, String> keyClassesByName = new HashMap<>();
 
   @Override
   public JsonElement serialize(Object key, Type typeOfSrc, JsonSerializationContext context) {
@@ -65,10 +67,16 @@ public class KeyWrapperAdapter implements JsonSerializer<Object>, JsonDeserializ
     }
   }
 
-  public static Optional<String> getCacheKeyTypeByClass(Class<?> clazz) {
-    return CacheKeyType.getRegisteredKeys().entrySet().stream()
-        .filter(entry -> entry.getValue().equals(clazz))
-        .map(Map.Entry::getKey)
-        .findFirst();
+  private static Optional<String> getCacheKeyTypeByClass(Class<?> clazz) {
+    if (keyClassesByName.containsKey(clazz)) {
+      return Optional.ofNullable(keyClassesByName.get(clazz));
+    } else {
+      Optional<String> keyClassName = CacheKeyType.getRegisteredKeys().entrySet().stream()
+          .filter(entry -> entry.getValue().equals(clazz))
+          .map(Map.Entry::getKey)
+          .findFirst();
+      keyClassName.ifPresent(name -> keyClassesByName.put(clazz, name));
+      return keyClassName;
+    }
   }
 }
