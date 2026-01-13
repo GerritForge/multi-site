@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e956cd22_86d24023",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 38
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-13T08:55:57Z",
+      "side": 1,
+      "message": "Add the dependency on https://gerrit-review.googlesource.com/c/gerrit/+/540181",
+      "revId": "7ef3b165fe6b196a32bbcae803d16771b6523893",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b2393bc0_4da9713c",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
         "patchSetId": 38
