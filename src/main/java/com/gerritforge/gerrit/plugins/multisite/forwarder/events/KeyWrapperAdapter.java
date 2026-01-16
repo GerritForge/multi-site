@@ -30,7 +30,8 @@ import java.util.Optional;
 public class KeyWrapperAdapter implements JsonSerializer<Object>, JsonDeserializer<Object> {
   private static final String KEY_TYPE = "keyType";
   private static final String KEY_VALUE_FIELD = "keyValue";
-  private static final HashMap<Class<?>, String> keyClassesByName = new HashMap<>();
+  private static final HashMap<Class<?>, String> keyNamesByClasses = new HashMap<>();
+  private static final HashMap<String, Class<?>> keyClassesByName = new HashMap<>();
 
   private static DynamicMap<CacheDef<?, ?>> cacheMap;
 
@@ -62,32 +63,33 @@ public class KeyWrapperAdapter implements JsonSerializer<Object>, JsonDeserializ
   @Override
   public Object deserialize(JsonElement json, Type type, JsonDeserializationContext context)
       throws JsonParseException {
-    Map<String, Class<?>> cacheDefMap = getDynamicCacheDefs();
     if (json.isJsonObject()) {
       JsonObject jsonObject = json.getAsJsonObject();
       if (!jsonObject.has(KEY_TYPE)) {
         throw new JsonParseException("JSON Object has no member " + KEY_TYPE);
       }
       String typeName = jsonObject.get(KEY_TYPE).getAsString();
-      if (!cacheDefMap.containsKey(typeName)) {
+      Optional<Class<?>> clazz = getCacheDef(typeName);
+      if (clazz.isPresent()) {
+        Class<?> cls = clazz.get();
+        return context.deserialize(jsonObject.get(KEY_VALUE_FIELD), cls);
+      } else {
         throw new KeyTypeNotRegisteredException(typeName);
       }
-      Class<?> cls = cacheDefMap.get(typeName);
-      return context.deserialize(jsonObject.get(KEY_VALUE_FIELD), cls);
     } else {
       return context.deserialize(json, type);
     }
   }
 
   private static Optional<String> getCacheKeyTypeByClass(Class<?> clazz) {
-    if (keyClassesByName.containsKey(clazz)) {
-      return Optional.ofNullable(keyClassesByName.get(clazz));
+    if (keyNamesByClasses.containsKey(clazz)) {
+      return Optional.ofNullable(keyNamesByClasses.get(clazz));
     } else {
       Optional<String> keyClassName = getDynamicCacheDefs().entrySet().stream()
           .filter(entry -> entry.getValue().equals(clazz))
           .map(Map.Entry::getKey)
           .findFirst();
-      keyClassName.ifPresent(name -> keyClassesByName.put(clazz, name));
+      keyClassName.ifPresent(name -> keyNamesByClasses.put(clazz, name));
       return keyClassName;
     }
   }
@@ -101,5 +103,17 @@ public class KeyWrapperAdapter implements JsonSerializer<Object>, JsonDeserializ
       }
     }
     return cacheDefMap;
+  }
+
+  private static Optional<Class<?>> getCacheDef(String name) {
+    if(keyClassesByName.containsKey(name)) {
+      return Optional.ofNullable(keyClassesByName.get(name));
+    } else {
+      Map<String, Class<?>> cacheDefMap = getDynamicCacheDefs();
+      if(cacheDefMap.containsKey(name)) {
+        keyNamesByClasses.put(cacheDefMap.get(name), name);
+      }
+      return Optional.ofNullable(cacheDefMap.get(name));
+    }
   }
 }
