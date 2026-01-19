@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "528ba234_15527dcc",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyTypeNotRegisteredException.java",
+        "patchSetId": 48
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-19T14:20:15Z",
+      "side": 1,
+      "message": "```suggestion\n// Copyright (C) 2026 GerritForge, Inc.\n```",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "5e415018e419d5c344af6b8e61cd0a44453fc029",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3402b722_1d296b4b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 48
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-19T14:20:15Z",
+      "side": 1,
+      "message": "```suggestion\n// Copyright (C) 2026 GerritForge, Inc.\n```",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "5e415018e419d5c344af6b8e61cd0a44453fc029",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
