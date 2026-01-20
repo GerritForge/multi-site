@@ -104,8 +104,10 @@ sh_test(
         "--healthcheck-retries 30",
         "--location '$(location //plugins/multi-site:e2e_multi_site_test_dir)'",
         "--local-env '$(location //plugins/multi-site:e2e_multi_site_setup_local_env_dir)'",
+        "--gerrit-war '$(location //:gerrit)'",
     ],
     data = [
+        "//:gerrit",
         "//plugins/events-broker",
         "//plugins/global-refdb",
         "//plugins/multi-site",
