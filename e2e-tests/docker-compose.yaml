@@ -1,7 +1,7 @@
 version: '3'
 services:
   zookeeper:
-    image: bitnami/zookeeper:3.8.3
+    image: gerritforge/zookeeper:3.8.3
     environment:
       ALLOW_ANONYMOUS_LOGIN: "true"
 

@@ -88,6 +88,7 @@ function setup_gerrit_config {
 }
 
 function cleanup_tests_hook {
+  docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml logs e2e-tests-gerrit2-1
   echo "Shutting down the setup"
   docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml down -v
   echo "Removing setup dir"
