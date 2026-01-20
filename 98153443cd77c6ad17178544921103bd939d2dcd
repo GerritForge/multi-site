@@ -1,0 +1,233 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7af3b85e_0537c85b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyTypeNotRegisteredException.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "This name is now stale: key types should not be explicitly registered anymore.\n\n```suggestion\npublic class CacheNotRegisteredException extends RuntimeException {\n```",
+      "range": {
+        "startLine": 14,
+        "startChar": 13,
+        "endLine": 14,
+        "endChar": 42
+      },
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "658b1155_5da9bb5a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyTypeNotRegisteredException.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n  public KeyTypeNotRegisteredException(String cacheName) {\n```",
+      "range": {
+        "startLine": 17,
+        "startChar": 39,
+        "endLine": 17,
+        "endChar": 53
+      },
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "805da86f_0c179ae4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyTypeNotRegisteredException.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n            \"Cache \u0027%s\u0027 is not a registered\", cacheName));\n```",
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c17921_78b9d5f0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "This is now the cache name.\n\n\n\n```suggestion\n  private static final String CACHE_NAME \u003d \"cacheName\";\n```",
+      "range": {
+        "startLine": 31,
+        "startChar": 30,
+        "endLine": 31,
+        "endChar": 38
+      },
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "630714cb_1bb9dc04",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n      Optional\u003cString\u003e cacheName \u003d getCacheNameByKeyClass(key.getClass());\n```",
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c84b5068_c651bd96",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "Do we really need the cache name after all? We already have it in the `CacheEvictionEvent` isn\u0027t it?",
+      "range": {
+        "startLine": 48,
+        "startChar": 8,
+        "endLine": 48,
+        "endChar": 53
+      },
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11dc68eb_a66bc396",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n        throw new CacheNotRegisteredException(key.getClass().getName());\n```",
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38557e93_0d1e786c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n      String cacheName \u003d jsonObject.get(CACHE_NAME).getAsString();\n```",
+      "range": {
+        "startLine": 66,
+        "startChar": 13,
+        "endLine": 66,
+        "endChar": 21
+      },
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb3f1653_69efc588",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n        throw new CacheNotRegisteredException(typeName);\n```",
+      "range": {
+        "startLine": 68,
+        "startChar": 18,
+        "endLine": 68,
+        "endChar": 47
+      },
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf8ef4a8_86c27c1a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n  private static Optional\u003cString\u003e getCacheNameByKeyClass(Class\u003c?\u003e clazz) {\n```",
+      "range": {
+        "startLine": 77,
+        "startChar": 34,
+        "endLine": 77,
+        "endChar": 56
+      },
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9b8b0ed_1f5b23f3",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 55
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "By looking at the `jsonEvent` variable, it contains: \n\n\n```\n{\n  \"cacheName\": \"test-cache\",\n  \"key\": {\n    \"cacheName\": \"test-cache\",\n    \"keyValue\": {\n      \"aKey\": \"cache-key\"\n    }\n  },\n  \"type\": \"cache-eviction\",\n  \"eventCreatedOn\": 1768948487,\n  \"instanceId\": \"myinstanceid\"\n}\n```\n\nAs you can see from the above payload, the `test-cache` is repeated twice, hence it is clearly redundant.\n\nI believe we can remove the cache name from the `CacheEvictionEvent`, or at least make it nullable so that we don\u0027t care about it anymore in the future versions and avoid duplication.",
+      "revId": "98153443cd77c6ad17178544921103bd939d2dcd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

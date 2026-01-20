@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "989f01f8_0a8ddbcd",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "This should be marked as `@Deprecated` and `@Nullable`",
+      "revId": "0c9fc448f5fa10c7aedd5720984ee7fad345991c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fbd4325_7fe572d8",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "Can this actually be a `CacheKeyWrapper` that contains the `cacheName` in it? We will then be able to get rid of the `cacheName` field that is actually duplicated in the JSON payload.",
+      "range": {
+        "startLine": 23,
+        "startChar": 9,
+        "endLine": 23,
+        "endChar": 15
+      },
+      "revId": "0c9fc448f5fa10c7aedd5720984ee7fad345991c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d50f3fd_bd7460b9",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "We should not use the `cacheName` anymore in the future. Add a comment before L27?",
+      "revId": "0c9fc448f5fa10c7aedd5720984ee7fad345991c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48543abe_916b9f83",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/CacheEvictionEvent.java",
+        "patchSetId": 54
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-20T23:45:50Z",
+      "side": 1,
+      "message": "```suggestion\n    this.key \u003d new CacheKeyWrapper(cacheName, key);\n```",
+      "revId": "0c9fc448f5fa10c7aedd5720984ee7fad345991c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
