@@ -106,12 +106,12 @@ sh_test(
         "--local-env '$(location //plugins/multi-site:e2e_multi_site_setup_local_env_dir)'",
     ],
     data = [
-        "//plugins/multi-site",
-        "//plugins/global-refdb",
         "//plugins/events-broker",
-        "//plugins/replication",
-        "//plugins/multi-site:e2e_multi_site_test_dir",
+        "//plugins/global-refdb",
+        "//plugins/multi-site",
         "//plugins/multi-site:e2e_multi_site_setup_local_env_dir",
+        "//plugins/multi-site:e2e_multi_site_test_dir",
+        "//plugins/replication",
     ] + glob(["setup_local_env/**/*"]) + glob(["e2e-tests/**/*"]),
     tags = [
         "e2e-multi-site",
