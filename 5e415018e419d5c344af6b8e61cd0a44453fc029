@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b18c26e0_89db66c0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyTypeNotRegisteredException.java",
+        "patchSetId": 48
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-20T17:22:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "528ba234_15527dcc",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "5e415018e419d5c344af6b8e61cd0a44453fc029",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3402b722_1d296b4b",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-01-19T14:20:15Z",
       "side": 1,
       "message": "```suggestion\n// Copyright (C) 2026 GerritForge, Inc.\n```",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "5e415018e419d5c344af6b8e61cd0a44453fc029",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e457ee13_4766ad30",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/KeyWrapperAdapter.java",
+        "patchSetId": 48
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-20T17:22:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3402b722_1d296b4b",
       "range": {
         "startLine": 1,
         "startChar": 17,
