@@ -104,8 +104,13 @@ sh_test(
         "--healthcheck-retries 30",
         "--location '$(location //plugins/multi-site:e2e_multi_site_test_dir)'",
         "--local-env '$(location //plugins/multi-site:e2e_multi_site_setup_local_env_dir)'",
+        "--gerrit-war '$(location //:gerrit)'",
     ],
     data = [
+<<<<<<< PATCH SET (24e7ca7898429f7725522e0fb1005e4eef465bbc Copy latest gerrit.war before running E2E tests)
+        "//:gerrit",
+=======
+>>>>>>> BASE      (dbfcf5a67665c55dde811bc6f3eb2b8b2104881c Reformat BUILD file)
         "//plugins/events-broker",
         "//plugins/global-refdb",
         "//plugins/multi-site",
