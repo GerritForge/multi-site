@@ -218,6 +218,11 @@ case "$1" in
     shift
     shift
   ;;
+  "--gerrit-war" )
+    GERRIT_WAR=$2
+    shift
+    shift
+  ;;
   *     )
     echo "Unknown option argument: $1"
     shift
@@ -240,6 +245,7 @@ echo "GERRIT_HEALTHCHECK_TIMEOUT=$GERRIT_HEALTHCHECK_TIMEOUT"
 echo "GERRIT_HEALTHCHECK_RETRIES=$GERRIT_HEALTHCHECK_RETRIES"
 echo "LOCATION=$LOCATION"
 echo "LOCAL_ENV=$LOCAL_ENV"
+echo "GERRIT_WAR=$GERRIT_WAR"
 echo "-----------------------------------------------------------------"
 
 # Defaults
@@ -258,11 +264,13 @@ GERRIT_HEALTHCHECK_RETRIES=${GERRIT_HEALTHCHECK_RETRIES:-${DEF_GERRIT_HEALTHCHEC
 GERRIT_1_ETC=${DEPLOYMENT_LOCATION}/etc_1
 GERRIT_1_PLUGINS=${DEPLOYMENT_LOCATION}/plugins_1
 GERRIT_1_LIBS=${DEPLOYMENT_LOCATION}/libs_1
+GERRIT_1_WAR=${DEPLOYMENT_LOCATION}/war_1
 
 # Gerrit secondary
 GERRIT_2_ETC=${DEPLOYMENT_LOCATION}/etc_2
 GERRIT_2_PLUGINS=${DEPLOYMENT_LOCATION}/plugins_2
 GERRIT_2_LIBS=${DEPLOYMENT_LOCATION}/libs_2
+GERRIT_2_WAR=${DEPLOYMENT_LOCATION}/war_2
 
 echo "Deployment location: [${DEPLOYMENT_LOCATION}]"
 
@@ -274,6 +282,11 @@ for plugin in $COMMON_PLUGINS_LIST; do download_plugin $plugin; done
 echo "plugin location[${MULTISITE_LIB_LOCATION}]"
 cp -f $MULTISITE_LIB_LOCATION $COMMON_PLUGINS/multi-site.jar  >/dev/null 2>&1 || \
   { echo >&2 "$MULTISITE_LIB_LOCATION: Not able to copy the file. Aborting"; exit 1; }
+
+COMMON_WAR=${DEPLOYMENT_LOCATION}/common_war
+echo "Copying $GERRIT_WAR to ${COMMON_WAR}"
+mkdir -p ${COMMON_WAR}
+cp $GERRIT_WAR ${COMMON_WAR}/gerrit.war
 
 if [ "$BROKER_TYPE" = "kafka" ]; then
   download_plugin events-kafka $COMMON_PLUGINS
@@ -301,7 +314,11 @@ echo "Downloading events-broker library $GERRIT_BRANCH"
 cp $EVENTS_BROKER_LIB_LOCATION $COMMON_LIBS/events-broker.jar
 
 echo "Setting up directories"
-mkdir -p ${GERRIT_1_ETC} ${GERRIT_1_PLUGINS} ${GERRIT_1_LIBS} ${GERRIT_2_ETC} ${GERRIT_2_PLUGINS} ${GERRIT_2_LIBS}
+mkdir -p ${GERRIT_1_ETC} ${GERRIT_1_PLUGINS} ${GERRIT_1_LIBS} ${GERRIT_1_WAR} ${GERRIT_2_ETC} ${GERRIT_2_PLUGINS} ${GERRIT_2_LIBS} ${GERRIT_2_WAR}
+
+echo "Copying Gerrit war"
+cp -f $COMMON_WAR/* ${GERRIT_1_WAR}
+cp -f $COMMON_WAR/* ${GERRIT_2_WAR}
 
 echo "Copying plugins"
 cp -f $COMMON_PLUGINS/* ${GERRIT_1_PLUGINS}
@@ -366,12 +383,14 @@ GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml
 #copy files to gerrit containers
 echo "Copying files to Gerrit containers"
 docker cp $ENTRYPOINT "${GERRIT1_CONTAINER}:/entrypoint.sh"
+docker cp "${GERRIT_1_WAR}/." "${GERRIT1_CONTAINER}:/var/gerrit/bin/"
 docker cp "${GERRIT_1_ETC}/." "${GERRIT1_CONTAINER}:/var/gerrit/etc/"
 docker cp "${GERRIT_1_PLUGINS}/." "${GERRIT1_CONTAINER}:/var/gerrit/plugins/"
 docker cp "${GERRIT_1_LIBS}/." "${GERRIT1_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT1_CONTAINER}:/var/gerrit/.ssh"
 
 docker cp $ENTRYPOINT "${GERRIT2_CONTAINER}:/entrypoint.sh"
+docker cp "${GERRIT_2_WAR}/." "${GERRIT2_CONTAINER}:/var/gerrit/bin/"
 docker cp "${GERRIT_2_ETC}/." "${GERRIT2_CONTAINER}:/var/gerrit/etc/"
 docker cp "${GERRIT_2_PLUGINS}/." "${GERRIT2_CONTAINER}:/var/gerrit/plugins/"
 docker cp "${GERRIT_2_LIBS}/." "${GERRIT2_CONTAINER}:/var/gerrit/lib/"
