@@ -54,7 +54,10 @@ public class CacheEvictionEventRouterTest {
     CacheDef<java.lang.String, Object> keyTypeCacheDef =
         new CacheEvictionEventRouterTest.TestCacheDef<>(
             CACHE_NAME, java.lang.String.class, Object.class);
+    CacheDef<Project.NameKey, Object> projectsKeyTypeCacheDef =
+        new CacheEvictionEventRouterTest.TestCacheDef<>(Constants.PROJECTS, Project.NameKey.class, Object.class);
     cacheDefMap.put("gerrit", CACHE_NAME, Providers.of(keyTypeCacheDef));
+    cacheDefMap.put("gerrit", Constants.PROJECTS, Providers.of(projectsKeyTypeCacheDef));
     return cacheDefMap;
   }
 
