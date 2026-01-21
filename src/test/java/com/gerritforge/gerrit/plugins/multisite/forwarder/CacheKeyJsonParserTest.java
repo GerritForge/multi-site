@@ -17,8 +17,6 @@ import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 import com.gerritforge.gerrit.plugins.multisite.NoOpCacheKeyDef;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.Weigher;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
@@ -28,9 +26,7 @@ import com.google.gerrit.extensions.registration.RegistrationHandle;
 import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.events.EventGsonProvider;
 import com.google.gson.Gson;
-import com.google.inject.TypeLiteral;
 import com.google.inject.util.Providers;
-import java.time.Duration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,6 +52,8 @@ public class CacheKeyJsonParserTest {
 
     defineCache(GERRIT, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(GERRIT, CACHE_NAME_WITH_SIMPLE_KEY_TYPE, String.class);
+    defineCache(GERRIT, Constants.PROJECTS, Project.NameKey.class);
+    defineCache(GERRIT, Constants.ACCOUNTS, Account.Id.class);
     defineCache(PLUGIN_NAME1, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(PLUGIN_NAME2, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     gsonParser = new CacheKeyJsonParser(gson, cacheDefMap);

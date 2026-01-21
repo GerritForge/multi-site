@@ -52,6 +52,7 @@ public class CacheEvictionEventRouterTest {
     cacheDefMap =
         (PrivateInternals_DynamicMapImpl<CacheDef<?, ?>>) DynamicMap.<CacheDef<?, ?>>emptyMap();
     defineCache(GERRIT, CACHE_NAME, String.class);
+    defineCache(GERRIT, Constants.PROJECTS, Project.class);
     router =
         new CacheEvictionEventRouter(
             cacheEvictionHandler, new CacheKeyJsonParser(gson, cacheDefMap));
