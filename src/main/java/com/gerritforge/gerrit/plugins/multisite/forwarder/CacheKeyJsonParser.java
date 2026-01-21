@@ -41,12 +41,6 @@ public final class CacheKeyJsonParser {
         parsedKey =
             AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
         break;
-      case Constants.GROUPS_BYINCLUDE:
-      case Constants.GROUPS_MEMBERS:
-        parsedKey =
-            AccountGroup.uuid(
-                jsonElement(cacheKeyValue).getAsJsonObject().get("uuid").getAsString());
-        break;
       case Constants.PROJECTS:
         parsedKey = Project.nameKey(nullToEmpty(cacheKeyValue));
         break;

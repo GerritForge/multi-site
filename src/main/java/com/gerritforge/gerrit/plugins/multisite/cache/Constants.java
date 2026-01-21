@@ -16,8 +16,6 @@ public final class Constants {
   public static final String PROJECT_LIST = "project_list";
   public static final String ACCOUNTS = "accounts";
   public static final String GROUPS = "groups";
-  public static final String GROUPS_BYINCLUDE = "groups_byinclude";
-  public static final String GROUPS_MEMBERS = "groups_members";
   public static final String PROJECTS = "projects";
 
   private Constants() {}
