@@ -27,10 +27,12 @@ import com.google.inject.Inject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;
   private final DynamicMap<CacheDef<?, ?>> cachesMap;
+  private static final HashMap<String, Class<?>> keyClassesByName = new HashMap<>();
 
   @Inject
   public CacheKeyJsonParser(@EventGson Gson gson, DynamicMap<CacheDef<?, ?>> cachesMap) {
@@ -62,11 +64,11 @@ public final class CacheKeyJsonParser {
         parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
-        Map<String, Class<?>> cacheDefMap = getDynamicCacheDefs();
-        if (!cacheDefMap.containsKey(cacheName)) {
+        Optional<Class<?>> clazz = getCacheDef(cacheName);
+        if (clazz.isEmpty()) {
           throw new IllegalStateException(cacheName);
         }
-        Class<?> cls = cacheDefMap.get(cacheName);
+        Class<?> cls = clazz.get();
         JsonElement json = jsonElement(cacheKeyValue);
         if (json.isJsonPrimitive()) {
           parsedKey = gson.fromJson(json.getAsJsonPrimitive(), cls);
@@ -99,5 +101,17 @@ public final class CacheKeyJsonParser {
       }
     }
     return cacheDefMap;
+  }
+
+  private Optional<Class<?>> getCacheDef(String name) {
+    if(keyClassesByName.containsKey(name)) {
+      return Optional.ofNullable(keyClassesByName.get(name));
+    } else {
+      Map<String, Class<?>> cacheDefMap = getDynamicCacheDefs();
+      if(cacheDefMap.containsKey(name)) {
+        keyClassesByName.put(name, cacheDefMap.get(name));
+      }
+      return Optional.ofNullable(cacheDefMap.get(name));
+    }
   }
 }
