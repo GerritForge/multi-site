@@ -12,6 +12,7 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
@@ -56,7 +57,7 @@ public class ForwardedCacheEvictionHandlerTest {
 
   @Test
   public void testSuccessfulCacheEviction() throws Exception {
-    CacheEntry entry = new CacheEntry(Constants.GERRIT, Constants.ACCOUNTS, Account.id(123));
+    CacheEntry entry = new CacheEntry(GERRIT, Constants.ACCOUNTS, Account.id(123));
     cacheUnderTest.put(entry.getKey(), new Object());
     doReturn(cacheUnderTest).when(cacheMapMock).get(entry.getPluginName(), entry.getCacheName());
 
@@ -66,7 +67,7 @@ public class ForwardedCacheEvictionHandlerTest {
 
   @Test
   public void testSuccessfulProjectListCacheEviction() throws Exception {
-    CacheEntry entry = new CacheEntry(Constants.GERRIT, Constants.PROJECT_LIST, null);
+    CacheEntry entry = new CacheEntry(GERRIT, Constants.PROJECT_LIST, null);
     cacheUnderTest.put("foo", new Object());
     cacheUnderTest.put("bar", new Object());
     doReturn(cacheUnderTest).when(cacheMapMock).get(entry.getPluginName(), entry.getCacheName());

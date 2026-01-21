@@ -12,22 +12,27 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder.events;
 
 import com.google.common.base.Objects;
+import com.google.gerrit.common.Nullable;
 
 public class CacheEvictionEvent extends MultiSiteEvent {
   static final String TYPE = "cache-eviction";
 
+  @Nullable // The pluginName is not provided by the v3.13 or earlier versions
+  public String pluginName;
+
   public String cacheName;
   public Object key;
 
-  public CacheEvictionEvent(String cacheName, Object key, String instanceId) {
+  public CacheEvictionEvent(String pluginName, String cacheName, Object key, String instanceId) {
     super(TYPE, instanceId);
+    this.pluginName = pluginName;
     this.cacheName = cacheName;
     this.key = key;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(cacheName, key);
+    return Objects.hashCode(pluginName, cacheName, key);
   }
 
   @Override
@@ -35,6 +40,8 @@ public class CacheEvictionEvent extends MultiSiteEvent {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     CacheEvictionEvent that = (CacheEvictionEvent) o;
-    return Objects.equal(cacheName, that.cacheName) && Objects.equal(key, that.key);
+    return Objects.equal(cacheName, that.cacheName)
+        && Objects.equal(key, that.key)
+        && Objects.equal(pluginName, that.pluginName);
   }
 }
