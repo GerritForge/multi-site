@@ -45,7 +45,7 @@ public class CacheKeyJsonParserTest {
   public void accountGroupUUIDParse() {
     AccountGroup.UUID accountGroupUuid = AccountGroup.uuid("abc123");
     String json = gson.toJson(accountGroupUuid);
-    assertThat(accountGroupUuid).isEqualTo(gsonParser.from(Constants.GROUPS_BYINCLUDE, json));
+    assertThat(accountGroupUuid).isEqualTo(gsonParser.from(Constants.GROUPS_BYSUBGROUP, json));
   }
 
   @Test
