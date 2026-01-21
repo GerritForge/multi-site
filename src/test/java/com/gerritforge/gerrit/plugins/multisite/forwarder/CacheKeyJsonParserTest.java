@@ -66,6 +66,7 @@ public class CacheKeyJsonParserTest {
         new MockMultiSiteChangeKindCacheKeySerializer());
     defineCache(GERRIT, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(GERRIT, CACHE_NAME_WITH_SIMPLE_KEY_TYPE, String.class);
+    defineCache(GERRIT, Constants.PROJECTS, Project.NameKey.class);
     defineCache(PLUGIN_NAME1, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(PLUGIN_NAME2, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(GERRIT, Constants.GROUPS, AccountGroup.Id.class);
