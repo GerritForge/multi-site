@@ -26,10 +26,14 @@ import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import java.util.NavigableMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;
   private final DynamicMap<CacheDef<?, ?>> cachesMap;
+  private static final HashMap<CachePluginAndNameRecord, Class<?>> keyClassesByName = new HashMap<>();
 
   @Inject
   public CacheKeyJsonParser(@EventGson Gson gson, DynamicMap<CacheDef<?, ?>> cachesMap) {
@@ -61,7 +65,7 @@ public final class CacheKeyJsonParser {
         parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
-        Class<?> cls = getCacheKeyClassFromDefs(cacheNameWithPlugin);
+        Class<?> cls = getCacheDef(cacheNameWithPlugin);
         parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
     }
     return parsedKey;
@@ -92,5 +96,15 @@ public final class CacheKeyJsonParser {
     }
 
     return cacheDefProvider.get().keyType().getRawType();
+  }
+
+  private Class<?> getCacheDef(CachePluginAndNameRecord name) {
+    if (keyClassesByName.containsKey(name)) {
+      return keyClassesByName.get(name);
+    } else {
+      Class<?> cacheValueType = getCacheKeyClassFromDefs(name);
+        keyClassesByName.put(name, cacheValueType);
+      return cacheValueType;
+    }
   }
 }
