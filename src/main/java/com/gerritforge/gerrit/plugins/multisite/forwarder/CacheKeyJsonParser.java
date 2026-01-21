@@ -14,7 +14,6 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.MoreObjects;
 import com.google.gerrit.entities.AccountGroup;
-import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.cache.PersistentCacheDef;
@@ -59,12 +58,6 @@ public final class CacheKeyJsonParser {
         parsedKey =
             AccountGroup.uuid(
                 jsonElement(cacheKeyValue).getAsJsonObject().get("uuid").getAsString());
-        break;
-      case Constants.PROJECTS:
-        parsedKey = Project.nameKey(nullToEmpty(cacheKeyValue));
-        break;
-      case Constants.PROJECT_LIST:
-        parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
         Optional<CacheSerializer<Object>> keySerializer =
