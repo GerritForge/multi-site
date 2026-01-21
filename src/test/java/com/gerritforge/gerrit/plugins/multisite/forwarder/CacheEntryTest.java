@@ -19,7 +19,7 @@ public class CacheEntryTest {
 
   @Test
   public void cacheEntry() throws Exception {
-    CacheEntry entry = CacheEntry.from("my_plugin.my_cache", "someOtherKey");
+    CacheEntry entry = CacheEntry.from("my_plugin", "my_cache", "someOtherKey");
     assertThat(entry.getPluginName()).isEqualTo("my_plugin");
     assertThat(entry.getCacheName()).isEqualTo("my_cache");
     assertThat(entry.getKey()).isEqualTo("someOtherKey");
