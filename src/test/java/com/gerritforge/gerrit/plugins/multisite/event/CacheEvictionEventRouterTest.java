@@ -19,26 +19,47 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedCacheEvictionHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.CacheEvictionEventRouter;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.Weigher;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.extensions.registration.DynamicMap;
+import com.google.gerrit.extensions.registration.PrivateInternals_DynamicMapImpl;
+import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.events.EventGsonProvider;
 import com.google.gson.Gson;
+import com.google.inject.TypeLiteral;
+import com.google.inject.util.Providers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.time.Duration;
+
 @RunWith(MockitoJUnitRunner.class)
 public class CacheEvictionEventRouterTest {
 
   private static final String INSTANCE_ID = "instance-id";
+  private static final String CACHE_NAME = "test-cache";
   private static Gson gson = new EventGsonProvider().get();
   private CacheEvictionEventRouter router;
   @Mock private ForwardedCacheEvictionHandler cacheEvictionHandler;
 
+  private PrivateInternals_DynamicMapImpl<CacheDef<?, ?>> cacheDefMap;
+  private DynamicMap<CacheDef<?, ?>> getDynamicMap() {
+    cacheDefMap = (PrivateInternals_DynamicMapImpl<CacheDef<?, ?>>)
+        DynamicMap.<CacheDef<?, ?>>emptyMap();
+
+    CacheDef<java.lang.String, Object> complexKeyTypeCacheDef =
+        new CacheEvictionEventRouterTest.TestCacheDef<>(CACHE_NAME, java.lang.String.class, Object.class);
+    cacheDefMap.put("gerrit", CACHE_NAME, Providers.of(complexKeyTypeCacheDef));
+    return cacheDefMap;
+  }
+
   @Before
   public void setUp() {
-    router = new CacheEvictionEventRouter(cacheEvictionHandler, new CacheKeyJsonParser(gson));
+    router = new CacheEvictionEventRouter(cacheEvictionHandler, new CacheKeyJsonParser(gson, getDynamicMap()));
   }
 
   @Test
@@ -67,5 +88,26 @@ public class CacheEvictionEventRouterTest {
 
     verify(cacheEvictionHandler)
         .evict(CacheEntry.from(event.cacheName, Project.nameKey((String) event.key)));
+  }
+
+  private static class TestCacheDef<K, V> implements CacheDef<K, V> {
+    private final String name;
+    private final TypeLiteral<K> keyType;
+    private final TypeLiteral<V> valueType;
+    TestCacheDef(String name, Class<K> keyClass, Class<V> valueClass) {
+      this.name = name;
+      this.keyType = TypeLiteral.get(keyClass);
+      this.valueType = TypeLiteral.get(valueClass);
+    }
+    @Override public String name() { return name; }
+    @Override public String configKey() { return name; }
+    @Override public TypeLiteral<K> keyType() { return keyType; }
+    @Override public TypeLiteral<V> valueType() { return valueType; }
+    @Override public long maximumWeight() { return 0; }
+    @Override public Duration expireAfterWrite() { return null; }
+    @Override public Duration expireFromMemoryAfterAccess() { return null; }
+    @Override public Duration refreshAfterWrite() { return null; }
+    @Override public Weigher<K, V> weigher() { return null; }
+    @Override public CacheLoader<K, V> loader() { return null; }
   }
 }
