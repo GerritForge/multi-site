@@ -12,20 +12,80 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
+import com.gerritforge.gerrit.plugins.multisite.NoOpCacheKeyDef;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.extensions.registration.DynamicMap;
+import com.google.gerrit.extensions.registration.PrivateInternals_DynamicMapImpl;
+import com.google.gerrit.extensions.registration.RegistrationHandle;
+import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.events.EventGsonProvider;
 import com.google.gson.Gson;
+import com.google.inject.util.Providers;
+import org.junit.Before;
 import org.junit.Test;
 
 public class CacheKeyJsonParserTest {
+  private static final String CACHE_NAME_WITH_COMPLEX_KEY_TYPE = "complex-test-cache";
+  private static final String CACHE_NAME_WITH_SIMPLE_KEY_TYPE = "simple-test-cache";
   private static final Object EMPTY_JSON = "{}";
+  private static final String PLUGIN_NAME1 = "plugin1";
+  private static final String PLUGIN_NAME2 = "plugin2";
 
   private final Gson gson = new EventGsonProvider().get();
-  private final CacheKeyJsonParser gsonParser = new CacheKeyJsonParser(gson);
+  private CacheKeyJsonParser gsonParser;
+
+  public record ComplexKey(String key) {}
+
+  private PrivateInternals_DynamicMapImpl<CacheDef<?, ?>> cacheDefMap;
+
+  @Before
+  public void setUp() throws Exception {
+    MultiSiteEvent.registerEventTypes();
+    cacheDefMap =
+        (PrivateInternals_DynamicMapImpl<CacheDef<?, ?>>) DynamicMap.<CacheDef<?, ?>>emptyMap();
+
+    defineCache(GERRIT, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
+    defineCache(GERRIT, CACHE_NAME_WITH_SIMPLE_KEY_TYPE, String.class);
+    defineCache(PLUGIN_NAME1, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
+    defineCache(PLUGIN_NAME2, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
+    gsonParser = new CacheKeyJsonParser(gson, cacheDefMap);
+  }
+
+  private void defineCache(String pluginName, String cacheName, Class<?> keyRawType) {
+    RegistrationHandle unused =
+        cacheDefMap.put(
+            pluginName,
+            cacheName,
+            Providers.of(new NoOpCacheKeyDef<>(cacheName, keyRawType, Object.class)));
+  }
+
+  @Test
+  public void serializeDeserializeCacheEvictionEventWithComplexKeyType() {
+    ComplexKey complexKeyType = new ComplexKey("cache-key");
+    String jsonEvent = gson.toJson(complexKeyType);
+    Object parsedKey = gsonParser.from(CACHE_NAME_WITH_COMPLEX_KEY_TYPE, jsonEvent);
+    assertThat(parsedKey).isEqualTo(complexKeyType);
+  }
+
+  @Test
+  public void serializeDeserializeCacheEvictionEventForMultiplePlugins() {
+    ComplexKey complexKeyType1 = new ComplexKey("cache-key-1");
+    ComplexKey complexKeyType2 = new ComplexKey("cache-key-2");
+    String jsonEvent1 = gson.toJson(complexKeyType1);
+    String jsonEvent2 = gson.toJson(complexKeyType2);
+    Object parsedKey1 =
+        gsonParser.from(PLUGIN_NAME1 + "." + CACHE_NAME_WITH_COMPLEX_KEY_TYPE, jsonEvent1);
+    Object parsedKey2 =
+        gsonParser.from(PLUGIN_NAME2 + "." + CACHE_NAME_WITH_COMPLEX_KEY_TYPE, jsonEvent2);
+    assertThat(parsedKey1).isEqualTo(complexKeyType1);
+    assertThat(parsedKey2).isEqualTo(complexKeyType2);
+  }
 
   @Test
   public void accountIDParse() {
@@ -58,7 +118,7 @@ public class CacheKeyJsonParserTest {
   @Test
   public void stringParse() {
     String key = "key";
-    assertThat(key).isEqualTo(gsonParser.from("any-cache-with-string-key", key));
+    assertThat(key).isEqualTo(gsonParser.from(CACHE_NAME_WITH_SIMPLE_KEY_TYPE, key));
   }
 
   @Test
