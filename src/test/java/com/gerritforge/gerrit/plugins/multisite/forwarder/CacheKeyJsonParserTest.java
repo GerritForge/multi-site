@@ -52,6 +52,8 @@ public class CacheKeyJsonParserTest {
 
     defineCache(GERRIT, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(GERRIT, CACHE_NAME_WITH_SIMPLE_KEY_TYPE, String.class);
+    defineCache(GERRIT, Constants.PROJECTS, Project.NameKey.class);
+    defineCache(GERRIT, Constants.ACCOUNTS, Account.Id.class);
     defineCache(PLUGIN_NAME1, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(PLUGIN_NAME2, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     gsonParser = new CacheKeyJsonParser(gson, cacheDefMap);
