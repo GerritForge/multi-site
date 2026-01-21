@@ -44,7 +44,8 @@ class CacheEvictionHandler<K, V> implements CacheRemovalListener<K, V> {
   public void onRemoval(String plugin, String cache, RemovalNotification<K, V> notification) {
     if (!Context.isForwardedEvent() && !notification.wasEvicted() && matcher.matches(cache)) {
       executor.execute(
-          new CacheEvictionTask(new CacheEvictionEvent(cache, notification.getKey(), instanceId)));
+          new CacheEvictionTask(
+              new CacheEvictionEvent(plugin, cache, notification.getKey(), instanceId)));
     }
   }
 

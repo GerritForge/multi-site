@@ -11,26 +11,37 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import static com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent.GERRIT_PLUGIN_NAME;
+
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.MoreObjects;
+import com.google.gerrit.common.Nullable;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.extensions.registration.DynamicMap;
+import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.events.EventGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import java.util.NavigableMap;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;
+  private final DynamicMap<CacheDef<?, ?>> cachesMap;
 
   @Inject
-  public CacheKeyJsonParser(@EventGson Gson gson) {
+  public CacheKeyJsonParser(@EventGson Gson gson, DynamicMap<CacheDef<?, ?>> cachesMap) {
     this.gson = gson;
+    this.cachesMap = cachesMap;
   }
 
   @SuppressWarnings("cast")
-  public Object from(String cacheName, Object cacheKeyValue) {
+  public Object from(@Nullable String pluginName, String cacheName, Object cacheKeyValue) {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
     switch (cacheName) {
@@ -53,24 +64,35 @@ public final class CacheKeyJsonParser {
         parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
-        if (cacheKeyValue instanceof String) {
-          parsedKey = (String) cacheKeyValue;
-        } else {
-          try {
-            parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString().trim(), String.class);
-          } catch (Exception e) {
-            parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
-          }
-        }
+        Class<?> cls = getDynamicCacheDefs(pluginName, cacheName);
+        parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
     }
     return parsedKey;
   }
 
   private JsonElement jsonElement(Object json) {
-    return gson.fromJson(nullToEmpty(json), JsonElement.class);
+    String jsonString = nullToEmpty(json);
+    try {
+      return gson.fromJson(jsonString, JsonElement.class);
+    } catch (JsonParseException e) {
+      return new JsonPrimitive(jsonString);
+    }
   }
 
   private static String nullToEmpty(Object value) {
     return MoreObjects.firstNonNull(value, "").toString().trim();
+  }
+
+  private Class<?> getDynamicCacheDefs(@Nullable String pluginName, String cacheName) {
+    String notNullPluginName = MoreObjects.firstNonNull(pluginName, GERRIT_PLUGIN_NAME);
+    NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin =
+        cachesMap.byPlugin(notNullPluginName);
+    Provider<CacheDef<?, ?>> cacheDefProvider = cachesByPlugin.get(cacheName);
+    if (cacheDefProvider == null) {
+      throw new IllegalStateException(
+          "Unable to find definition for cache " + cacheName + " provided by " + notNullPluginName);
+    }
+
+    return cacheDefProvider.get().keyType().getRawType();
   }
 }

@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import static com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent.GERRIT_PLUGIN_NAME;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
@@ -168,7 +169,8 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
   @GerritConfig(name = "gerrit.instanceId", value = "testInstanceId")
   public void shouldEvictProjectCache() throws Exception {
     objectUnderTest.route(
-        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, project.get(), "instance-id"));
+        new CacheEvictionEvent(
+            GERRIT_PLUGIN_NAME, ProjectCacheImpl.CACHE_NAME, project.get(), "instance-id"));
     evictionsCacheTracker.waitForExpectedEvictions();
 
     assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))
@@ -216,7 +218,8 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
     restartCacheEvictionsTracking();
 
     objectUnderTest.route(
-        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, projectNameKey.get(), "instance-id"));
+        new CacheEvictionEvent(
+            GERRIT_PLUGIN_NAME, ProjectCacheImpl.CACHE_NAME, projectNameKey.get(), "instance-id"));
 
     evictionsCacheTracker.waitForExpectedEvictions();
     assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))
