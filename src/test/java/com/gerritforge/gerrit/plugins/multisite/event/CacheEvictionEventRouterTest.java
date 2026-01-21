@@ -52,6 +52,7 @@ public class CacheEvictionEventRouterTest {
     cacheDefMap =
         (PrivateInternals_DynamicMapImpl<CacheDef<?, ?>>) DynamicMap.<CacheDef<?, ?>>emptyMap();
     defineCache(GERRIT, CACHE_NAME, String.class);
+    defineCache(GERRIT, Constants.PROJECTS, Project.class);
     router =
         new CacheEvictionEventRouter(
             cacheEvictionHandler, new CacheKeyJsonParser(gson, cacheDefMap));
@@ -70,7 +71,8 @@ public class CacheEvictionEventRouterTest {
     final CacheEvictionEvent event = new CacheEvictionEvent(CACHE_NAME, "key", INSTANCE_ID);
     router.route(event);
 
-    verify(cacheEvictionHandler).evict(CacheEntry.from(CachePluginAndNameRecord.from(event.cacheName), event.key));
+    verify(cacheEvictionHandler)
+        .evict(CacheEntry.from(CachePluginAndNameRecord.from(event.cacheName), event.key));
   }
 
   @Test
@@ -79,7 +81,8 @@ public class CacheEvictionEventRouterTest {
     final CacheEvictionEvent event = new CacheEvictionEvent(CACHE_NAME, "some/key", INSTANCE_ID);
     router.route(event);
 
-    verify(cacheEvictionHandler).evict(CacheEntry.from(CachePluginAndNameRecord.from(event.cacheName), event.key));
+    verify(cacheEvictionHandler)
+        .evict(CacheEntry.from(CachePluginAndNameRecord.from(event.cacheName), event.key));
   }
 
   @Test
@@ -90,6 +93,9 @@ public class CacheEvictionEventRouterTest {
     router.route(event);
 
     verify(cacheEvictionHandler)
-        .evict(CacheEntry.from(CachePluginAndNameRecord.from(event.cacheName), Project.nameKey((String) event.key)));
+        .evict(
+            CacheEntry.from(
+                CachePluginAndNameRecord.from(event.cacheName),
+                Project.nameKey((String) event.key)));
   }
 }
