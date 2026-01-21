@@ -16,17 +16,26 @@ import com.google.common.base.MoreObjects;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.extensions.registration.DynamicMap;
+import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.events.EventGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.inject.Inject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.apache.commons.lang3.ArrayUtils.nullToEmpty;
+
 public final class CacheKeyJsonParser {
   private final Gson gson;
+  private final DynamicMap<CacheDef<?, ?>> cachesMap;
 
   @Inject
-  public CacheKeyJsonParser(@EventGson Gson gson) {
+  public CacheKeyJsonParser(@EventGson Gson gson, DynamicMap<CacheDef<?, ?>> cachesMap) {
     this.gson = gson;
+    this.cachesMap = cachesMap;
   }
 
   @SuppressWarnings("cast")
@@ -34,9 +43,6 @@ public final class CacheKeyJsonParser {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
     switch (cacheName) {
-      case Constants.ACCOUNTS:
-        parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
-        break;
       case Constants.GROUPS:
         parsedKey =
             AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
@@ -46,21 +52,17 @@ public final class CacheKeyJsonParser {
             AccountGroup.uuid(
                 jsonElement(cacheKeyValue).getAsJsonObject().get("uuid").getAsString());
         break;
-      case Constants.PROJECTS:
-        parsedKey = Project.nameKey(nullToEmpty(cacheKeyValue));
-        break;
-      case Constants.PROJECT_LIST:
-        parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
-        break;
       default:
-        if (cacheKeyValue instanceof String) {
-          parsedKey = (String) cacheKeyValue;
+        Map<String, Class<?>> cacheDefMap = getDynamicCacheDefs();
+        if (!cacheDefMap.containsKey(cacheName)) {
+          throw new IllegalStateException(cacheName);
+        }
+        Class<?> cls = cacheDefMap.get(cacheName);
+        JsonElement json = jsonElement(cacheKeyValue);
+        if (json.isJsonPrimitive()) {
+          parsedKey = gson.fromJson(json.getAsJsonPrimitive().getAsString(), cls);
         } else {
-          try {
-            parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString().trim(), String.class);
-          } catch (Exception e) {
-            parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
-          }
+          parsedKey = gson.fromJson(json.getAsJsonObject(), cls);
         }
     }
     return parsedKey;
@@ -72,5 +74,16 @@ public final class CacheKeyJsonParser {
 
   private static String nullToEmpty(Object value) {
     return MoreObjects.firstNonNull(value, "").toString().trim();
+  }
+
+  private Map<String, Class<?>> getDynamicCacheDefs() {
+    Map<String, Class<?>> cacheDefMap = new HashMap<>();
+    for (String pluginName : cachesMap.plugins()) {
+      for (String cacheName : cachesMap.byPlugin(pluginName).keySet()) {
+        CacheDef<?, ?> cacheDef = cachesMap.byPlugin(pluginName).get(cacheName).get();
+        cacheDefMap.put(cacheDef.name(), cacheDef.keyType().getRawType());
+      }
+    }
+    return cacheDefMap;
   }
 }
