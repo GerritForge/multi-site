@@ -59,8 +59,20 @@ public class CacheKeyJsonParserTest {
         new TestCacheDef<>(CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKeyType.class, Object.class);
     CacheDef<java.lang.String, Object> simpleKeyTypeCacheDef =
         new TestCacheDef<>(CACHE_NAME_WITH_SIMPLE_KEY_TYPE, java.lang.String.class, Object.class);
+    CacheDef<Project.NameKey, Object> projectNameKeyTypeCacheDef =
+        new TestCacheDef<>(Constants.PROJECTS, Project.NameKey.class, Object.class);
+    CacheDef<AccountGroup.Id, Object> groupsTypeCacheDef =
+        new TestCacheDef<>(Constants.GROUPS, AccountGroup.Id.class, Object.class);
+    CacheDef<Account.Id, Object> accountsTypeCacheDef =
+        new TestCacheDef<>(Constants.ACCOUNTS, Account.Id.class, Object.class);
+    CacheDef<AccountGroup.UUID, Object> accountsGroupsBySubgroupsTypeCacheDef =
+        new TestCacheDef<>(Constants.GROUPS_BYSUBGROUP, AccountGroup.UUID.class, Object.class);
     cacheDefMap.put("gerrit", CACHE_NAME_WITH_COMPLEX_KEY_TYPE, Providers.of(complexKeyTypeCacheDef));
     cacheDefMap.put("gerrit", CACHE_NAME_WITH_SIMPLE_KEY_TYPE, Providers.of(simpleKeyTypeCacheDef));
+    cacheDefMap.put("gerrit", Constants.PROJECTS, Providers.of(projectNameKeyTypeCacheDef));
+    cacheDefMap.put("gerrit", Constants.GROUPS, Providers.of(groupsTypeCacheDef));
+    cacheDefMap.put("gerrit", Constants.ACCOUNTS, Providers.of(accountsTypeCacheDef));
+    cacheDefMap.put("gerrit", Constants.GROUPS_BYSUBGROUP, Providers.of(accountsGroupsBySubgroupsTypeCacheDef));
     return cacheDefMap;
   }
 

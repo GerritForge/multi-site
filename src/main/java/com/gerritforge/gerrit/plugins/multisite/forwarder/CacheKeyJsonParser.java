@@ -13,9 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.MoreObjects;
-import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
-import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.events.EventGson;
@@ -24,7 +22,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -45,9 +42,6 @@ public final class CacheKeyJsonParser {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
     switch (cacheName) {
-      case Constants.ACCOUNTS:
-        parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
-        break;
       case Constants.GROUPS:
         parsedKey =
             AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
@@ -56,12 +50,6 @@ public final class CacheKeyJsonParser {
         parsedKey =
             AccountGroup.uuid(
                 jsonElement(cacheKeyValue).getAsJsonObject().get("uuid").getAsString());
-        break;
-      case Constants.PROJECTS:
-        parsedKey = Project.nameKey(nullToEmpty(cacheKeyValue));
-        break;
-      case Constants.PROJECT_LIST:
-        parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
         Optional<Class<?>> clazz = getCacheDef(cacheName);
@@ -104,11 +92,11 @@ public final class CacheKeyJsonParser {
   }
 
   private Optional<Class<?>> getCacheDef(String name) {
-    if(keyClassesByName.containsKey(name)) {
+    if (keyClassesByName.containsKey(name)) {
       return Optional.ofNullable(keyClassesByName.get(name));
     } else {
       Map<String, Class<?>> cacheDefMap = getDynamicCacheDefs();
-      if(cacheDefMap.containsKey(name)) {
+      if (cacheDefMap.containsKey(name)) {
         keyClassesByName.put(name, cacheDefMap.get(name));
       }
       return Optional.ofNullable(cacheDefMap.get(name));

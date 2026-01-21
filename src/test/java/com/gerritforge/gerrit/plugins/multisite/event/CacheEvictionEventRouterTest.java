@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
+import com.google.gerrit.entities.Project;
 import java.time.Duration;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -53,7 +53,10 @@ public class CacheEvictionEventRouterTest {
 
     CacheDef<java.lang.String, Object> keyTypeCacheDef =
         new CacheEvictionEventRouterTest.TestCacheDef<>(CACHE_NAME, java.lang.String.class, Object.class);
+    CacheDef<Project.NameKey, Object> projectsKeyTypeCacheDef =
+        new CacheEvictionEventRouterTest.TestCacheDef<>(Constants.PROJECTS, Project.NameKey.class, Object.class);
     cacheDefMap.put("gerrit", CACHE_NAME, Providers.of(keyTypeCacheDef));
+    cacheDefMap.put("gerrit", Constants.PROJECTS, Providers.of(projectsKeyTypeCacheDef));
     return cacheDefMap;
   }
 
