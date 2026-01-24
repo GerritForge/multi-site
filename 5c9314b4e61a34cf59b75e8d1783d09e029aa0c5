@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0208e1ad_98e0af80",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d891e3bc_e62dadeb",
+      "range": {
+        "startLine": 64,
+        "startChar": 44,
+        "endLine": 64,
+        "endChar": 65
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "97c4e0e9_6484a5e9",
@@ -70,6 +94,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df39570f_a396405a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "My bad, wrong place.",
+      "parentUuid": "2f730214_d04943f1",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 5
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "951816ee_c451105d",
@@ -83,6 +131,30 @@
       "writtenOn": "2026-01-24T11:04:59Z",
       "side": 1,
       "message": "This wouldn\u0027t work: two plugins `foo` and `bar` can define the same cache `mycache`. How do you get the correct one to evict?\n\nGerrit puts the plugin name as prefix to the cache name: we should do the same.",
+      "range": {
+        "startLine": 90,
+        "startChar": 29,
+        "endLine": 90,
+        "endChar": 48
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "127baa5f_933e85b0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "951816ee_c451105d",
       "range": {
         "startLine": 90,
         "startChar": 29,
@@ -116,6 +188,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47fa48be_32d1d71e",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d646aaa_006cba19",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 94
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ba9cedc_8772c32b",
@@ -129,6 +225,30 @@
       "writtenOn": "2026-01-24T11:04:59Z",
       "side": 1,
       "message": "This is a complex key, not its type.\n\n\n\n```suggestion\n  public static class ComplexKey {\n```",
+      "range": {
+        "startLine": 42,
+        "startChar": 22,
+        "endLine": 42,
+        "endChar": 36
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5ea29a1_201024fb",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ba9cedc_8772c32b",
       "range": {
         "startLine": 42,
         "startChar": 22,
@@ -162,6 +282,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35523fa3_ddae23b5",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f2622f_9288d77f",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 3
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79e0f7b9_5efb227d",
@@ -175,6 +319,30 @@
       "writtenOn": "2026-01-24T11:04:59Z",
       "side": 1,
       "message": "This is an initialisation rather than constructor, as the dynamicMap is stored in the instance variable.",
+      "range": {
+        "startLine": 52,
+        "startChar": 37,
+        "endLine": 52,
+        "endChar": 50
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5a367c_1e7ae808",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79e0f7b9_5efb227d",
       "range": {
         "startLine": 52,
         "startChar": 37,
@@ -208,6 +376,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d245081d_a6d3409b",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af56a371_d47cfa98",
+      "range": {
+        "startLine": 59,
+        "startChar": 60,
+        "endLine": 59,
+        "endChar": 82
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96fd209b_fb5da766",
@@ -231,6 +423,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b70c762_72ad3f0a",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96fd209b_fb5da766",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 16
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48a77bb0_2d70cd71",
@@ -244,6 +460,30 @@
       "writtenOn": "2026-01-24T11:04:59Z",
       "side": 1,
       "message": "This isn\u0027t enough: we also need to assert that the key has the value we expect.\n\n\n\n```suggestion\n    assertThat(parsedKey).isEqualTo(complexKeyType);\n```",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 61
+      },
+      "revId": "5c9314b4e61a34cf59b75e8d1783d09e029aa0c5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcbe54d0_8fe4b407",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T11:06:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48a77bb0_2d70cd71",
       "range": {
         "startLine": 76,
         "startChar": 4,
