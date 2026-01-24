@@ -70,6 +70,30 @@
       },
       "revId": "fac615dee3f7e346068283de41c61b2ac6129c4a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3245d73_f6df4f34",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/cache/CacheEvictionHandler.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-24T23:27:00Z",
+      "side": 0,
+      "message": "True, I forgot Gerrit does it already in `CacheProvider.java`.\n\n```\n  @Override\n  public String name() {\n    if (!Strings.isNullOrEmpty(plugin)) {\n      return plugin + \".\" + name;\n    }\n    return name;\n  }\n```",
+      "parentUuid": "8e8ad840_682e9c0e",
+      "range": {
+        "startLine": 44,
+        "startChar": 23,
+        "endLine": 44,
+        "endChar": 37
+      },
+      "revId": "fac615dee3f7e346068283de41c61b2ac6129c4a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
