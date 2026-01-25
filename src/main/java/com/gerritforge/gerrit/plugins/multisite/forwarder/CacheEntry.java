@@ -11,7 +11,6 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
-import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.Objects;
 
 /** Represents a cache entry to evict */
@@ -49,16 +48,12 @@ public class CacheEntry {
   /**
    * Build a CacheEntry from the specified cache and key
    *
-   * @param cache String representing the cache, e.g. my_plugin.my_cache
+   * @param cacheNameAndPlugin CacheNameAndPlugin representing the cache and plugin names
    * @param key The Object representing the key
    * @return the CacheEntry
    */
-  public static CacheEntry from(String cache, Object key) {
-    int dot = cache.indexOf('.');
-    if (dot > 0) {
-      return new CacheEntry(cache.substring(0, dot), cache.substring(dot + 1), key);
-    }
-    return new CacheEntry(Constants.GERRIT, cache, key);
+  public static CacheEntry from(CacheNameAndPlugin cacheNameAndPlugin, Object key) {
+    return new CacheEntry(cacheNameAndPlugin.pluginName(), cacheNameAndPlugin.cacheName(), key);
   }
 
   @Override

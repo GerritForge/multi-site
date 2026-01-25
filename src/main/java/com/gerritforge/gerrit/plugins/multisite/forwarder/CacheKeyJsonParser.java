@@ -11,8 +11,6 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
-import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
-
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.MoreObjects;
 import com.google.gerrit.entities.Account;
@@ -39,17 +37,10 @@ public final class CacheKeyJsonParser {
     this.cachesMap = cachesMap;
   }
 
-  public Object from(String cacheNameWithPlugin, Object cacheKeyValue) {
-    int cacheNameStart = cacheNameWithPlugin.indexOf('.');
-    String pluginName =
-        cacheNameStart > 0 ? cacheNameWithPlugin.substring(0, cacheNameStart) : GERRIT;
-    String cacheName =
-        cacheNameStart > 0
-            ? cacheNameWithPlugin.substring(cacheNameStart + 1)
-            : cacheNameWithPlugin;
+  public Object from(CacheNameAndPlugin cacheNameAndPlugin, Object cacheKeyValue) {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
-    switch (cacheName) {
+    switch (cacheNameAndPlugin.cacheName()) {
       case Constants.ACCOUNTS:
         parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
         break;
@@ -69,7 +60,7 @@ public final class CacheKeyJsonParser {
         parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
-        Class<?> cls = getCacheKeyClassFromDefs(pluginName, cacheName);
+        Class<?> cls = getCacheKeyClassFromDefs(cacheNameAndPlugin);
         parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
     }
     return parsedKey;
@@ -88,15 +79,20 @@ public final class CacheKeyJsonParser {
     return MoreObjects.firstNonNull(value, "").toString().trim();
   }
 
-  private Class<?> getCacheKeyClassFromDefs(String pluginName, String cacheName) {
-    NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin = cachesMap.byPlugin(pluginName);
+  private Class<?> getCacheKeyClassFromDefs(CacheNameAndPlugin cacheNameAndPlugin) {
+    NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin =
+        cachesMap.byPlugin(cacheNameAndPlugin.pluginName());
     if (cachesByPlugin == null) {
-      throw new IllegalStateException("Unable to find any cache provided by " + pluginName);
+      throw new IllegalStateException(
+          "Unable to find any cache provided by " + cacheNameAndPlugin.pluginName());
     }
-    Provider<CacheDef<?, ?>> cacheDefProvider = cachesByPlugin.get(cacheName);
+    Provider<CacheDef<?, ?>> cacheDefProvider = cachesByPlugin.get(cacheNameAndPlugin.cacheName());
     if (cacheDefProvider == null) {
       throw new IllegalStateException(
-          "Unable to find definition for cache '" + cacheName + "' provided by " + pluginName);
+          "Unable to find definition for cache '"
+              + cacheNameAndPlugin.cacheName()
+              + "' provided by "
+              + cacheNameAndPlugin.pluginName());
     }
 
     return cacheDefProvider.get().keyType().getRawType();
