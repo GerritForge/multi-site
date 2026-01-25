@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d2173a0_5ec952a8",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-25T00:14:48Z",
+      "side": 1,
+      "message": "Maybe would be best to have this test class extracted out, so that can be reused across tests.",
+      "revId": "0285181ed90b494630ddf477f8c06cab5a8830da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
