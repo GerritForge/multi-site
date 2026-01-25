@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd73c4b5_f446f6e3",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-25T00:12:18Z",
+      "side": 1,
+      "message": "Not needed anymore.",
+      "range": {
+        "startLine": 93,
+        "startChar": 4,
+        "endLine": 93,
+        "endChar": 76
+      },
+      "revId": "d3661af17bb817f364baa976123c627ad0842490",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
