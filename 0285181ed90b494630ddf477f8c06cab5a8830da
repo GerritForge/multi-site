@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "755d7816_f43829b8",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-25T10:27:36Z",
+      "side": 1,
+      "message": "If `cls` is an abstract class (or interface), this will fail with:\n\n```\n[2026-01-25T08:53:07.596Z] [kafka-subscriber-4[com.gerritforge.gerrit.plugins.kafka.subscribe.KafkaEventNativeSubscriber$ReceiverJob@4cc6aee5]] ERROR com.gerritforge.gerrit.plugins.kafka.subscribe.KafkaEventNativeSubscriber : Malformed event \u0027{\"cacheName\":\"permission_sort\",\"key\":{\"ref\":\"refs/heads/\",\"patterns\":[\"refs/heads/*\",\"refs/*\"]},\"type\":\"cache-eviction\",\"eventCreatedOn\":1769331187,\"instanceId\":\"instance-1\"}\u0027: [Exception: com.google.gson.JsonIOException: Abstract classes can\u0027t be instantiated! Adjust the R8 configuration or register an InstanceCreator or a TypeAdapter for this type. Class name: com.google.gerrit.server.permissions.SectionSortCache$EntryKey\nSee https://github.com/google/gson/blob/main/Troubleshooting.md#r8-abstract-class]\ncom.google.gson.JsonIOException: Abstract classes can\u0027t be instantiated! Adjust the R8 configuration or register an InstanceCreator or a TypeAdapter for this type. Class name: com.google.gerrit.server.permissions.SectionSortCache$EntryKey\nSee https://github.com/google/gson/blob/main/Troubleshooting.md#r8-abstract-class\n        at com.google.gson.internal.ConstructorConstructor.lambda$get$2(ConstructorConstructor.java:141)\n        at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$FieldReflectionAdapter.createAccumulator(ReflectiveTypeAdapterFactory.java:552)\n        at com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:505)\n        at com.google.gson.Gson.fromJson(Gson.java:1361)\n        at com.google.gson.Gson.fromJson(Gson.java:1463)\n        at com.google.gson.Gson.fromJson(Gson.java:1406)\n        at com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser.from(CacheKeyJsonParser.java:74)\n```",
+      "range": {
+        "startLine": 74,
+        "startChar": 20,
+        "endLine": 74,
+        "endChar": 66
+      },
+      "revId": "0285181ed90b494630ddf477f8c06cab5a8830da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d2173a0_5ec952a8",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
         "patchSetId": 25
