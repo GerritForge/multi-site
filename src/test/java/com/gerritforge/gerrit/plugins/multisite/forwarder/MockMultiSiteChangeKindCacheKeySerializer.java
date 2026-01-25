@@ -15,9 +15,7 @@ import com.google.gerrit.server.cache.serialize.CacheSerializer;
 import com.google.gerrit.server.change.ChangeKindCacheImpl;
 import java.nio.charset.StandardCharsets;
 import org.eclipse.jgit.lib.ObjectId;
-import org.junit.Ignore;
 
-@Ignore
 public class MockMultiSiteChangeKindCacheKeySerializer
     implements CacheSerializer<ChangeKindCacheImpl.Key> {
 

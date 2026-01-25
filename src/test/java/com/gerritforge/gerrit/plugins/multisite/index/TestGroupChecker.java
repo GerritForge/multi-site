@@ -14,9 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import java.util.Optional;
 import org.eclipse.jgit.lib.ObjectId;
-import org.junit.Ignore;
 
-@Ignore
 public class TestGroupChecker implements GroupChecker {
 
   private final boolean isUpToDate;

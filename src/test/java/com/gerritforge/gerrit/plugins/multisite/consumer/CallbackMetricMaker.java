@@ -15,9 +15,7 @@ import com.google.gerrit.metrics.Counter1;
 import com.google.gerrit.metrics.Description;
 import com.google.gerrit.metrics.DisabledMetricMaker;
 import com.google.gerrit.metrics.Field;
-import org.junit.Ignore;
 
-@Ignore
 public class CallbackMetricMaker extends DisabledMetricMaker {
   private int callbackMetricCounter = 0;
 
