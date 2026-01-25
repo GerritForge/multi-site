@@ -16,6 +16,24 @@
       "message": "I don\u0027t believe this is needed anymore",
       "revId": "18e6a70cc9c3b22a1198d2d63235149818ec9383",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe319f68_ab994e9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-25T11:16:21Z",
+      "side": 1,
+      "message": "mmmh, really?\n\nIt\u0027ll still be more efficient to run an updated version of this change than the plain `getCacheKeyClassFromDefs` that we have now?",
+      "parentUuid": "964426dd_d7dde012",
+      "revId": "18e6a70cc9c3b22a1198d2d63235149818ec9383",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
