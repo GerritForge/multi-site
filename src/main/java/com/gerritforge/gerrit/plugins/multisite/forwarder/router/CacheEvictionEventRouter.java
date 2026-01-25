@@ -15,6 +15,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEntry;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedCacheEvictionHandler;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.CachePluginAndNameRecord;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.google.inject.Inject;
 

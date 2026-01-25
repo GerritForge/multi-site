@@ -14,10 +14,9 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
+import com.gerritforge.gerrit.plugins.multisite.NoOpCacheKeyDef;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.Weigher;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
@@ -27,9 +26,7 @@ import com.google.gerrit.extensions.registration.RegistrationHandle;
 import com.google.gerrit.server.cache.CacheDef;
 import com.google.gerrit.server.events.EventGsonProvider;
 import com.google.gson.Gson;
-import com.google.inject.TypeLiteral;
 import com.google.inject.util.Providers;
-import java.time.Duration;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,7 +62,7 @@ public class CacheKeyJsonParserTest {
         cacheDefMap.put(
             pluginName,
             cacheName,
-            Providers.of(new TestCacheDef<>(cacheName, keyRawType, Object.class)));
+            Providers.of(new NoOpCacheKeyDef<>(cacheName, keyRawType, Object.class)));
   }
 
   @Test
@@ -142,67 +139,5 @@ public class CacheKeyJsonParserTest {
     Object object = new Object();
     String json = gson.toJson(object);
     assertThat(json).isEqualTo(EMPTY_JSON);
-  }
-
-  private static class TestCacheDef<K, V> implements CacheDef<K, V> {
-    private final String name;
-    private final TypeLiteral<K> keyType;
-    private final TypeLiteral<V> valueType;
-
-    TestCacheDef(String name, Class<K> keyClass, Class<V> valueClass) {
-      this.name = name;
-      this.keyType = TypeLiteral.get(keyClass);
-      this.valueType = TypeLiteral.get(valueClass);
-    }
-
-    @Override
-    public String name() {
-      return name;
-    }
-
-    @Override
-    public String configKey() {
-      return name;
-    }
-
-    @Override
-    public TypeLiteral<K> keyType() {
-      return keyType;
-    }
-
-    @Override
-    public TypeLiteral<V> valueType() {
-      return valueType;
-    }
-
-    @Override
-    public long maximumWeight() {
-      return 0;
-    }
-
-    @Override
-    public Duration expireAfterWrite() {
-      return null;
-    }
-
-    @Override
-    public Duration expireFromMemoryAfterAccess() {
-      return null;
-    }
-
-    @Override
-    public Duration refreshAfterWrite() {
-      return null;
-    }
-
-    @Override
-    public Weigher<K, V> weigher() {
-      return null;
-    }
-
-    @Override
-    public CacheLoader<K, V> loader() {
-      return null;
-    }
   }
 }
