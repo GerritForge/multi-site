@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc852068_fd0f7e42",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-25T22:07:33Z",
+      "side": 1,
+      "message": "If you add this test: \n\n```\n  @Test\n  public void serializeDeserializeCacheEvictionEventWithAutoValueKeyType() {\n    ChangeKindCacheImpl.Key changeKindType \u003d ChangeKindCacheImpl.Key.create(ObjectId.zeroId(), ObjectId.zeroId(), \"sample-strategy\");\n    String jsonEvent \u003d gson.toJson(changeKindType);\n    Object parsedKey \u003d gsonParser.from(CACHE_CHANGE_KIND, jsonEvent);\n    assertThat(parsedKey).isEqualTo(changeKindType);\n  }\n```\n\nWhere the CACHE_CHANGE_KIND is a persistent cache definition, with a key of type `ChangeKindCacheImpl.Key.class`, the test will fail with:\n\n```\nAbstract classes can\u0027t be instantiated! Adjust the R8 configuration or register an InstanceCreator or a TypeAdapter for this type. Class name: com.google.gerrit.server.change.ChangeKindCacheImpl$Key\nSee https://github.com/google/gson/blob/main/Troubleshooting.md#r8-abstract-class\ncom.google.gson.JsonIOException: \n\tat com.google.gson.internal.ConstructorConstructor.lambda$get$2(ConstructorConstructor.java:141)\n\tat com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$FieldReflectionAdapter.createAccumulator(ReflectiveTypeAdapterFactory.java:552)\n\tat com.google.gson.internal.bind.ReflectiveTypeAdapterFactory$Adapter.read(ReflectiveTypeAdapterFactory.java:505)\n\tat com.google.gson.Gson.fromJson(Gson.java:1361)\n\tat com.google.gson.Gson.fromJson(Gson.java:1463)\n\tat com.google.gson.Gson.fromJson(Gson.java:1406)\n\tat com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser.from(CacheKeyJsonParser.java:78)\n\tat com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParserTest.serializeDeserializeCacheEvictionEventWithAutoValueKeyType(CacheKeyJsonParserTest.java:88)\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat org.junit.runners.Suite.runChild(Suite.java:128)\n\tat org.junit.runners.Suite.runChild(Suite.java:27)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n```\n\nThat is due to the way we deserialise, relying on Gson knowing what to do from the class name. When using AutoValues (all of persistent caches use them), then Gson doesn\u0027t know what to do. AutoValues are by definition abstract classes.",
+      "parentUuid": "473b6aaf_0317e796",
+      "revId": "0285181ed90b494630ddf477f8c06cab5a8830da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "755d7816_f43829b8",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
         "patchSetId": 25
