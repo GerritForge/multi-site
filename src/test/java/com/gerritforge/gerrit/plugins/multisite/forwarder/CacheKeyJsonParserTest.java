@@ -69,7 +69,8 @@ public class CacheKeyJsonParserTest {
   public void serializeDeserializeCacheEvictionEventWithComplexKeyType() {
     ComplexKey complexKeyType = new ComplexKey("cache-key");
     String jsonEvent = gson.toJson(complexKeyType);
-    Object parsedKey = gsonParser.from(CACHE_NAME_WITH_COMPLEX_KEY_TYPE, jsonEvent);
+    Object parsedKey =
+        gsonParser.from(CachePluginAndNameRecord.from(CACHE_NAME_WITH_COMPLEX_KEY_TYPE), jsonEvent);
     assertThat(parsedKey).isEqualTo(complexKeyType);
   }
 
@@ -80,9 +81,13 @@ public class CacheKeyJsonParserTest {
     String jsonEvent1 = gson.toJson(complexKeyType1);
     String jsonEvent2 = gson.toJson(complexKeyType2);
     Object parsedKey1 =
-        gsonParser.from(PLUGIN_NAME1 + "." + CACHE_NAME_WITH_COMPLEX_KEY_TYPE, jsonEvent1);
+        gsonParser.from(
+            CachePluginAndNameRecord.from(PLUGIN_NAME1 + "." + CACHE_NAME_WITH_COMPLEX_KEY_TYPE),
+            jsonEvent1);
     Object parsedKey2 =
-        gsonParser.from(PLUGIN_NAME2 + "." + CACHE_NAME_WITH_COMPLEX_KEY_TYPE, jsonEvent2);
+        gsonParser.from(
+            CachePluginAndNameRecord.from(PLUGIN_NAME2 + "." + CACHE_NAME_WITH_COMPLEX_KEY_TYPE),
+            jsonEvent2);
     assertThat(parsedKey1).isEqualTo(complexKeyType1);
     assertThat(parsedKey2).isEqualTo(complexKeyType2);
   }
@@ -91,34 +96,42 @@ public class CacheKeyJsonParserTest {
   public void accountIDParse() {
     Account.Id accountId = Account.id(1);
     String json = gson.toJson(accountId);
-    assertThat(accountId).isEqualTo(gsonParser.from(Constants.ACCOUNTS, json));
+    assertThat(accountId)
+        .isEqualTo(gsonParser.from(CachePluginAndNameRecord.from(Constants.ACCOUNTS), json));
   }
 
   @Test
   public void accountGroupIDParse() {
     AccountGroup.Id accountGroupId = AccountGroup.id(1);
     String json = gson.toJson(accountGroupId);
-    assertThat(accountGroupId).isEqualTo(gsonParser.from(Constants.GROUPS, json));
+    assertThat(accountGroupId)
+        .isEqualTo(gsonParser.from(CachePluginAndNameRecord.from(Constants.GROUPS), json));
   }
 
   @Test
   public void accountGroupUUIDParse() {
     AccountGroup.UUID accountGroupUuid = AccountGroup.uuid("abc123");
     String json = gson.toJson(accountGroupUuid);
-    assertThat(accountGroupUuid).isEqualTo(gsonParser.from(Constants.GROUPS_BYSUBGROUP, json));
+    assertThat(accountGroupUuid)
+        .isEqualTo(
+            gsonParser.from(CachePluginAndNameRecord.from(Constants.GROUPS_BYSUBGROUP), json));
   }
 
   @Test
   public void projectNameKeyParse() {
     String projectNameString = "foo";
     Project.NameKey projectNameKey = Project.nameKey(projectNameString);
-    assertThat(projectNameKey).isEqualTo(gsonParser.from(Constants.PROJECTS, projectNameString));
+    assertThat(projectNameKey)
+        .isEqualTo(
+            gsonParser.from(CachePluginAndNameRecord.from(Constants.PROJECTS), projectNameString));
   }
 
   @Test
   public void stringParse() {
     String key = "key";
-    assertThat(key).isEqualTo(gsonParser.from(CACHE_NAME_WITH_SIMPLE_KEY_TYPE, key));
+    assertThat(key)
+        .isEqualTo(
+            gsonParser.from(CachePluginAndNameRecord.from(CACHE_NAME_WITH_SIMPLE_KEY_TYPE), key));
   }
 
   @Test

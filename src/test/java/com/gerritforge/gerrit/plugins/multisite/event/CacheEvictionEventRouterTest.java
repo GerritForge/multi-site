@@ -18,6 +18,7 @@ import com.gerritforge.gerrit.plugins.multisite.NoOpCacheKeyDef;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEntry;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.CachePluginAndNameRecord;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedCacheEvictionHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.CacheEvictionEventRouter;
@@ -69,7 +70,8 @@ public class CacheEvictionEventRouterTest {
     final CacheEvictionEvent event = new CacheEvictionEvent(CACHE_NAME, "key", INSTANCE_ID);
     router.route(event);
 
-    verify(cacheEvictionHandler).evict(CacheEntry.from(event.cacheName, event.key));
+    verify(cacheEvictionHandler)
+        .evict(CacheEntry.from(CachePluginAndNameRecord.from(event.cacheName), event.key));
   }
 
   @Test
@@ -78,7 +80,8 @@ public class CacheEvictionEventRouterTest {
     final CacheEvictionEvent event = new CacheEvictionEvent(CACHE_NAME, "some/key", INSTANCE_ID);
     router.route(event);
 
-    verify(cacheEvictionHandler).evict(CacheEntry.from(event.cacheName, event.key));
+    verify(cacheEvictionHandler)
+        .evict(CacheEntry.from(CachePluginAndNameRecord.from(event.cacheName), event.key));
   }
 
   @Test
@@ -89,6 +92,9 @@ public class CacheEvictionEventRouterTest {
     router.route(event);
 
     verify(cacheEvictionHandler)
-        .evict(CacheEntry.from(event.cacheName, Project.nameKey((String) event.key)));
+        .evict(
+            CacheEntry.from(
+                CachePluginAndNameRecord.from(event.cacheName),
+                Project.nameKey((String) event.key)));
   }
 }
