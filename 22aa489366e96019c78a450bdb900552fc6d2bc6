@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f8c6d9f_ae9338b2",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CachePluginAndNameRecord.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-25T16:14:08Z",
+      "side": 1,
+      "message": "Missing BSL license header.",
+      "revId": "22aa489366e96019c78a450bdb900552fc6d2bc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
