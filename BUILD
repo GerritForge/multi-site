@@ -51,7 +51,10 @@ java_library(
 
 junit_tests(
     name = "multi_site_tests",
-    srcs = glob(["src/test/java/**/*.java"]),
+    srcs = glob([
+        "src/test/java/**/*Test.java",
+        "src/test/java/**/*IT.java",
+    ]),
     resources = glob(["src/test/resources/**/*"]),
     tags = [
         "local",
@@ -59,6 +62,7 @@ junit_tests(
     ],
     deps = [
         ":multi-site__plugin_test_deps",
+        ":multi_site_util",
     ],
 )
 
@@ -72,6 +76,21 @@ java_library(
         "//plugins/global-refdb",
         "//plugins/pull-replication",
         "//plugins/replication",
+    ],
+)
+
+java_library(
+    name = "multi_site_util",
+    testonly = True,
+    srcs = glob(
+        ["src/test/java/**/*.java"],
+        exclude = [
+            "src/test/java/**/*Test.java",
+            "src/test/java/**/*IT.java",
+        ],
+    ),
+    deps = [
+        ":multi-site__plugin_test_deps",
     ],
 )
 
