@@ -145,6 +145,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "473b6aaf_0317e796",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-25T20:31:58Z",
+      "side": 1,
+      "message": "If `cacheName` refers to a persistent cache, fetching the key class name and trying to use Gson serialisation won\u0027t work.\n\nWe should get the key serialiser and use it.",
+      "revId": "0285181ed90b494630ddf477f8c06cab5a8830da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "755d7816_f43829b8",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
         "patchSetId": 25
