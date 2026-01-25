@@ -16,9 +16,7 @@ import com.google.gerrit.entities.RefNames;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectIdRef;
 import org.eclipse.jgit.lib.Ref;
-import org.junit.Ignore;
 
-@Ignore
 public interface RefFixture {
 
   static final String ALLOWED_CHARS = "abcdefghilmnopqrstuvz";

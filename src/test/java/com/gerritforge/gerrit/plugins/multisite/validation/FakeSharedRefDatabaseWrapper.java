@@ -24,9 +24,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
-import org.junit.Ignore;
 
-@Ignore
 public class FakeSharedRefDatabaseWrapper extends SharedRefDatabaseWrapper {
 
   public FakeSharedRefDatabaseWrapper(String... rejectedRefs) {

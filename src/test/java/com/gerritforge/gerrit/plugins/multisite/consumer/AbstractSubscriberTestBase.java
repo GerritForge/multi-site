@@ -30,14 +30,12 @@ import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
 import java.util.List;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-@Ignore
 public abstract class AbstractSubscriberTestBase {
   protected static final String NODE_INSTANCE_ID = "node-instance-id";
   protected static final String INSTANCE_ID = "other-node-instance-id";
