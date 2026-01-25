@@ -16,6 +16,24 @@
       "message": "Missing BSL license header.",
       "revId": "22aa489366e96019c78a450bdb900552fc6d2bc6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c97736a_73d2ef35",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CachePluginAndNameRecord.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-25T18:44:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f8c6d9f_ae9338b2",
+      "revId": "22aa489366e96019c78a450bdb900552fc6d2bc6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
