@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bddbaf1d_9108228a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-25T23:03:17Z",
+      "side": 1,
+      "message": "I\u0027ve tried to introduce also the `CacheKeyJsonParser.toJson()` method (it was actualliy missing: how did we rely on serialising the key until now?) as follows:\n\n```\n  public \u003cK\u003e String toJson(String cacheNameWithPlugin, K cacheKeyValue) {\n    int cacheNameStart \u003d cacheNameWithPlugin.indexOf(\u0027.\u0027);\n    String pluginName \u003d\n            cacheNameStart \u003e 0 ? cacheNameWithPlugin.substring(0, cacheNameStart) : GERRIT;\n    String cacheName \u003d\n            cacheNameStart \u003e 0\n                    ? cacheNameWithPlugin.substring(cacheNameStart + 1)\n                    : cacheNameWithPlugin;\n    Optional\u003cCacheSerializer\u003cK\u003e\u003e keySerializer \u003d getCacheKeySerializerFromDefs(pluginName, cacheName);\n    return keySerializer.map(ser -\u003e gson.toJson(ser.serialize(cacheKeyValue))).orElseGet(() -\u003e gson.toJson(cacheKeyValue));\n  }\n```\n\nWith the above method, I rely on the persistent cache definition to obtain the serializer and use it for computing the serialized form of the key.\n\nI\u0027ve also adapted the deserialization as follows:\n\n```\n        Optional\u003cCacheSerializer\u003cK\u003e\u003e keySerializer \u003d getCacheKeySerializerFromDefs(pluginName, cacheName);\n        parsedKey \u003d keySerializer\n                .map(ser -\u003e ser.deserialize(gson.fromJson(jsonElement(cacheKeyValue), byte[].class)))\n                .orElseGet(() -\u003e (K) gson.fromJson(jsonElement(cacheKeyValue), getCacheKeyClassFromDefs(pluginName, cacheName)));\n```\n\nAnd now it works with the auto-values, as I just use the cache serializer/deserializer and I am able to manage the keys transparently.",
+      "parentUuid": "bc852068_fd0f7e42",
+      "revId": "0285181ed90b494630ddf477f8c06cab5a8830da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "755d7816_f43829b8",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
         "patchSetId": 25
