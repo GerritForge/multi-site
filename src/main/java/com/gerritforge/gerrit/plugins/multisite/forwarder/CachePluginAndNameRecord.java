@@ -1,4 +1,4 @@
-// Copyright (C) 2025 GerritForge, Inc.
+// Copyright (C) 2026 GerritForge, Inc.
 //
 // Licensed under the BSL 1.1 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,18 +11,15 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
-import static com.google.common.truth.Truth.assertThat;
+import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 
-import org.junit.Test;
-
-public class CacheEntryTest {
-
-  @Test
-  public void cacheEntry() throws Exception {
-    CacheEntry entry =
-        CacheEntry.from(CachePluginAndNameRecord.from("my_plugin.my_cache"), "someOtherKey");
-    assertThat(entry.getPluginName()).isEqualTo("my_plugin");
-    assertThat(entry.getCacheName()).isEqualTo("my_cache");
-    assertThat(entry.getKey()).isEqualTo("someOtherKey");
+public record CachePluginAndNameRecord(String plugin, String name) {
+  public static CachePluginAndNameRecord from(String cacheName) {
+    int dot = cacheName.indexOf('.');
+    if (dot > 0) {
+      return new CachePluginAndNameRecord(
+          cacheName.substring(0, dot), cacheName.substring(dot + 1));
+    }
+    return new CachePluginAndNameRecord(Constants.GERRIT, cacheName);
   }
 }

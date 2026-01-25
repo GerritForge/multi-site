@@ -31,7 +31,9 @@ public class CacheEvictionEventRouter implements ForwardedEventRouter<CacheEvict
 
   @Override
   public void route(CacheEvictionEvent cacheEvictionEvent) throws CacheNotFoundException {
-    Object parsedKey = gsonParser.from(cacheEvictionEvent.cacheName, cacheEvictionEvent.key);
-    cacheEvictionHanlder.evict(CacheEntry.from(cacheEvictionEvent.cacheName, parsedKey));
+    CachePluginAndNameRecord pluginAndNameRecord =
+        CachePluginAndNameRecord.from(cacheEvictionEvent.cacheName);
+    Object parsedKey = gsonParser.from(pluginAndNameRecord, cacheEvictionEvent.key);
+    cacheEvictionHanlder.evict(CacheEntry.from(pluginAndNameRecord, parsedKey));
   }
 }
