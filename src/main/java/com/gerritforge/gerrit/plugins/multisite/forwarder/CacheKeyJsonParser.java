@@ -17,6 +17,8 @@ import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.server.cache.CacheDef;
+import com.google.gerrit.server.cache.PersistentCacheDef;
+import com.google.gerrit.server.cache.serialize.CacheSerializer;
 import com.google.gerrit.server.events.EventGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -25,6 +27,8 @@ import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import java.util.NavigableMap;
+import java.util.Objects;
+import java.util.Optional;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;
@@ -36,10 +40,17 @@ public final class CacheKeyJsonParser {
     this.cachesMap = cachesMap;
   }
 
-  public Object from(CacheNameAndPlugin cacheNameAndPlugin, Object cacheKeyValue) {
+  public String toJson(CacheNameAndPlugin cacheNameWithPlugin, Object cacheKeyValue) {
+    return getCacheKeySerializerFromDefs(cacheNameWithPlugin)
+        .map(ser -> ser.serialize(cacheKeyValue))
+        .map(gson::toJson)
+        .orElseGet(() -> gson.toJson(cacheKeyValue));
+  }
+
+  public Object from(CacheNameAndPlugin cacheNameWithPlugin, Object cacheKeyValue) {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
-    switch (cacheNameAndPlugin.cacheName()) {
+    switch (cacheNameWithPlugin.cacheName()) {
       case Constants.GROUPS:
         parsedKey =
             AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
@@ -56,7 +67,14 @@ public final class CacheKeyJsonParser {
         parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
-        Class<?> cls = getCacheKeyClassFromDefs(cacheNameAndPlugin);
+        Optional<CacheSerializer<Object>> keySerializer =
+            getCacheKeySerializerFromDefs(cacheNameWithPlugin);
+        if (keySerializer.isPresent()) {
+          return keySerializer
+              .get()
+              .deserialize(gson.fromJson(jsonElement(cacheKeyValue), byte[].class));
+        }
+        Class<?> cls = getCacheKeyClassFromDefs(cacheNameWithPlugin);
         parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
     }
     return parsedKey;
@@ -76,6 +94,22 @@ public final class CacheKeyJsonParser {
   }
 
   private Class<?> getCacheKeyClassFromDefs(CacheNameAndPlugin cacheNameAndPlugin) {
+    return getCacheDef(cacheNameAndPlugin).keyType().getRawType();
+  }
+
+  private <K> Optional<CacheSerializer<K>> getCacheKeySerializerFromDefs(
+      CacheNameAndPlugin cacheNameWithPlugin) {
+    CacheDef<K, ?> cacheDef = Objects.requireNonNull(getCacheDef(cacheNameWithPlugin));
+    if (cacheDef instanceof PersistentCacheDef<K, ?> persistentCacheDef) {
+      return Optional.of(persistentCacheDef.keySerializer());
+    }
+    return Optional.empty();
+  }
+
+  // The cast to CacheDef<K, ?> cannot be avoided because the cachesMap is a
+  // DynamicMap which has a generic type on the value, but Object as a Key.
+  @SuppressWarnings("unchecked")
+  private <K> CacheDef<K, ?> getCacheDef(CacheNameAndPlugin cacheNameAndPlugin) {
     NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin =
         cachesMap.byPlugin(cacheNameAndPlugin.pluginName());
     if (cachesByPlugin == null) {
@@ -90,7 +124,6 @@ public final class CacheKeyJsonParser {
               + "' provided by "
               + cacheNameAndPlugin.pluginName());
     }
-
-    return cacheDefProvider.get().keyType().getRawType();
+    return (CacheDef<K, ?>) cacheDefProvider.get();
   }
 }
