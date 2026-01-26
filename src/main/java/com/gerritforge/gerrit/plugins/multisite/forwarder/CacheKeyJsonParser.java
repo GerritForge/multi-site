@@ -11,13 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
-import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.MoreObjects;
-import com.google.gerrit.entities.Account;
-import com.google.gerrit.entities.AccountGroup;
-import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.server.cache.CacheDef;
+import com.google.gerrit.server.cache.PersistentCacheDef;
+import com.google.gerrit.server.cache.serialize.CacheSerializer;
 import com.google.gerrit.server.events.EventGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -26,6 +24,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import java.util.NavigableMap;
+import java.util.Optional;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;
@@ -37,33 +36,18 @@ public final class CacheKeyJsonParser {
     this.cachesMap = cachesMap;
   }
 
-  public Object from(CachePluginAndNameRecord cacheNameWithPlugin, Object cacheKeyValue) {
+  public <K> String toJson(String cacheNameWithPlugin, K cacheKeyValue) {
+    Optional<CacheSerializer<K>> keySerializer = getCacheKeySerializerFromDefs(CachePluginAndNameRecord.from(cacheNameWithPlugin));
+    return keySerializer.map(ser -> gson.toJson(ser.serialize(cacheKeyValue))).orElseGet(() -> gson.toJson(cacheKeyValue));
+  }
+
+  public <K> K from(CachePluginAndNameRecord cacheNameWithPlugin, Object cacheKeyValue) {
     Object parsedKey;
-    // Need to add a case for 'adv_bases'
-    switch (cacheNameWithPlugin.name()) {
-      case Constants.ACCOUNTS:
-        parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
-        break;
-      case Constants.GROUPS:
-        parsedKey =
-            AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
-        break;
-      case Constants.GROUPS_BYSUBGROUP:
-        parsedKey =
-            AccountGroup.uuid(
-                jsonElement(cacheKeyValue).getAsJsonObject().get("uuid").getAsString());
-        break;
-      case Constants.PROJECTS:
-        parsedKey = Project.nameKey(nullToEmpty(cacheKeyValue));
-        break;
-      case Constants.PROJECT_LIST:
-        parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
-        break;
-      default:
-        Class<?> cls = getCacheKeyClassFromDefs(cacheNameWithPlugin);
-        parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
-    }
-    return parsedKey;
+    Optional<CacheSerializer<K>> keySerializer = getCacheKeySerializerFromDefs(cacheNameWithPlugin);
+    parsedKey = keySerializer
+            .map(ser -> ser.deserialize(gson.fromJson(jsonElement(cacheKeyValue), byte[].class)))
+            .orElseGet(() -> (K) gson.fromJson(jsonElement(cacheKeyValue), getCacheKeyClassFromDefs(cacheNameWithPlugin)));
+    return (K) parsedKey;
   }
 
   private JsonElement jsonElement(Object json) {
@@ -80,8 +64,19 @@ public final class CacheKeyJsonParser {
   }
 
   private Class<?> getCacheKeyClassFromDefs(CachePluginAndNameRecord cacheNameDetails) {
-    NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin =
-        cachesMap.byPlugin(cacheNameDetails.plugin());
+    return getCacheDef(cacheNameDetails).keyType().getRawType();
+  }
+
+  private <K> Optional<CacheSerializer<K>> getCacheKeySerializerFromDefs(CachePluginAndNameRecord cacheNameDetails) {
+    CacheDef<K,?> cacheDef = getCacheDef(cacheNameDetails);
+    return switch (cacheDef) {
+      case PersistentCacheDef<K,?> persistentCacheDef -> Optional.of(persistentCacheDef.keySerializer());
+      default -> Optional.empty();
+    };
+  }
+
+  private <K> CacheDef<K,?> getCacheDef(CachePluginAndNameRecord cacheNameDetails) {
+    NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin = cachesMap.byPlugin(cacheNameDetails.plugin());
     if (cachesByPlugin == null) {
       throw new IllegalStateException(
           "Unable to find any cache provided by " + cacheNameDetails.plugin());
@@ -94,7 +89,6 @@ public final class CacheKeyJsonParser {
               + "' provided by "
               + cacheNameDetails.name());
     }
-
-    return cacheDefProvider.get().keyType().getRawType();
+    return (CacheDef<K, ?>) cacheDefProvider.get();
   }
 }
