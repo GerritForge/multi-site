@@ -12,6 +12,8 @@
 package com.gerritforge.gerrit.plugins.multisite.cache;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEvictionForwarder;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNameAndPlugin;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
@@ -27,24 +29,28 @@ class CacheEvictionHandler<K, V> implements CacheRemovalListener<K, V> {
   private final DynamicSet<CacheEvictionForwarder> forwarders;
   private final CachePatternMatcher matcher;
   private final String instanceId;
+  private final CacheKeyJsonParser cacheKeyJsonParser;
 
   @Inject
   CacheEvictionHandler(
       DynamicSet<CacheEvictionForwarder> forwarders,
       @CacheExecutor Executor executor,
       CachePatternMatcher matcher,
-      @GerritInstanceId String instanceId) {
+      @GerritInstanceId String instanceId,
+      CacheKeyJsonParser cacheKeyJsonParser) {
     this.forwarders = forwarders;
     this.executor = executor;
     this.matcher = matcher;
     this.instanceId = instanceId;
+    this.cacheKeyJsonParser = cacheKeyJsonParser;
   }
 
   @Override
   public void onRemoval(String plugin, String cache, RemovalNotification<K, V> notification) {
     if (!Context.isForwardedEvent() && !notification.wasEvicted() && matcher.matches(cache)) {
-      executor.execute(
-          new CacheEvictionTask(new CacheEvictionEvent(cache, notification.getKey(), instanceId)));
+      String cacheKey =
+          cacheKeyJsonParser.toJson(CacheNameAndPlugin.from(cache), notification.getKey());
+      executor.execute(new CacheEvictionTask(new CacheEvictionEvent(cache, cacheKey, instanceId)));
     }
   }
 
