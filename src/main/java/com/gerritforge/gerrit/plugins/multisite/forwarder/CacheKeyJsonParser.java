@@ -18,6 +18,8 @@ import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.server.cache.CacheDef;
+import com.google.gerrit.server.cache.PersistentCacheDef;
+import com.google.gerrit.server.cache.serialize.CacheSerializer;
 import com.google.gerrit.server.events.EventGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -26,6 +28,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import java.util.NavigableMap;
+import java.util.Optional;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;
@@ -37,12 +40,24 @@ public final class CacheKeyJsonParser {
     this.cachesMap = cachesMap;
   }
 
-  public Object from(CacheNameAndPlugin cacheNameAndPlugin, Object cacheKeyValue) {
+  public String toJson(String cacheNameWithPlugin, Object cacheKeyValue) {
+    Optional<CacheSerializer<Object>> keySerializer =
+        getCacheKeySerializerFromDefs(CacheNameAndPlugin.from(cacheNameWithPlugin));
+    return keySerializer
+        .map(ser -> gson.toJson(ser.serialize(cacheKeyValue)))
+        .orElseGet(() -> gson.toJson(cacheKeyValue));
+  }
+
+  public Object from(CacheNameAndPlugin cacheNameWithPlugin, Object cacheKeyValue) {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
-    switch (cacheNameAndPlugin.cacheName()) {
+    switch (cacheNameWithPlugin.cacheName()) {
       case Constants.ACCOUNTS:
-        parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
+        try {
+          parsedKey = deserialize(cacheNameWithPlugin, cacheKeyValue);
+        } catch (JsonParseException e) {
+          parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
+        }
         break;
       case Constants.GROUPS:
         parsedKey =
@@ -60,10 +75,21 @@ public final class CacheKeyJsonParser {
         parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
-        Class<?> cls = getCacheKeyClassFromDefs(cacheNameAndPlugin);
-        parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
+        parsedKey = deserialize(cacheNameWithPlugin, cacheKeyValue);
     }
     return parsedKey;
+  }
+
+  private Object deserialize(CacheNameAndPlugin cacheNameWithPlugin, Object cacheKeyValue) {
+    Optional<CacheSerializer<Object>> keySerializer =
+        getCacheKeySerializerFromDefs(cacheNameWithPlugin);
+    if (keySerializer.isPresent()) {
+      return keySerializer
+          .get()
+          .deserialize(gson.fromJson(jsonElement(cacheKeyValue), byte[].class));
+    }
+    Class<?> cls = getCacheKeyClassFromDefs(cacheNameWithPlugin);
+    return gson.fromJson(jsonElement(cacheKeyValue), cls);
   }
 
   private JsonElement jsonElement(Object json) {
@@ -80,6 +106,24 @@ public final class CacheKeyJsonParser {
   }
 
   private Class<?> getCacheKeyClassFromDefs(CacheNameAndPlugin cacheNameAndPlugin) {
+    return getCacheDef(cacheNameAndPlugin).keyType().getRawType();
+  }
+
+  private <K> Optional<CacheSerializer<K>> getCacheKeySerializerFromDefs(
+      CacheNameAndPlugin cacheNameDetails) {
+    CacheDef<K, ?> cacheDef = getCacheDef(cacheNameDetails);
+    return switch (cacheDef) {
+      case PersistentCacheDef<K, ?> persistentCacheDef ->
+          Optional.of(persistentCacheDef.keySerializer());
+      default -> Optional.empty();
+    };
+  }
+
+  // The cast to CacheDef<K, ?> is safe in the context of this class, as the
+  // callers of this method are responsible for ensuring the type K is correct.
+  // A runtime check is not possible due to Java's type erasure.
+  @SuppressWarnings("unchecked")
+  private <K> CacheDef<K, ?> getCacheDef(CacheNameAndPlugin cacheNameAndPlugin) {
     NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin =
         cachesMap.byPlugin(cacheNameAndPlugin.pluginName());
     if (cachesByPlugin == null) {
@@ -94,7 +138,6 @@ public final class CacheKeyJsonParser {
               + "' provided by "
               + cacheNameAndPlugin.pluginName());
     }
-
-    return cacheDefProvider.get().keyType().getRawType();
+    return (CacheDef<K, ?>) cacheDefProvider.get();
   }
 }
