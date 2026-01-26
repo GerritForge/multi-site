@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.cache;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser;
 import com.google.common.cache.RemovalCause;
 import com.google.common.cache.RemovalNotification;
 import com.google.gerrit.extensions.registration.DynamicSet;
@@ -31,12 +32,14 @@ public class CacheEvictionHandlerTest {
   private CachePatternMatcher defaultCacheMatcher =
       new CachePatternMatcher(new Configuration(new Config(), new Config()));
 
+  @Mock private CacheKeyJsonParser cacheKeyJsonParser;
+
   @Test
   public void shouldNotPublishAccountsCacheEvictions() {
     String instanceId = "instance-id";
     final CacheEvictionHandler<String, String> handler =
         new CacheEvictionHandler<>(
-            DynamicSet.emptySet(), executorMock, defaultCacheMatcher, instanceId);
+            DynamicSet.emptySet(), executorMock, defaultCacheMatcher, instanceId, cacheKeyJsonParser);
 
     handler.onRemoval(
         "test", "accounts", RemovalNotification.create("test", "accounts", RemovalCause.EXPLICIT));

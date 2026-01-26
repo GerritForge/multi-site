@@ -20,6 +20,8 @@ import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.server.cache.CacheDef;
+import com.google.gerrit.server.cache.PersistentCacheDef;
+import com.google.gerrit.server.cache.serialize.CacheSerializer;
 import com.google.gerrit.server.events.EventGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -28,6 +30,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import java.util.NavigableMap;
+import java.util.Optional;
 
 public final class CacheKeyJsonParser {
   private final Gson gson;
@@ -39,8 +42,20 @@ public final class CacheKeyJsonParser {
     this.cachesMap = cachesMap;
   }
 
+  public <K> String toJson(String cacheNameWithPlugin, K cacheKeyValue) {
+    int cacheNameStart = cacheNameWithPlugin.indexOf('.');
+    String pluginName =
+            cacheNameStart > 0 ? cacheNameWithPlugin.substring(0, cacheNameStart) : GERRIT;
+    String cacheName =
+            cacheNameStart > 0
+                    ? cacheNameWithPlugin.substring(cacheNameStart + 1)
+                    : cacheNameWithPlugin;
+    Optional<CacheSerializer<K>> keySerializer = getCacheKeySerializerFromDefs(pluginName, cacheName);
+    return keySerializer.map(ser -> gson.toJson(ser.serialize(cacheKeyValue))).orElseGet(() -> gson.toJson(cacheKeyValue));
+  }
+
   @SuppressWarnings("cast")
-  public Object from(String cacheNameWithPlugin, Object cacheKeyValue) {
+  public <K> K from(String cacheNameWithPlugin, Object cacheKeyValue) {
     int cacheNameStart = cacheNameWithPlugin.indexOf('.');
     String pluginName =
         cacheNameStart > 0 ? cacheNameWithPlugin.substring(0, cacheNameStart) : GERRIT;
@@ -70,10 +85,12 @@ public final class CacheKeyJsonParser {
         parsedKey = gson.fromJson(nullToEmpty(cacheKeyValue).toString(), Object.class);
         break;
       default:
-        Class<?> cls = getCacheKeyClassFromDefs(pluginName, cacheName);
-        parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
+        Optional<CacheSerializer<K>> keySerializer = getCacheKeySerializerFromDefs(pluginName, cacheName);
+        parsedKey = keySerializer
+                .map(ser -> ser.deserialize(gson.fromJson(jsonElement(cacheKeyValue), byte[].class)))
+                .orElseGet(() -> (K) gson.fromJson(jsonElement(cacheKeyValue), getCacheKeyClassFromDefs(pluginName, cacheName)));
     }
-    return parsedKey;
+    return (K) parsedKey;
   }
 
   private JsonElement jsonElement(Object json) {
@@ -90,6 +107,19 @@ public final class CacheKeyJsonParser {
   }
 
   private Class<?> getCacheKeyClassFromDefs(String pluginName, String cacheName) {
+    CacheDef<?, ?> cacheDef = getCacheDef(pluginName, cacheName);
+    return cacheDef.keyType().getRawType();
+  }
+
+  private <K> Optional<CacheSerializer<K>> getCacheKeySerializerFromDefs(String pluginName, String cacheName) {
+    CacheDef<K,?> cacheDef = getCacheDef(pluginName, cacheName);
+    return switch (cacheDef) {
+      case PersistentCacheDef<K,?> persistentCacheDef -> Optional.of(persistentCacheDef.keySerializer());
+      default -> Optional.empty();
+    };
+  }
+
+  private <K> CacheDef<K,?> getCacheDef(String pluginName, String cacheName) {
     NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin = cachesMap.byPlugin(pluginName);
     if (cachesByPlugin == null) {
       throw new IllegalStateException("Unable to find any cache provided by " + pluginName);
@@ -99,7 +129,6 @@ public final class CacheKeyJsonParser {
       throw new IllegalStateException(
           "Unable to find definition for cache '" + cacheName + "' provided by " + pluginName);
     }
-
-    return cacheDefProvider.get().keyType().getRawType();
+    return (CacheDef<K, ?>) cacheDefProvider.get();
   }
 }
