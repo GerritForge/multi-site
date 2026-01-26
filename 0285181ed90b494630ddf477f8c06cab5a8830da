@@ -198,6 +198,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7ba2819_6da9a5c5",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-26T07:12:43Z",
+      "side": 1,
+      "message": "\u003e Where the CACHE_CHANGE_KIND is a persistent cache definition, with a key of type ChangeKindCacheImpl.Key.class\n\nWhat\u0027s has the persistence have to do with this? This is a known issue, there\u0027s no need to add tests, even the current `accountGroupUUIDParse` will fail for the same reason if we remove the case for it in the switch statement.\n\n\u003e it was actualliy missing: how did we rely on serialising the key until now?\nAFAIK, Since we\u0027ve dismissed the initial approach of a specific serialiser for the key(as we didn\u0027t need the key type anymore), in no particular way, with gson. The even serialiser would just to a tojson of it.\n\n\u003eAnd now it works with the auto-values, as I just use the cache serializer/deserializer and I am able to manage the keys transparently.\n\nAh good one... if this avoids us having to inject new type adapters in gson that\u0027s great.",
+      "parentUuid": "bddbaf1d_9108228a",
+      "revId": "0285181ed90b494630ddf477f8c06cab5a8830da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "755d7816_f43829b8",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
         "patchSetId": 25
