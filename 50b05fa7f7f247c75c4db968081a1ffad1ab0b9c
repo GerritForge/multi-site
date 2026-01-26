@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b75259f8_cc9b2be2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-26T15:13:46Z",
+      "side": 1,
+      "message": "I believe this is no longer needed, but want to confirm before abandoning.",
+      "revId": "50b05fa7f7f247c75c4db968081a1ffad1ab0b9c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
