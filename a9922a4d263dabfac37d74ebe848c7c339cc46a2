@@ -22,6 +22,30 @@
       },
       "revId": "a9922a4d263dabfac37d74ebe848c7c339cc46a2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3be75917_e76a7a13",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-27T21:44:50Z",
+      "side": 0,
+      "message": "We need preserve backward compatibility, therefore the `accounts` cache, even if it is persistent and has its own serialiser, should still be serialised in the _old way_, unfortunately :-(",
+      "parentUuid": "1fe63dbe_b0dcc492",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 46,
+        "endChar": 14
+      },
+      "revId": "a9922a4d263dabfac37d74ebe848c7c339cc46a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
