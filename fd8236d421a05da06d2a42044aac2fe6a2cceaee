@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ceaacd62_eff6bc02",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParserTest.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-27T09:56:01Z",
+      "side": 1,
+      "message": "```suggestion\n    defineCache(GERRIT, Constants.PROJECTS, Project.NameKey.class);\n```",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 62
+      },
+      "revId": "fd8236d421a05da06d2a42044aac2fe6a2cceaee",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
