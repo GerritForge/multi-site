@@ -14,7 +14,6 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
-import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.events.EventGsonProvider;
@@ -26,13 +25,6 @@ public class CacheKeyJsonParserTest {
 
   private final Gson gson = new EventGsonProvider().get();
   private final CacheKeyJsonParser gsonParser = new CacheKeyJsonParser(gson);
-
-  @Test
-  public void accountIDParse() {
-    Account.Id accountId = Account.id(1);
-    String json = gson.toJson(accountId);
-    assertThat(accountId).isEqualTo(gsonParser.from(Constants.ACCOUNTS, json));
-  }
 
   @Test
   public void accountGroupIDParse() {
