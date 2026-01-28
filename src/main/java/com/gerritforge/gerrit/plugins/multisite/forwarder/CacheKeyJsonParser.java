@@ -52,9 +52,6 @@ public final class CacheKeyJsonParser {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
     switch (cacheNameWithPlugin.cacheName()) {
-      case Constants.ACCOUNTS:
-        parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
-        break;
       case Constants.GROUPS:
         parsedKey =
             AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
