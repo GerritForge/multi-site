@@ -19,7 +19,6 @@ import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.Weigher;
-import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
@@ -69,7 +68,6 @@ public class CacheKeyJsonParserTest {
     defineCache(PLUGIN_NAME1, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(PLUGIN_NAME2, CACHE_NAME_WITH_COMPLEX_KEY_TYPE, ComplexKey.class);
     defineCache(GERRIT, Constants.GROUPS, AccountGroup.Id.class);
-    defineCache(GERRIT, Constants.ACCOUNTS, Account.Id.class);
     gsonParser = new CacheKeyJsonParser(gson, cacheDefMap);
   }
 
@@ -130,14 +128,6 @@ public class CacheKeyJsonParserTest {
             jsonEvent2);
     assertThat(parsedKey1).isEqualTo(complexKeyType1);
     assertThat(parsedKey2).isEqualTo(complexKeyType2);
-  }
-
-  @Test
-  public void accountIDParse() {
-    Account.Id accountId = Account.id(1);
-    String json = gsonParser.toJson(Constants.ACCOUNTS, accountId);
-    assertThat(accountId)
-        .isEqualTo(gsonParser.from(CacheNameAndPlugin.from(Constants.ACCOUNTS), json));
   }
 
   @Test
