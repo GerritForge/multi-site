@@ -56,7 +56,7 @@ public class ForwardedCacheEvictionHandlerTest {
 
   @Test
   public void testSuccessfulCacheEviction() throws Exception {
-    CacheEntry entry = new CacheEntry(Constants.GERRIT, Constants.ACCOUNTS, Account.id(123));
+    CacheEntry entry = new CacheEntry(Constants.GERRIT, Constants.PROJECTS, Account.id(123));
     cacheUnderTest.put(entry.getKey(), new Object());
     doReturn(cacheUnderTest).when(cacheMapMock).get(entry.getPluginName(), entry.getCacheName());
 
