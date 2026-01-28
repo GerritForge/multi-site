@@ -22,6 +22,29 @@
       },
       "revId": "7a288b8f09937562ec7594ed90ddee218f747887",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45f34a55_23bb5bd3",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-28T21:59:22Z",
+      "side": 1,
+      "message": "This can be inlined at L46.",
+      "range": {
+        "startLine": 44,
+        "startChar": 38,
+        "endLine": 44,
+        "endChar": 51
+      },
+      "revId": "7a288b8f09937562ec7594ed90ddee218f747887",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
