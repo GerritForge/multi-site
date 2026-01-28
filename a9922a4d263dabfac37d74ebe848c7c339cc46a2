@@ -94,6 +94,30 @@
       },
       "revId": "a9922a4d263dabfac37d74ebe848c7c339cc46a2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1909132e_807381ed",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-28T15:49:15Z",
+      "side": 0,
+      "message": "Turns out it wasn\u0027t a good point about backwards compatibility, as serialization for this cache has always been broken and eviction for this has never worked.\n\nThis change actually fixes the serialization of this cache, but it was decided to split out removal of the case statement to make each change more focused.",
+      "parentUuid": "91a3cdd9_16060644",
+      "range": {
+        "startLine": 44,
+        "startChar": 5,
+        "endLine": 46,
+        "endChar": 14
+      },
+      "revId": "a9922a4d263dabfac37d74ebe848c7c339cc46a2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
