@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71360033_33f6f90c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-01-28T13:47:44Z",
+      "side": 1,
+      "message": "Testing this E2E, doesn\u0027t seem to work as expected for now.",
+      "revId": "4617695cd5a2b047ac56d434c89c5d30f79bf514",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
