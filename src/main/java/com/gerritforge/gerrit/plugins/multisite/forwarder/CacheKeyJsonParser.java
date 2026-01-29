@@ -24,8 +24,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
-import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -103,14 +101,12 @@ public final class CacheKeyJsonParser {
   // DynamicMap which has a generic type on the value, but Object as a Key.
   @SuppressWarnings("unchecked")
   private <K> CacheDef<K, ?> getCacheDef(CacheNameAndPlugin cacheNameAndPlugin) {
-    NavigableMap<String, Provider<CacheDef<?, ?>>> cachesByPlugin =
-        cachesMap.byPlugin(cacheNameAndPlugin.pluginName());
-    if (cachesByPlugin == null) {
-      throw new IllegalStateException(
-          "Unable to find any cache provided by " + cacheNameAndPlugin.pluginName());
-    }
-    Provider<CacheDef<?, ?>> cacheDefProvider = cachesByPlugin.get(cacheNameAndPlugin.cacheName());
-    if (cacheDefProvider == null) {
+
+    Optional<CacheDef<?, ?>> cacheDefProvider =
+        Optional.ofNullable(
+            cachesMap.get(cacheNameAndPlugin.pluginName(), cacheNameAndPlugin.cacheName()));
+
+    if (cacheDefProvider.isEmpty()) {
       throw new IllegalStateException(
           "Unable to find definition for cache '"
               + cacheNameAndPlugin.cacheName()
