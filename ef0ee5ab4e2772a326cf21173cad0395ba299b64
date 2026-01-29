@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c63f707e_ba516c28",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/CacheKeyJsonParser.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-01-29T08:26:09Z",
+      "side": 1,
+      "message": "This isn\u0027t useful anymore, as all these caches have no serialisers.",
+      "range": {
+        "startLine": 102,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 32
+      },
+      "revId": "ef0ee5ab4e2772a326cf21173cad0395ba299b64",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
