@@ -17,7 +17,6 @@ import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 import com.gerritforge.gerrit.plugins.multisite.NoOpCacheKeyDef;
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
-import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
@@ -90,14 +89,6 @@ public class CacheKeyJsonParserTest {
             jsonEvent2);
     assertThat(parsedKey1).isEqualTo(complexKeyType1);
     assertThat(parsedKey2).isEqualTo(complexKeyType2);
-  }
-
-  @Test
-  public void accountIDParse() {
-    Account.Id accountId = Account.id(1);
-    String json = gson.toJson(accountId);
-    assertThat(accountId)
-        .isEqualTo(gsonParser.from(CacheNameAndPlugin.from(Constants.ACCOUNTS), json));
   }
 
   @Test

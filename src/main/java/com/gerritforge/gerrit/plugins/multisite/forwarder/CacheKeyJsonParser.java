@@ -13,7 +13,6 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import com.gerritforge.gerrit.plugins.multisite.cache.Constants;
 import com.google.common.base.MoreObjects;
-import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.registration.DynamicMap;
@@ -41,9 +40,6 @@ public final class CacheKeyJsonParser {
     Object parsedKey;
     // Need to add a case for 'adv_bases'
     switch (cacheNameAndPlugin.cacheName()) {
-      case Constants.ACCOUNTS:
-        parsedKey = Account.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
-        break;
       case Constants.GROUPS:
         parsedKey =
             AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
