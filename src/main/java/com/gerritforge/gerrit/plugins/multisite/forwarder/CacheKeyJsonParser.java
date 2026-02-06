@@ -45,30 +45,15 @@ public final class CacheKeyJsonParser {
   }
 
   public Object from(CacheNameAndPlugin cacheNameWithPlugin, Object cacheKeyValue) {
-    Object parsedKey;
-    // Need to add a case for 'adv_bases'
-    switch (cacheNameWithPlugin.cacheName()) {
-      case Constants.GROUPS:
-        parsedKey =
-            AccountGroup.id(jsonElement(cacheKeyValue).getAsJsonObject().get("id").getAsInt());
-        break;
-      case Constants.GROUPS_BYSUBGROUP:
-        parsedKey =
-            AccountGroup.uuid(
-                jsonElement(cacheKeyValue).getAsJsonObject().get("uuid").getAsString());
-        break;
-      default:
-        Optional<CacheSerializer<Object>> keySerializer =
-            getCacheKeySerializerFromDefs(cacheNameWithPlugin);
-        if (keySerializer.isPresent()) {
-          return keySerializer
-              .get()
-              .deserialize(gson.fromJson(jsonElement(cacheKeyValue), byte[].class));
-        }
-        Class<?> cls = getCacheKeyClassFromDefs(cacheNameWithPlugin);
-        parsedKey = gson.fromJson(jsonElement(cacheKeyValue), cls);
+    Optional<CacheSerializer<Object>> keySerializer =
+        getCacheKeySerializerFromDefs(cacheNameWithPlugin);
+    if (keySerializer.isPresent()) {
+      return keySerializer
+          .get()
+          .deserialize(gson.fromJson(jsonElement(cacheKeyValue), byte[].class));
     }
-    return parsedKey;
+    Class<?> cls = getCacheKeyClassFromDefs(cacheNameWithPlugin);
+    return gson.fromJson(jsonElement(cacheKeyValue), cls);
   }
 
   private JsonElement jsonElement(Object json) {
