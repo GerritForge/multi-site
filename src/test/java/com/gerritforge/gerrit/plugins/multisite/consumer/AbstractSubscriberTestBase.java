@@ -18,6 +18,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.MessageContext;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
@@ -68,7 +69,7 @@ public abstract class AbstractSubscriberTestBase {
       throws IOException, PermissionBackendException, CacheNotFoundException {
     for (Event event : events()) {
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, MessageContext.noop());
       verifyConsumed(event);
     }
   }
@@ -78,7 +79,7 @@ public abstract class AbstractSubscriberTestBase {
       throws IOException, PermissionBackendException, CacheNotFoundException {
     for (Event event : events()) {
       when(projectsFilter.matches(any(String.class))).thenReturn(false);
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, MessageContext.noop());
       verifySkipped(event);
     }
   }
@@ -91,7 +92,7 @@ public abstract class AbstractSubscriberTestBase {
       event.instanceId = NODE_INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, MessageContext.noop());
 
       verify(projectsFilter, never()).matches(PROJECT_NAME);
       verify(eventRouter, never()).route(event);
@@ -106,7 +107,7 @@ public abstract class AbstractSubscriberTestBase {
       event.instanceId = NODE_INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, MessageContext.noop());
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
       reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
@@ -119,7 +120,7 @@ public abstract class AbstractSubscriberTestBase {
       event.instanceId = INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, MessageContext.noop());
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
       reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);

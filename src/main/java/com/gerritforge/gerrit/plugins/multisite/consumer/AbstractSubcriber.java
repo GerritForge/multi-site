@@ -11,6 +11,8 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import com.gerritforge.gerrit.eventbroker.ContextAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.MessageContext;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
@@ -23,7 +25,6 @@ import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
-import java.util.function.Consumer;
 
 public abstract class AbstractSubcriber {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
@@ -56,11 +57,11 @@ public abstract class AbstractSubcriber {
 
   protected abstract Boolean shouldConsumeEvent(Event event);
 
-  public Consumer<Event> getConsumer() {
+  public ContextAwareConsumer<Event> getConsumer() {
     return this::processRecord;
   }
 
-  private void processRecord(Event event) {
+  private void processRecord(Event event, MessageContext context) {
     String sourceInstanceId = event.instanceId;
 
     if ((Strings.isNullOrEmpty(sourceInstanceId) || instanceId.equals(sourceInstanceId))
@@ -71,10 +72,14 @@ public abstract class AbstractSubcriber {
         logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
       }
       droppedEventListeners.forEach(l -> l.onEventDropped(event));
+      context.ack();
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
         eventRouter.route(event);
+        // TODO: we should not ack here. We should pass the context to the handlers and let them
+        // ack.
+        context.ack();
         subscriberMetrics.incrementSubscriberConsumedMessage();
       } catch (IOException e) {
         logger.atSevere().withCause(e).log("Malformed event '%s'", event);
