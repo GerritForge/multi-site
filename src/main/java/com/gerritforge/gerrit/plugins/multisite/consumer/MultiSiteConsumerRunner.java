@@ -43,7 +43,11 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
     logger.atInfo().log("starting consumers");
     consumers.forEach(
         consumer ->
-            brokerApi.get().receiveAsync(consumer.getTopic().topic(cfg), consumer.getConsumer()));
+            brokerApi
+                .get()
+                .receiveAsync(
+                    consumer.getTopic().topic(cfg),
+                    consumer.getConsumer(brokerApi.get().isAutoAck())));
   }
 
   @Override
