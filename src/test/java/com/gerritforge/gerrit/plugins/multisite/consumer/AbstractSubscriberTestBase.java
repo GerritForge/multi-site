@@ -18,6 +18,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
@@ -68,7 +69,7 @@ public abstract class AbstractSubscriberTestBase {
       throws IOException, PermissionBackendException, CacheNotFoundException {
     for (Event event : events()) {
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, NoopAck.INSTANCE);
       verifyConsumed(event);
     }
   }
@@ -78,7 +79,7 @@ public abstract class AbstractSubscriberTestBase {
       throws IOException, PermissionBackendException, CacheNotFoundException {
     for (Event event : events()) {
       when(projectsFilter.matches(any(String.class))).thenReturn(false);
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, NoopAck.INSTANCE);
       verifySkipped(event);
     }
   }
@@ -91,7 +92,7 @@ public abstract class AbstractSubscriberTestBase {
       event.instanceId = NODE_INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, NoopAck.INSTANCE);
 
       verify(projectsFilter, never()).matches(PROJECT_NAME);
       verify(eventRouter, never()).route(event);
@@ -106,7 +107,7 @@ public abstract class AbstractSubscriberTestBase {
       event.instanceId = NODE_INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, NoopAck.INSTANCE);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
       reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
@@ -119,7 +120,7 @@ public abstract class AbstractSubscriberTestBase {
       event.instanceId = INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
-      objectUnderTest.getConsumer().accept(event);
+      objectUnderTest.getConsumer().accept(event, NoopAck.INSTANCE);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
       reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
@@ -155,5 +156,18 @@ public abstract class AbstractSubscriberTestBase {
     DynamicSet<DroppedEventListener> result = new DynamicSet<>();
     result.add("multi-site", listener);
     return result;
+  }
+
+  protected static class NoopAck implements MessageAcknowledgement {
+
+    public static final NoopAck INSTANCE = new NoopAck();
+
+    @Override
+    public void ack() {}
+
+    @Override
+    public boolean isAutoAck() {
+      return false;
+    }
   }
 }
