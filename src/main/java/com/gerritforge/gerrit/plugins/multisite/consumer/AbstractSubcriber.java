@@ -11,6 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
@@ -23,7 +26,6 @@ import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
-import java.util.function.Consumer;
 
 public abstract class AbstractSubcriber {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
@@ -56,11 +58,13 @@ public abstract class AbstractSubcriber {
 
   protected abstract Boolean shouldConsumeEvent(Event event);
 
-  public Consumer<Event> getConsumer() {
-    return this::processRecord;
+  public AckAwareConsumer<Event> getConsumer(boolean isAutoAck) {
+    return (event, messageAcknowledgement) ->
+        processRecord(event, messageAcknowledgement, isAutoAck);
   }
 
-  private void processRecord(Event event) {
+  private void processRecord(
+      Event event, MessageAcknowledgement messageAcknowledgement, boolean isAutoAck) {
     String sourceInstanceId = event.instanceId;
 
     if ((Strings.isNullOrEmpty(sourceInstanceId) || instanceId.equals(sourceInstanceId))
@@ -70,12 +74,20 @@ public abstract class AbstractSubcriber {
       } else if (instanceId.equals(sourceInstanceId)) {
         logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
       }
-      droppedEventListeners.forEach(l -> l.onEventDropped(event));
+      try {
+        droppedEventListeners.forEach(l -> l.onEventDropped(event));
+      } finally {
+        if (!isAutoAck) {
+          tryAck(event, messageAcknowledgement);
+        }
+      }
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
         eventRouter.route(event);
-        subscriberMetrics.incrementSubscriberConsumedMessage();
+        if (isAutoAck || tryAck(event, messageAcknowledgement)) {
+          subscriberMetrics.incrementSubscriberConsumedMessage();
+        }
       } catch (IOException e) {
         logger.atSevere().withCause(e).log("Malformed event '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
@@ -85,5 +97,16 @@ public abstract class AbstractSubcriber {
       }
     }
     subscriberMetrics.updateReplicationStatusMetrics(event);
+  }
+
+  private boolean tryAck(Event event, MessageAcknowledgement ack) {
+    try {
+      ack.ack();
+      return true;
+    } catch (MessageAcknowledgementException e) {
+      logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
+      subscriberMetrics.incrementSubscriberFailedToAckMessage();
+      return false;
+    }
   }
 }
