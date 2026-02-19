@@ -12,6 +12,7 @@
 package com.gerritforge.gerrit.plugins.multisite.broker;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.ContextAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriber;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithGroupId;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
@@ -26,7 +27,6 @@ import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 import java.util.Set;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,12 +109,12 @@ public class BrokerApiWrapper implements BrokerApi {
   }
 
   @Override
-  public void receiveAsync(String topic, Consumer<Event> messageConsumer) {
+  public void receiveAsync(String topic, ContextAwareConsumer<Event> messageConsumer) {
     apiDelegate.get().receiveAsync(topic, messageConsumer);
   }
 
   @Override
-  public void receiveAsync(String topic, String groupId, Consumer<Event> consumer) {
+  public void receiveAsync(String topic, String groupId, ContextAwareConsumer<Event> consumer) {
     apiDelegate.get().receiveAsync(topic, groupId, consumer);
   }
 
