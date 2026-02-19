@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
 import com.google.gerrit.metrics.CallbackMetric1;
+import com.google.gerrit.metrics.Counter0;
 import com.google.gerrit.metrics.Counter1;
 import com.google.gerrit.metrics.Description;
 import com.google.gerrit.metrics.Field;
@@ -35,6 +36,8 @@ public class SubscriberMetrics extends MultiSiteMetrics {
   private static final String SUBSCRIBER_SUCCESS_COUNTER = "subscriber_msg_consumer_counter";
   private static final String SUBSCRIBER_FAILURE_COUNTER =
       "subscriber_msg_consumer_failure_counter";
+  private static final String SUBSCRIBER_ACK_FAILURE_COUNTER =
+      "subscriber_msg_consumer_ack_failure_counter";
   public static final String REPLICATION_LAG_SEC =
       "multi_site/subscriber/subscriber_replication_status/sec_behind";
   private static final String REPLICATION_LAG_MSEC =
@@ -44,6 +47,7 @@ public class SubscriberMetrics extends MultiSiteMetrics {
 
   private final Counter1<String> subscriberSuccessCounter;
   private final Counter1<String> subscriberFailureCounter;
+  private final Counter0 subscriberAckFailureCounter;
   private final ReplicationStatus replicationStatus;
   private static final Pattern isValidMetricNamePattern = Pattern.compile("[a-zA-Z0-9_-]");
   private static final Field<String> PROJECT_NAME =
@@ -67,6 +71,12 @@ public class SubscriberMetrics extends MultiSiteMetrics {
                 .setRate()
                 .setUnit("errors"),
             stringField(SUBSCRIBER_FAILURE_COUNTER, "Subscriber failed to consume messages count"));
+    this.subscriberAckFailureCounter =
+        metricMaker.newCounter(
+            "multi_site/subscriber/subscriber_message_consumer_ack_failure_counter",
+            new Description("Number of messages failed to be acked by the subscriber consumer")
+                .setRate()
+                .setUnit("errors"));
 
     if (replicationStatus.replicationLagEnabled()) {
       metricMaker.newCallbackMetric(
@@ -128,6 +138,10 @@ public class SubscriberMetrics extends MultiSiteMetrics {
 
   public void incrementSubscriberFailedToConsumeMessage() {
     subscriberFailureCounter.increment(SUBSCRIBER_FAILURE_COUNTER);
+  }
+
+  public void incrementSubscriberFailedToAckMessage() {
+    subscriberAckFailureCounter.increment();
   }
 
   public void updateReplicationStatusMetrics(Event event) {
