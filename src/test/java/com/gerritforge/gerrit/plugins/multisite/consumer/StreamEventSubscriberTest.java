@@ -73,7 +73,7 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
       throws IOException, PermissionBackendException, CacheNotFoundException {
     IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
 
-    objectUnderTest.getConsumer().accept(event);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, never()).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);
@@ -99,7 +99,7 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
     event.instanceId = INSTANCE_ID;
     when(projectsFilter.matches(eq(PROJECT_NAME))).thenReturn(true);
 
-    objectUnderTest.getConsumer().accept(event);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
     reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
