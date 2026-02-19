@@ -4,9 +4,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.Weigher;
 import com.google.gerrit.server.cache.CacheDef;
 import com.google.inject.TypeLiteral;
-import org.junit.Ignore;
-
 import java.time.Duration;
+import org.junit.Ignore;
 
 @Ignore
 public class NoOpCacheKeyDef<K, V> implements CacheDef<K, V> {
