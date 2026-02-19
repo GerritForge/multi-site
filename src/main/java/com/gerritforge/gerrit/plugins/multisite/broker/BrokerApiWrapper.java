@@ -13,6 +13,8 @@ package com.gerritforge.gerrit.plugins.multisite.broker;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriber;
+import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithContext;
+import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithContextWithGroupId;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithGroupId;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.google.common.base.Strings;
@@ -141,5 +143,15 @@ public class BrokerApiWrapper implements BrokerApi {
   @Override
   public Set<TopicSubscriberWithGroupId> topicSubscribersWithGroupId() {
     return apiDelegate.get().topicSubscribersWithGroupId();
+  }
+
+  @Override
+  public Set<TopicSubscriberWithContext> topicSubscribersWithContext() {
+    return apiDelegate.get().topicSubscribersWithContext();
+  }
+
+  @Override
+  public Set<TopicSubscriberWithContextWithGroupId> topicSubscribersWithContextAndGroupId() {
+    return apiDelegate.get().topicSubscribersWithContextAndGroupId();
   }
 }
