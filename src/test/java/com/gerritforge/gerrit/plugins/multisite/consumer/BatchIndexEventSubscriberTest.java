@@ -40,7 +40,7 @@ public class BatchIndexEventSubscriberTest extends AbstractSubscriberTestBase {
       throws IOException, PermissionBackendException, CacheNotFoundException {
     IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
 
-    objectUnderTest.getConsumer().accept(event);
+    objectUnderTest.getConsumer().accept(event, new TestAck());
 
     verify(projectsFilter, never()).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);
