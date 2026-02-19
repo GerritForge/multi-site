@@ -54,7 +54,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
       throws IOException, PermissionBackendException, CacheNotFoundException {
     IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
 
-    objectUnderTest.getConsumer().accept(event);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, never()).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);
@@ -72,7 +72,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
     when(changeFinderMock.findOne(any(Change.Id.class))).thenReturn(Optional.of(changeNotesMock));
     when(projectsFilter.matches(PROJECT_NAME)).thenReturn(true);
 
-    objectUnderTest.getConsumer().accept(event);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, times(1)).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);
@@ -87,7 +87,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
     when(changeFinderMock.findOne(any(Change.Id.class))).thenReturn(Optional.empty());
     when(projectsFilter.matches(EMPTY_PROJECT_NAME)).thenReturn(false);
 
-    objectUnderTest.getConsumer().accept(event);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, times(1)).matches(EMPTY_PROJECT_NAME);
     verify(eventRouter, never()).route(event);
