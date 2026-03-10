@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1baad8fd_22c79248",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/Configuration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-03-10T21:30:35Z",
+      "side": 1,
+      "message": "Comment from @luca.milanesio@gmail.com on the original change over at [1]\n\n```\nOnly the pull-replication should be defaulted to zero IMHO.\n```\n\n[1] https://gerrit-review.googlesource.com/c/plugins/multi-site/+/474021/comment/8f023385_05f76fa9",
+      "range": {
+        "startLine": 497,
+        "startChar": 4,
+        "endLine": 498,
+        "endChar": 94
+      },
+      "revId": "d871a6b86be9314ab91b11570e85c2ca45bfa4b5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
