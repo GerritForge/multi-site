@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "074cca53_8997b80c",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-03-11T17:16:37Z",
+      "side": 1,
+      "message": "The commit message mentions only the update to the helper, but this change actually gets the new parameters as well. Can you just mention that we allow ports for Gerrit 3 to be configurable?",
+      "range": {
+        "startLine": 395,
+        "startChar": 0,
+        "endLine": 399,
+        "endChar": 4
+      },
+      "revId": "763f92132378916f373416c82cf4aabeb2bf2d35",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
