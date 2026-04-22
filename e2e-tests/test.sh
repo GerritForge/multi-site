@@ -40,6 +40,12 @@ function check_application_requirements {
   type git >/dev/null 2>&1 || { echo >&2 "Require git but it's not installed. Aborting."; exit 1; }
 }
 
+function compose {
+  docker compose "$@" 2>/dev/null ||
+    docker-compose "$@" 2>/dev/null ||
+    /Applications/Docker.app/Contents/Resources/cli-plugins/docker-compose "$@"
+}
+
 function setup_zookeeper_config {
   SOURCE_ZOOKEEPER_CONFIG=${LOCAL_ENV}/configs/zookeeper-refdb.config
   DESTINATION_ZOOKEEPER_CONFIG=$1
@@ -89,7 +95,7 @@ function setup_gerrit_config {
 
 function cleanup_tests_hook {
   echo "Shutting down the setup"
-  docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml down -v
+  compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml down -v
   echo "Removing setup dir"
   rm -rf ${DEPLOYMENT_LOCATION}
 }
@@ -371,17 +377,17 @@ export GERRIT_IMAGE; \
   export GERRIT_HEALTHCHECK_INTERVAL; \
   export GERRIT_HEALTHCHECK_TIMEOUT; \
   export GERRIT_HEALTHCHECK_RETRIES; \
-  docker compose ${COMPOSE_FILES} config > ${DEPLOYMENT_LOCATION}/docker-compose.yaml
+  compose ${COMPOSE_FILES} config > ${DEPLOYMENT_LOCATION}/docker-compose.yaml
 
 trap cleanup_tests_hook EXIT
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d zookeeper kafka
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml logs -f --no-color -t > ${DEPLOYMENT_LOCATION}/site.log &
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d zookeeper kafka
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml logs -f --no-color -t > ${DEPLOYMENT_LOCATION}/site.log &
 
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start gerrit1 gerrit2
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-GERRIT1_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit1 | awk '{print $1}')
-GERRIT2_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit2 | awk '{print $1}')
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start gerrit1 gerrit2
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
+GERRIT1_CONTAINER=$(compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit1 | awk '{print $1}')
+GERRIT2_CONTAINER=$(compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep gerrit2 | awk '{print $1}')
 
 #copy files to gerrit containers
 echo "Copying files to Gerrit containers"
@@ -400,16 +406,16 @@ docker cp "${GERRIT_2_LIBS}/." "${GERRIT2_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT2_CONTAINER}:/var/gerrit/.ssh"
 
 echo "Starting Gerrit servers"
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d gerrit1 gerrit2
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d gerrit1 gerrit2
 
 echo "Waiting for services to start (and being healthy) and calling e2e tests"
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start tester
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
-TEST_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep tester | awk '{print $1}')
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start tester
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
+TEST_CONTAINER=$(compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep tester | awk '{print $1}')
 docker cp "${COMMON_SSH}/" "${TEST_CONTAINER}:/var/gerrit/.ssh"
 docker cp "${SCENARIOS}" "${TEST_CONTAINER}:/var/gerrit/scenarios.sh"
 
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up tester
+compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up tester
 
 # inspect test container exit code as 'up' always returns '0'
 check_result "${TEST_CONTAINER}" 0
