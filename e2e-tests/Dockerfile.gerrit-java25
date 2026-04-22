@@ -1,0 +1,13 @@
+ARG GERRIT_IMAGE
+
+FROM gerritcodereview/gerrit:${GERRIT_IMAGE}
+
+USER root
+
+RUN dnf install -y java-25-openjdk-headless \
+    && dnf clean all
+
+ENV JAVA_HOME=/usr/lib/jvm/java-25-openjdk
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+USER gerrit
