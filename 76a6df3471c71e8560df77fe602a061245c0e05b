@@ -34,6 +34,24 @@
       "parentUuid": "7b304ea6_6cacc6f2",
       "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e8303bb_b1dc8f55",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-04-22T21:10:10Z",
+      "side": 1,
+      "message": "\u003e Gerrit is fully compatible with Java 21 on Gerrit@HEAD. We also have set-up Jenkins job that is producing Java 21 byte code with --config\u003djava21 build option: 1.\n\n\nIs this also done for plugins?\nThis setup needs plugins built on master to work (`websession-broker healthcheck zookeeper-refdb pull-replication`).\nAre they also available for Java 21? Otherwise they wouldn\u0027t run on a java21 environment.",
+      "parentUuid": "9ade29f7_ff8e42e2",
+      "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
