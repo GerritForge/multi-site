@@ -1,0 +1,14 @@
+ARG GERRIT_IMAGE=3.14.0-rc4
+
+FROM eclipse-temurin:25-jre AS java25
+
+FROM gerritcodereview/gerrit:${GERRIT_IMAGE}
+
+USER root
+
+COPY --from=java25 /opt/java/openjdk /usr/lib/jvm/jre-25
+
+ENV JAVA_HOME=/usr/lib/jvm/jre-25
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+USER gerrit
