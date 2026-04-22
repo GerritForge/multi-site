@@ -6,7 +6,11 @@ services:
       ALLOW_ANONYMOUS_LOGIN: "true"
 
   gerrit1:
-    image: gerritcodereview/gerrit:${GERRIT_IMAGE}
+    build:
+      context: .
+      dockerfile: Dockerfile.gerrit-java25
+      args:
+        GERRIT_IMAGE: ${GERRIT_IMAGE}
     depends_on:
       - zookeeper
     volumes:
@@ -18,11 +22,13 @@ services:
       interval: ${GERRIT_HEALTHCHECK_INTERVAL-5s}
       timeout: ${GERRIT_HEALTHCHECK_TIMEOUT-5s}
       retries: ${GERRIT_HEALTHCHECK_RETRIES-5}
-    environment:
-      - JAVA_HOME=/usr/lib/jvm/jre-21
 
   gerrit2:
-    image: gerritcodereview/gerrit:${GERRIT_IMAGE}
+    build:
+      context: .
+      dockerfile: Dockerfile.gerrit-java25
+      args:
+        GERRIT_IMAGE: ${GERRIT_IMAGE}
     depends_on:
       - zookeeper
     volumes:
@@ -34,8 +40,6 @@ services:
       interval: ${GERRIT_HEALTHCHECK_INTERVAL:-5s}
       timeout: ${GERRIT_HEALTHCHECK_TIMEOUT:-5s}
       retries: ${GERRIT_HEALTHCHECK_RETRIES:-5}
-    environment:
-      - JAVA_HOME=/usr/lib/jvm/jre-21
 
 volumes:
   gerrit1_git:
