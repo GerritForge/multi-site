@@ -70,6 +70,24 @@
       "parentUuid": "7e8303bb_b1dc8f55",
       "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30eb9f04_3ba86544",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-04-23T04:56:24Z",
+      "side": 1,
+      "message": "Are you suggesting that we build _all_ plugins on master **just** for Java 21, or that we add *new* pipelines for Java 21 *also*?\n\nI don\u0027t mind working on that, but if this is the only instance for which we need Java 21 plugins, I think we should keep the e2e resolution relative to this plugin by running them on Java 25. It seems much less invasive.\n\nWDYT @luca.milanesio@gmail.com, @david.ostrovsky@gmail.com?",
+      "parentUuid": "31bf22b9_84a5c239",
+      "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
