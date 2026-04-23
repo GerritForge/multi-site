@@ -88,6 +88,24 @@
       "parentUuid": "31bf22b9_84a5c239",
       "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36dae512_55957606",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000177
+      },
+      "writtenOn": "2026-04-23T05:27:27Z",
+      "side": 1,
+      "message": "I think we should wait for an official Gerrit image with Java 25 support instead of patching the official Docker image in individual plugin build toolchains.\n\nIf there are issues with the Java 25 bump, they should be discovered, tested, and fixed upstream in Gerrit, not worked around independently in downstream plugin builds. If an interim solution is needed, it would be better to publish a Java 25 Gerrit image upstream sooner and use that downstream.\n\n\u003e Are you suggesting that we build all plugins on master just for Java 21, or that we add new pipelines for Java 21 also?\n\nThese changes do not introduce a general Java 21 policy for all master plugins, and they do not add separate Java 21 pipelines.\n\nIn: [change1] I added support for passing additional Bazel configuration options to the build scripts and pipeline helpers, similar to the existing `extra-plugins` and `extra-modules` options.\n\nIn: [change2] I extended the `zookeeper-refdb` plugin build to use Java 21 on master branch.\n\n[change1]: https://gerrit-review.googlesource.com/c/gerrit-ci-scripts/+/575961\n[change2]: https://gerrit-review.googlesource.com/c/gerrit-ci-scripts/+/575962",
+      "parentUuid": "30eb9f04_3ba86544",
+      "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
