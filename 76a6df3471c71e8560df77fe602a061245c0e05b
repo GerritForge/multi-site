@@ -142,6 +142,24 @@
       "parentUuid": "36dae512_55957606",
       "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bbd784e_68f5adb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-04-23T08:57:27Z",
+      "side": 1,
+      "message": "Thanks @david.ostrovsky@gmail.com, as discussed f2f, let\u0027s evaluate options together with @luca.milanesio@gmail.com.\nI believe the discussed options are\n\n1. Publish a Java 25 Gerrit image upstream\n2. Allow gerrit-ci to build master plugins on java21 **only**.\n3. Allow gerrit-ci to build master plugins on java21 **as well as** java25 (expensive)\n4. Patch locally where needed (i.e. this change)",
+      "parentUuid": "8f6b8ab1_22964302",
+      "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
