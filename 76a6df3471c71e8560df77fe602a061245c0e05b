@@ -106,6 +106,24 @@
       "parentUuid": "30eb9f04_3ba86544",
       "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28b40db8_bf968fa9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000177
+      },
+      "writtenOn": "2026-04-23T06:04:16Z",
+      "side": 1,
+      "message": "\u003e  If an interim solution is needed, it would be better to publish a Java 25 Gerrit image upstream sooner and use that downstream.\n\nDone in: [change3].\n\n[change3]: https://gerrit-review.googlesource.com/c/docker-gerrit/+/576001",
+      "parentUuid": "36dae512_55957606",
+      "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
