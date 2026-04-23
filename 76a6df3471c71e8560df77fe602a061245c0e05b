@@ -124,6 +124,24 @@
       "parentUuid": "36dae512_55957606",
       "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f6b8ab1_22964302",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-04-23T06:11:56Z",
+      "side": 1,
+      "message": "\u003e I think we should wait for an official Gerrit image with Java 25 support instead of patching the official Docker image in individual plugin build toolchains.\n\nWhat do you mean by `wait for an official Gerrit image with Java 25`?\nWe don\u0027t ever release Docker images for master as far as I know, so for an official Gerrit image with Java 25, we\u0027d need to wait for 3.15 (I mention this in the commit message). However, we still need to fix master tests before that happens.\n\nPerhaps we should start publishing an official Gerrit image with Java 25 support for development/testing purposes?\n\n\u003e \n\u003e If there are issues with the Java 25 bump, they should be discovered, tested, and fixed upstream in Gerrit, not worked around independently in downstream plugin builds. If an interim solution is needed, it would be better to publish a Java 25 Gerrit image upstream sooner and use that downstream.\n\n\u003e \n\u003e \u003e Are you suggesting that we build all plugins on master just for Java 21, or that we add new pipelines for Java 21 also?\n\u003e \n\u003e These changes do not introduce a general Java 21 policy for all master plugins, and they do not add separate Java 21 pipelines.\n\u003e \n\u003e In: [change1] I added support for passing additional Bazel configuration options to the build scripts and pipeline helpers, similar to the existing `extra-plugins` and `extra-modules` options.\n\u003e \n\u003e In: [change2] I extended the `zookeeper-refdb` plugin build to use Java 21 on master branch.\n\u003e \n\u003e [change1]: https://gerrit-review.googlesource.com/c/gerrit-ci-scripts/+/575961\n\u003e [change2]: https://gerrit-review.googlesource.com/c/gerrit-ci-scripts/+/575962\n\nI have commented on that.\nDo we want to release master plugins on Java 21?\nIf so, my apologies, I was under the impression that the master (and its plugins) was shipped on 25, is that not the case?\n\nBut yes, if we want these e2e tests to consume Java 21 plugins, they have to either:\n1. Adapt all plugins\u0027 jobs to build them.\n2. Build them locally as the tests start.",
+      "parentUuid": "36dae512_55957606",
+      "revId": "76a6df3471c71e8560df77fe602a061245c0e05b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
