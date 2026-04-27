@@ -27,15 +27,18 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandl
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
+import com.google.common.collect.ImmutableList;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
+import com.google.gerrit.server.query.change.ChangeData;
+import com.google.gerrit.server.query.change.InternalChangeQuery;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
-import com.google.gerrit.server.util.time.TimeUtil;
+import com.google.inject.Provider;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
@@ -76,6 +79,9 @@ public class ForwardedIndexChangeHandlerTest {
   @Mock private ChangeCheckerImpl.Factory changeCheckerFactoryMock;
   @Mock private ChangeChecker changeCheckerAbsentMock;
   @Mock private ChangeChecker changeCheckerPresentMock;
+  @Mock private Provider<InternalChangeQuery> queryProviderMock;
+  @Mock private InternalChangeQuery changeQueryMock;
+  @Mock private ChangeData changeDataMock;
   private ForwardedIndexChangeHandler handler;
   private Change.Id id;
 
@@ -89,7 +95,12 @@ public class ForwardedIndexChangeHandlerTest {
     when(index.maxTries()).thenReturn(1);
     handler =
         new ForwardedIndexChangeHandler(
-            indexerMock, configurationMock, indexExecutorMock, ctxMock, changeCheckerFactoryMock);
+            indexerMock,
+            configurationMock,
+            indexExecutorMock,
+            ctxMock,
+            changeCheckerFactoryMock,
+            queryProviderMock);
   }
 
   @Test
@@ -133,15 +144,18 @@ public class ForwardedIndexChangeHandlerTest {
 
   @Test
   public void changeIsDeletedFromIndex() throws Exception {
-    handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty());
-    verify(indexerMock, times(1)).delete(id);
+    handler.index(
+        TEST_CHANGE_ID,
+        Operation.DELETE,
+        Optional.of(new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, true, "instance-id")));
+    verify(indexerMock, times(1)).delete(Project.NameKey.parse(TEST_PROJECT), id);
   }
 
   @Test
   public void changeToIndexDoesNotExist() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_DOES_NOT_EXIST, CHANGE_OUTDATED);
     handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
-    verify(indexerMock, never()).delete(id);
+    verify(indexerMock, never()).delete(Project.NameKey.parse(TEST_PROJECT), id);
     verify(indexerMock, never()).index(any(Project.NameKey.class), any(Change.Id.class));
   }
 
@@ -196,6 +210,41 @@ public class ForwardedIndexChangeHandlerTest {
     assertThat(Context.isForwardedEvent()).isFalse();
 
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+  }
+
+  @Test
+  public void deleteWithoutEventThrowsIllegalArgument() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty()));
+    verify(indexerMock, never()).delete(any(), any());
+  }
+
+  @Test
+  public void deleteWithEmptyProjectNameLooksUpProjectFromIndex() throws Exception {
+    when(queryProviderMock.get()).thenReturn(changeQueryMock);
+    when(changeQueryMock.byChangeNumber(id)).thenReturn(ImmutableList.of(changeDataMock));
+    when(changeDataMock.project()).thenReturn(Project.nameKey(TEST_PROJECT));
+
+    handler.index(
+        "~" + TEST_CHANGE_NUMBER,
+        Operation.DELETE,
+        Optional.of(new ChangeIndexEvent("", TEST_CHANGE_NUMBER, true, "instance-id")));
+
+    verify(indexerMock, times(1)).delete(Project.nameKey(TEST_PROJECT), id);
+  }
+
+  @Test
+  public void deleteWithEmptyProjectNameSkipsWhenChangeNotFoundInIndex() throws Exception {
+    when(queryProviderMock.get()).thenReturn(changeQueryMock);
+    when(changeQueryMock.byChangeNumber(id)).thenReturn(ImmutableList.of());
+
+    handler.index(
+        "~" + TEST_CHANGE_NUMBER,
+        Operation.DELETE,
+        Optional.of(new ChangeIndexEvent("", TEST_CHANGE_NUMBER, true, "instance-id")));
+
+    verify(indexerMock, never()).delete(any(), any());
   }
 
   private void setupChangeAccessRelatedMocks(boolean changeExist, boolean changeUpToDate)
