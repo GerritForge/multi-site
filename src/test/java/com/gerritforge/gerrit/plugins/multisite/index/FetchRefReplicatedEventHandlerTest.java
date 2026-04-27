@@ -94,7 +94,7 @@ public class FetchRefReplicatedEventHandlerTest {
               ReplicationState.RefFetchResult.SUCCEEDED,
               LOCAL_INSTANCE_ID,
               RefUpdate.Result.FORCED));
-      verify(changeIndexerMock, times(1)).delete(eq(changeId));
+      verify(changeIndexerMock, times(1)).delete(eq(projectNameKey), eq(changeId));
     } finally {
       Context.unsetLocalEvent();
     }
