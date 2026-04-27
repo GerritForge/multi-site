@@ -87,8 +87,8 @@ class IndexEventHandler
   }
 
   @Override
-  public void onChangeDeleted(int id) {
-    executeDeleteChangeTask(id);
+  public void onChangeDeleted(String projectName, int id) {
+    executeDeleteChangeTask(projectName, id);
   }
 
   @Override
@@ -150,9 +150,10 @@ class IndexEventHandler
     }
   }
 
-  private void executeDeleteChangeTask(int id) {
+  private void executeDeleteChangeTask(String projectName, int id) {
     if (!Context.isForwardedEvent()) {
-      IndexChangeTask task = new IndexChangeTask(new ChangeIndexEvent("", id, true, instanceId));
+      IndexChangeTask task =
+          new IndexChangeTask(new ChangeIndexEvent(projectName, id, true, instanceId));
       if (queuedTasks.add(task)) {
         executor.execute(task);
       }
