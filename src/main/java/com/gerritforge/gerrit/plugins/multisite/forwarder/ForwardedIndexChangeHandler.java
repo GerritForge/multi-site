@@ -1,4 +1,4 @@
-// Copyright (C) 2025 GerritForge, Inc.
+// Copyright (C) 2026 GerritForge, Inc.
 //
 // Licensed under the BSL 1.1 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,16 +20,20 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
-import com.google.common.base.Splitter;
+import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
+import com.google.gerrit.server.query.change.ChangeData;
+import com.google.gerrit.server.query.change.InternalChangeQuery;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -44,6 +48,7 @@ public class ForwardedIndexChangeHandler
     extends ForwardedIndexingHandlerWithRetries<String, ChangeIndexEvent> {
   private final ChangeIndexer indexer;
   private final ChangeCheckerImpl.Factory changeCheckerFactory;
+  private final Provider<InternalChangeQuery> queryProvider;
 
   @Inject
   ForwardedIndexChangeHandler(
@@ -51,10 +56,12 @@ public class ForwardedIndexChangeHandler
       Configuration configuration,
       @ForwardedIndexExecutor ScheduledExecutorService indexExecutor,
       OneOffRequestContext oneOffCtx,
-      ChangeCheckerImpl.Factory changeCheckerFactory) {
+      ChangeCheckerImpl.Factory changeCheckerFactory,
+      Provider<InternalChangeQuery> queryProvider) {
     super(indexExecutor, configuration, oneOffCtx);
     this.indexer = indexer;
     this.changeCheckerFactory = changeCheckerFactory;
+    this.queryProvider = queryProvider;
   }
 
   @Override
@@ -140,12 +147,30 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
-    indexer.delete(parseChangeId(id));
+    Preconditions.checkArgument(indexEvent.isPresent(), "No event found when deleting change %s", id);
+    ChangeIndexEvent event = indexEvent.get();
+    if (event.projectName.isEmpty()) {
+      List<ChangeData> changes = queryProvider.get().byChangeNumber(Change.id(event.changeId));
+      if (isUnambiguousChange(id, changes)) return;
+      indexer.delete(changes.getFirst().change().getProject(), changes.getFirst().virtualId());
+    } else {
+      List<ChangeData> changes = queryProvider.get().byProjectChangeNumber(Project.nameKey(event.projectName), Change.id(event.changeId));
+      if (isUnambiguousChange(id, changes)) return;
+      indexer.delete(Project.nameKey(event.projectName), changes.getFirst().virtualId());
+    }
     log.debug("Change {} successfully deleted from index", id);
   }
 
-  private static Change.Id parseChangeId(String id) {
-    Change.Id changeId = Change.id(Integer.parseInt(Splitter.on("~").splitToList(id).get(1)));
-    return changeId;
+  private boolean isUnambiguousChange(String id, List<ChangeData> changes) {
+    if (changes.isEmpty()) {
+      log.warn("Change {} not found in index, skipping delete", id);
+      return true;
+    }
+    Preconditions.checkState(
+        changes.size() == 1,
+        "Ambiguous change ID %s in project %s",
+        changes.getFirst().change().getChangeId(),
+        changes.getFirst().change().getProject());
+    return false;
   }
 }
