@@ -35,7 +35,6 @@ import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
-import com.google.gerrit.server.util.time.TimeUtil;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
@@ -133,15 +132,18 @@ public class ForwardedIndexChangeHandlerTest {
 
   @Test
   public void changeIsDeletedFromIndex() throws Exception {
-    handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty());
-    verify(indexerMock, times(1)).delete(id);
+    handler.index(
+        TEST_CHANGE_ID,
+        Operation.DELETE,
+        Optional.of(new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, true, "instance-id")));
+    verify(indexerMock, times(1)).delete(Project.NameKey.parse(TEST_PROJECT), id);
   }
 
   @Test
   public void changeToIndexDoesNotExist() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_DOES_NOT_EXIST, CHANGE_OUTDATED);
     handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
-    verify(indexerMock, never()).delete(id);
+    verify(indexerMock, never()).delete(Project.NameKey.parse(TEST_PROJECT), id);
     verify(indexerMock, never()).index(any(Project.NameKey.class), any(Change.Id.class));
   }
 
