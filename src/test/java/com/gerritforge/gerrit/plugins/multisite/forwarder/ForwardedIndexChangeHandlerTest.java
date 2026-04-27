@@ -133,15 +133,15 @@ public class ForwardedIndexChangeHandlerTest {
 
   @Test
   public void changeIsDeletedFromIndex() throws Exception {
-    handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty());
-    verify(indexerMock, times(1)).delete(id);
+    handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.of(new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, true, "instance-id")));
+    verify(indexerMock, times(1)).delete(Project.NameKey.parse(TEST_PROJECT), id);
   }
 
   @Test
   public void changeToIndexDoesNotExist() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_DOES_NOT_EXIST, CHANGE_OUTDATED);
     handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
-    verify(indexerMock, never()).delete(id);
+    verify(indexerMock, never()).delete(Project.NameKey.parse(TEST_PROJECT), id);
     verify(indexerMock, never()).index(any(Project.NameKey.class), any(Change.Id.class));
   }
 
