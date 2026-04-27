@@ -97,14 +97,14 @@ public class FetchRefReplicatedEventHandler implements EventListener {
               // of the imported changes as well.
               if (isMetaRef) {
                 catchStorageExceptionForMissingUnknown(
-                    () -> changeIndexer.delete(changeId),
+                    () -> changeIndexer.delete(projectNameKey, changeId),
                     "Skipping deleting from index of "
                         + projectNameKey
                         + "~"
                         + changeId.get()
                         + " because its patch-sets aren't replicated yet");
               } else {
-                changeIndexer.delete(changeId);
+                changeIndexer.delete(projectNameKey, changeId);
               }
             } else {
               logger.atInfo().log(

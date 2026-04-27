@@ -30,6 +30,7 @@ import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -140,12 +141,8 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
-    indexer.delete(parseChangeId(id));
+    ChangeIndexEvent forsureEvent = indexEvent.orElseThrow();
+    indexer.delete(Project.nameKey(forsureEvent.projectName), Change.id(forsureEvent.changeId));
     log.debug("Change {} successfully deleted from index", id);
-  }
-
-  private static Change.Id parseChangeId(String id) {
-    Change.Id changeId = Change.id(Integer.parseInt(Splitter.on("~").splitToList(id).get(1)));
-    return changeId;
   }
 }
