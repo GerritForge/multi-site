@@ -20,9 +20,10 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
-import com.google.common.base.Splitter;
+import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.change.ChangeFinder;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -44,6 +45,7 @@ public class ForwardedIndexChangeHandler
     extends ForwardedIndexingHandlerWithRetries<String, ChangeIndexEvent> {
   private final ChangeIndexer indexer;
   private final ChangeCheckerImpl.Factory changeCheckerFactory;
+  private final ChangeFinder changeFinder;
 
   @Inject
   ForwardedIndexChangeHandler(
@@ -51,10 +53,12 @@ public class ForwardedIndexChangeHandler
       Configuration configuration,
       @ForwardedIndexExecutor ScheduledExecutorService indexExecutor,
       OneOffRequestContext oneOffCtx,
-      ChangeCheckerImpl.Factory changeCheckerFactory) {
+      ChangeCheckerImpl.Factory changeCheckerFactory,
+      ChangeFinder changeFinder) {
     super(indexExecutor, configuration, oneOffCtx);
     this.indexer = indexer;
     this.changeCheckerFactory = changeCheckerFactory;
+    this.changeFinder = changeFinder;
   }
 
   @Override
@@ -140,12 +144,21 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
-    indexer.delete(parseChangeId(id));
+    Preconditions.checkArgument(indexEvent.isPresent(), "No event found when deleting change %s", id);
+    ChangeIndexEvent event = indexEvent.get();
+    String projectName = event.projectName;
+    if (projectName.isEmpty()) {
+      Optional<String> found =
+          changeFinder
+              .findOne(Change.id(event.changeId))
+              .map(notes -> notes.getChange().getProject().get());
+      if (found.isEmpty()) {
+        log.warn("Change {} not found in index, skipping delete", id);
+        return;
+      }
+      projectName = found.get();
+    }
+    indexer.delete(Project.nameKey(projectName), Change.id(event.changeId));
     log.debug("Change {} successfully deleted from index", id);
-  }
-
-  private static Change.Id parseChangeId(String id) {
-    Change.Id changeId = Change.id(Integer.parseInt(Splitter.on("~").splitToList(id).get(1)));
-    return changeId;
   }
 }
