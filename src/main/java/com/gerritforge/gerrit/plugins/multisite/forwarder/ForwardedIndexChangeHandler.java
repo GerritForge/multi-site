@@ -20,7 +20,6 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
-import com.google.common.base.Splitter;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.index.change.ChangeIndexer;
@@ -140,12 +139,8 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
-    indexer.delete(parseChangeId(id));
+    ChangeIndexEvent forsureEvent = indexEvent.orElseThrow();
+    indexer.delete(Project.nameKey(forsureEvent.projectName), Change.id(forsureEvent.changeId));
     log.debug("Change {} successfully deleted from index", id);
-  }
-
-  private static Change.Id parseChangeId(String id) {
-    Change.Id changeId = Change.id(Integer.parseInt(Splitter.on("~").splitToList(id).get(1)));
-    return changeId;
   }
 }
