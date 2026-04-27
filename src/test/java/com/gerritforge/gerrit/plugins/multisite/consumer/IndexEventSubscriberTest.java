@@ -30,7 +30,6 @@ import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
-import com.google.gerrit.server.change.ChangeFinder;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.permissions.PermissionBackendException;
@@ -45,8 +44,6 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   private static final boolean DELETED = false;
   private static final int CHANGE_ID = 1;
   private static final String EMPTY_PROJECT_NAME = "";
-
-  @Mock protected ChangeFinder changeFinderMock;
 
   @SuppressWarnings("unchecked")
   @Test
@@ -63,33 +60,15 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void shouldConsumeDeleteChangeIndexEventWithEmptyProjectNameWhenFound()
+  public void shouldNotConsumeDeleteChangeIndexEventWithEmptyProjectName()
       throws IOException, PermissionBackendException, CacheNotFoundException {
     ChangeIndexEvent event = new ChangeIndexEvent(EMPTY_PROJECT_NAME, CHANGE_ID, true, INSTANCE_ID);
 
     ChangeNotes changeNotesMock = mock(ChangeNotes.class);
     when(changeNotesMock.getChange()).thenReturn(newChange());
-    when(changeFinderMock.findOne(any(Change.Id.class))).thenReturn(Optional.of(changeNotesMock));
-    when(projectsFilter.matches(PROJECT_NAME)).thenReturn(true);
 
     objectUnderTest.getConsumer().accept(event);
 
-    verify(projectsFilter, times(1)).matches(PROJECT_NAME);
-    verify(eventRouter, times(1)).route(event);
-  }
-
-  @SuppressWarnings("unchecked")
-  @Test
-  public void shouldNOTConsumeDeleteChangeIndexEventWithEmptyProjectNameWhenNotFound()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
-    ChangeIndexEvent event = new ChangeIndexEvent("", CHANGE_ID, true, INSTANCE_ID);
-
-    when(changeFinderMock.findOne(any(Change.Id.class))).thenReturn(Optional.empty());
-    when(projectsFilter.matches(EMPTY_PROJECT_NAME)).thenReturn(false);
-
-    objectUnderTest.getConsumer().accept(event);
-
-    verify(projectsFilter, times(1)).matches(EMPTY_PROJECT_NAME);
     verify(eventRouter, never()).route(event);
   }
 
@@ -115,8 +94,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
         msgLog,
         subscriberMetrics,
         cfg,
-        projectsFilter,
-        changeFinderMock);
+        projectsFilter);
   }
 
   private Change newChange() {
