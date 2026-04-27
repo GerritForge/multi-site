@@ -87,8 +87,14 @@ class IndexEventHandler
   }
 
   @Override
+  @Deprecated
   public void onChangeDeleted(int id) {
-    executeDeleteChangeTask(id);
+    executeDeleteChangeTask(id, "");
+  }
+
+  @Override
+  public void onChangeDeleted(int id, String projectName) {
+    executeDeleteChangeTask(id, projectName);
   }
 
   @Override
@@ -150,9 +156,9 @@ class IndexEventHandler
     }
   }
 
-  private void executeDeleteChangeTask(int id) {
+  private void executeDeleteChangeTask(int id, String projectName) {
     if (!Context.isForwardedEvent()) {
-      IndexChangeTask task = new IndexChangeTask(new ChangeIndexEvent("", id, true, instanceId));
+      IndexChangeTask task = new IndexChangeTask(new ChangeIndexEvent(projectName, id, true, instanceId));
       if (queuedTasks.add(task)) {
         executor.execute(task);
       }
