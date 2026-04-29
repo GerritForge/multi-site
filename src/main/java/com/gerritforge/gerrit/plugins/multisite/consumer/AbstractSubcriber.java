@@ -35,7 +35,6 @@ public abstract class AbstractSubcriber {
   private final String instanceId;
   private final MessageLogger msgLog;
   private SubscriberMetrics subscriberMetrics;
-  private final Configuration cfg;
   private final String topic;
 
   public AbstractSubcriber(
@@ -50,7 +49,6 @@ public abstract class AbstractSubcriber {
     this.instanceId = gerritInstanceId;
     this.msgLog = msgLog;
     this.subscriberMetrics = subscriberMetrics;
-    this.cfg = cfg;
     this.topic = getTopic().topic(cfg);
   }
 
