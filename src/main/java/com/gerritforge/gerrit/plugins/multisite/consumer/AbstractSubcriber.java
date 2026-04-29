@@ -28,7 +28,7 @@ import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
 
 public abstract class AbstractSubcriber {
-  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+  protected static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final ForwardedEventRouter eventRouter;
   private final DynamicSet<DroppedEventListener> droppedEventListeners;
