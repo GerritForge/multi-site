@@ -26,7 +26,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 public abstract class AbstractSubcriber {
-  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+  protected static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final ForwardedEventRouter eventRouter;
   private final DynamicSet<DroppedEventListener> droppedEventListeners;
