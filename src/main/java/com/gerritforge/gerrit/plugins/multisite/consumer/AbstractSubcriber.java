@@ -67,18 +67,14 @@ public abstract class AbstractSubcriber {
       Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
     String sourceInstanceId = event.instanceId;
 
-    if ((Strings.isNullOrEmpty(sourceInstanceId) || instanceId.equals(sourceInstanceId))
-        || !shouldConsumeEvent(event)) {
-      if (Strings.isNullOrEmpty(sourceInstanceId)) {
-        logger.atWarning().log("Dropping event %s because sourceInstanceId cannot be null", event);
-      } else if (instanceId.equals(sourceInstanceId)) {
-        logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
-      }
-      try {
-        droppedEventListeners.forEach(l -> l.onEventDropped(event));
-      } finally {
-        tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
-      }
+    if (Strings.isNullOrEmpty(sourceInstanceId)) {
+      logger.atWarning().log("Dropping event %s because sourceInstanceId cannot be null", event);
+      handleDroppedEvent(event, messageAcknowledgement, isAutoAck);
+    } else if (instanceId.equals(sourceInstanceId)) {
+      logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
+      handleDroppedEvent(event, messageAcknowledgement, isAutoAck);
+    } else if (!shouldConsumeEvent(event)) {
+      handleDroppedEvent(event, messageAcknowledgement, isAutoAck);
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
@@ -93,6 +89,14 @@ public abstract class AbstractSubcriber {
       }
     }
     subscriberMetrics.updateReplicationStatusMetrics(event);
+  }
+
+  private void handleDroppedEvent(Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
+    try {
+      droppedEventListeners.forEach(l -> l.onEventDropped(event));
+    } finally {
+      tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
+    }
   }
 
   private void tryAckAndMarkAsConsumed(
