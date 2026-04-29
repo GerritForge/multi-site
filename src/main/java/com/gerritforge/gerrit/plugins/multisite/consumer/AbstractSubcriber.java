@@ -67,13 +67,11 @@ public abstract class AbstractSubcriber {
       Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
     String sourceInstanceId = event.instanceId;
 
-    if ((Strings.isNullOrEmpty(sourceInstanceId) || instanceId.equals(sourceInstanceId))
-        || !shouldConsumeEvent(event)) {
-      if (Strings.isNullOrEmpty(sourceInstanceId)) {
-        logger.atWarning().log("Dropping event %s because sourceInstanceId cannot be null", event);
-      } else if (instanceId.equals(sourceInstanceId)) {
-        logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
-      }
+    if (Strings.isNullOrEmpty(sourceInstanceId)) {
+      logger.atWarning().log("Dropping event %s because sourceInstanceId cannot be null", event);
+    } else if (instanceId.equals(sourceInstanceId)) {
+      logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
+    } else if (!shouldConsumeEvent(event)) {
       try {
         droppedEventListeners.forEach(l -> l.onEventDropped(event));
       } finally {
