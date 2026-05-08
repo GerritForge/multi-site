@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b07dead_e17205bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T16:14:12Z",
+      "side": 1,
+      "message": "multi-site validation currently broken for **many** reasons:\n\n1. pull-replication to be adapted to the new [events-broker Ack API](https://gerrit-review.googlesource.com/q/topic:%22events-broker-ack-api%22):\n\nProposed fix [is here](https://review.gerrithub.io/c/GerritForge/pull-replication/+/1231717)\n\n2. multi-site to be adapted to the new new [events-broker Ack API](https://gerrit-review.googlesource.com/q/topic:%22events-broker-ack-api%22):\n\nProposed fix [is here](https://review.gerrithub.io/c/GerritForge/multi-site/+/1231716/18)\n \n3. E2E tests require a java-25-based docker-image:\n\nProposed fix [is here](https://review.gerrithub.io/c/GerritForge/multi-site/+/1236114)\n\n4. Incorrect formatting: this change.\n\nWe cannot get a green build until all of them have been fixed, so I guess we will need to do a manual verification.\n\nI believe this change is mergeable.",
+      "revId": "d0d0c4ad6c28a6c935ca7bd5b140db34b7698d19",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
