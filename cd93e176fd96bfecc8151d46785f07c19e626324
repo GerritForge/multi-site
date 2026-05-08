@@ -16,6 +16,24 @@
       "message": "The e2e tests download the events-kafka jar from the CI.\nSince the events-kafka from the CI has not been adapted to the new ack-aware broker api (the change is still in review [here](https://review.gerrithub.io/c/GerritForge/events-kafka/+/1230792), the tests will still fail.\n\nWe first have to merge [event-kafka ack aware api](https://review.gerrithub.io/c/GerritForge/events-kafka/+/1230792) and then we can submit this.\n\nBlocking for now.",
       "revId": "cd93e176fd96bfecc8151d46785f07c19e626324",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcb569de_e57fd084",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T12:20:42Z",
+      "side": 1,
+      "message": "This has now been merged [1]\n\n[1] https://review.gerrithub.io/c/GerritForge/events-kafka/+/1230792",
+      "parentUuid": "0877d6b7_3d9167a2",
+      "revId": "cd93e176fd96bfecc8151d46785f07c19e626324",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
