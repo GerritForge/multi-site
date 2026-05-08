@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37a214ef_f67690da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:59:30Z",
+      "side": 1,
+      "message": "e2e tests also require pull-replication to be merged:\n\n```\nplugins/pull-replication/src/main/java/com/gerritforge/gerrit/plugins/replication/pull/event/EventsBrokerMessageConsumer.java:72: error: incompatible types: EventsBrokerMessageConsumer cannot be converted to AckAwareConsumer\u003cEvent\u003e\n      brokerApi.receiveAsync(eventsTopicName, this);\n                                              ^\nplugins/pull-replication/src/main/java/com/gerritforge/gerrit/plugins/replication/pull/event/EventsBrokerMessageConsumer.java:75: error: incompatible types: EventsBrokerMessageConsumer cannot be converted to AckAwareConsumer\u003cEvent\u003e\n    brokerApi.receiveAsync(eventsTopicName, groupId, this);\n```\n\nOnce [1] is merged, this particular error should go away:\n\n[1] https://review.gerrithub.io/c/GerritForge/pull-replication/+/1231717",
+      "revId": "523d80d4c4bda255a6798883c76649009358d7b0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
