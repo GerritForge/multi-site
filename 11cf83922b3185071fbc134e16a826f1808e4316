@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9434dfa6_ab8b3066",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:18:31Z",
+      "side": 1,
+      "message": "I think it still makes sense to track ack failures on this path.\n\nEven if we don\u0027t count these events as \"consumed\", we are still trying to acknowledge them to the broker after deciding to drop them locally.\n\nBut if acking one of them fails, I’d still like the failed-ack metric to move.\n\nWDYT?",
+      "parentUuid": "4004ff75_f144c09b",
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c389ead2_a7217398",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
         "patchSetId": 15
@@ -31,6 +49,24 @@
       "writtenOn": "2026-05-07T14:44:27Z",
       "side": 1,
       "message": "This can be created in the common setup for all tests.",
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0600be76_9e9844d7",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c389ead2_a7217398",
       "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -48,6 +84,30 @@
       "writtenOn": "2026-05-07T14:44:27Z",
       "side": 1,
       "message": "By creating a subclass `TestAutoAck` of `TestAck` you would make this comment redundant and the class name will be self-documented.",
+      "range": {
+        "startLine": 143,
+        "startChar": 18,
+        "endLine": 143,
+        "endChar": 49
+      },
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3decabbc_eb81960c",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02af89fd_6201e157",
       "range": {
         "startLine": 143,
         "startChar": 18,
@@ -81,6 +141,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e79f97c_8409f42e",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d20fb76f_8f072eec",
+      "range": {
+        "startLine": 145,
+        "startChar": 32,
+        "endLine": 145,
+        "endChar": 47
+      },
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bd238ca_4d89f001",
@@ -94,6 +178,30 @@
       "writtenOn": "2026-05-07T14:44:27Z",
       "side": 1,
       "message": "```suggestion\n    objectUnderTest.getConsumer(false).accept(event, ack);\n```",
+      "range": {
+        "startLine": 159,
+        "startChar": 32,
+        "endLine": 159,
+        "endChar": 47
+      },
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4adebf53_2d42210a",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bd238ca_4d89f001",
       "range": {
         "startLine": 159,
         "startChar": 32,
@@ -127,6 +235,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22046252_b27f6eca",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7491660c_1c8f5348",
+      "range": {
+        "startLine": 204,
+        "startChar": 25,
+        "endLine": 204,
+        "endChar": 32
+      },
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25a49ee0_53657a25",
@@ -140,6 +272,24 @@
       "writtenOn": "2026-05-07T14:44:27Z",
       "side": 1,
       "message": "```suggestion\n  }\n  \n  private static class TestAutoAck extends TestAck {\n  \n     TestAutoAck() {\n        super(true, false);\n     }\n  }\n  \n  private static class TestManualAck extends TestAck {\n      \n      TestManualAck(boolean fail) {\n         super(false, fail);\n      }\n  }\n```",
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a493f73f_6098b873",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-08T15:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25a49ee0_53657a25",
       "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
