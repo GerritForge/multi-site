@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76b748a8_ac693ff0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-11T09:04:27Z",
+      "side": 1,
+      "message": "Agreed.\n\nThe inconsistency between the number of *published* messages and the number of *consumed* messages is something that already exists, regardless of the acking metric.\n\nI will fix this as a follow up.",
+      "parentUuid": "ef9a8baa_4cad6da1",
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c389ead2_a7217398",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
         "patchSetId": 15
