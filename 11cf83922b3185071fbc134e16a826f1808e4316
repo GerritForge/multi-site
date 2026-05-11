@@ -72,6 +72,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9d4f7fe_36fbdcc7",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-11T11:34:02Z",
+      "side": 1,
+      "message": "Addressed with [1]\n\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1237007/1",
+      "parentUuid": "76b748a8_ac693ff0",
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c389ead2_a7217398",
