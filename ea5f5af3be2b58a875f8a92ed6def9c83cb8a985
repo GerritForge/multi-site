@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55367378_3d73bde9",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/BatchIndexEventSubscriberTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-11T07:44:14Z",
+      "side": 1,
+      "message": "Avoid hardcoded values and use more readable constants.\n\n\n\n```suggestion\n    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);\n```",
+      "range": {
+        "startLine": 43,
+        "startChar": 32,
+        "endLine": 43,
+        "endChar": 37
+      },
+      "revId": "ea5f5af3be2b58a875f8a92ed6def9c83cb8a985",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f43819d3_cf679c45",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-11T07:44:14Z",
+      "side": 1,
+      "message": "```suggestion\n    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);\n```",
+      "range": {
+        "startLine": 57,
+        "startChar": 32,
+        "endLine": 57,
+        "endChar": 37
+      },
+      "revId": "ea5f5af3be2b58a875f8a92ed6def9c83cb8a985",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "997f03ea_888188d9",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-11T07:44:14Z",
+      "side": 1,
+      "message": "```suggestion\n    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);\n```",
+      "range": {
+        "startLine": 75,
+        "startChar": 32,
+        "endLine": 75,
+        "endChar": 37
+      },
+      "revId": "ea5f5af3be2b58a875f8a92ed6def9c83cb8a985",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6017a08_d0046156",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-11T07:44:14Z",
+      "side": 1,
+      "message": "```suggestion\n    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);\n```",
+      "range": {
+        "startLine": 90,
+        "startChar": 32,
+        "endLine": 90,
+        "endChar": 37
+      },
+      "revId": "ea5f5af3be2b58a875f8a92ed6def9c83cb8a985",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "919dd1e5_e51418c5",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/StreamEventSubscriberTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-11T07:44:14Z",
+      "side": 1,
+      "message": "```suggestion\n    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);\n```",
+      "range": {
+        "startLine": 76,
+        "startChar": 32,
+        "endLine": 76,
+        "endChar": 37
+      },
+      "revId": "ea5f5af3be2b58a875f8a92ed6def9c83cb8a985",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b768daaf_9ecb8d7f",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/StreamEventSubscriberTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-11T07:44:14Z",
+      "side": 1,
+      "message": "```suggestion\n    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);\n```",
+      "range": {
+        "startLine": 102,
+        "startChar": 32,
+        "endLine": 102,
+        "endChar": 37
+      },
+      "revId": "ea5f5af3be2b58a875f8a92ed6def9c83cb8a985",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

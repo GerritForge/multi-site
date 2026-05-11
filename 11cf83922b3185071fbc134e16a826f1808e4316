@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ef9a8baa_4cad6da1",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-11T07:44:14Z",
+      "side": 1,
+      "message": "Makes sense, but then we need to increase the metric of consumed messages as well, otherwise, you may have inconsistencies in the numbers.",
+      "parentUuid": "9434dfa6_ab8b3066",
+      "revId": "11cf83922b3185071fbc134e16a826f1808e4316",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c389ead2_a7217398",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
         "patchSetId": 15
