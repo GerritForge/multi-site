@@ -91,6 +91,19 @@ public abstract class AbstractSubscriberTestBase {
     }
   }
 
+  @Test
+  public void shouldCountDroppedMessageAsConsumed()
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    Event event = events().getFirst();
+    when(projectsFilter.matches(any(String.class))).thenReturn(false);
+
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+
+    verifySkipped(event, ack);
+    verify(subscriberMetrics, times(1)).incrementSubscriberConsumedMessage();
+    reset(subscriberMetrics);
+  }
+
   @SuppressWarnings("unchecked")
   @Test
   public void shouldSkipLocalEvents()

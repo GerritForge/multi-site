@@ -77,17 +77,13 @@ public abstract class AbstractSubcriber {
       try {
         droppedEventListeners.forEach(l -> l.onEventDropped(event));
       } finally {
-        if (!isAutoAck) {
-          tryAck(event, messageAcknowledgement);
-        }
+        tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
       }
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
         eventRouter.route(event);
-        if (isAutoAck || tryAck(event, messageAcknowledgement)) {
-          subscriberMetrics.incrementSubscriberConsumedMessage();
-        }
+        tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
       } catch (IOException e) {
         logger.atSevere().withCause(e).log("Malformed event '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
@@ -97,6 +93,13 @@ public abstract class AbstractSubcriber {
       }
     }
     subscriberMetrics.updateReplicationStatusMetrics(event);
+  }
+
+  private void tryAckAndMarkAsConsumed(
+      Event event, MessageAcknowledgement<Event> ack, boolean isAutoAck) {
+    if (isAutoAck || tryAck(event, ack)) {
+      subscriberMetrics.incrementSubscriberConsumedMessage();
+    }
   }
 
   private boolean tryAck(Event event, MessageAcknowledgement<Event> ack) {
