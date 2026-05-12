@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f1c83da_f62e829b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-12T07:51:28Z",
+      "side": 1,
+      "message": "The name suggests this is only marking, but it also acking if you look at the body.\n\n\n\n```suggestion\n  private void tryAckAndMarkAsConsumed(Event event, MessageAcknowledgement\u003cEvent\u003e ack, boolean isAutoAck) {\n```",
+      "range": {
+        "startLine": 98,
+        "startChar": 15,
+        "endLine": 98,
+        "endChar": 29
+      },
+      "revId": "201489af099a7baf1c26f9e9db86cef8487ff4be",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
