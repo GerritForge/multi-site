@@ -11,7 +11,6 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -19,12 +18,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
-import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration.Broker;
+import com.gerritforge.gerrit.plugins.multisite.consumer.AckTestHelper.TestAck;
+import com.gerritforge.gerrit.plugins.multisite.consumer.AckTestHelper.TestAutoAck;
+import com.gerritforge.gerrit.plugins.multisite.consumer.AckTestHelper.TestManualAck;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
 import com.google.gerrit.extensions.registration.DynamicSet;
@@ -215,56 +215,5 @@ public abstract class AbstractSubscriberTestBase {
     DynamicSet<DroppedEventListener> result = new DynamicSet<>();
     result.add("multi-site", listener);
     return result;
-  }
-
-  protected abstract static class TestAck implements MessageAcknowledgement<Event> {
-    private final boolean autoAck;
-    private final boolean fail;
-    private int ackCount;
-
-    TestAck(boolean autoAck, boolean fail) {
-      this.autoAck = autoAck;
-      this.fail = fail;
-    }
-
-    @Override
-    public void ack(Event event) {
-      ackCount++;
-      if (fail) {
-        throw new MessageAcknowledgementException("ack failed");
-      }
-    }
-
-    public boolean isAutoAck() {
-      return autoAck;
-    }
-
-    private void assertAckAttemptedOnce() {
-      assertEquals(1, ackCount);
-    }
-
-    private void assertNotAcked() {
-      assertEquals(0, ackCount);
-    }
-  }
-
-  protected static class TestAutoAck extends TestAck {
-    TestAutoAck() {
-      super(/* autoAck */ true, /* fail */ false);
-    }
-  }
-
-  protected static class TestManualAck extends TestAck {
-    TestManualAck() {
-      this(/* fail */ false);
-    }
-
-    TestManualAck(boolean fail) {
-      super(/* autoAck */ false, fail);
-    }
-
-    private static TestManualAck failing() {
-      return new TestManualAck(/* fail */ true);
-    }
   }
 }
