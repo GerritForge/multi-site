@@ -16,6 +16,24 @@
       "message": "Build fails due to:\n\n```\nplugins/pull-replication/src/main/java/com/gerritforge/gerrit/plugins/replication/pull/SourceConfiguration.java:23: error: SourceConfiguration is not abstract and does not override abstract method storeRefLog() in RemoteConfiguration\npublic class SourceConfiguration implements RemoteConfiguration {\n```\n\nShould be addressed by this cherry-pick [1]\n\n\n[1] https://review.gerrithub.io/c/GerritForge/pull-replication/+/1237024",
       "revId": "9038eafefa8125251fc738c41efe4766fccea91b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3379303_ea9585b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-12T11:49:31Z",
+      "side": 1,
+      "message": "That\u0027s merged now and the build passes.",
+      "parentUuid": "9f29b0c5_7c9cae74",
+      "revId": "9038eafefa8125251fc738c41efe4766fccea91b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
