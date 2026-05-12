@@ -22,6 +22,30 @@
       },
       "revId": "73724e2f2d9b33852a5c1a030d2768b86cfe3684",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "581009bf_831e7eb3",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-12T15:42:41Z",
+      "side": 1,
+      "message": "it\u0027s the pid of the process that is running the script, so it\u0027s guaranteed to ne unique.",
+      "parentUuid": "8bbf0bb2_2752bf2f",
+      "range": {
+        "startLine": 252,
+        "startChar": 31,
+        "endLine": 252,
+        "endChar": 33
+      },
+      "revId": "73724e2f2d9b33852a5c1a030d2768b86cfe3684",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
