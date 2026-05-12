@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64b8d355_a919270a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-12T07:48:01Z",
+      "side": 1,
+      "message": "We don\u0027t need this change.\nThe problem is a side-effect of [1].\n\nOverriding the DOCKER_CONFIG makes the compose plugin undiscoverable.\nthe issue should be fixed there.\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1236114/16",
+      "revId": "9064a3a6c79d9e2d6641e5a4c8a2d6ec5f42f12f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "453c8ae8_f27f9f2d",
