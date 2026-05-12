@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bbf0bb2_2752bf2f",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-05-12T15:39:58Z",
+      "side": 1,
+      "message": "What does this resolve too?",
+      "range": {
+        "startLine": 252,
+        "startChar": 31,
+        "endLine": 252,
+        "endChar": 33
+      },
+      "revId": "73724e2f2d9b33852a5c1a030d2768b86cfe3684",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
