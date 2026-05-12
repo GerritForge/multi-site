@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "453c8ae8_f27f9f2d",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 15
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-12T05:36:20Z",
+      "side": 1,
+      "message": "`docker-compose` is largely obsolete: do we really need to support it?",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 1
+      },
+      "revId": "9064a3a6c79d9e2d6641e5a4c8a2d6ec5f42f12f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
