@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -53,7 +54,11 @@ public class IndexEventRouter
   }
 
   @Override
-  public void route(IndexEvent sourceEvent) throws IOException {
+  public void route(
+      IndexEvent sourceEvent,
+      MessageAcknowledgement<Event> messageAcknowledgement,
+      boolean isAutoAck)
+      throws IOException {
     ForwardedIndexingHandler<?, ? extends IndexEvent> handler =
         indexHandlers.get(GERRIT, sourceEvent.getType());
     if (handler != null) {

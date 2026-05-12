@@ -37,7 +37,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CacheEvictionEventRouterTest {
+public class CacheEvictionEventRouterTest extends EventRouterTestBase {
 
   private static final String INSTANCE_ID = "instance-id";
   private static final String CACHE_NAME = "test-cache";
@@ -49,6 +49,7 @@ public class CacheEvictionEventRouterTest {
 
   @Before
   public void setUp() {
+    super.seTup();
     cacheDefMap =
         (PrivateInternals_DynamicMapImpl<CacheDef<?, ?>>) DynamicMap.<CacheDef<?, ?>>emptyMap();
     defineCache(GERRIT, CACHE_NAME, String.class);
@@ -69,7 +70,7 @@ public class CacheEvictionEventRouterTest {
   @Test
   public void routerShouldSendEventsToTheAppropriateHandler_CacheEviction() throws Exception {
     final CacheEvictionEvent event = new CacheEvictionEvent(CACHE_NAME, "key", INSTANCE_ID);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(cacheEvictionHandler)
         .evict(CacheEntry.from(CacheNameAndPlugin.from(event.cacheName), event.key));
@@ -79,7 +80,7 @@ public class CacheEvictionEventRouterTest {
   public void routerShouldSendEventsToTheAppropriateHandler_CacheEvictionWithSlash()
       throws Exception {
     final CacheEvictionEvent event = new CacheEvictionEvent(CACHE_NAME, "some/key", INSTANCE_ID);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(cacheEvictionHandler)
         .evict(CacheEntry.from(CacheNameAndPlugin.from(event.cacheName), event.key));
@@ -90,7 +91,7 @@ public class CacheEvictionEventRouterTest {
       throws Exception {
     final CacheEvictionEvent event =
         new CacheEvictionEvent(Constants.PROJECTS, "some/project", INSTANCE_ID);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(cacheEvictionHandler)
         .evict(

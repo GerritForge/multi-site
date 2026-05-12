@@ -17,6 +17,7 @@ import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
 import com.gerritforge.gerrit.plugins.multisite.cache.CacheModule;
+import com.gerritforge.gerrit.plugins.multisite.consumer.AckTestHelper.TestManualAck;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.CacheEvictionEventRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.RouterModule;
@@ -59,6 +60,7 @@ import org.junit.Test;
         "com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedCacheEvictionHandlerIT$TestModule")
 public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest {
   private static final Duration CACHE_EVICTIONS_WAIT_TIMEOUT = Duration.ofMinutes(1);
+  protected static final boolean MANUAL_ACK = false;
 
   @SuppressWarnings("rawtypes")
   @Inject
@@ -168,7 +170,9 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
   @GerritConfig(name = "gerrit.instanceId", value = "testInstanceId")
   public void shouldEvictProjectCache() throws Exception {
     objectUnderTest.route(
-        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, project.get(), "instance-id"));
+        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, project.get(), "instance-id"),
+        new TestManualAck(),
+        MANUAL_ACK);
     evictionsCacheTracker.waitForExpectedEvictions();
 
     assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))
@@ -216,7 +220,9 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
     restartCacheEvictionsTracking();
 
     objectUnderTest.route(
-        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, projectNameKey.get(), "instance-id"));
+        new CacheEvictionEvent(ProjectCacheImpl.CACHE_NAME, projectNameKey.get(), "instance-id"),
+        new TestManualAck(),
+        MANUAL_ACK);
 
     evictionsCacheTracker.waitForExpectedEvictions();
     assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))

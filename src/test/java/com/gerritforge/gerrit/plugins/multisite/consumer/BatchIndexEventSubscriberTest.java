@@ -43,8 +43,7 @@ public class BatchIndexEventSubscriberTest extends AbstractSubscriberTestBase {
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, never()).matches(PROJECT_NAME);
-    verify(eventRouter, times(1)).route(event);
-    verify(droppedEventListeners, never()).onEventDropped(event);
+    verify(eventRouter, times(1)).route(event, ack, MANUAL_ACK);
   }
 
   @SuppressWarnings("rawtypes")

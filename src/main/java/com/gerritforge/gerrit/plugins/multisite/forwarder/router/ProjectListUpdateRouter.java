@@ -11,8 +11,10 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedProjectListUpdateHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
+import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 import java.io.IOException;
 
@@ -25,7 +27,11 @@ public class ProjectListUpdateRouter implements ForwardedEventRouter<ProjectList
   }
 
   @Override
-  public void route(ProjectListUpdateEvent projectListUpdateEvent) throws IOException {
+  public void route(
+      ProjectListUpdateEvent projectListUpdateEvent,
+      MessageAcknowledgement<Event> messageAcknowledgement,
+      boolean isAutoAck)
+      throws IOException {
     projectListUpdateHandler.update(projectListUpdateEvent);
   }
 }

@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
@@ -30,7 +31,9 @@ public class StreamEventRouter implements ForwardedEventRouter<Event> {
   }
 
   @Override
-  public void route(Event sourceEvent) throws PermissionBackendException, IOException {
+  public void route(
+      Event sourceEvent, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck)
+      throws PermissionBackendException, IOException {
     if (RefReplicationDoneEvent.TYPE.equals(sourceEvent.getType())) {
       /* TODO: We currently explicitly ignore the status and result of the replication
        * event because there isn't a reliable way to understand if the current node was

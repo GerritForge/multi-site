@@ -41,7 +41,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class IndexEventRouterTest {
+public class IndexEventRouterTest extends EventRouterTestBase {
   private static final String INSTANCE_ID = "instance-id";
   private IndexEventRouter router;
   @Mock private ForwardedIndexAccountHandler indexAccountHandler;
@@ -54,6 +54,7 @@ public class IndexEventRouterTest {
 
   @Before
   public void setUp() {
+    super.seTup();
     indexHandlers = (PrivateInternals_DynamicMapImpl) DynamicMap.emptyMap();
     indexHandlers.put(GERRIT, AccountIndexEvent.TYPE, Providers.of(indexAccountHandler));
     indexHandlers.put(GERRIT, GroupIndexEvent.TYPE, Providers.of(indexGroupHandler));
@@ -65,8 +66,7 @@ public class IndexEventRouterTest {
   @Test
   public void routerShouldSendEventsToTheAppropriateHandler_AccountIndex() throws Exception {
     final AccountIndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
-    router.route(event);
-
+    router.route(event, ack, MANUAL_ACK);
     verify(indexAccountHandler).handle(event);
 
     verifyNoInteractions(indexChangeHandler, indexGroupHandler, indexProjectHandler);
@@ -77,13 +77,13 @@ public class IndexEventRouterTest {
     StreamEventRouter streamEventRouter = new StreamEventRouter(forwardedEventDispatcher, router);
 
     final AccountIndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
-    router.route(event);
-
+    router.route(event, ack, MANUAL_ACK);
     verify(indexAccountHandler).handle(event);
 
     verifyNoInteractions(indexChangeHandler, indexGroupHandler, indexProjectHandler);
 
-    streamEventRouter.route(new RefReplicationDoneEvent(allUsersName.get(), "refs/any", 1));
+    streamEventRouter.route(
+        new RefReplicationDoneEvent(allUsersName.get(), "refs/any", 1), ack, MANUAL_ACK);
 
     verify(indexAccountHandler).doAsyncIndex();
   }
@@ -92,7 +92,7 @@ public class IndexEventRouterTest {
   public void routerShouldSendEventsToTheAppropriateHandler_GroupIndex() throws Exception {
     final String groupId = "12";
     final GroupIndexEvent event = new GroupIndexEvent(groupId, ObjectId.zeroId(), INSTANCE_ID);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(indexGroupHandler).handle(event);
 
@@ -103,7 +103,7 @@ public class IndexEventRouterTest {
   public void routerShouldSendEventsToTheAppropriateHandler_ProjectIndex() throws Exception {
     final String projectName = "projectName";
     final ProjectIndexEvent event = new ProjectIndexEvent(projectName, INSTANCE_ID);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(indexProjectHandler).handle(event);
 
@@ -113,7 +113,7 @@ public class IndexEventRouterTest {
   @Test
   public void routerShouldSendEventsToTheAppropriateHandler_ChangeIndex() throws Exception {
     final ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(indexChangeHandler).handle(event);
 
@@ -123,7 +123,7 @@ public class IndexEventRouterTest {
   @Test
   public void routerShouldSendEventsToTheAppropriateHandler_ChangeIndexDelete() throws Exception {
     final ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, true, INSTANCE_ID);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(indexChangeHandler).handle(event);
 
@@ -134,7 +134,7 @@ public class IndexEventRouterTest {
   public void routerShouldIgnoreNotRecognisedEvents() throws Exception {
     final IndexEvent newEventType = new IndexEvent("new-type", INSTANCE_ID) {};
 
-    router.route(newEventType);
+    router.route(newEventType, ack, MANUAL_ACK);
     verifyNoInteractions(
         indexAccountHandler, indexChangeHandler, indexGroupHandler, indexProjectHandler);
   }

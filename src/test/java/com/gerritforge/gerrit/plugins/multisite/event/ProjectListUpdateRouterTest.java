@@ -23,13 +23,14 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProjectListUpdateRouterTest {
+public class ProjectListUpdateRouterTest extends EventRouterTestBase {
 
   private ProjectListUpdateRouter router;
   @Mock private ForwardedProjectListUpdateHandler projectListUpdateHandler;
 
   @Before
   public void setUp() {
+    super.seTup();
     router = new ProjectListUpdateRouter(projectListUpdateHandler);
   }
 
@@ -37,7 +38,7 @@ public class ProjectListUpdateRouterTest {
   public void routerShouldSendEventsToTheAppropriateHandler_ProjectListUpdate() throws Exception {
     String instanceId = "instance-id";
     final ProjectListUpdateEvent event = new ProjectListUpdateEvent("project", false, instanceId);
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
 
     verify(projectListUpdateHandler).update(event);
   }

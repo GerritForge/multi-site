@@ -116,7 +116,7 @@ public abstract class AbstractSubscriberTestBase {
       objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
       verify(projectsFilter, never()).matches(PROJECT_NAME);
-      verify(eventRouter, never()).route(event);
+      verify(eventRouter, never()).route(event, ack, MANUAL_ACK);
       verify(droppedEventListeners, times(1)).onEventDropped(event);
       ack.assertAckAttemptedOnce();
       reset(projectsFilter, eventRouter, droppedEventListeners);
@@ -175,7 +175,7 @@ public abstract class AbstractSubscriberTestBase {
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, times(1)).matches(PROJECT_NAME);
-    verify(eventRouter, times(1)).route(event);
+    verify(eventRouter, times(1)).route(event, ack, MANUAL_ACK);
     ack.assertAckAttemptedOnce();
     verify(subscriberMetrics, times(1)).incrementSubscriberFailedToAckMessage();
     verify(subscriberMetrics, never()).incrementSubscriberConsumedMessage();
@@ -193,7 +193,7 @@ public abstract class AbstractSubscriberTestBase {
   protected void verifySkipped(Event event, TestAck ack)
       throws IOException, PermissionBackendException, CacheNotFoundException {
     verify(projectsFilter, times(1)).matches(PROJECT_NAME);
-    verify(eventRouter, never()).route(event);
+    verify(eventRouter, never()).route(event, ack, MANUAL_ACK);
     verify(droppedEventListeners, times(1)).onEventDropped(event);
     ack.assertAckAttemptedOnce();
     reset(projectsFilter, eventRouter, droppedEventListeners);
@@ -203,7 +203,7 @@ public abstract class AbstractSubscriberTestBase {
   protected void verifyConsumed(Event event, TestAck ack)
       throws IOException, PermissionBackendException, CacheNotFoundException {
     verify(projectsFilter, times(1)).matches(PROJECT_NAME);
-    verify(eventRouter, times(1)).route(event);
+    verify(eventRouter, times(1)).route(event, ack, ack.isAutoAck());
     verify(droppedEventListeners, never()).onEventDropped(event);
     if (!ack.isAutoAck()) {
       ack.assertAckAttemptedOnce();
