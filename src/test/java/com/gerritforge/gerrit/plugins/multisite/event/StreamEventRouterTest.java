@@ -28,7 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StreamEventRouterTest {
+public class StreamEventRouterTest extends EventRouterTestBase {
 
   private StreamEventRouter router;
   @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
@@ -36,13 +36,14 @@ public class StreamEventRouterTest {
 
   @Before
   public void setUp() {
+    super.seTup();
     router = new StreamEventRouter(forwardedEventDispatcher, indexEventRouter);
   }
 
   @Test
   public void routerShouldSendEventsToTheAppropriateHandler_StreamEvent() throws Exception {
     final CommentAddedEvent event = new CommentAddedEvent(aChange());
-    router.route(event);
+    router.route(event, ack, MANUAL_ACK);
     verify(forwardedEventDispatcher).dispatch(event);
   }
 

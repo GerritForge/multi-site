@@ -11,12 +11,14 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheEntry;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheKeyJsonParser;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNameAndPlugin;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedCacheEvictionHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
+import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 
 public class CacheEvictionEventRouter implements ForwardedEventRouter<CacheEvictionEvent> {
@@ -31,7 +33,11 @@ public class CacheEvictionEventRouter implements ForwardedEventRouter<CacheEvict
   }
 
   @Override
-  public void route(CacheEvictionEvent cacheEvictionEvent) throws CacheNotFoundException {
+  public void route(
+      CacheEvictionEvent cacheEvictionEvent,
+      MessageAcknowledgement<Event> messageAcknowledgement,
+      boolean isAutoAck)
+      throws CacheNotFoundException {
     CacheNameAndPlugin cacheNameAndPlugin = CacheNameAndPlugin.from(cacheEvictionEvent.cacheName);
     Object parsedKey = gsonParser.from(cacheNameAndPlugin, cacheEvictionEvent.key);
     cacheEvictionHanlder.evict(CacheEntry.from(cacheNameAndPlugin, parsedKey));

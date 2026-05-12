@@ -11,11 +11,16 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
 
 public interface ForwardedEventRouter<EventType> {
-  void route(EventType sourceEvent)
+  void route(
+      EventType sourceEvent,
+      MessageAcknowledgement<Event> messageAcknowledgement,
+      boolean isAutoAck)
       throws IOException, PermissionBackendException, CacheNotFoundException;
 }

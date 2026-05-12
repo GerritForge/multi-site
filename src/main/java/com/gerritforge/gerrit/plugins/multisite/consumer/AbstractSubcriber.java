@@ -82,7 +82,7 @@ public abstract class AbstractSubcriber {
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
-        eventRouter.route(event);
+        eventRouter.route(event, messageAcknowledgement, isAutoAck);
         tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
       } catch (IOException e) {
         logger.atSevere().withCause(e).log("Malformed event '%s'", event);

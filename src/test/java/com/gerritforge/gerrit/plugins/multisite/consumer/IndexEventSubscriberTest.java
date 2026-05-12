@@ -57,7 +57,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, never()).matches(PROJECT_NAME);
-    verify(eventRouter, times(1)).route(event);
+    verify(eventRouter, times(1)).route(event, ack, MANUAL_ACK);
     verify(droppedEventListeners, never()).onEventDropped(event);
   }
 
@@ -75,7 +75,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, times(1)).matches(PROJECT_NAME);
-    verify(eventRouter, times(1)).route(event);
+    verify(eventRouter, times(1)).route(event, ack, MANUAL_ACK);
   }
 
   @SuppressWarnings("unchecked")
@@ -90,7 +90,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
     verify(projectsFilter, times(1)).matches(EMPTY_PROJECT_NAME);
-    verify(eventRouter, never()).route(event);
+    verify(eventRouter, never()).route(event, ack, MANUAL_ACK);
   }
 
   @SuppressWarnings("rawtypes")
