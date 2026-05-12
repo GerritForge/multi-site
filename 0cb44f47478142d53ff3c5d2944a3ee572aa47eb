@@ -22,6 +22,30 @@
       },
       "revId": "0cb44f47478142d53ff3c5d2944a3ee572aa47eb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a218a660_7b8fc212",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 16
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-12T09:20:59Z",
+      "side": 1,
+      "message": "Yes I explain the rationale in the commit message:\n\n```\nThis requires to set DOCKER_CONFIG to a writable temporary directory so\nDocker/Compose can create client state during Bazel-sandboxed runs where\n~/.docker is read-only.\n```\n\nThis had an error though: it is not enough to configure a new `DOCKER_CONFIG`, we also need to make sure it contains the plugins, because that\u0027s how `docker compose` is discoverable.\n\nI have updated the code and also added a comment.",
+      "parentUuid": "5eaee2f9_f096df5c",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 255,
+        "endChar": 20
+      },
+      "revId": "0cb44f47478142d53ff3c5d2944a3ee572aa47eb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
