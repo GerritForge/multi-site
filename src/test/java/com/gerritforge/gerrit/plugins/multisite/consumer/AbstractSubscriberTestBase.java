@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -65,6 +66,7 @@ public abstract class AbstractSubscriberTestBase {
     when(cfg.broker()).thenReturn(brokerCfg);
     when(brokerCfg.getTopic(any(), any())).thenReturn("test-topic");
     eventRouter = eventRouter();
+    stubManualAcker();
     objectUnderTest = objectUnderTest();
     ack = new TestManualAck();
   }
@@ -119,7 +121,7 @@ public abstract class AbstractSubscriberTestBase {
       verify(eventRouter, never()).route(event);
       verify(droppedEventListeners, times(1)).onEventDropped(event);
       ack.assertAckAttemptedOnce();
-      reset(projectsFilter, eventRouter, droppedEventListeners);
+      resetMocks(projectsFilter, eventRouter, droppedEventListeners);
     }
   }
 
@@ -133,7 +135,7 @@ public abstract class AbstractSubscriberTestBase {
       objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
-      reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
+      resetMocks(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
     }
   }
 
@@ -147,7 +149,7 @@ public abstract class AbstractSubscriberTestBase {
       objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
-      reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
+      resetMocks(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
     }
   }
 
@@ -179,7 +181,7 @@ public abstract class AbstractSubscriberTestBase {
     ack.assertAckAttemptedOnce();
     verify(subscriberMetrics, times(1)).incrementSubscriberFailedToAckMessage();
     verify(subscriberMetrics, never()).incrementSubscriberConsumedMessage();
-    reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
+    resetMocks(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
   }
 
   protected abstract AbstractSubcriber objectUnderTest();
@@ -196,7 +198,7 @@ public abstract class AbstractSubscriberTestBase {
     verify(eventRouter, never()).route(event);
     verify(droppedEventListeners, times(1)).onEventDropped(event);
     ack.assertAckAttemptedOnce();
-    reset(projectsFilter, eventRouter, droppedEventListeners);
+    resetMocks(projectsFilter, eventRouter, droppedEventListeners);
   }
 
   @SuppressWarnings("unchecked")
@@ -208,7 +210,7 @@ public abstract class AbstractSubscriberTestBase {
     if (!ack.isAutoAck()) {
       ack.assertAckAttemptedOnce();
     }
-    reset(projectsFilter, eventRouter, droppedEventListeners);
+    resetMocks(projectsFilter, eventRouter, droppedEventListeners);
   }
 
   protected DynamicSet<DroppedEventListener> asDynamicSet(DroppedEventListener listener) {
@@ -266,5 +268,29 @@ public abstract class AbstractSubscriberTestBase {
     private static TestManualAck failing() {
       return new TestManualAck(/* fail */ true);
     }
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private void stubManualAcker() {
+    if (eventRouter instanceof ManualAcker manualAcker) {
+      doAnswer(
+              invocation -> {
+                Event event = invocation.getArgument(0);
+                MessageAcknowledgement<Event> ack = invocation.getArgument(1);
+                SubscriberMetrics metrics = invocation.getArgument(2);
+                if (AckHelper.tryAck(event, ack, metrics)) {
+                  metrics.incrementSubscriberConsumedMessage();
+                }
+                return null;
+              })
+          .when(manualAcker)
+          .ackIfNeeded(
+              any(Event.class), any(MessageAcknowledgement.class), any(SubscriberMetrics.class));
+    }
+  }
+
+  protected void resetMocks(Object... mocks) {
+    reset(mocks);
+    stubManualAcker();
   }
 }

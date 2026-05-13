@@ -13,7 +13,6 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
-import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
@@ -91,6 +90,9 @@ public abstract class AbstractSubcriber {
     subscriberMetrics.updateReplicationStatusMetrics(event);
   }
 
+<<<<<<< PATCH SET (2901d2a03467e565ac4d5fe1f8704f133e7c5afc Introduce opt-in manual ack handling for routers)
+  @SuppressWarnings("unchecked")
+=======
   private void handleDroppedEvent(Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
     try {
       droppedEventListeners.forEach(l -> l.onEventDropped(event));
@@ -99,21 +101,13 @@ public abstract class AbstractSubcriber {
     }
   }
 
+>>>>>>> BASE      (d75a0939ec96ea0a4a5c344fb5eab3b5aac64d6a Merge "Isolate multi-site e2e Compose projects")
   private void tryAckAndMarkAsConsumed(
       Event event, MessageAcknowledgement<Event> ack, boolean isAutoAck) {
-    if (isAutoAck || tryAck(event, ack)) {
+    if (!isAutoAck && eventRouter instanceof ManualAcker<?> manualAcker) {
+      ((ManualAcker<Event>) manualAcker).ackIfNeeded(event, ack, subscriberMetrics);
+    } else if (isAutoAck || AckHelper.tryAck(event, ack, subscriberMetrics)) {
       subscriberMetrics.incrementSubscriberConsumedMessage();
-    }
-  }
-
-  private boolean tryAck(Event event, MessageAcknowledgement<Event> ack) {
-    try {
-      ack.ack(event);
-      return true;
-    } catch (MessageAcknowledgementException e) {
-      logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
-      subscriberMetrics.incrementSubscriberFailedToAckMessage();
-      return false;
     }
   }
 }
