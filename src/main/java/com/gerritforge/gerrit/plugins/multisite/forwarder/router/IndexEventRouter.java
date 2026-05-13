@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
+import com.gerritforge.gerrit.plugins.multisite.consumer.ManualAcker;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -32,7 +33,10 @@ import java.util.Optional;
 import java.util.Set;
 
 public class IndexEventRouter
-    implements ForwardedEventRouter<IndexEvent>, EventListener, LifecycleListener {
+    implements ForwardedEventRouter<IndexEvent>,
+        EventListener,
+        LifecycleListener,
+        ManualAcker<IndexEvent> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final ForwardedIndexAccountHandler indexAccountHandler;

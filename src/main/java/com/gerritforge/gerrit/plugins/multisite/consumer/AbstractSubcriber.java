@@ -13,7 +13,6 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
-import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
@@ -95,21 +94,13 @@ public abstract class AbstractSubcriber {
     subscriberMetrics.updateReplicationStatusMetrics(event);
   }
 
+  @SuppressWarnings("unchecked")
   private void tryAckAndMarkAsConsumed(
       Event event, MessageAcknowledgement<Event> ack, boolean isAutoAck) {
-    if (isAutoAck || tryAck(event, ack)) {
+    if (!isAutoAck && eventRouter instanceof ManualAcker<?> manualAcker) {
+      ((ManualAcker<Event>) manualAcker).ackIfNeeded(event, ack, subscriberMetrics);
+    } else if (isAutoAck || AckHelper.tryAck(event, ack, subscriberMetrics)) {
       subscriberMetrics.incrementSubscriberConsumedMessage();
-    }
-  }
-
-  private boolean tryAck(Event event, MessageAcknowledgement<Event> ack) {
-    try {
-      ack.ack(event);
-      return true;
-    } catch (MessageAcknowledgementException e) {
-      logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
-      subscriberMetrics.incrementSubscriberFailedToAckMessage();
-      return false;
     }
   }
 }
