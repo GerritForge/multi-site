@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b6cedf2_ff91e63f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AckHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T16:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a8ca705_3640772f",
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "362935b8_19a821bc",
@@ -55,6 +73,30 @@
       "side": 1,
       "message": "An override may decide to ack only after some extra work, or maybe batch acks and only actually call ack() every `N` messages.\n\n- `ack` means *actually ack*\n- `ackIfNeeded` highlights that calling this method doesn\u0027t necessarily `ack` immediately, but might apply some logic.",
       "parentUuid": "362935b8_19a821bc",
+      "range": {
+        "startLine": 28,
+        "startChar": 15,
+        "endLine": 28,
+        "endChar": 26
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd8d31f1_bd9f44bf",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T16:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3381a96_40cf5ffa",
       "range": {
         "startLine": 28,
         "startChar": 15,
@@ -112,6 +154,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a3f5e0_99177e68",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T16:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31ae738a_a9f3d9f8",
+      "range": {
+        "startLine": 29,
+        "startChar": 56,
+        "endLine": 29,
+        "endChar": 93
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09d84438_396f95f0",
@@ -159,6 +225,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4122630c_bf5e6193",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T16:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a311a65_f6742c4a",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 5
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b23e3f9_c45bc7ed",
@@ -172,6 +262,30 @@
       "writtenOn": "2026-05-14T07:37:27Z",
       "side": 1,
       "message": "This is now resetting the mocks and stubbing the manual acker, therefore the new name should reflect this.\n\n\n\n```suggestion\n  protected void resetMocksAndStubManualAcker(Object... mocks) {\n```",
+      "range": {
+        "startLine": 292,
+        "startChar": 17,
+        "endLine": 292,
+        "endChar": 27
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb749dae_575d8dbf",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T16:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b23e3f9_c45bc7ed",
       "range": {
         "startLine": 292,
         "startChar": 17,
