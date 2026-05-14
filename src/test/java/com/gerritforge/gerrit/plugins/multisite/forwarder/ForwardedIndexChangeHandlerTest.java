@@ -22,6 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
@@ -30,6 +31,7 @@ import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.exceptions.StorageException;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
@@ -76,6 +78,7 @@ public class ForwardedIndexChangeHandlerTest {
   @Mock private ChangeCheckerImpl.Factory changeCheckerFactoryMock;
   @Mock private ChangeChecker changeCheckerAbsentMock;
   @Mock private ChangeChecker changeCheckerPresentMock;
+  @Mock private MessageAcknowledgement<Event> ackMock;
   private ForwardedIndexChangeHandler handler;
   private Change.Id id;
   private Change change;
@@ -131,6 +134,40 @@ public class ForwardedIndexChangeHandlerTest {
         Operation.INDEX,
         Optional.of(new ChangeIndexEvent("foo", 1, false, "instance-id")));
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+  }
+
+  @Test
+  public void syncChangeIndexRetriesUntilChangeIsConsistentBeforeAcking() throws Exception {
+    ChangeIndexEvent event =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_CONSISTENT);
+
+    handler.handleSync(event, ackMock);
+
+    verify(indexerMock, times(1)).index(changeNotes);
+    verify(ackMock, times(1)).ack(event);
+  }
+
+  @Test
+  public void syncChangeIndexDoesNotAckWhenChangeIsStillInconsistent() throws Exception {
+    ChangeIndexEvent event =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_INCONSISTENT);
+
+    assertThrows(IOException.class, () -> handler.handleSync(event, ackMock));
+
+    verify(indexerMock, never()).index(any(ChangeNotes.class));
+    verify(ackMock, never()).ack(event);
   }
 
   @Test

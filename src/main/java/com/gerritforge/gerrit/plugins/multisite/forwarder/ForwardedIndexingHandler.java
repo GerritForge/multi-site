@@ -11,8 +11,10 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.common.util.concurrent.Striped;
+import com.google.gerrit.server.events.Event;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
@@ -37,6 +39,9 @@ public abstract class ForwardedIndexingHandler<T, E> {
       return name().toLowerCase();
     }
   }
+
+  public abstract void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+      throws IOException;
 
   public abstract void handle(IndexEvent sourceEvent) throws IOException;
 
