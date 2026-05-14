@@ -249,6 +249,8 @@ echo "GERRIT_WAR=$GERRIT_WAR"
 echo "-----------------------------------------------------------------"
 
 DEPLOYMENT_LOCATION=$(mktemp -d || $(echo >&2 "Could not create temp dir" && exit 1))
+COMPOSE_PROJECT_NAME=e2e-tests-$RANDOM-$$
+export COMPOSE_PROJECT_NAME
 
 # Prepare a writable Docker config for Bazel-sandboxed runs and preserve the
 # user's Docker setup so docker compose still works.
@@ -406,16 +408,16 @@ docker cp "${GERRIT_2_LIBS}/." "${GERRIT2_CONTAINER}:/var/gerrit/lib/"
 docker cp "${COMMON_SSH}/" "${GERRIT2_CONTAINER}:/var/gerrit/.ssh"
 
 echo "Starting Gerrit servers"
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up -d gerrit1 gerrit2
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-recreate -d gerrit1 gerrit2
 
 echo "Waiting for services to start (and being healthy) and calling e2e tests"
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-start tester
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-recreate --no-start tester
 docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a
 TEST_CONTAINER=$(docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml ps -a | grep tester | awk '{print $1}')
 docker cp "${COMMON_SSH}/" "${TEST_CONTAINER}:/var/gerrit/.ssh"
 docker cp "${SCENARIOS}" "${TEST_CONTAINER}:/var/gerrit/scenarios.sh"
 
-docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up tester
+docker compose -f ${DEPLOYMENT_LOCATION}/docker-compose.yaml up --no-recreate tester
 
 # inspect test container exit code as 'up' always returns '0'
 check_result "${TEST_CONTAINER}" 0
