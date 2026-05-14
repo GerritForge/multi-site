@@ -69,8 +69,14 @@ public class IndexEventRouter
 
   @Override
   public void route(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) throws IOException {
-    route(sourceEvent);
-    ack.ack(sourceEvent);
+    ForwardedIndexingHandler<?, ? extends IndexEvent> handler =
+        indexHandlers.get(GERRIT, sourceEvent.getType());
+    if (handler != null) {
+      handler.handleSync(sourceEvent, ack);
+    } else {
+      throw new IllegalStateException(
+          String.format("No registered handlers to route event %s", sourceEvent.getType()));
+    }
   }
 
   public void onRefReplicated(RefEvent replicationEvent) throws IOException {
