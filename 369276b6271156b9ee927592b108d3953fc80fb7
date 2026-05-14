@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a8ca705_3640772f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AckHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-14T07:37:27Z",
+      "side": 1,
+      "message": "Is this refactoring related?",
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "362935b8_19a821bc",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-14T07:37:27Z",
+      "side": 1,
+      "message": "I believe this is interface for manual acking: why do we still have the `IfNeeded` prefix? I believe if the caller choses to go for this interface, then manual acking is needed.",
+      "range": {
+        "startLine": 28,
+        "startChar": 15,
+        "endLine": 28,
+        "endChar": 26
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "669c2506_b24e5d22",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-14T07:37:27Z",
+      "side": 1,
+      "message": "I don\u0027t believe this is something that the router should be aware of.",
+      "range": {
+        "startLine": 29,
+        "startChar": 56,
+        "endLine": 29,
+        "endChar": 93
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09d84438_396f95f0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-14T07:37:27Z",
+      "side": 1,
+      "message": "I wouldn\u0027t recommend this default implementation: if the router has to make a manual ack, that needs to be explicitly implemented with the router-specific implementation logic.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 5
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b23e3f9_c45bc7ed",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-14T07:37:27Z",
+      "side": 1,
+      "message": "This is now resetting the mocks and stubbing the manual acker, therefore the new name should reflect this.\n\n\n\n```suggestion\n  protected void resetMocksAndStubManualAcker(Object... mocks) {\n```",
+      "range": {
+        "startLine": 292,
+        "startChar": 17,
+        "endLine": 292,
+        "endChar": 27
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
