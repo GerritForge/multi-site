@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -26,6 +27,7 @@ import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration.Broker;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventManualAckingRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
@@ -65,6 +67,7 @@ public abstract class AbstractSubscriberTestBase {
     when(cfg.broker()).thenReturn(brokerCfg);
     when(brokerCfg.getTopic(any(), any())).thenReturn("test-topic");
     eventRouter = eventRouter();
+    stubAckingRouter();
     objectUnderTest = objectUnderTest();
     ack = new TestManualAck();
   }
@@ -119,7 +122,7 @@ public abstract class AbstractSubscriberTestBase {
       verify(eventRouter, never()).route(event);
       verify(droppedEventListeners, times(1)).onEventDropped(event);
       ack.assertAckAttemptedOnce();
-      reset(projectsFilter, eventRouter, droppedEventListeners);
+      resetMocksAndStubManualAcker(projectsFilter, eventRouter, droppedEventListeners);
     }
   }
 
@@ -133,7 +136,8 @@ public abstract class AbstractSubscriberTestBase {
       objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
-      reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
+      resetMocksAndStubManualAcker(
+          projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
     }
   }
 
@@ -147,7 +151,8 @@ public abstract class AbstractSubscriberTestBase {
       objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
-      reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
+      resetMocksAndStubManualAcker(
+          projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
     }
   }
 
@@ -179,7 +184,8 @@ public abstract class AbstractSubscriberTestBase {
     ack.assertAckAttemptedOnce();
     verify(subscriberMetrics, times(1)).incrementSubscriberFailedToAckMessage();
     verify(subscriberMetrics, never()).incrementSubscriberConsumedMessage();
-    reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
+    resetMocksAndStubManualAcker(
+        projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
   }
 
   protected abstract AbstractSubcriber objectUnderTest();
@@ -196,7 +202,7 @@ public abstract class AbstractSubscriberTestBase {
     verify(eventRouter, never()).route(event);
     verify(droppedEventListeners, times(1)).onEventDropped(event);
     ack.assertAckAttemptedOnce();
-    reset(projectsFilter, eventRouter, droppedEventListeners);
+    resetMocksAndStubManualAcker(projectsFilter, eventRouter, droppedEventListeners);
   }
 
   @SuppressWarnings("unchecked")
@@ -208,7 +214,7 @@ public abstract class AbstractSubscriberTestBase {
     if (!ack.isAutoAck()) {
       ack.assertAckAttemptedOnce();
     }
-    reset(projectsFilter, eventRouter, droppedEventListeners);
+    resetMocksAndStubManualAcker(projectsFilter, eventRouter, droppedEventListeners);
   }
 
   protected DynamicSet<DroppedEventListener> asDynamicSet(DroppedEventListener listener) {
@@ -266,5 +272,30 @@ public abstract class AbstractSubscriberTestBase {
     private static TestManualAck failing() {
       return new TestManualAck(/* fail */ true);
     }
+  }
+
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private void stubAckingRouter() {
+    if (eventRouter instanceof ForwardedEventManualAckingRouter ackingRouter) {
+      try {
+        doAnswer(
+                invocation -> {
+                  Event event = invocation.getArgument(0);
+                  MessageAcknowledgement<Event> ack = invocation.getArgument(1);
+                  eventRouter.route(event);
+                  ack.ack(event);
+                  return null;
+                })
+            .when(ackingRouter)
+            .route(any(Event.class), any(MessageAcknowledgement.class));
+      } catch (IOException | PermissionBackendException | CacheNotFoundException e) {
+        throw new IllegalStateException(e);
+      }
+    }
+  }
+
+  protected void resetMocksAndStubManualAcker(Object... mocks) {
+    reset(mocks);
+    stubAckingRouter();
   }
 }

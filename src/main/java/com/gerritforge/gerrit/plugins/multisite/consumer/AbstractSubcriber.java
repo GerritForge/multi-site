@@ -18,6 +18,7 @@ import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventManualAckingRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
 import com.google.common.base.Strings;
 import com.google.common.flogger.FluentLogger;
@@ -78,14 +79,16 @@ public abstract class AbstractSubcriber {
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
-        eventRouter.route(event);
-        tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
+        route(event, messageAcknowledgement, isAutoAck);
       } catch (IOException e) {
         logger.atSevere().withCause(e).log("Malformed event '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
       } catch (PermissionBackendException | CacheNotFoundException e) {
         logger.atSevere().withCause(e).log("Cannot handle message '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
+      } catch (MessageAcknowledgementException e) {
+        logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
+        subscriberMetrics.incrementSubscriberFailedToAckMessage();
       }
     }
     subscriberMetrics.updateReplicationStatusMetrics(event);
@@ -97,6 +100,18 @@ public abstract class AbstractSubcriber {
       droppedEventListeners.forEach(l -> l.onEventDropped(event));
     } finally {
       tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void route(Event event, MessageAcknowledgement<Event> ack, boolean isAutoAck)
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    if (!isAutoAck && eventRouter instanceof ForwardedEventManualAckingRouter<?> ackingRouter) {
+      ((ForwardedEventManualAckingRouter<Event>) ackingRouter).route(event, ack);
+      subscriberMetrics.incrementSubscriberConsumedMessage();
+    } else {
+      eventRouter.route(event);
+      tryAckAndMarkAsConsumed(event, ack, isAutoAck);
     }
   }
 
