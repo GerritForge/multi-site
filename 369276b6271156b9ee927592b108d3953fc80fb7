@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3381a96_40cf5ffa",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T07:58:28Z",
+      "side": 1,
+      "message": "An override may decide to ack only after some extra work, or maybe batch acks and only actually call ack() every `N` messages.\n\n- `ack` means *actually ack*\n- `ackIfNeeded` highlights that calling this method doesn\u0027t necessarily `ack` immediately, but might apply some logic.",
+      "parentUuid": "362935b8_19a821bc",
+      "range": {
+        "startLine": 28,
+        "startChar": 15,
+        "endLine": 28,
+        "endChar": 26
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "669c2506_b24e5d22",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
         "patchSetId": 6
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "31ae738a_a9f3d9f8",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T07:58:28Z",
+      "side": 1,
+      "message": "Yes, if we remove the default implementation this is no longer needed.\nI will remove it.",
+      "parentUuid": "669c2506_b24e5d22",
+      "range": {
+        "startLine": 29,
+        "startChar": 56,
+        "endLine": 29,
+        "endChar": 93
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "09d84438_396f95f0",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
         "patchSetId": 6
@@ -77,6 +125,30 @@
       "writtenOn": "2026-05-14T07:37:27Z",
       "side": 1,
       "message": "I wouldn\u0027t recommend this default implementation: if the router has to make a manual ack, that needs to be explicitly implemented with the router-specific implementation logic.",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 5
+      },
+      "revId": "369276b6271156b9ee927592b108d3953fc80fb7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a311a65_f6742c4a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/ManualAcker.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-05-14T07:58:28Z",
+      "side": 1,
+      "message": "Agreed, we don\u0027t need any default implementation.\nThe IndexEventRouter will override this and it is the only consumer at the moment.",
+      "parentUuid": "09d84438_396f95f0",
       "range": {
         "startLine": 30,
         "startChar": 0,
