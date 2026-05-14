@@ -11,8 +11,10 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.common.util.concurrent.Striped;
+import com.google.gerrit.server.events.Event;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.locks.Lock;
@@ -38,6 +40,9 @@ public abstract class ForwardedIndexingHandler<T, E> {
     }
   }
 
+  public abstract void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+      throws IOException;
+
   public abstract void handle(IndexEvent sourceEvent) throws IOException;
 
   private final Striped<Lock> idLocks;
@@ -48,6 +53,15 @@ public abstract class ForwardedIndexingHandler<T, E> {
 
   protected ForwardedIndexingHandler(int lockStripes) {
     idLocks = Striped.lock(lockStripes);
+  }
+
+  protected void withForwardedEventContext(Runnable runnable) {
+    try {
+      Context.setForwardedEvent(true);
+      runnable.run();
+    } finally {
+      Context.unsetForwardedEvent();
+    }
   }
 
   /**

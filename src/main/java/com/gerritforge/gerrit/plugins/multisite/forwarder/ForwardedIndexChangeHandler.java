@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.DELETE;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -23,6 +24,7 @@ import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.google.common.base.Splitter;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -58,6 +60,22 @@ public class ForwardedIndexChangeHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+    withForwardedEventContext(
+        () -> {
+          if (sourceEvent instanceof ChangeIndexEvent changeIndexEvent) {
+            String id = changeIndexEvent.projectName + "~" + changeIndexEvent.changeId;
+            if (changeIndexEvent.deleted) {
+              doDelete(id, Optional.of(changeIndexEvent));
+            } else {
+              doIndexSync(id, changeIndexEvent);
+            }
+          }
+        });
+    ack.ack(sourceEvent);
+  }
+
+  @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ChangeIndexEvent changeIndexEvent) {
       ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
@@ -75,6 +93,14 @@ public class ForwardedIndexChangeHandler
       indexer.deleteAllForProject(Project.nameKey(indexEvent.get().projectName));
     } else {
       scheduleIndexing(id, indexEvent, this::indexIfConsistent);
+    }
+  }
+
+  protected void doIndexSync(String id, ChangeIndexEvent indexEvent) {
+    if (ChangeIndexEvent.isAllChangesDeletedForProject(indexEvent)) {
+      indexer.deleteAllForProject(Project.nameKey(indexEvent.projectName));
+    } else {
+      indexIfConsistent(id);
     }
   }
 

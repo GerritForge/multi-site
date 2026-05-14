@@ -13,12 +13,14 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.gerritforge.gerrit.plugins.multisite.index.GroupChecker;
 import com.google.gerrit.entities.AccountGroup;
+import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.index.group.GroupIndexer;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
@@ -49,6 +51,17 @@ public class ForwardedIndexGroupHandler
     super(indexExecutor, config, oneOffRequestContext);
     this.indexer = indexer;
     this.groupChecker = groupChecker;
+  }
+
+  @Override
+  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+    withForwardedEventContext(
+        () -> {
+          if (sourceEvent instanceof GroupIndexEvent groupIndexEvent) {
+            reindex(groupIndexEvent.groupUUID);
+          }
+        });
+    ack.ack(sourceEvent);
   }
 
   @Override

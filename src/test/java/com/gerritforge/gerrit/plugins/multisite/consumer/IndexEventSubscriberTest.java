@@ -50,6 +50,28 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
   @SuppressWarnings("unchecked")
   @Test
+  public void shouldRouteManualAckIndexEventsThroughAckingRouter() throws IOException {
+    IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
+    IndexEventRouter router = mock(IndexEventRouter.class);
+    AbstractSubcriber subscriber =
+        new IndexEventSubscriber(
+            router,
+            asDynamicSet(droppedEventListeners),
+            NODE_INSTANCE_ID,
+            msgLog,
+            subscriberMetrics,
+            cfg,
+            projectsFilter,
+            changeFinderMock);
+
+    subscriber.getConsumer(MANUAL_ACK).accept(event, ack);
+
+    verify(router, times(1)).route(event, ack);
+    verify(router, never()).route(event);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
   public void shouldConsumeNonProjectAndNonChangeIndexingEventsTypes()
       throws IOException, PermissionBackendException, CacheNotFoundException {
     IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
