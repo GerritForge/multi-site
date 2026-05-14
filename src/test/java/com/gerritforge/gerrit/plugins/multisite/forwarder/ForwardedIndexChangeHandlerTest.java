@@ -28,11 +28,14 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandl
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
+import com.google.common.collect.ImmutableList;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.git.GitRepositoryManager;
+import com.google.gerrit.server.index.change.ChangeIndex;
+import com.google.gerrit.server.index.change.ChangeIndexCollection;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -68,6 +71,8 @@ public class ForwardedIndexChangeHandlerTest {
 
   @Rule public ExpectedException exception = ExpectedException.none();
   @Mock private ChangeIndexer indexerMock;
+  @Mock private ChangeIndexCollection indexesMock;
+  @Mock private ChangeIndex changeIndexMock;
   @Mock private OneOffRequestContext ctxMock;
   @Mock private ManualRequestContext manualRequestContextMock;
   @Mock private ChangeNotes changeNotes;
@@ -92,9 +97,15 @@ public class ForwardedIndexChangeHandlerTest {
     when(configurationMock.index()).thenReturn(index);
     when(index.numStripedLocks()).thenReturn(10);
     when(index.maxTries()).thenReturn(1);
+    when(indexesMock.getWriteIndexes()).thenReturn(ImmutableList.of(changeIndexMock));
     handler =
         new ForwardedIndexChangeHandler(
-            indexerMock, configurationMock, indexExecutorMock, ctxMock, changeCheckerFactoryMock);
+            indexerMock,
+            indexesMock,
+            configurationMock,
+            indexExecutorMock,
+            ctxMock,
+            changeCheckerFactoryMock);
   }
 
   @Test
@@ -150,6 +161,7 @@ public class ForwardedIndexChangeHandlerTest {
     handler.handleSync(event, ackMock);
 
     verify(indexerMock, times(1)).index(changeNotes);
+    verify(changeIndexMock, times(1)).flushAndCommit();
     verify(ackMock, times(1)).ack(event);
   }
 
@@ -167,6 +179,22 @@ public class ForwardedIndexChangeHandlerTest {
     assertThrows(IOException.class, () -> handler.handleSync(event, ackMock));
 
     verify(indexerMock, never()).index(any(ChangeNotes.class));
+    verify(changeIndexMock, never()).flushAndCommit();
+    verify(ackMock, never()).ack(event);
+  }
+
+  @Test
+  public void syncChangeIndexDoesNotAckWhenFlushAndCommitFails() throws Exception {
+    ChangeIndexEvent event =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS, DO_NOT_THROW_STORAGE_EXCEPTION, CHANGE_UP_TO_DATE, CHANGE_CONSISTENT);
+    doThrow(new IOException("flush failed")).when(changeIndexMock).flushAndCommit();
+
+    assertThrows(IOException.class, () -> handler.handleSync(event, ackMock));
+
+    verify(indexerMock, times(1)).index(changeNotes);
+    verify(changeIndexMock, times(1)).flushAndCommit();
     verify(ackMock, never()).ack(event);
   }
 

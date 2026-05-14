@@ -20,6 +20,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEve
 import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.gerritforge.gerrit.plugins.multisite.index.ProjectChecker;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.index.project.ProjectIndexCollection;
 import com.google.gerrit.index.project.ProjectIndexer;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.util.OneOffRequestContext;
@@ -39,26 +40,31 @@ import java.util.concurrent.ScheduledExecutorService;
 public class ForwardedIndexProjectHandler
     extends ForwardedIndexingHandlerWithRetries<String, ProjectIndexEvent> {
   private final ProjectIndexer indexer;
+  private final ProjectIndexCollection indexes;
   private final ProjectChecker projectChecker;
 
   @Inject
   ForwardedIndexProjectHandler(
       ProjectIndexer indexer,
+      ProjectIndexCollection indexes,
       ProjectChecker projectChecker,
       OneOffRequestContext oneOffRequestContext,
       @ForwardedIndexExecutor ScheduledExecutorService indexExecutor,
       Configuration config) {
     super(indexExecutor, config, oneOffRequestContext);
     this.indexer = indexer;
+    this.indexes = indexes;
     this.projectChecker = projectChecker;
   }
 
   @Override
-  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+      throws IOException {
     try {
       Context.setForwardedEvent(true);
       if (sourceEvent instanceof ProjectIndexEvent projectIndexEvent) {
         indexer.index(Project.nameKey(projectIndexEvent.projectName));
+        flushAndCommit(indexes.getWriteIndexes());
       }
     } finally {
       Context.unsetForwardedEvent();

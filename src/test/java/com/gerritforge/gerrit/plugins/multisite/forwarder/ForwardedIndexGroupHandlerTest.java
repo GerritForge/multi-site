@@ -24,6 +24,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandl
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.TestGroupChecker;
 import com.google.gerrit.entities.AccountGroup;
+import com.google.gerrit.server.index.group.GroupIndexCollection;
 import com.google.gerrit.server.index.group.GroupIndexer;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class ForwardedIndexGroupHandlerTest {
 
   @Rule public ExpectedException exception = ExpectedException.none();
   @Mock private GroupIndexer indexerMock;
+  @Mock private GroupIndexCollection indexesMock;
   @Mock private OneOffRequestContext ctxMock;
   @Mock private ScheduledExecutorService indexExecutorMock;
   @Mock private Configuration config;
@@ -136,7 +138,12 @@ public class ForwardedIndexGroupHandlerTest {
 
   private ForwardedIndexGroupHandler groupHandler(boolean checkIsUpToDate) {
     return new ForwardedIndexGroupHandler(
-        indexerMock, config, new TestGroupChecker(checkIsUpToDate), ctxMock, indexExecutorMock);
+        indexerMock,
+        indexesMock,
+        config,
+        new TestGroupChecker(checkIsUpToDate),
+        ctxMock,
+        indexExecutorMock);
   }
 
   private Optional<GroupIndexEvent> groupIndexEvent(String uuid) {

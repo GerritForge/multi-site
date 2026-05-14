@@ -25,6 +25,7 @@ import com.google.common.base.Splitter;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.index.change.ChangeIndexCollection;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
@@ -46,17 +47,20 @@ import java.util.concurrent.TimeUnit;
 public class ForwardedIndexChangeHandler
     extends ForwardedIndexingHandlerWithRetries<String, ChangeIndexEvent> {
   private final ChangeIndexer indexer;
+  private final ChangeIndexCollection indexes;
   private final ChangeCheckerImpl.Factory changeCheckerFactory;
 
   @Inject
   ForwardedIndexChangeHandler(
       ChangeIndexer indexer,
+      ChangeIndexCollection indexes,
       Configuration configuration,
       @ForwardedIndexExecutor ScheduledExecutorService indexExecutor,
       OneOffRequestContext oneOffCtx,
       ChangeCheckerImpl.Factory changeCheckerFactory) {
     super(indexExecutor, configuration, oneOffCtx);
     this.indexer = indexer;
+    this.indexes = indexes;
     this.changeCheckerFactory = changeCheckerFactory;
   }
 
@@ -72,6 +76,7 @@ public class ForwardedIndexChangeHandler
         } else {
           doIndexSync(id, changeIndexEvent);
         }
+        flushAndCommit(indexes.getWriteIndexes());
       }
     } finally {
       Context.unsetForwardedEvent();

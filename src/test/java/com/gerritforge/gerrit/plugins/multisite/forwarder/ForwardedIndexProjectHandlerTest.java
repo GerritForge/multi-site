@@ -22,6 +22,7 @@ import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.index.ProjectChecker;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.index.project.ProjectIndexCollection;
 import com.google.gerrit.index.project.ProjectIndexer;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class ForwardedIndexProjectHandlerTest {
 
   @Rule public ExpectedException exception = ExpectedException.none();
   @Mock private ProjectIndexer indexerMock;
+  @Mock private ProjectIndexCollection indexesMock;
   @Mock private Configuration configMock;
   @Mock private OneOffRequestContext ctxMock;
   @Mock private ProjectChecker projectCheckerMock;
@@ -58,7 +60,7 @@ public class ForwardedIndexProjectHandlerTest {
     when(projectCheckerMock.isUpToDate(any())).thenReturn(true);
     handler =
         new ForwardedIndexProjectHandler(
-            indexerMock, projectCheckerMock, ctxMock, indexExecutorMock, configMock);
+            indexerMock, indexesMock, projectCheckerMock, ctxMock, indexExecutorMock, configMock);
     nameKey = "project/name";
   }
 
