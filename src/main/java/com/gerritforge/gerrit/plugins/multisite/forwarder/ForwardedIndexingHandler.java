@@ -38,6 +38,8 @@ public abstract class ForwardedIndexingHandler<T, E> {
     }
   }
 
+  public abstract void handleSync(IndexEvent sourceEvent) throws IOException;
+
   public abstract void handle(IndexEvent sourceEvent) throws IOException;
 
   private final Striped<Lock> idLocks;

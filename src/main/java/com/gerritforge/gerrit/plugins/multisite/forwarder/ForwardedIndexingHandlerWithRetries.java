@@ -33,8 +33,8 @@ import java.util.function.Consumer;
 public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEvent>
     extends ForwardedIndexingHandler<T, E> {
 
-  private final int retryInterval;
-  private final int maxTries;
+  protected final int retryInterval;
+  protected final int maxTries;
   private final ScheduledExecutorService indexExecutor;
   protected final OneOffRequestContext oneOffCtx;
   protected final Map<T, IndexingRetry> indexingRetryTaskMap = new ConcurrentHashMap<>();

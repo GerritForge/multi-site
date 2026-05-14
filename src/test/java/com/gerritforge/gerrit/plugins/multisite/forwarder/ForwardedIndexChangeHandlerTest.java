@@ -134,6 +134,38 @@ public class ForwardedIndexChangeHandlerTest {
   }
 
   @Test
+  public void syncChangeIndexRetriesUntilChangeIsConsistent() throws Exception {
+    ChangeIndexEvent event =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_CONSISTENT);
+
+    handler.handleSync(event);
+
+    verify(indexerMock, times(1)).index(changeNotes);
+  }
+
+  @Test
+  public void syncChangeIndexFailsWhenChangeIsStillInconsistent() throws Exception {
+    ChangeIndexEvent event =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_INCONSISTENT);
+
+    assertThrows(IOException.class, () -> handler.handleSync(event));
+
+    verify(indexerMock, never()).index(any(ChangeNotes.class));
+  }
+
+  @Test
   public void changeIsDeletedFromIndex() throws Exception {
     handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty());
     verify(indexerMock, times(1)).delete(id);

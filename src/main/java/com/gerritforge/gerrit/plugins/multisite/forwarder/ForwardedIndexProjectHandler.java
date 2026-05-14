@@ -52,6 +52,18 @@ public class ForwardedIndexProjectHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent) {
+    try {
+      Context.setForwardedEvent(true);
+      if (sourceEvent instanceof ProjectIndexEvent projectIndexEvent) {
+        indexer.index(Project.nameKey(projectIndexEvent.projectName));
+      }
+    } finally {
+      Context.unsetForwardedEvent();
+    }
+  }
+
+  @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ProjectIndexEvent projectIndexEvent) {
       index(projectIndexEvent.projectName, INDEX, Optional.of(projectIndexEvent));

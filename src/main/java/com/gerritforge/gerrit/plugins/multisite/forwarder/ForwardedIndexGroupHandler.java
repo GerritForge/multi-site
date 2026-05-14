@@ -52,6 +52,18 @@ public class ForwardedIndexGroupHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent) {
+    try {
+      Context.setForwardedEvent(true);
+      if (sourceEvent instanceof GroupIndexEvent groupIndexEvent) {
+        reindex(groupIndexEvent.groupUUID);
+      }
+    } finally {
+      Context.unsetForwardedEvent();
+    }
+  }
+
+  @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof GroupIndexEvent groupIndexEvent) {
       index(groupIndexEvent.groupUUID, INDEX, Optional.of(groupIndexEvent));

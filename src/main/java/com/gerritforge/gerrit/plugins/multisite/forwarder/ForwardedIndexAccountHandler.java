@@ -48,6 +48,18 @@ public class ForwardedIndexAccountHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent) {
+    try {
+      Context.setForwardedEvent(true);
+      if (sourceEvent instanceof AccountIndexEvent accountIndexEvent) {
+        doIndex(Account.id(accountIndexEvent.accountId), Optional.of(accountIndexEvent));
+      }
+    } finally {
+      Context.unsetForwardedEvent();
+    }
+  }
+
+  @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof AccountIndexEvent accountIndexEvent) {
       indexAsync(Account.id(accountIndexEvent.accountId), INDEX);

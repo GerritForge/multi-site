@@ -32,6 +32,7 @@ import com.google.inject.Singleton;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Index a change using {@link ChangeIndexer}. This class is meant to be used on the receiving side
@@ -58,6 +59,23 @@ public class ForwardedIndexChangeHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent) throws IOException {
+    try {
+      Context.setForwardedEvent(true);
+      if (sourceEvent instanceof ChangeIndexEvent changeIndexEvent) {
+        String id = changeIndexEvent.projectName + "~" + changeIndexEvent.changeId;
+        if (changeIndexEvent.deleted) {
+          doDelete(id, Optional.of(changeIndexEvent));
+        } else {
+          doIndexSync(id, changeIndexEvent);
+        }
+      }
+    } finally {
+      Context.unsetForwardedEvent();
+    }
+  }
+
+  @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ChangeIndexEvent changeIndexEvent) {
       ForwardedIndexingHandler.Operation operation = changeIndexEvent.deleted ? DELETE : INDEX;
@@ -75,6 +93,50 @@ public class ForwardedIndexChangeHandler
       indexer.deleteAllForProject(Project.nameKey(indexEvent.get().projectName));
     } else {
       scheduleIndexing(id, indexEvent, this::indexIfConsistent);
+    }
+  }
+
+  protected void doIndexSync(String id, ChangeIndexEvent indexEvent) throws IOException {
+    if (ChangeIndexEvent.isAllChangesDeletedForProject(indexEvent)) {
+      indexer.deleteAllForProject(Project.nameKey(indexEvent.projectName));
+    } else {
+      indexSyncWithRetry(id, indexEvent);
+    }
+  }
+
+  private void indexSyncWithRetry(String id, ChangeIndexEvent indexEvent) throws IOException {
+    for (int attempt = 0; attempt <= maxTries; attempt++) {
+      ChangeChecker checker = changeCheckerFactory.create(id);
+      Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
+      boolean changeIsPresent = changeNotes.isPresent();
+      if (changeIsPresent && checker.isChangeConsistent()) {
+        reindex(id);
+        if (checker.isUpToDate(Optional.of(indexEvent))) {
+          return;
+        }
+        log.warn("Change {} is not up-to-date after synchronous indexing", id);
+      } else {
+        log.warn(
+            "Change {} {} in local Git repository during synchronous indexing",
+            id,
+            !changeIsPresent ? "not present yet" : "is not consistent");
+      }
+      if (attempt < maxTries) {
+        sleepBeforeRetry(id);
+      }
+    }
+    throw new IOException(
+        String.format(
+            "Change %s could not be indexed synchronously after %d attempt(s)", id, maxTries + 1));
+  }
+
+  private void sleepBeforeRetry(String id) throws IOException {
+    try {
+      TimeUnit.MILLISECONDS.sleep(retryInterval);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new IOException(
+          String.format("Interrupted while retrying synchronous indexing of %s", id), e);
     }
   }
 
