@@ -21,6 +21,7 @@ import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.gerritforge.gerrit.plugins.multisite.index.GroupChecker;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.index.group.GroupIndexCollection;
 import com.google.gerrit.server.index.group.GroupIndexer;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
@@ -39,26 +40,31 @@ import java.util.concurrent.ScheduledExecutorService;
 public class ForwardedIndexGroupHandler
     extends ForwardedIndexingHandlerWithRetries<String, GroupIndexEvent> {
   private final GroupIndexer indexer;
+  private final GroupIndexCollection indexes;
   private final GroupChecker groupChecker;
 
   @Inject
   ForwardedIndexGroupHandler(
       GroupIndexer indexer,
+      GroupIndexCollection indexes,
       Configuration config,
       GroupChecker groupChecker,
       OneOffRequestContext oneOffRequestContext,
       @ForwardedIndexExecutor ScheduledExecutorService indexExecutor) {
     super(indexExecutor, config, oneOffRequestContext);
     this.indexer = indexer;
+    this.indexes = indexes;
     this.groupChecker = groupChecker;
   }
 
   @Override
-  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+      throws IOException {
     try {
       Context.setForwardedEvent(true);
       if (sourceEvent instanceof GroupIndexEvent groupIndexEvent) {
         reindex(groupIndexEvent.groupUUID);
+        flushAndCommit(indexes.getWriteIndexes());
       }
     } finally {
       Context.unsetForwardedEvent();

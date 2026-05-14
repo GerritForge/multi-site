@@ -19,6 +19,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEve
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.index.account.AccountIndexCollection;
 import com.google.gerrit.server.index.account.AccountIndexer;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -40,21 +41,26 @@ public class ForwardedIndexAccountHandler
     extends ForwardedIndexingHandler<Account.Id, AccountIndexEvent> {
 
   private final AccountIndexer indexer;
+  private final AccountIndexCollection indexes;
   private Map<Account.Id, Operation> accountsToIndex;
 
   @Inject
-  ForwardedIndexAccountHandler(AccountIndexer indexer, Configuration config) {
+  ForwardedIndexAccountHandler(
+      AccountIndexer indexer, AccountIndexCollection indexes, Configuration config) {
     super(config.index().numStripedLocks());
     this.indexer = indexer;
+    this.indexes = indexes;
     this.accountsToIndex = new HashMap<>();
   }
 
   @Override
-  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+  public void handleSync(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+      throws IOException {
     try {
       Context.setForwardedEvent(true);
       if (sourceEvent instanceof AccountIndexEvent accountIndexEvent) {
         doIndex(Account.id(accountIndexEvent.accountId), Optional.of(accountIndexEvent));
+        flushAndCommit(indexes.getWriteIndexes());
       }
     } finally {
       Context.unsetForwardedEvent();
