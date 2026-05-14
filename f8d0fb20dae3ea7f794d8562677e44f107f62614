@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd188095_74d5fd49",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-05-14T07:38:02Z",
+      "side": 1,
+      "message": "Each class must have its own logger.",
+      "revId": "f8d0fb20dae3ea7f794d8562677e44f107f62614",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
