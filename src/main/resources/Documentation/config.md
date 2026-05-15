@@ -88,7 +88,10 @@ Defaults to true.
 ```index.ackInterval```
 :   The minimum time interval between manual acknowledgements of synchronized
     index events. Values should use common time-unit suffixes, such as `ms`,
-    `s`, `m`, or `h`. Set to 0 to acknowledge every index event.
+    `s`, `m`, or `h`. When acknowledging an index event, all index types
+    updated since the previous acknowledgement are flushed before the broker
+    message is acknowledged. Set to 0 to flush and acknowledge every index
+    event.
 
     Defaults to 5 minutes.
 
