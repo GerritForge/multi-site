@@ -85,6 +85,13 @@ Defaults to true.
 :   The time interval in milliseconds between subsequent auto-retries.
     Defaults to 30000 (30 seconds).
 
+```index.ackInterval```
+:   The minimum time interval between manual acknowledgements of synchronized
+    index events. Values should use common time-unit suffixes, such as `ms`,
+    `s`, `m`, or `h`. Set to 0 to acknowledge every index event.
+
+    Defaults to 5 minutes.
+
 ```broker.indexEventTopic```
 :   Name of the topic to use for publishing indexing events
     Defaults to GERRIT.EVENT.INDEX

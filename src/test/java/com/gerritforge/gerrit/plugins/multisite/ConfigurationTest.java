@@ -17,6 +17,7 @@ import static com.gerritforge.gerrit.plugins.multisite.Configuration.DEFAULT_THR
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Event.EVENT_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Forwarding.DEFAULT_SYNCHRONIZE;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Forwarding.SYNCHRONIZE_KEY;
+import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.ACK_INTERVAL_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.DEFAULT_SYNCHRONIZE_FORCED;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.INDEX_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.SYNCHRONIZE_FORCED_KEY;
@@ -136,5 +137,13 @@ public class ConfigurationTest {
 
     globalPluginConfig.setBoolean(INDEX_SECTION, null, SYNCHRONIZE_FORCED_KEY, false);
     assertThat(getConfiguration().index().synchronizeForced()).isFalse();
+  }
+
+  @Test
+  public void testGetIndexAckInterval() throws Exception {
+    assertThat(getConfiguration().index().ackIntervalMs()).isEqualTo(300000);
+
+    globalPluginConfig.setString(INDEX_SECTION, null, ACK_INTERVAL_KEY, "10 minutes");
+    assertThat(getConfiguration().index().ackIntervalMs()).isEqualTo(600000);
   }
 }
