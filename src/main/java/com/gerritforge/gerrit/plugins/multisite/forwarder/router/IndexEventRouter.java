@@ -15,6 +15,7 @@ import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexi
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -27,6 +28,7 @@ import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
+import com.google.gerrit.server.util.time.TimeUtil;
 import com.google.inject.Inject;
 import java.io.IOException;
 import java.util.Optional;
@@ -43,15 +45,21 @@ public class IndexEventRouter
   private final AllUsersName allUsersName;
   private final String gerritInstanceId;
   private final DynamicMap<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
+  private final long ackIntervalMs;
+  private final Object ackLock = new Object();
+  private long lastAckTs;
 
   @Inject
   public IndexEventRouter(
       ForwardedIndexAccountHandler indexAccountHandler,
       DynamicMap<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers,
+      Configuration cfg,
       AllUsersName allUsersName,
       @GerritInstanceId String gerritInstanceId) {
     this.indexAccountHandler = indexAccountHandler;
     this.indexHandlers = indexHandlers;
+    this.ackIntervalMs = cfg.index().ackIntervalMs();
+    this.lastAckTs = TimeUtil.nowMs();
     this.allUsersName = allUsersName;
     this.gerritInstanceId = gerritInstanceId;
   }
@@ -73,10 +81,20 @@ public class IndexEventRouter
         indexHandlers.get(GERRIT, sourceEvent.getType());
     if (handler != null) {
       handler.handleSync(sourceEvent);
-      ack.ack(sourceEvent);
+      ackIfDue(sourceEvent, ack);
     } else {
       throw new IllegalStateException(
           String.format("No registered handlers to route event %s", sourceEvent.getType()));
+    }
+  }
+
+  private void ackIfDue(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+    synchronized (ackLock) {
+      long now = TimeUtil.nowMs();
+      if (ackIntervalMs == 0 || now - lastAckTs >= ackIntervalMs) {
+        ack.ack(sourceEvent);
+        lastAckTs = now;
+      }
     }
   }
 

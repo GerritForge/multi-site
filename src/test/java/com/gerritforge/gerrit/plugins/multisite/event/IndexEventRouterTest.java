@@ -12,10 +12,13 @@
 package com.gerritforge.gerrit.plugins.multisite.event;
 
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
+import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexChangeHandler;
@@ -33,9 +36,12 @@ import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.PrivateInternals_DynamicMapImpl;
 import com.google.gerrit.server.config.AllUsersName;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.util.time.TimeUtil;
 import com.google.inject.util.Providers;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;
+import java.util.concurrent.atomic.AtomicLong;
 import org.eclipse.jgit.lib.ObjectId;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +51,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class IndexEventRouterTest {
   private static final String INSTANCE_ID = "instance-id";
+  private static final long TEST_TIME = 1000;
   private IndexEventRouter router;
   @Mock private ForwardedIndexAccountHandler indexAccountHandler;
   @Mock private ForwardedIndexChangeHandler indexChangeHandler;
@@ -52,6 +59,8 @@ public class IndexEventRouterTest {
   @Mock private ForwardedIndexProjectHandler indexProjectHandler;
   @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
   @Mock private MessageAcknowledgement<Event> ack;
+  @Mock private Configuration cfg;
+  @Mock private Configuration.Index indexConfig;
   private AllUsersName allUsersName = new AllUsersName("All-Users");
   PrivateInternals_DynamicMapImpl<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
 
@@ -62,7 +71,14 @@ public class IndexEventRouterTest {
     indexHandlers.put(GERRIT, GroupIndexEvent.TYPE, Providers.of(indexGroupHandler));
     indexHandlers.put(GERRIT, ChangeIndexEvent.TYPE, Providers.of(indexChangeHandler));
     indexHandlers.put(GERRIT, ProjectIndexEvent.TYPE, Providers.of(indexProjectHandler));
-    router = new IndexEventRouter(indexAccountHandler, indexHandlers, allUsersName, INSTANCE_ID);
+    when(cfg.index()).thenReturn(indexConfig);
+    when(indexConfig.ackIntervalMs()).thenReturn(0L);
+    router = newRouter();
+  }
+
+  @After
+  public void tearDown() {
+    TimeUtil.resetCurrentMillisSupplier();
   }
 
   @Test
@@ -150,5 +166,32 @@ public class IndexEventRouterTest {
 
     verify(indexChangeHandler).handleSync(event);
     verify(ack).ack(event);
+  }
+
+  @Test
+  public void manualAckRouteShouldNotAckAgainBeforeAckInterval() throws Exception {
+    when(indexConfig.ackIntervalMs()).thenReturn(60000L);
+    AtomicLong now = new AtomicLong(TEST_TIME);
+    TimeUtil.setCurrentMillisSupplier(now::get);
+    router = newRouter();
+    final ChangeIndexEvent firstEvent = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    final ChangeIndexEvent secondEvent = new ChangeIndexEvent("projectName", 4, false, INSTANCE_ID);
+    final ChangeIndexEvent thirdEvent = new ChangeIndexEvent("projectName", 5, false, INSTANCE_ID);
+
+    router.route(firstEvent, ack);
+    router.route(secondEvent, ack);
+    now.set(TEST_TIME + 60000);
+    router.route(thirdEvent, ack);
+
+    verify(indexChangeHandler).handleSync(firstEvent);
+    verify(indexChangeHandler).handleSync(secondEvent);
+    verify(indexChangeHandler).handleSync(thirdEvent);
+    verify(ack, never()).ack(firstEvent);
+    verify(ack, never()).ack(secondEvent);
+    verify(ack).ack(thirdEvent);
+  }
+
+  private IndexEventRouter newRouter() {
+    return new IndexEventRouter(indexAccountHandler, indexHandlers, cfg, allUsersName, INSTANCE_ID);
   }
 }
