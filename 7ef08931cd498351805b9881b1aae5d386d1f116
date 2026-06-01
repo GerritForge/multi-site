@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35d6135b_53095130",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventRouter.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-01T18:07:45Z",
+      "side": 1,
+      "message": "I don\u0027t believe this matters, but the event created this way will have a \"eventCreatedOn\" timestamp that is different from the original event.\n\nShall we allow setting the createdOn timestamp for events in the contrusctor to be more specific?",
+      "range": {
+        "startLine": 71,
+        "startChar": 30,
+        "endLine": 71,
+        "endChar": 96
+      },
+      "revId": "7ef08931cd498351805b9881b1aae5d386d1f116",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
