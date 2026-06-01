@@ -51,6 +51,24 @@
       "message": "Build failing for the right reason now.",
       "revId": "fa0e10d0d5353dc573843711a48c76a2ec9b44cb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21cdf317_4017cb6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-01T17:54:40Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b08bd837_b676c0f5",
+      "revId": "fa0e10d0d5353dc573843711a48c76a2ec9b44cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
