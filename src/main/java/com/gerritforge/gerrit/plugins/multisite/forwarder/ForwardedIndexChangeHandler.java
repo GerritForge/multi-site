@@ -63,15 +63,14 @@ public class ForwardedIndexChangeHandler
       index(
           changeIndexEvent.projectName + "~" + changeIndexEvent.changeId,
           operation,
-          Optional.of(changeIndexEvent));
+          changeIndexEvent);
     }
   }
 
   @Override
-  protected void doIndex(String id, Optional<ChangeIndexEvent> indexEvent) {
-    if (indexEvent.isPresent()
-        && ChangeIndexEvent.isAllChangesDeletedForProject(indexEvent.get())) {
-      indexer.deleteAllForProject(Project.nameKey(indexEvent.get().projectName));
+  protected void doIndex(String id, ChangeIndexEvent indexEvent) {
+    if (ChangeIndexEvent.isAllChangesDeletedForProject(indexEvent)) {
+      indexer.deleteAllForProject(Project.nameKey(indexEvent.projectName));
     } else {
       scheduleIndexing(id, indexEvent, this::indexIfConsistent);
     }
@@ -138,9 +137,8 @@ public class ForwardedIndexChangeHandler
   }
 
   @Override
-  protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
-    ChangeIndexEvent forsureEvent = indexEvent.orElseThrow();
-    indexer.delete(Project.nameKey(forsureEvent.projectName), Change.id(forsureEvent.changeId));
+  protected void doDelete(String id, ChangeIndexEvent indexEvent) {
+    indexer.delete(Project.nameKey(indexEvent.projectName), Change.id(indexEvent.changeId));
     log.debug("Change {} successfully deleted from index", id);
   }
 }

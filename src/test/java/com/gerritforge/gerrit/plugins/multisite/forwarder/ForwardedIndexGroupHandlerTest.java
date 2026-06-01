@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.TestGroupChecker;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.server.index.group.GroupIndexer;
@@ -30,6 +31,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -65,7 +68,7 @@ public class ForwardedIndexGroupHandlerTest {
 
   @Test
   public void testSuccessfulIndexing() throws Exception {
-    handler.index(uuid, Operation.INDEX, Optional.empty());
+    handler.index(uuid, Operation.INDEX, groupIndexEvent(uuid));
     verify(indexerMock).index(AccountGroup.uuid(uuid));
   }
 
@@ -74,7 +77,7 @@ public class ForwardedIndexGroupHandlerTest {
     UnsupportedOperationException thrown =
         assertThrows(
             UnsupportedOperationException.class,
-            () -> handler.index(uuid, Operation.DELETE, Optional.empty()));
+            () -> handler.index(uuid, Operation.DELETE, groupIndexEvent(uuid)));
     assertThat(thrown).hasMessageThat().isEqualTo("Delete from group index not supported");
   }
 
@@ -92,7 +95,7 @@ public class ForwardedIndexGroupHandlerTest {
         .index(AccountGroup.uuid(uuid));
 
     assertThat(Context.isForwardedEvent()).isFalse();
-    handler.index(uuid, Operation.INDEX, Optional.empty());
+    handler.index(uuid, Operation.INDEX, groupIndexEvent(uuid));
     assertThat(Context.isForwardedEvent()).isFalse();
 
     verify(indexerMock).index(AccountGroup.uuid(uuid));
@@ -112,7 +115,7 @@ public class ForwardedIndexGroupHandlerTest {
     assertThat(Context.isForwardedEvent()).isFalse();
     IOException thrown =
         assertThrows(
-            IOException.class, () -> handler.index(uuid, Operation.INDEX, Optional.empty()));
+            IOException.class, () -> handler.index(uuid, Operation.INDEX, groupIndexEvent(uuid)));
     assertThat(thrown).hasMessageThat().isEqualTo("someMessage");
     assertThat(Context.isForwardedEvent()).isFalse();
 
@@ -139,7 +142,7 @@ public class ForwardedIndexGroupHandlerTest {
         indexerMock, config, new TestGroupChecker(checkIsUpToDate), ctxMock, indexExecutorMock);
   }
 
-  private Optional<GroupIndexEvent> groupIndexEvent(String uuid) {
-    return Optional.of(new GroupIndexEvent(uuid, null, "instance-id"));
+  private GroupIndexEvent groupIndexEvent(String uuid) {
+    return new GroupIndexEvent(uuid, null, "instance-id");
   }
 }

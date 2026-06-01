@@ -12,7 +12,6 @@
 package com.gerritforge.gerrit.plugins.multisite.index;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
-import java.util.Optional;
 
 public interface UpToDateChecker<E extends IndexEvent> {
   /**
@@ -21,5 +20,5 @@ public interface UpToDateChecker<E extends IndexEvent> {
    * @param indexEvent indexing event
    * @return true if the local Change is up-to-date, false otherwise.
    */
-  boolean isUpToDate(Optional<E> indexEvent);
+  boolean isUpToDate(E indexEvent);
 }

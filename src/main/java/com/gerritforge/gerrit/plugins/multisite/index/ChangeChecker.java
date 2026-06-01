@@ -45,7 +45,7 @@ public interface ChangeChecker extends UpToDateChecker<ChangeIndexEvent> {
    * @param indexEvent indexing event
    * @return true if the local Change is up-to-date, false otherwise.
    */
-  boolean isUpToDate(Optional<ChangeIndexEvent> indexEvent);
+  boolean isUpToDate(ChangeIndexEvent indexEvent);
 
   /**
    * Return the last computed up-to-date Change time-stamp.

@@ -61,7 +61,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
 
     RevCommit secondCommit = createCommit();
     assertThat(secondCommit.getId().getName()).isNotEqualTo(indexChangeEvent.targetSha);
-    assertThat(changeCheckerFactory.create(changeId).isUpToDate(Optional.of(indexChangeEvent)))
+    assertThat(changeCheckerFactory.create(changeId).isUpToDate(indexChangeEvent))
         .isTrue();
   }
 
@@ -76,7 +76,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
     indexChangeEvent.eventCreatedOn = changeCommitTs / 1000L;
     indexChangeEvent.targetSha = NONEXISTENTSHA1;
 
-    assertThat(changeCheckerFactory.create(changeId).isUpToDate(Optional.of(indexChangeEvent)))
+    assertThat(changeCheckerFactory.create(changeId).isUpToDate(indexChangeEvent))
         .isFalse();
   }
 

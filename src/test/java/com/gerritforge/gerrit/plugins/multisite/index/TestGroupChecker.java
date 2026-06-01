@@ -12,7 +12,6 @@
 package com.gerritforge.gerrit.plugins.multisite.index;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
-import java.util.Optional;
 import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Ignore;
 
@@ -28,7 +27,7 @@ public class TestGroupChecker implements GroupChecker {
   private static final String someObjectId = "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef";
 
   @Override
-  public boolean isUpToDate(Optional<GroupIndexEvent> groupIndexEvent) {
+  public boolean isUpToDate(GroupIndexEvent groupIndexEvent) {
     return isUpToDate;
   }
 

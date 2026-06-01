@@ -41,15 +41,10 @@ class GroupCheckerImpl implements GroupChecker {
   }
 
   @Override
-  public boolean isUpToDate(Optional<GroupIndexEvent> groupIndexEvent) {
-    if (!groupIndexEvent.isPresent()) {
-      logger.atWarning().log("Group Index empty, considering this group up-to-date");
-      return true;
-    }
-    GroupIndexEvent event = groupIndexEvent.get();
-    AccountGroup.UUID groupUUID = AccountGroup.uuid(event.groupUUID);
+  public boolean isUpToDate(GroupIndexEvent groupIndexEvent) {
+    AccountGroup.UUID groupUUID = AccountGroup.uuid(groupIndexEvent.groupUUID);
 
-    if (event.sha1 == null) {
+    if (groupIndexEvent.sha1 == null) {
       logger.atWarning().log(
           "Event for group '%s' does not contain sha1, consider group up-to-date for"
               + " compatibility.",
@@ -58,14 +53,15 @@ class GroupCheckerImpl implements GroupChecker {
     }
 
     try (Repository repo = repoManager.openRepository(allUsers)) {
-      if (commitExistsInRepo(repo, event.sha1)) {
+      if (commitExistsInRepo(repo, groupIndexEvent.sha1)) {
         logger.atInfo().log(
-            "Group '%s' up-to-date: sha1 '%s' exists in All-Users", groupUUID, event.sha1);
+            "Group '%s' up-to-date: sha1 '%s' exists in All-Users",
+            groupUUID, groupIndexEvent.sha1);
         return true;
       } else {
         logger.atWarning().log(
             "Group '%s' NOT up-to-date: sha1 '%s' still missing in All-Users",
-            groupUUID, event.sha1);
+            groupUUID, groupIndexEvent.sha1);
       }
     } catch (Exception e) {
       logger.atSevere().withCause(e).log(
