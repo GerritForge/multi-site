@@ -34,6 +34,23 @@
       "parentUuid": "7826bcf7_b10deabf",
       "revId": "fa0e10d0d5353dc573843711a48c76a2ec9b44cb",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "731a46c2_4da3332e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-01T17:45:59Z",
+      "side": 1,
+      "message": "Build failing for the right reason now.",
+      "revId": "fa0e10d0d5353dc573843711a48c76a2ec9b44cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
