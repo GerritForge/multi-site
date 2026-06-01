@@ -16,6 +16,7 @@ import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Account;
@@ -28,7 +29,6 @@ import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.RefEvent;
 import com.google.inject.Inject;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.Set;
 
 public class IndexEventRouter
@@ -67,7 +67,10 @@ public class IndexEventRouter
     if (replicationEvent.getProjectNameKey().equals(allUsersName)) {
       Account.Id accountId = Account.Id.fromRef(replicationEvent.getRefName());
       if (accountId != null) {
-        indexAccountHandler.index(accountId, INDEX, Optional.empty());
+        indexAccountHandler.index(
+            accountId,
+            INDEX,
+            new AccountIndexEvent(accountId.id(), replicationEvent.getInstanceId()));
       } else {
         indexAccountHandler.doAsyncIndex();
       }

@@ -97,17 +97,14 @@ public class ForwardedIndexChangeHandlerTest {
   @Test
   public void changeIsIndexedWhenUpToDate() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_UP_TO_DATE, CHANGE_CONSISTENT);
-    handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
+    handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent());
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
   }
 
   @Test
   public void changeIsStillIndexedEvenWhenOutdated() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_OUTDATED, CHANGE_CONSISTENT);
-    handler.index(
-        TEST_CHANGE_ID,
-        Operation.INDEX,
-        Optional.of(new ChangeIndexEvent("foo", 1, false, "instance-id")));
+    handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent());
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
   }
 
@@ -119,31 +116,25 @@ public class ForwardedIndexChangeHandlerTest {
         CHANGE_UP_TO_DATE,
         CHANGE_INCONSISTENT,
         CHANGE_CONSISTENT);
-    handler.index(
-        TEST_CHANGE_ID,
-        Operation.INDEX,
-        Optional.of(new ChangeIndexEvent("foo", 1, false, "instance-id")));
+    handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent());
     verify(indexerMock, never()).index(any(ChangeNotes.class));
     verify(indexExecutorMock, times(1)).schedule(any(Runnable.class), anyLong(), any());
 
-    handler.index(
-        TEST_CHANGE_ID,
-        Operation.INDEX,
-        Optional.of(new ChangeIndexEvent("foo", 1, false, "instance-id")));
+    handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent());
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
   }
 
   @Test
   public void changeIsDeletedFromIndex() throws Exception {
-    handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty());
-    verify(indexerMock, times(1)).delete(id);
+    handler.index(TEST_CHANGE_ID, Operation.DELETE, changeDeleteEvent());
+    verify(indexerMock, times(1)).delete(Project.nameKey(TEST_PROJECT), id);
   }
 
   @Test
   public void changeToIndexDoesNotExist() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_DOES_NOT_EXIST, CHANGE_OUTDATED);
-    handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
-    verify(indexerMock, never()).delete(id);
+    handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent());
+    verify(indexerMock, never()).delete(Project.nameKey(TEST_PROJECT), id);
     verify(indexerMock, never()).index(any(Project.NameKey.class), any(Change.Id.class));
   }
 
@@ -153,7 +144,7 @@ public class ForwardedIndexChangeHandlerTest {
         CHANGE_EXISTS, THROW_STORAGE_EXCEPTION, CHANGE_UP_TO_DATE, CHANGE_CONSISTENT);
     assertThrows(
         StorageException.class,
-        () -> handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty()));
+        () -> handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent()));
   }
 
   @Test
@@ -171,7 +162,7 @@ public class ForwardedIndexChangeHandlerTest {
         .index(any(ChangeNotes.class));
 
     assertThat(Context.isForwardedEvent()).isFalse();
-    handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
+    handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent());
     assertThat(Context.isForwardedEvent()).isFalse();
 
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
@@ -193,11 +184,19 @@ public class ForwardedIndexChangeHandlerTest {
     IOException thrown =
         assertThrows(
             IOException.class,
-            () -> handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty()));
+            () -> handler.index(TEST_CHANGE_ID, Operation.INDEX, changeIndexEvent()));
     assertThat(thrown).hasMessageThat().isEqualTo("someMessage");
     assertThat(Context.isForwardedEvent()).isFalse();
 
     verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+  }
+
+  private ChangeIndexEvent changeIndexEvent() {
+    return new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+  }
+
+  private ChangeIndexEvent changeDeleteEvent() {
+    return new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, true, "instance-id");
   }
 
   private void setupChangeAccessRelatedMocks(boolean changeExist, boolean changeUpToDate)
