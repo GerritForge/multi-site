@@ -65,7 +65,7 @@ public class ForwardedIndexAccountHandler
     throw new UnsupportedOperationException("Delete from account index not supported");
   }
 
-  public synchronized void indexAsync(Account.Id id, Operation operation) {
+  private synchronized void indexAsync(Account.Id id, Operation operation) {
     accountsToIndex.put(id, operation);
   }
 
