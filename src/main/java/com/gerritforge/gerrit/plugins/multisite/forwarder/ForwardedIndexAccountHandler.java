@@ -23,7 +23,6 @@ import com.google.inject.Singleton;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,7 @@ public class ForwardedIndexAccountHandler
     extends ForwardedIndexingHandler<Account.Id, AccountIndexEvent> {
 
   private final AccountIndexer indexer;
-  private Map<Account.Id, Operation> accountsToIndex;
+  private Map<Account.Id, AccountIndexEvent> accountsToIndex;
 
   @Inject
   ForwardedIndexAccountHandler(AccountIndexer indexer, Configuration config) {
@@ -50,23 +49,23 @@ public class ForwardedIndexAccountHandler
   @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof AccountIndexEvent accountIndexEvent) {
-      indexAsync(Account.id(accountIndexEvent.accountId), INDEX);
+      indexAsync(Account.id(accountIndexEvent.accountId), accountIndexEvent);
     }
   }
 
   @Override
-  protected void doIndex(Account.Id id, Optional<AccountIndexEvent> event) {
+  protected void doIndex(Account.Id id, AccountIndexEvent event) {
     indexer.index(id);
     log.debug("Account {} successfully indexed", id);
   }
 
   @Override
-  protected void doDelete(Account.Id id, Optional<AccountIndexEvent> event) {
+  protected void doDelete(Account.Id id, AccountIndexEvent event) {
     throw new UnsupportedOperationException("Delete from account index not supported");
   }
 
-  private synchronized void indexAsync(Account.Id id, Operation operation) {
-    accountsToIndex.put(id, operation);
+  private synchronized void indexAsync(Account.Id id, AccountIndexEvent event) {
+    accountsToIndex.put(id, event);
   }
 
   public synchronized void doAsyncIndex() {
@@ -76,9 +75,9 @@ public class ForwardedIndexAccountHandler
             .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
   }
 
-  private boolean checkedIndex(Map.Entry<Account.Id, Operation> account) {
+  private boolean checkedIndex(Map.Entry<Account.Id, AccountIndexEvent> account) {
     try {
-      index(account.getKey(), account.getValue(), Optional.empty());
+      index(account.getKey(), INDEX, account.getValue());
       return true;
     } catch (IOException e) {
       log.error("Account {} index failed", account.getKey(), e);

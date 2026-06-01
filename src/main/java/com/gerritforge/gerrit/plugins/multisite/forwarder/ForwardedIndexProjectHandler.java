@@ -24,7 +24,6 @@ import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -54,12 +53,12 @@ public class ForwardedIndexProjectHandler
   @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ProjectIndexEvent projectIndexEvent) {
-      index(projectIndexEvent.projectName, INDEX, Optional.of(projectIndexEvent));
+      index(projectIndexEvent.projectName, INDEX, projectIndexEvent);
     }
   }
 
   @Override
-  protected void doIndex(String projectName, Optional<ProjectIndexEvent> event) {
+  protected void doIndex(String projectName, ProjectIndexEvent event) {
     scheduleIndexing(projectName, event, this::reindex);
   }
 
@@ -79,7 +78,7 @@ public class ForwardedIndexProjectHandler
   }
 
   @Override
-  protected void doDelete(String projectName, Optional<ProjectIndexEvent> event) {
+  protected void doDelete(String projectName, ProjectIndexEvent event) {
     throw new UnsupportedOperationException("Delete from project index not supported");
   }
 }

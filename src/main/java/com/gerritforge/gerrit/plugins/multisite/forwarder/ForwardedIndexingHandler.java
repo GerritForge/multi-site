@@ -14,7 +14,6 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.common.util.concurrent.Striped;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +41,9 @@ public abstract class ForwardedIndexingHandler<T, E> {
 
   private final Striped<Lock> idLocks;
 
-  protected abstract void doIndex(T id, Optional<E> indexEvent);
+  protected abstract void doIndex(T id, E indexEvent);
 
-  protected abstract void doDelete(T id, Optional<E> indexEvent);
+  protected abstract void doDelete(T id, E indexEvent);
 
   protected ForwardedIndexingHandler(int lockStripes) {
     idLocks = Striped.lock(lockStripes);
@@ -58,7 +57,7 @@ public abstract class ForwardedIndexingHandler<T, E> {
    * @param event The index event details.
    * @throws IOException If an error occur while indexing.
    */
-  public void index(T id, Operation operation, Optional<E> event) throws IOException {
+  public void index(T id, Operation operation, E event) throws IOException {
     log.debug("{} {} {}", operation, id, event);
     try {
       Context.setForwardedEvent(true);

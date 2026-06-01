@@ -24,7 +24,6 @@ import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 
 /**
@@ -54,12 +53,12 @@ public class ForwardedIndexGroupHandler
   @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof GroupIndexEvent groupIndexEvent) {
-      index(groupIndexEvent.groupUUID, INDEX, Optional.of(groupIndexEvent));
+      index(groupIndexEvent.groupUUID, INDEX, groupIndexEvent);
     }
   }
 
   @Override
-  protected void doIndex(String uuid, Optional<GroupIndexEvent> event) {
+  protected void doIndex(String uuid, GroupIndexEvent event) {
     scheduleIndexing(uuid, event, this::reindex);
   }
 
@@ -79,7 +78,7 @@ public class ForwardedIndexGroupHandler
   }
 
   @Override
-  protected void doDelete(String uuid, Optional<GroupIndexEvent> event) {
+  protected void doDelete(String uuid, GroupIndexEvent event) {
     throw new UnsupportedOperationException("Delete from group index not supported");
   }
 }
