@@ -21,7 +21,6 @@ import com.google.gerrit.acceptance.config.GerritConfig;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.inject.AbstractModule;
-import java.util.Optional;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;
 
@@ -61,8 +60,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
 
     RevCommit secondCommit = createCommit();
     assertThat(secondCommit.getId().getName()).isNotEqualTo(indexChangeEvent.targetSha);
-    assertThat(changeCheckerFactory.create(changeId).isUpToDate(Optional.of(indexChangeEvent)))
-        .isTrue();
+    assertThat(changeCheckerFactory.create(changeId).isUpToDate(indexChangeEvent)).isTrue();
   }
 
   @Test
@@ -76,8 +74,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
     indexChangeEvent.eventCreatedOn = changeCommitTs / 1000L;
     indexChangeEvent.targetSha = NONEXISTENTSHA1;
 
-    assertThat(changeCheckerFactory.create(changeId).isUpToDate(Optional.of(indexChangeEvent)))
-        .isFalse();
+    assertThat(changeCheckerFactory.create(changeId).isUpToDate(indexChangeEvent)).isFalse();
   }
 
   private ChangeIndexEvent newIndexChangeEvent(int changeNum) {

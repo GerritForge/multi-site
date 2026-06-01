@@ -15,7 +15,6 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEve
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.inject.Inject;
-import java.util.Optional;
 
 public class ProjectCheckerImpl implements ProjectChecker {
   private final ProjectCache projectCache;
@@ -26,9 +25,7 @@ public class ProjectCheckerImpl implements ProjectChecker {
   }
 
   @Override
-  public boolean isUpToDate(Optional<ProjectIndexEvent> indexEvent) {
-    return indexEvent
-        .flatMap(event -> projectCache.get(Project.nameKey(event.projectName)))
-        .isPresent();
+  public boolean isUpToDate(ProjectIndexEvent indexEvent) {
+    return projectCache.get(Project.nameKey(indexEvent.projectName)).isPresent();
   }
 }

@@ -22,7 +22,6 @@ import com.google.gerrit.server.config.AllUsersName;
 import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectIdRef;
@@ -47,11 +46,6 @@ public class GroupCheckerImplTest {
   public void setUp() throws Exception {
     doReturn(repoMock).when(repoManagerMock).openRepository(allUsers);
     objectUnderTest = new GroupCheckerImpl(repoManagerMock, allUsers);
-  }
-
-  @Test
-  public void isGroupUpToDate_shouldReturnTrueWhenEventIsEmpty() {
-    assertThat(objectUnderTest.isUpToDate(Optional.empty())).isTrue();
   }
 
   @Test
@@ -94,8 +88,8 @@ public class GroupCheckerImplTest {
     assertThat(objectUnderTest.getGroupHead(groupUUID.toString())).isEqualTo(ObjectId.zeroId());
   }
 
-  private Optional<GroupIndexEvent> groupIndexEvent(String uuid, @Nullable ObjectId sha1) {
-    return Optional.of(new GroupIndexEvent(uuid, sha1, "instance-id"));
+  private GroupIndexEvent groupIndexEvent(String uuid, @Nullable ObjectId sha1) {
+    return new GroupIndexEvent(uuid, sha1, "instance-id");
   }
 
   private void setCommitExistsInRepo(boolean commitExists) {
