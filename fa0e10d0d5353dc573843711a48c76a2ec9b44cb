@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7826bcf7_b10deabf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-01T15:22:58Z",
+      "side": 1,
+      "message": "The build seems to pass, but tests fail to compile locally.",
+      "revId": "fa0e10d0d5353dc573843711a48c76a2ec9b44cb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
