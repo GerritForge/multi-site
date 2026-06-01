@@ -50,11 +50,6 @@ public class GroupCheckerImplTest {
   }
 
   @Test
-  public void isGroupUpToDate_shouldReturnTrueWhenEventIsEmpty() {
-    assertThat(objectUnderTest.isUpToDate(Optional.empty())).isTrue();
-  }
-
-  @Test
   public void isGroupUpToDate_shouldReturnFalseWhenSha1DoesNotExistInAllUsers() {
     setCommitExistsInRepo(false);
     assertThat(
@@ -94,8 +89,8 @@ public class GroupCheckerImplTest {
     assertThat(objectUnderTest.getGroupHead(groupUUID.toString())).isEqualTo(ObjectId.zeroId());
   }
 
-  private Optional<GroupIndexEvent> groupIndexEvent(String uuid, @Nullable ObjectId sha1) {
-    return Optional.of(new GroupIndexEvent(uuid, sha1, "instance-id"));
+  private GroupIndexEvent groupIndexEvent(String uuid, @Nullable ObjectId sha1) {
+    return new GroupIndexEvent(uuid, sha1, "instance-id");
   }
 
   private void setCommitExistsInRepo(boolean commitExists) {

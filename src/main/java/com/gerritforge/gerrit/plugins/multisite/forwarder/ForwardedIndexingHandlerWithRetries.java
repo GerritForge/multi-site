@@ -17,7 +17,6 @@ import com.gerritforge.gerrit.plugins.multisite.index.UpToDateChecker;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -104,7 +103,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     return true;
   }
 
-  public void scheduleIndexing(T id, Optional<E> event, Consumer<T> indexOnce) {
+  public void scheduleIndexing(T id, E event, Consumer<T> indexOnce) {
     IndexingRetry retry = new IndexingRetry(event);
     if (indexingRetryTaskMap.put(id, retry) != null) {
       indexOnce.accept(id);
@@ -149,10 +148,10 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   }
 
   public class IndexingRetry {
-    private final Optional<E> event;
+    private final E event;
     private int retryNumber = 0;
 
-    public IndexingRetry(Optional<E> event) {
+    public IndexingRetry(E event) {
       this.event = event;
     }
 
@@ -160,7 +159,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
       return retryNumber;
     }
 
-    public Optional<E> getEvent() {
+    public E getEvent() {
       return event;
     }
 

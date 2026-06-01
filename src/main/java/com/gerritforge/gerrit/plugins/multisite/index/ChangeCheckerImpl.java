@@ -95,23 +95,20 @@ public class ChangeCheckerImpl implements ChangeChecker {
   }
 
   @Override
-  public boolean isUpToDate(Optional<ChangeIndexEvent> indexEvent) {
+  public boolean isUpToDate(ChangeIndexEvent indexEvent) {
     getComputedChangeTs();
     if (!computedChangeTs.isPresent()) {
       log.warn("Unable to compute last updated ts for change {}", changeId);
       return true;
     }
 
-    if (indexEvent.isPresent() && indexEvent.get().targetSha == null) {
-      return indexEvent.map(e -> (computedChangeTs.get() >= e.eventCreatedOn)).orElse(true);
+    if (indexEvent.targetSha == null) {
+      return computedChangeTs.get() >= indexEvent.eventCreatedOn;
     }
 
-    return indexEvent
-        .map(
-            e ->
-                (computedChangeTs.get() > e.eventCreatedOn)
-                    || ((computedChangeTs.get() == e.eventCreatedOn) && repositoryHas(e.targetSha)))
-        .orElse(true);
+    return (computedChangeTs.get() > indexEvent.eventCreatedOn)
+        || ((computedChangeTs.get() == indexEvent.eventCreatedOn)
+            && repositoryHas(indexEvent.targetSha));
   }
 
   @Override

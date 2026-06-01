@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.server.index.account.AccountIndexer;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class ForwardedIndexAccountHandlerTest {
   @Mock private Configuration.Index index;
   private ForwardedIndexAccountHandler handler;
   private Account.Id id;
+  private AccountIndexEvent event;
 
   @Before
   public void setUp() throws Exception {
@@ -48,11 +50,12 @@ public class ForwardedIndexAccountHandlerTest {
     when(index.numStripedLocks()).thenReturn(10);
     handler = new ForwardedIndexAccountHandler(indexerMock, config);
     id = Account.id(123);
+    event = new AccountIndexEvent(id.id(), "instance-id");
   }
 
   @Test
   public void testSuccessfulIndexing() throws Exception {
-    handler.index(id, Operation.INDEX, Optional.empty());
+    handler.index(id, Operation.INDEX, event);
     verify(indexerMock).index(id);
   }
 
@@ -61,7 +64,7 @@ public class ForwardedIndexAccountHandlerTest {
     UnsupportedOperationException thrown =
         assertThrows(
             UnsupportedOperationException.class,
-            () -> handler.index(id, Operation.DELETE, Optional.empty()));
+            () -> handler.index(id, Operation.DELETE, event));
     assertThat(thrown).hasMessageThat().isEqualTo("Delete from account index not supported");
   }
 
@@ -79,7 +82,7 @@ public class ForwardedIndexAccountHandlerTest {
         .index(id);
 
     assertThat(Context.isForwardedEvent()).isFalse();
-    handler.index(id, Operation.INDEX, Optional.empty());
+    handler.index(id, Operation.INDEX, event);
     assertThat(Context.isForwardedEvent()).isFalse();
 
     verify(indexerMock).index(id);
@@ -98,7 +101,7 @@ public class ForwardedIndexAccountHandlerTest {
 
     assertThat(Context.isForwardedEvent()).isFalse();
     IOException thrown =
-        assertThrows(IOException.class, () -> handler.index(id, Operation.INDEX, Optional.empty()));
+        assertThrows(IOException.class, () -> handler.index(id, Operation.INDEX, event));
     assertThat(thrown).hasMessageThat().isEqualTo("someMessage");
     assertThat(Context.isForwardedEvent()).isFalse();
 
