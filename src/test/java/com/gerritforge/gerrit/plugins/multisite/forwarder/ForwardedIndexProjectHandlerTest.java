@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ProjectChecker;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.index.project.ProjectIndexer;
@@ -48,6 +49,7 @@ public class ForwardedIndexProjectHandlerTest {
   @Mock private ScheduledExecutorService indexExecutorMock;
   private ForwardedIndexProjectHandler handler;
   private String nameKey;
+  private ProjectIndexEvent event;
 
   @Before
   public void setUp() {
@@ -60,11 +62,12 @@ public class ForwardedIndexProjectHandlerTest {
         new ForwardedIndexProjectHandler(
             indexerMock, projectCheckerMock, ctxMock, indexExecutorMock, configMock);
     nameKey = "project/name";
+    event = new ProjectIndexEvent(nameKey, "test-instance");
   }
 
   @Test
   public void testSuccessfulIndexing() throws Exception {
-    handler.index(nameKey, Operation.INDEX, Optional.empty());
+    handler.index(nameKey, Operation.INDEX, event);
     verify(indexerMock).index(Project.nameKey(nameKey));
   }
 
@@ -73,7 +76,7 @@ public class ForwardedIndexProjectHandlerTest {
     UnsupportedOperationException thrown =
         assertThrows(
             UnsupportedOperationException.class,
-            () -> handler.index(nameKey, Operation.DELETE, Optional.empty()));
+            () -> handler.index(nameKey, Operation.DELETE, event));
     assertThat(thrown).hasMessageThat().isEqualTo("Delete from project index not supported");
   }
 
@@ -91,7 +94,7 @@ public class ForwardedIndexProjectHandlerTest {
         .index(Project.nameKey(nameKey));
 
     assertThat(Context.isForwardedEvent()).isFalse();
-    handler.index(nameKey, Operation.INDEX, Optional.empty());
+    handler.index(nameKey, Operation.INDEX, event);
     assertThat(Context.isForwardedEvent()).isFalse();
 
     verify(indexerMock).index(Project.nameKey(nameKey));
@@ -111,7 +114,7 @@ public class ForwardedIndexProjectHandlerTest {
     assertThat(Context.isForwardedEvent()).isFalse();
     IOException thrown =
         assertThrows(
-            IOException.class, () -> handler.index(nameKey, Operation.INDEX, Optional.empty()));
+            IOException.class, () -> handler.index(nameKey, Operation.INDEX, event));
     assertThat(thrown).hasMessageThat().isEqualTo("someMessage");
     assertThat(Context.isForwardedEvent()).isFalse();
 
