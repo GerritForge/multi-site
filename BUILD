@@ -1,13 +1,14 @@
-load("//tools/bzl:junit.bzl", "junit_tests")
 load(
-    "//tools/bzl:plugin.bzl",
-    "PLUGIN_DEPS",
-    "PLUGIN_TEST_DEPS",
+    "@com_googlesource_gerrit_bazlets//:gerrit_plugin.bzl",
     "gerrit_plugin",
+    "gerrit_plugin_tests",
 )
+load("@rules_java//java:defs.bzl", "java_library")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+PLUGIN = "multi-site"
 
 gerrit_plugin(
-    name = "multi-site",
     srcs = glob(["src/main/java/**/*.java"]),
     manifest_entries = [
         "Gerrit-PluginName: multi-site",
@@ -16,12 +17,26 @@ gerrit_plugin(
         "Implementation-Title: multi-site plugin",
         "Implementation-URL: https://github.com/GerritForge/multi-site",
     ],
+    plugin = PLUGIN,
     resources = glob(["src/main/resources/**/*"]),
     deps = [
         ":events-broker-neverlink",
         ":global-refdb-neverlink",
         ":pull-replication-neverlink",
         ":replication-neverlink",
+    ],
+)
+
+gerrit_plugin_tests(
+    srcs = glob(["src/test/java/**/*.java"]),
+    plugin = PLUGIN,
+    resources = glob(["src/test/resources/**/*"]),
+    tags = ["local"],
+    deps = [
+        "//plugins/events-broker",
+        "//plugins/global-refdb",
+        "//plugins/pull-replication",
+        "//plugins/replication",
     ],
 )
 
@@ -47,32 +62,6 @@ java_library(
     name = "global-refdb-neverlink",
     neverlink = 1,
     exports = ["//plugins/global-refdb"],
-)
-
-junit_tests(
-    name = "multi_site_tests",
-    srcs = glob(["src/test/java/**/*.java"]),
-    resources = glob(["src/test/resources/**/*"]),
-    tags = [
-        "local",
-        "multi-site",
-    ],
-    deps = [
-        ":multi-site__plugin_test_deps",
-    ],
-)
-
-java_library(
-    name = "multi-site__plugin_test_deps",
-    testonly = 1,
-    visibility = ["//visibility:public"],
-    exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
-        ":multi-site__plugin",
-        "//plugins/events-broker",
-        "//plugins/global-refdb",
-        "//plugins/pull-replication",
-        "//plugins/replication",
-    ],
 )
 
 filegroup(
