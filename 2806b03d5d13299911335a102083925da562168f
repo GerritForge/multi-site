@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8410203c_22a2f5eb",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T14:11:13Z",
+      "side": 0,
+      "message": "This needs to be kept if the `event` doesn\u0027t contain the project name.\nRemember that we may receive events from Gerrit v3.14 where the project name isn\u0027t defined for delete operations.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 93
+      },
+      "revId": "2806b03d5d13299911335a102083925da562168f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

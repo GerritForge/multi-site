@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65020aab_94af74c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T14:11:13Z",
+      "side": 1,
+      "message": "No need for this change: we *have to* support consumption of events from Gerrit v3.14",
+      "revId": "40026d702cfc5544fda9da4cd74390503b48dc98",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb560581_8b6edd3c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriber.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T14:11:13Z",
+      "side": 1,
+      "message": "No, this is creating an issue where we don\u0027t propagate deletions from Gerrit v3.14",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 21
+      },
+      "revId": "40026d702cfc5544fda9da4cd74390503b48dc98",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
