@@ -22,6 +22,30 @@
       },
       "revId": "7ef08931cd498351805b9881b1aae5d386d1f116",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe8cf25f_c86b8b02",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventRouter.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T14:08:57Z",
+      "side": 1,
+      "message": "We don\u0027t have an event, so why do we need to create an artificial one instead?",
+      "parentUuid": "35d6135b_53095130",
+      "range": {
+        "startLine": 71,
+        "startChar": 30,
+        "endLine": 71,
+        "endChar": 96
+      },
+      "revId": "7ef08931cd498351805b9881b1aae5d386d1f116",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

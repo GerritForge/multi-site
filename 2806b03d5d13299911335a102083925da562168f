@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cdca863a_3c0d6c79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T14:08:57Z",
+      "side": 1,
+      "message": "Well, there are times where the reindexing isn\u0027t triggered by an event.\n\nSee for example the `IndexEventRouter.onRefReplicated()`",
+      "range": {
+        "startLine": 7,
+        "startChar": 28,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "2806b03d5d13299911335a102083925da562168f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cca03021_97d176f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T14:08:57Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this refactoring is needed: it\u0027s a big change, isn\u0027t fit for purpose as it requires to always have an event, whilst that\u0027s not the case.",
+      "revId": "2806b03d5d13299911335a102083925da562168f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
