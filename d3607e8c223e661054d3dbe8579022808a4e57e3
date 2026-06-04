@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bef5bd5e_8d206a78",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T21:36:00Z",
+      "side": 1,
+      "message": "This is wrong: you cannot use the `changeFinder` because if the indexing is reaching this point, it means that the pull-replication completed its job and the Git repository data is gone.\n\nYou need to use the index *ONLY* and read the data from it, without having to use NoteDb.",
+      "range": {
+        "startLine": 152,
+        "startChar": 10,
+        "endLine": 152,
+        "endChar": 22
+      },
+      "revId": "d3607e8c223e661054d3dbe8579022808a4e57e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
