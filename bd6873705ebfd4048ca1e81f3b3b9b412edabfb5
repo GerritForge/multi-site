@@ -70,6 +70,30 @@
       },
       "revId": "bd6873705ebfd4048ca1e81f3b3b9b412edabfb5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a26b3672_7b07c582",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T13:56:11Z",
+      "side": 1,
+      "message": "Apologies, I misread the code.\n\nHere we just need to assert that the `indexEvent` must be present.\n\n\n\n```suggestion\n    Preconditions.checkParameter(indexEvent.isPresent);\n```\n\n\nInstead, if the `forsureEvent.projectName` is empty, then we need to lookup the project from the index.",
+      "parentUuid": "afb226e6_3f3c6c7e",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 61
+      },
+      "revId": "bd6873705ebfd4048ca1e81f3b3b9b412edabfb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
