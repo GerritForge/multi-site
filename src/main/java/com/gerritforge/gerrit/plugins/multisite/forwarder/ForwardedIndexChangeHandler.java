@@ -128,7 +128,7 @@ public class ForwardedIndexChangeHandler
       ChangeChecker checker = changeCheckerFactory.create(id);
       Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
       ChangeNotes notes = changeNotes.get();
-      notes.reload();
+      var unused = notes.reload();
       indexer.index(notes);
     }
   }
