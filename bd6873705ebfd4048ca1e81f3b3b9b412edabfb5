@@ -46,6 +46,30 @@
       },
       "revId": "bd6873705ebfd4048ca1e81f3b3b9b412edabfb5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afb226e6_3f3c6c7e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-04T13:43:22Z",
+      "side": 1,
+      "message": "This isn\u0027t allowing any rolling upgrade, which isn\u0027t what we typically do.\n\nI believe we should:\n\na) Use the indexEvent *IF* the `Optional` isn\u0027t empty\nb) Search for the Document in the index by id and fetch the project name from the index, if the `Optional` is empty.",
+      "parentUuid": "98b05312_8ba4229b",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 61
+      },
+      "revId": "bd6873705ebfd4048ca1e81f3b3b9b412edabfb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
