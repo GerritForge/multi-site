@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eed06d70_206e0ce3",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-05T12:40:50Z",
+      "side": 1,
+      "message": "Is it necessary here to check if the is more than one?\nWDYT @luca.milanesio@gmail.com?\n\nAs we\u0027re using the virtualId I think this should be impossible.",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 26
+      },
+      "revId": "58f6446093e7c6abd46c2a3f8ec4dbff9f92fd5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
