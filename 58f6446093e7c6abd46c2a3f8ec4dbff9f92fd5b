@@ -46,6 +46,30 @@
       },
       "revId": "58f6446093e7c6abd46c2a3f8ec4dbff9f92fd5b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac256e71_a9a46109",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-05T13:50:59Z",
+      "side": 1,
+      "message": "Not going to lie, I\u0027m finding these query methods naming pretty confusing. I didn\u0027t use `byLegacyChangeId` because that made it sound like it would be a legacy method, and I\u0027m not using a legacy change id, but it looks like the `legacy` there refers to something else, and actually that\u0027s the right method to call.\n\nAm I understanding it right now?",
+      "parentUuid": "814980cc_c11fa409",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 26
+      },
+      "revId": "58f6446093e7c6abd46c2a3f8ec4dbff9f92fd5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
