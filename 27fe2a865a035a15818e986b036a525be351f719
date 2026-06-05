@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c3f0739_f8585370",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-05T20:27:46Z",
+      "side": 1,
+      "message": "Arguably this should only return one change, no point in this returning a list, something is broken if so.\n\nThis can be a follow-up change.",
+      "range": {
+        "startLine": 157,
+        "startChar": 53,
+        "endLine": 157,
+        "endChar": 74
+      },
+      "revId": "27fe2a865a035a15818e986b036a525be351f719",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
