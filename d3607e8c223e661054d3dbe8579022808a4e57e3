@@ -22,6 +22,30 @@
       },
       "revId": "d3607e8c223e661054d3dbe8579022808a4e57e3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68715f8a_2470b487",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-05T11:38:13Z",
+      "side": 1,
+      "message": "As we\u0027re calling changeFinder with the changeId only, this will fall back to the index and its also what we\u0027re currently doing in\n\n`src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriber.java`\n\nSee I2b8b67d2aa",
+      "parentUuid": "bef5bd5e_8d206a78",
+      "range": {
+        "startLine": 152,
+        "startChar": 10,
+        "endLine": 152,
+        "endChar": 22
+      },
+      "revId": "d3607e8c223e661054d3dbe8579022808a4e57e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
