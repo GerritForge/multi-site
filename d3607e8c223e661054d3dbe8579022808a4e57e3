@@ -46,6 +46,30 @@
       },
       "revId": "d3607e8c223e661054d3dbe8579022808a4e57e3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88ae16ed_93c3fc97",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 20
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-05T12:32:50Z",
+      "side": 1,
+      "message": "I checked the `ChangeFinder.findOne(Change.Id)` and I see the following:\n\n```\n  /**\n   * @deprecated this method is not reliable in Gerrit instances with imported changes, since\n   *     multiple changes can have the same change number and make the `changeIdProjectCache` cache\n   *     pointless.\n   */\n```\n\nDo you see the same or am I reading the wrong code?",
+      "parentUuid": "68715f8a_2470b487",
+      "range": {
+        "startLine": 152,
+        "startChar": 10,
+        "endLine": 152,
+        "endChar": 22
+      },
+      "revId": "d3607e8c223e661054d3dbe8579022808a4e57e3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
