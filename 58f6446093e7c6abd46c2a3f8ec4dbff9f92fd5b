@@ -22,6 +22,30 @@
       },
       "revId": "58f6446093e7c6abd46c2a3f8ec4dbff9f92fd5b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "814980cc_c11fa409",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 21
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-05T12:43:44Z",
+      "side": 1,
+      "message": "If you look at the code, it does:\n\n```\n  public static Predicate\u003cChangeData\u003e changeNumber(\n      Change.Id id, ChangeQueryBuilder.Arguments args) {\n    if (args.getSchema().hasField(ChangeField.CHANGENUM_SPEC)) {\n      return new ChangeIndexCardinalPredicate(\n          ChangeField.CHANGENUM_SPEC, ChangeQueryBuilder.FIELD_CHANGE, id.toString(), 1);\n    }\n    return idStr(id);\n  }\n```\n\nThat\u0027s not a query by document-id (aka virtual-id) but by change number, which may not be unique.\n\nBottom line: if you have two projects with the same change number (possible) then it\u0027s possible that returns more than one document.",
+      "parentUuid": "eed06d70_206e0ce3",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 154,
+        "endChar": 26
+      },
+      "revId": "58f6446093e7c6abd46c2a3f8ec4dbff9f92fd5b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
