@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c93e780_902b14e5",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 23
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-05T17:28:39Z",
+      "side": 1,
+      "message": "This seems to be broken for imported changes, unrelated to this change though.",
+      "range": {
+        "startLine": 162,
+        "startChar": 59,
+        "endLine": 162,
+        "endChar": 73
+      },
+      "revId": "37b022d2ff4b0e57c3578751517674b6f624e0d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
