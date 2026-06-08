@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef368b20_440682b7",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-08T16:05:03Z",
+      "side": 1,
+      "message": "```suggestion\n// Copyright (C) 2025 GerritForge, Inc.\n```",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "531330a36671a09a83a236f4b78e248fcd46a608",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
