@@ -22,6 +22,29 @@
       },
       "revId": "27fe2a865a035a15818e986b036a525be351f719",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ffd4bc_eeae9e21",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerIT.java",
+        "patchSetId": 25
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-08T07:33:03Z",
+      "side": 1,
+      "message": "```suggestion\n// Copyright (C) 2026 GerritForge, Inc.\n```",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "27fe2a865a035a15818e986b036a525be351f719",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
