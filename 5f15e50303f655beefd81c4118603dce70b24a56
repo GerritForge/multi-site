@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc27debc_341a3112",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 28
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-08T16:14:02Z",
+      "side": 1,
+      "message": "This should return an optional of change data really, as byProjectChangeNumber either returns one change or none. And if it returns more it should throw itself.",
+      "range": {
+        "startLine": 157,
+        "startChar": 53,
+        "endLine": 157,
+        "endChar": 74
+      },
+      "revId": "5f15e50303f655beefd81c4118603dce70b24a56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
