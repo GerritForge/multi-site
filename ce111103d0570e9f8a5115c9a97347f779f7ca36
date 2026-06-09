@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03c169a2_5de41b27",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-09T10:40:46Z",
+      "side": 1,
+      "message": "This is incorrect: the deletion needs to happen by `project~changeId`, not by `project~virtualId`.\n\nIf you are willing to use the `virtualId` because of the removal of imported changes, then you need to delete by document-id alone, passing the `virtualId` as a document-id.",
+      "range": {
+        "startLine": 155,
+        "startChar": 63,
+        "endLine": 155,
+        "endChar": 93
+      },
+      "revId": "ce111103d0570e9f8a5115c9a97347f779f7ca36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bea34a41_9bb36e3d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-09T10:40:46Z",
+      "side": 1,
+      "message": "The method isn\u0027t mentioning deleting: why `delete`?",
+      "range": {
+        "startLine": 166,
+        "startChar": 44,
+        "endLine": 166,
+        "endChar": 61
+      },
+      "revId": "ce111103d0570e9f8a5115c9a97347f779f7ca36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "254eb865_e6e89a6f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 29
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-09T10:40:46Z",
+      "side": 1,
+      "message": "This should return `true`, as this method highlight if a change is ambiguous or not.",
+      "range": {
+        "startLine": 169,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 50
+      },
+      "revId": "ce111103d0570e9f8a5115c9a97347f779f7ca36",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
