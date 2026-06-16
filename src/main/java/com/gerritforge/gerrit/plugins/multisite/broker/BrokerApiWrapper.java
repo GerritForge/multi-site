@@ -119,6 +119,12 @@ public class BrokerApiWrapper implements BrokerApi {
   }
 
   @Override
+  public void receiveAsyncWithPartition(
+      String topic, String partition, String groupId, AckAwareConsumer<Event> consumer) {
+    apiDelegate.get().receiveAsyncWithPartition(topic, partition, groupId, consumer);
+  }
+
+  @Override
   public void disconnect() {
     apiDelegate.get().disconnect();
   }
