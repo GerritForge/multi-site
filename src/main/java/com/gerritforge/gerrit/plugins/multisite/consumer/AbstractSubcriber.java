@@ -89,7 +89,8 @@ public abstract class AbstractSubcriber {
     subscriberMetrics.updateReplicationStatusMetrics(event);
   }
 
-  private void handleDroppedEvent(Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
+  private void handleDroppedEvent(
+      Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
     try {
       droppedEventListeners.forEach(l -> l.onEventDropped(event));
     } finally {
