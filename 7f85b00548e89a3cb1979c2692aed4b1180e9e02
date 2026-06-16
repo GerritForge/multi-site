@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38f8d102_44d68a53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-16T10:18:33Z",
+      "side": 1,
+      "message": "This is failing because of\n\n```\nplugins/multi-site/src/main/java/com/gerritforge/gerrit/plugins/multisite/index/IndexEventHandler.java:36: error: IndexEventHandler is not abstract and does not override abstract method onChangeDeleted(String,int) in ChangeIndexedListener\nclass IndexEventHandler\n```\n\nWhich I believe is being fixed by [1]\n\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1236322",
+      "revId": "7f85b00548e89a3cb1979c2692aed4b1180e9e02",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
