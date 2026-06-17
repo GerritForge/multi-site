@@ -197,6 +197,28 @@ function create_kinesis_streams {
   done
 }
 
+function create_kafka_topics {
+  create_kafka_topic gerrit_index 4
+}
+
+function create_kafka_topic {
+  local topic=$1
+  local partitions=$2
+
+  echo "[KAFKA] Create topic $topic with $partitions partitions"
+  until $SUDO docker exec kafka_test_node /opt/bitnami/kafka/bin/kafka-topics.sh \
+    --bootstrap-server localhost:$BROKER_PORT \
+    --create \
+    --if-not-exists \
+    --partitions "$partitions" \
+    --replication-factor 1 \
+    --topic "$topic"
+  do
+      echo "[KAFKA topic $topic] Creation failed. Retrying in 5 seconds..."
+      sleep 5s
+  done
+}
+
 function create_kinesis_stream {
   local stream=$1
 
@@ -255,7 +277,9 @@ function ensure_docker_compose_is_up_and_running {
 }
 
 function prepare_broker_data {
-  if [ "$BROKER_TYPE" = "kinesis" ]; then
+  if [ "$BROKER_TYPE" = "kafka" ]; then
+    create_kafka_topics
+  elif [ "$BROKER_TYPE" = "kinesis" ]; then
     create_kinesis_streams
   fi
 }
