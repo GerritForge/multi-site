@@ -461,6 +461,7 @@ public class Configuration {
   public static class Broker {
     static final String BROKER_SECTION = "broker";
     static final String STREAM_EVENT_PUBLISH_TIMEOUT = "streamEventPublishTimeoutMs";
+    static final String INDEX_EVENT_PARTITION_GROUP_ID = "indexEventPartitionGroupId";
     private final Config cfg;
     private long streamEventPublishTimeout;
 
@@ -477,6 +478,12 @@ public class Configuration {
 
     public String getTopic(String topicKey, String defValue) {
       return MoreObjects.firstNonNull(cfg.getString(BROKER_SECTION, null, topicKey), defValue);
+    }
+
+    public String getIndexEventPartitionGroupId(String instanceId) {
+      return MoreObjects.firstNonNull(
+          cfg.getString(BROKER_SECTION, null, INDEX_EVENT_PARTITION_GROUP_ID),
+          instanceId + "-index-event-partition");
     }
 
     public long getStreamEventPublishTimeout() {
