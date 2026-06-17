@@ -92,6 +92,7 @@ Defaults to true.
 ```broker.groupId```
 :   Consumer group id used for broker subscriptions. It must be unique to each Gerrit
     site. When omitted, the broker plugin uses its configured default consumer identity.
+    It is required when the index event topic is consumed at partition level.
 
     Changing the effective group id creates a new consumer and does not preserve its
     offsets or checkpoints. To retain the current position, set this value to the consumer
