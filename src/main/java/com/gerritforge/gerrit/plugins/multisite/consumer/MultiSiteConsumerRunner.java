@@ -12,44 +12,76 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class MultiSiteConsumerRunner implements LifecycleListener {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+  private static final List<String> INDEX_PARTITIONS =
+      List.of(
+          ChangeIndexEvent.TYPE,
+          AccountIndexEvent.TYPE,
+          ProjectIndexEvent.TYPE,
+          GroupIndexEvent.TYPE);
 
   private final DynamicSet<AbstractSubcriber> consumers;
   private DynamicItem<BrokerApi> brokerApi;
   private Configuration cfg;
+  private final EventsBrokerConfiguration eventsBrokerConfiguration;
+  private final String instanceId;
 
   @Inject
   public MultiSiteConsumerRunner(
       DynamicItem<BrokerApi> brokerApi,
       DynamicSet<AbstractSubcriber> consumers,
-      Configuration cfg) {
+      Configuration cfg,
+      EventsBrokerConfiguration eventsBrokerConfiguration,
+      @GerritInstanceId String instanceId) {
     this.consumers = consumers;
     this.brokerApi = brokerApi;
     this.cfg = cfg;
+    this.eventsBrokerConfiguration = eventsBrokerConfiguration;
+    this.instanceId = instanceId;
   }
 
   @Override
   public void start() {
     logger.atInfo().log("starting consumers");
     consumers.forEach(
-        consumer ->
-            brokerApi
-                .get()
-                .receiveAsync(
-                    consumer.getTopic().topic(cfg),
-                    consumer.getConsumer(brokerApi.get().isAutoAck())));
+        consumer -> {
+          BrokerApi broker = brokerApi.get();
+          String topic = consumer.getTopic().topic(cfg);
+          if (isPartitionAwareIndexTopic(consumer, topic)) {
+            String groupId = cfg.broker().getIndexEventPartitionGroupId(instanceId);
+            INDEX_PARTITIONS.forEach(
+                partition ->
+                    broker.receiveAsyncWithPartition(
+                        topic, partition, groupId, consumer.getConsumer(broker.isAutoAck())));
+          } else {
+            broker.receiveAsync(topic, consumer.getConsumer(broker.isAutoAck()));
+          }
+        });
   }
 
   @Override
   public void stop() {}
+
+  private boolean isPartitionAwareIndexTopic(AbstractSubcriber consumer, String topic) {
+    return consumer.getTopic() == EventTopic.INDEX_TOPIC
+        && !eventsBrokerConfiguration.getPartitionsForTopic(topic).isEmpty();
+  }
 }

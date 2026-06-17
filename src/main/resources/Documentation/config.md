@@ -89,6 +89,12 @@ Defaults to true.
 :   Name of the topic to use for publishing indexing events
     Defaults to GERRIT.EVENT.INDEX
 
+```broker.indexEventPartitionGroupId```
+:   Consumer group id used when the index event topic is consumed at partition level.
+    This is used only when `events-broker.config` defines partition values for the
+    configured index event topic.
+    Defaults to `<gerrit.instanceId>-index-event-partition`.
+
 `broker.streamEventTopic`
 :   Name of the topic to use for publishing all stream events.
     Default: gerrit
