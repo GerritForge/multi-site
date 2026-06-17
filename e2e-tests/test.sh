@@ -73,6 +73,7 @@ function setup_gerrit_config {
 
   export BROKER_HOST=$2
   export BROKER_PORT=$3
+  export BROKER_AUTO_ACK=true
   export INSTANCE_ID=$4
   export SSH_ADVERTISED_PORT=$5
   export LOCATION_TEST_SITE=/var/gerrit
