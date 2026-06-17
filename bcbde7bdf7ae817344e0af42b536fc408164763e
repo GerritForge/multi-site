@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a151b7d_7d929a58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-17T09:55:23Z",
+      "side": 1,
+      "message": "Overriding Verified -1 from CI, which currently fail because of Index Event Handler:\n\n```\nsite/src/main/java/com/gerritforge/gerrit/plugins/multisite/index/FetchRefReplicatedEventHandler.java:107: error: method delete in class ChangeIndexer cannot be applied to given types;\n                changeIndexer.delete(changeId);\n                             ^\n  required: NameKey,Id\n  found:    Id\n  reason: actual and formal argument lists differ in length\nplugins/multi-site/src/main/java/com/gerritforge/gerrit/plugins/multisite/index/IndexEventHandler.java:36: error: IndexEventHandler is not abstract and does not override abstract method onChangeDeleted(String,int) in ChangeIndexedListener\nclass IndexEventHandler\n^\n```\n\nThis is being fixed by [1], which is currently in progress.\nThe previous patchset was based on [1] and showed success, proving this change passes verification [2]\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1236322\n[2] https://gerrit-ci.gerritforge.com/job/plugin-multi-site-verifier-gh/job/94%252F1239594%252F3/1/console",
+      "revId": "bcbde7bdf7ae817344e0af42b536fc408164763e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
