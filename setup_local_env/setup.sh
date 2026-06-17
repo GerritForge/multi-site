@@ -58,8 +58,13 @@ function copy_config_files {
   for file in `ls $SCRIPT_DIR/configs/*.config`
   do
     file_name=`basename $file`
-
     CONFIG_TEST_SITE=$1
+
+    if [ "$file_name" = "events-broker.config" ] && [ "$BROKER_MANUAL_ACK" = "false" ]; then
+      rm -f "$CONFIG_TEST_SITE/$file_name"
+      continue
+    fi
+
     export GERRIT_HTTPD_PORT=$2
     export LOCATION_TEST_SITE=$3
     export GERRIT_SSHD_PORT=$4
@@ -190,22 +195,60 @@ function docker_host_env {
   fi
 }
 
+function get_index_partition_count {
+  if [ "$BROKER_MANUAL_ACK" = "false" ]; then
+    echo 1
+    return
+  fi
+  git config --file "$SCRIPT_DIR/configs/events-broker.config" \
+    --get-all topic.gerrit_index.partitionValue | wc -l | tr -d ' '
+}
+
 function create_kinesis_streams {
+  local index_partitions
+  index_partitions=$(get_index_partition_count)
   for stream in "gerrit_batch_index" "gerrit_cache_eviction" "gerrit_index" "gerrit_list_project" "gerrit_stream" "gerrit_web_session" "gerrit"
   do
-    create_kinesis_stream $stream
+    if [ "$stream" = "gerrit_index" ]; then
+      create_kinesis_stream "$stream" "$index_partitions"
+    fi
+  done
+}
+
+function create_kafka_topics {
+  local partitions
+  partitions=$(get_index_partition_count)
+  create_kafka_topic "gerrit_index" "$partitions"
+}
+
+function create_kafka_topic {
+  local topic=$1
+  local partitions=$2
+
+  echo "[KAFKA] Create topic $topic with $partitions partitions"
+  until $SUDO docker exec kafka_test_node /opt/bitnami/kafka/bin/kafka-topics.sh \
+    --bootstrap-server localhost:$BROKER_PORT \
+    --create \
+    --if-not-exists \
+    --partitions "$partitions" \
+    --replication-factor 1 \
+    --topic "$topic"
+  do
+      echo "[KAFKA topic $topic] Creation failed. Retrying in 5 seconds..."
+      sleep 5s
   done
 }
 
 function create_kinesis_stream {
   local stream=$1
+  local shards=$2
 
   export AWS_PAGER=''
   export AWS_ACCESS_KEY_ID=accessKey
   export AWS_SECRET_ACCESS_KEY=secretKey
   export AWS_DEFAULT_REGION=us-east-1
   echo "[KINESIS] Create stream $stream"
-  until aws --endpoint-url=http://localhost:$BROKER_PORT kinesis create-stream --shard-count 1 --stream-name "$stream"
+  until aws --endpoint-url=http://localhost:$BROKER_PORT kinesis create-stream --shard-count "$shards" --stream-name "$stream"
   do
       echo "[KINESIS stream $stream] Creation failed. Retrying in 5 seconds..."
       sleep 5s
@@ -255,7 +298,10 @@ function ensure_docker_compose_is_up_and_running {
 }
 
 function prepare_broker_data {
-  if [ "$BROKER_TYPE" = "kinesis" ]; then
+  # Pub/Sub topics have no configurable partition or shard count.
+  if [ "$BROKER_TYPE" = "kafka" ]; then
+    create_kafka_topics
+  elif [ "$BROKER_TYPE" = "kinesis" ]; then
     create_kinesis_streams
   fi
 }
@@ -309,6 +355,7 @@ function show_help {
   echo "[--enabled-https]               Enabled https; default true"
   echo
   echo "[--broker-type]                 events broker type; 'kafka', 'kinesis' or 'gcloud-pubsub'; default 'kafka'"
+  echo "[--broker-manual-ack]           Enable manual broker acknowledgement and index partitions; default false"
   echo
   echo "[--sudo]                        run docker commands with sudo"
   echo
@@ -423,6 +470,10 @@ case "$1" in
       exit 1
     fi
   ;;
+  "--broker-manual-ack" )
+    BROKER_MANUAL_ACK=true
+    shift
+  ;;
   "--sudo" )
     SUDO=sudo
     shift
@@ -458,6 +509,12 @@ export REPLICATION_DELAY_SEC=${REPLICATION_DELAY_SEC:-"5"}
 export SSH_ADVERTISED_PORT=${SSH_ADVERTISED_PORT:-"29418"}
 HTTPS_ENABLED=${HTTPS_ENABLED:-"false"}
 BROKER_TYPE=${BROKER_TYPE:-"kafka"}
+BROKER_MANUAL_ACK=${BROKER_MANUAL_ACK:-"false"}
+if [ "$BROKER_MANUAL_ACK" = "true" ]; then
+  export BROKER_AUTO_ACK=false
+else
+  export BROKER_AUTO_ACK=true
+fi
 
 export COMMON_LOCATION=$DEPLOYMENT_LOCATION/gerrit_setup
 LOCATION_TEST_SITE_1=$COMMON_LOCATION/instance-1
