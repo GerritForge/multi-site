@@ -89,6 +89,14 @@ Defaults to true.
 :   Name of the topic to use for publishing indexing events
     Defaults to GERRIT.EVENT.INDEX
 
+```broker.groupId```
+:   Consumer group id used for broker subscriptions. It must be unique to each Gerrit
+    site. When omitted, the broker plugin uses its configured default consumer identity.
+
+    Changing the effective group id creates a new consumer and does not preserve its
+    offsets or checkpoints. To retain the current position, set this value to the consumer
+    identity already configured in the broker plugin before enabling it in multi-site.
+
 `broker.streamEventTopic`
 :   Name of the topic to use for publishing all stream events.
     Default: gerrit
