@@ -11,14 +11,17 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.Optional;
 
 @Singleton
 public class MultiSiteConsumerRunner implements LifecycleListener {
@@ -41,15 +44,21 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   @Override
   public void start() {
     logger.atInfo().log("starting consumers");
-    consumers.forEach(
-        consumer ->
-            brokerApi
-                .get()
-                .receiveAsync(
-                    consumer.getTopic().topic(cfg),
-                    consumer.getConsumer(brokerApi.get().isAutoAck())));
+    consumers.forEach(this::subscribe);
   }
 
   @Override
   public void stop() {}
+
+  private void subscribe(AbstractSubcriber subscriber) {
+    BrokerApi broker = brokerApi.get();
+    String topic = subscriber.getTopic().topic(cfg);
+    AckAwareConsumer<Event> consumer = subscriber.getConsumer(broker.isAutoAck());
+    Optional<String> groupId = cfg.broker().getGroupId();
+    if (groupId.isPresent()) {
+      broker.receiveAsync(topic, groupId.get(), consumer);
+    } else {
+      broker.receiveAsync(topic, consumer);
+    }
+  }
 }
