@@ -43,6 +43,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -460,6 +461,7 @@ public class Configuration {
 
   public static class Broker {
     static final String BROKER_SECTION = "broker";
+    static final String GROUP_ID = "groupId";
     static final String STREAM_EVENT_PUBLISH_TIMEOUT = "streamEventPublishTimeoutMs";
     private final Config cfg;
     private long streamEventPublishTimeout;
@@ -477,6 +479,10 @@ public class Configuration {
 
     public String getTopic(String topicKey, String defValue) {
       return MoreObjects.firstNonNull(cfg.getString(BROKER_SECTION, null, topicKey), defValue);
+    }
+
+    public Optional<String> getGroupId() {
+      return Optional.ofNullable(cfg.getString(BROKER_SECTION, null, GROUP_ID));
     }
 
     public long getStreamEventPublishTimeout() {
