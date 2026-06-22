@@ -11,6 +11,8 @@
 
 package com.gerritforge.gerrit.plugins.multisite;
 
+import static com.gerritforge.gerrit.plugins.multisite.Configuration.Broker.BROKER_SECTION;
+import static com.gerritforge.gerrit.plugins.multisite.Configuration.Broker.GROUP_ID;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Cache.CACHE_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Cache.PATTERN_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.DEFAULT_THREAD_POOL_SIZE;
@@ -136,5 +138,14 @@ public class ConfigurationTest {
 
     globalPluginConfig.setBoolean(INDEX_SECTION, null, SYNCHRONIZE_FORCED_KEY, false);
     assertThat(getConfiguration().index().synchronizeForced()).isFalse();
+  }
+
+  @Test
+  public void shouldGetBrokerGroupIdWhenConfigured() {
+    assertThat(getConfiguration().broker().getGroupId()).isEmpty();
+
+    globalPluginConfig.setString(BROKER_SECTION, null, GROUP_ID, "multi-site-group");
+
+    assertThat(getConfiguration().broker().getGroupId()).hasValue("multi-site-group");
   }
 }
