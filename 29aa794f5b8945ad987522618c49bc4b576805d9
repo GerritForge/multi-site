@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bde67eee_c37c3c73",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-23T07:39:20Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you mean by _ inline the method wherever it is called_, can you elaborate?",
+      "parentUuid": "6987337b_c944b19a",
+      "range": {
+        "startLine": 175,
+        "startChar": 11,
+        "endLine": 175,
+        "endChar": 42
+      },
+      "revId": "29aa794f5b8945ad987522618c49bc4b576805d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e03e683d_9ec77234",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerIT.java",
         "patchSetId": 30
