@@ -16,6 +16,24 @@
       "message": "You\u0027re using the `Optional\u003c\u003e` pretty much like a nullable variable: just use a nullable variable instead.",
       "revId": "a1f88508dabcbecd75ae5a6b979751308e1dc908",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22b40b0a_93d60f45",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-23T14:15:30Z",
+      "side": 1,
+      "message": "I don\u0027t really see anything wrong with using optional here, anyway, done.",
+      "parentUuid": "e52fc057_3af2b7fc",
+      "revId": "a1f88508dabcbecd75ae5a6b979751308e1dc908",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
