@@ -164,6 +164,24 @@
       "parentUuid": "e03e683d_9ec77234",
       "revId": "29aa794f5b8945ad987522618c49bc4b576805d9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a9cd787_de39c220",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerIT.java",
+        "patchSetId": 30
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-06-24T08:51:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6639efb7_bb1d4729",
+      "revId": "29aa794f5b8945ad987522618c49bc4b576805d9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
