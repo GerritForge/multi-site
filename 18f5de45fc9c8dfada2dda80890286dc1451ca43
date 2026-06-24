@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e46055a2_4a1362ac",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunnerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-06-24T15:43:29Z",
+      "side": 1,
+      "message": "might be worth adding a test to cover the subscription of multiple topics, i.e.: register two subscribers with different topics and consumers, then verify both subscriptions use the configured group ID",
+      "revId": "18f5de45fc9c8dfada2dda80890286dc1451ca43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
