@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "570bbc51_f0da05ba",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-06-24T16:14:54Z",
+      "side": 1,
+      "message": "Partition creation should be conditional to the configuration. I.e.: depending if we configured multiple partitions or not, similarly to what you have done in `isPartitionAwareIndexTopic`.",
+      "range": {
+        "startLine": 201,
+        "startChar": 34,
+        "endLine": 201,
+        "endChar": 35
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b216388_a1603de4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-06-24T16:14:54Z",
+      "side": 1,
+      "message": "What about checking is all the partitions are properly configured before subscribing any?\n\nLike you get all the partitions with `eventsBrokerConfiguration.getPartitionsForTopic`and make sure they match `INDEX_PARTITIONS`.",
+      "range": {
+        "startLine": 81,
+        "startChar": 6,
+        "endLine": 81,
+        "endChar": 22
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5ae1519_bf430937",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-06-24T16:14:54Z",
+      "side": 1,
+      "message": "Can we add a comment explaining why we need appending the `partition` suffix to the `groupId`",
+      "range": {
+        "startLine": 101,
+        "startChar": 17,
+        "endLine": 101,
+        "endChar": 36
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be178edd_2c86af1f",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunnerTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-06-24T16:14:54Z",
+      "side": 1,
+      "message": "Can we reuse the list in `MultiSiteConsumerRunner` ?",
+      "range": {
+        "startLine": 82,
+        "startChar": 47,
+        "endLine": 82,
+        "endChar": 63
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a711b101_d3614661",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunnerTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-06-24T16:14:54Z",
+      "side": 1,
+      "message": "What about using `groupIdForPartition` by making it class-protected?",
+      "range": {
+        "startLine": 115,
+        "startChar": 24,
+        "endLine": 115,
+        "endChar": 31
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
