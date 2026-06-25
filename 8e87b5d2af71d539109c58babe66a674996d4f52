@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d838e904_91fc97ee",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-25T07:06:32Z",
+      "side": 1,
+      "message": "I don\u0027t know to be honest.\nThe `events-kafka` plugin already has an extensive set of checks, this `runner` is just suppose to _run_ the subscribers imho.\n\nLet\u0027s discuss.",
+      "parentUuid": "0b216388_a1603de4",
+      "range": {
+        "startLine": 81,
+        "startChar": 6,
+        "endLine": 81,
+        "endChar": 22
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5ae1519_bf430937",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
         "patchSetId": 13
