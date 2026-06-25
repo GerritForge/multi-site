@@ -16,6 +16,24 @@
       "message": "might be worth adding a test to cover the subscription of multiple topics, i.e.: register two subscribers with different topics and consumers, then verify both subscriptions use the configured group ID",
       "revId": "18f5de45fc9c8dfada2dda80890286dc1451ca43",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2da7eba_3fcf1e8a",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunnerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-25T07:01:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e46055a2_4a1362ac",
+      "revId": "18f5de45fc9c8dfada2dda80890286dc1451ca43",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
