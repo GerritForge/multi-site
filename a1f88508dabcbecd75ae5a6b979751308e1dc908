@@ -34,6 +34,24 @@
       "parentUuid": "e52fc057_3af2b7fc",
       "revId": "a1f88508dabcbecd75ae5a6b979751308e1dc908",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cb62db3_88ce64ff",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 33
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-06-26T21:04:26Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t really see anything wrong with using optional here, anyway, done.\n\nTrue, but it doesn\u0027t really provide any benefit either; therefore, redundant.",
+      "parentUuid": "22b40b0a_93d60f45",
+      "revId": "a1f88508dabcbecd75ae5a6b979751308e1dc908",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
