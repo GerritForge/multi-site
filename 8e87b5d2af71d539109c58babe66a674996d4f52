@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acc9343e_2823fc58",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 13
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-29T15:20:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "570bbc51_f0da05ba",
+      "range": {
+        "startLine": 201,
+        "startChar": 34,
+        "endLine": 201,
+        "endChar": 35
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0b216388_a1603de4",
@@ -71,6 +95,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd9840a4_32751372",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-29T15:20:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d838e904_91fc97ee",
+      "range": {
+        "startLine": 81,
+        "startChar": 6,
+        "endLine": 81,
+        "endChar": 22
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5ae1519_bf430937",
@@ -84,6 +132,30 @@
       "writtenOn": "2026-06-24T16:14:54Z",
       "side": 1,
       "message": "Can we add a comment explaining why we need appending the `partition` suffix to the `groupId`",
+      "range": {
+        "startLine": 101,
+        "startChar": 17,
+        "endLine": 101,
+        "endChar": 36
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55832f49_9300c426",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-29T15:20:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5ae1519_bf430937",
       "range": {
         "startLine": 101,
         "startChar": 17,
@@ -117,6 +189,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "510a8930_aed83972",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunnerTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-29T15:20:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be178edd_2c86af1f",
+      "range": {
+        "startLine": 82,
+        "startChar": 47,
+        "endLine": 82,
+        "endChar": 63
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a711b101_d3614661",
@@ -130,6 +226,30 @@
       "writtenOn": "2026-06-24T16:14:54Z",
       "side": 1,
       "message": "What about using `groupIdForPartition` by making it class-protected?",
+      "range": {
+        "startLine": 115,
+        "startChar": 24,
+        "endLine": 115,
+        "endChar": 31
+      },
+      "revId": "8e87b5d2af71d539109c58babe66a674996d4f52",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51b1946f_5904cf09",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunnerTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-06-29T15:20:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a711b101_d3614661",
       "range": {
         "startLine": 115,
         "startChar": 24,
