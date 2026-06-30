@@ -76,12 +76,43 @@ public class ForwardedIndexChangeHandler
   }
 
   @Override
+  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof ChangeIndexEvent event) {
+      String id = event.projectName + "~" + event.changeId;
+      if (ChangeIndexEvent.isAllChangesDeletedForProject(event)) {
+        deleteAllChangesForProject(event.projectName);
+        return IndexingResult.SUCCESS;
+      } else if (event.deleted) {
+        index(id, DELETE, Optional.of(event));
+        return IndexingResult.SUCCESS;
+      } else {
+        return indexWhenReady(
+            id,
+            event,
+            (e) -> {
+              ChangeChecker checker = changeCheckerFactory.create(id);
+              return checker.getChangeNotes().isPresent()
+                  && checker.isChangeConsistent()
+                  && checker.isUpToDate(e);
+            });
+      }
+    }
+    return IndexingResult.IGNORED;
+  }
+
+  @Override
   protected void doIndex(String id, Optional<ChangeIndexEvent> indexEvent) {
     if (indexEvent.isPresent()
         && ChangeIndexEvent.isAllChangesDeletedForProject(indexEvent.get())) {
-      indexer.deleteAllForProject(Project.nameKey(indexEvent.get().projectName));
+      deleteAllChangesForProject(indexEvent.get().projectName);
     } else {
       scheduleIndexing(id, indexEvent, this::indexIfConsistent);
+    }
+  }
+
+  private void deleteAllChangesForProject(String projectName) {
+    try (ForwardedContext ctx = ForwardedContext.open()) {
+      indexer.deleteAllForProject(Project.nameKey(projectName));
     }
   }
 
