@@ -18,6 +18,7 @@ import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventManualAckingRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
 import com.google.common.base.Strings;
 import com.google.common.flogger.FluentLogger;
@@ -29,6 +30,11 @@ import java.io.IOException;
 
 public abstract class AbstractSubcriber {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
+  private enum AckMode {
+    SUBSCRIBER_MANAGED,
+    ROUTER_MANAGED
+  }
 
   private final ForwardedEventRouter eventRouter;
   private final DynamicSet<DroppedEventListener> droppedEventListeners;
@@ -58,43 +64,87 @@ public abstract class AbstractSubcriber {
 
   public AckAwareConsumer<Event> getConsumer(boolean isAutoAck) {
     return (event, messageAcknowledgement) ->
-        processRecord(event, messageAcknowledgement, isAutoAck);
+        processRecord(event, messageAcknowledgement, isAutoAck, AckMode.SUBSCRIBER_MANAGED);
+  }
+
+  public AckAwareConsumer<Event> getManualAckConsumer() {
+    if (!(eventRouter instanceof ForwardedEventManualAckingRouter<?>)) {
+      throw new IllegalStateException("Router does not support manual acknowledgement");
+    }
+    return (event, messageAcknowledgement) ->
+        processRecord(event, messageAcknowledgement, /* isAutoAck */ false, AckMode.ROUTER_MANAGED);
   }
 
   private void processRecord(
-      Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
+      Event event,
+      MessageAcknowledgement<Event> messageAcknowledgement,
+      boolean isAutoAck,
+      AckMode ackMode) {
     String sourceInstanceId = event.instanceId;
 
     if (Strings.isNullOrEmpty(sourceInstanceId)) {
       logger.atWarning().log("Dropping event %s because sourceInstanceId cannot be null", event);
-      handleDroppedEvent(event, messageAcknowledgement, isAutoAck);
+      handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else if (instanceId.equals(sourceInstanceId)) {
       logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
-      handleDroppedEvent(event, messageAcknowledgement, isAutoAck);
+      handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else if (!shouldConsumeEvent(event)) {
-      handleDroppedEvent(event, messageAcknowledgement, isAutoAck);
+      handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
-        eventRouter.route(event);
-        tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
+        route(event, messageAcknowledgement, isAutoAck, ackMode);
       } catch (IOException e) {
         logger.atSevere().withCause(e).log("Malformed event '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
       } catch (PermissionBackendException | CacheNotFoundException e) {
         logger.atSevere().withCause(e).log("Cannot handle message '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
+      } catch (MessageAcknowledgementException e) {
+        logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
+        subscriberMetrics.incrementSubscriberFailedToAckMessage();
       }
     }
     subscriberMetrics.updateReplicationStatusMetrics(event);
   }
 
   private void handleDroppedEvent(
-      Event event, MessageAcknowledgement<Event> messageAcknowledgement, boolean isAutoAck) {
+      Event event,
+      MessageAcknowledgement<Event> messageAcknowledgement,
+      boolean isAutoAck,
+      AckMode ackMode) {
     try {
       droppedEventListeners.forEach(l -> l.onEventDropped(event));
     } finally {
-      tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
+      if (ackMode == AckMode.ROUTER_MANAGED) {
+        tryRouterAck(event, messageAcknowledgement);
+      } else {
+        tryAckAndMarkAsConsumed(event, messageAcknowledgement, isAutoAck);
+      }
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void route(
+      Event event, MessageAcknowledgement<Event> ack, boolean isAutoAck, AckMode ackMode)
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    if (ackMode == AckMode.ROUTER_MANAGED) {
+      ((ForwardedEventManualAckingRouter<Event>) eventRouter).route(event, ack);
+      subscriberMetrics.incrementSubscriberConsumedMessage();
+    } else {
+      eventRouter.route(event);
+      tryAckAndMarkAsConsumed(event, ack, isAutoAck);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void tryRouterAck(Event event, MessageAcknowledgement<Event> ack) {
+    try {
+      ((ForwardedEventManualAckingRouter<Event>) eventRouter).ack(event, ack);
+      subscriberMetrics.incrementSubscriberConsumedMessage();
+    } catch (MessageAcknowledgementException e) {
+      logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
+      subscriberMetrics.incrementSubscriberFailedToAckMessage();
     }
   }
 
