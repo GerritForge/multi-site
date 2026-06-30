@@ -83,8 +83,9 @@ Defaults to true.
 
 ```index.ackInterval```
 :   The minimum time between acknowledgements for each partition-level index
-    consumer. The interval is checked as events are processed. Set to `0` to
-    acknowledge every event.
+    consumer. The interval is checked as events are processed, and the matching
+    index is flushed before acknowledgement. Set to `0` to flush and acknowledge
+    every event.
 
     Defaults to 5 minutes.
 
