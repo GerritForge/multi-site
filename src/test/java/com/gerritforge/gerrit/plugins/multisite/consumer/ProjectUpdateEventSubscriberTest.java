@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
@@ -19,8 +20,14 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ProjectListUpda
 import com.google.common.collect.ImmutableList;
 import com.google.gerrit.server.events.Event;
 import java.util.List;
+import org.junit.Test;
 
 public class ProjectUpdateEventSubscriberTest extends AbstractSubscriberTestBase {
+
+  @Test
+  public void shouldRejectManualAckWhenRouterDoesNotSupportIt() {
+    assertThrows(IllegalStateException.class, objectUnderTest::getManualAckConsumer);
+  }
 
   @SuppressWarnings("rawtypes")
   @Override

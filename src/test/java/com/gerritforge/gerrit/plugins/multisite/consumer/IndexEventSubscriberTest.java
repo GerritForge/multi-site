@@ -48,6 +48,26 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
   @Mock protected ChangeFinder changeFinderMock;
 
+  @Test
+  public void shouldUseRouterManagedAckForPartitionEvents() throws Exception {
+    IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
+
+    objectUnderTest.getManualAckConsumer().accept(event, ack);
+
+    verify((IndexEventRouter) eventRouter).route(event, ack);
+    verify(eventRouter, never()).route(event);
+  }
+
+  @Test
+  public void shouldUseRouterManagedAckForDroppedPartitionEvents() throws Exception {
+    IndexEvent event = new AccountIndexEvent(1, NODE_INSTANCE_ID);
+
+    objectUnderTest.getManualAckConsumer().accept(event, ack);
+
+    verify((IndexEventRouter) eventRouter).ack(event, ack);
+    verify((IndexEventRouter) eventRouter, never()).route(event, ack);
+  }
+
   @SuppressWarnings("unchecked")
   @Test
   public void shouldConsumeNonProjectAndNonChangeIndexingEventsTypes()

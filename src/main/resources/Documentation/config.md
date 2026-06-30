@@ -93,6 +93,8 @@ Defaults to true.
 :   Consumer group id used for broker subscriptions. It must be unique to each Gerrit
     site. When omitted, the broker plugin uses its configured default consumer identity.
     It is required when the index event topic is consumed at partition level.
+    Partition-level index consumption also requires broker auto-acknowledgement
+    to be disabled.
 
     For partition-level index consumption, multi-site appends the logical partition
     name to this value. For example, `broker.groupId = multi-site-instance-1` uses
