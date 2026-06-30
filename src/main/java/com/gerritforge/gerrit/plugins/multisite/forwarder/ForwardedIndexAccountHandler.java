@@ -17,8 +17,11 @@ import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexi
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.index.AccountChecker;
+import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.server.index.account.AccountIndexer;
+import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.io.IOException;
@@ -26,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 /**
@@ -36,15 +40,22 @@ import java.util.stream.Collectors;
  */
 @Singleton
 public class ForwardedIndexAccountHandler
-    extends ForwardedIndexingHandler<Account.Id, AccountIndexEvent> {
+    extends ForwardedIndexingHandlerWithRetries<Account.Id, AccountIndexEvent> {
 
   private final AccountIndexer indexer;
+  private final AccountChecker accountChecker;
   private Map<Account.Id, Operation> accountsToIndex;
 
   @Inject
-  ForwardedIndexAccountHandler(AccountIndexer indexer, Configuration config) {
-    super(config.index().numStripedLocks());
+  ForwardedIndexAccountHandler(
+      AccountIndexer indexer,
+      AccountChecker accountChecker,
+      Configuration config,
+      OneOffRequestContext oneOffRequestContext,
+      @ForwardedIndexExecutor ScheduledExecutorService indexExecutor) {
+    super(indexExecutor, config, oneOffRequestContext);
     this.indexer = indexer;
+    this.accountChecker = accountChecker;
     this.accountsToIndex = new HashMap<>();
   }
 
@@ -57,9 +68,32 @@ public class ForwardedIndexAccountHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof AccountIndexEvent event) {
+      Account.Id id = Account.id(event.accountId);
+      indexWhenReady(id, () -> accountChecker.isUpToDate(Optional.of(event)));
+    }
+  }
+
+  @Override
   protected void doIndex(Account.Id id, Optional<AccountIndexEvent> event) {
+    reindex(id);
+  }
+
+  @Override
+  protected void reindex(Account.Id id) {
     indexer.index(id);
     log.debug("Account {} successfully indexed", id);
+  }
+
+  @Override
+  protected String indexName() {
+    return "account";
+  }
+
+  @Override
+  protected void attemptToIndex(Account.Id id) {
+    reindexAndCheckIsUpToDate(id, accountChecker);
   }
 
   @Override
