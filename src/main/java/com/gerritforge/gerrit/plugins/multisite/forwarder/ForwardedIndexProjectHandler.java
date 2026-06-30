@@ -59,13 +59,23 @@ public class ForwardedIndexProjectHandler
   }
 
   @Override
+  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof ProjectIndexEvent event) {
+      return indexWhenReady(event.projectName, event, projectChecker);
+    }
+    return IndexingResult.IGNORED;
+  }
+
+  @Override
   protected void doIndex(String projectName, Optional<ProjectIndexEvent> event) {
     scheduleIndexing(projectName, event, this::reindex);
   }
 
   @Override
   protected void reindex(String id) {
-    indexer.index(Project.nameKey(id));
+    try (ForwardedContext fwdCtx = ForwardedContext.open()) {
+      indexer.index(Project.nameKey(id));
+    }
   }
 
   @Override
