@@ -88,13 +88,13 @@ Defaults to true.
     Defaults to 30000 (30 seconds).
 
 ```index.commitInterval```
-:   The minimum time between acknowledgements for each partition-level index
-    consumer. The interval is checked as events are processed. Set to `0` to
-    acknowledge every event. Depending on the broker implementation, unacknowledged
-    events may be kept in memory until the next acknowledgement, so longer intervals
-    can increase memory usage during bursts of events. The interval should be kept
-    well below the broker retention period, otherwise unacknowledged events may no
-    longer be available for replay after a consumer restart or reconnection.
+:   The minimum time between acknowledgements and index flushing for each partition-level index
+    consumer. The interval is checked as events are processed. Set to `0` to commit the index and
+    acknowledge every event. Depending on the broker implementation, unacknowledged events may be
+    kept in memory until the next acknowledgement, so longer intervals can increase memory usage
+    during bursts of events. The interval should be kept well below the broker retention period,
+    otherwise unacknowledged events may no longer be available for replay after a consumer restart
+    or reconnection.
 
     Defaults to 5 minutes.
 
