@@ -11,6 +11,9 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import static com.google.gerrit.testing.GerritJUnit.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -19,13 +22,21 @@ import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.google.gerrit.index.project.ProjectIndexCollection;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.index.account.AccountIndexCollection;
+import com.google.gerrit.server.index.change.ChangeIndex;
+import com.google.gerrit.server.index.change.ChangeIndexCollection;
+import com.google.gerrit.server.index.group.GroupIndexCollection;
 import com.google.gerrit.server.util.time.TimeUtil;
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -40,6 +51,11 @@ public class IndexEventAckHandlerTest {
       new AccountIndexEvent(1, null, INSTANCE_ID, false);
 
   @Mock private MessageAcknowledgement<Event> ack;
+  @Mock private AccountIndexCollection accountIndexes;
+  @Mock private ChangeIndexCollection changeIndexes;
+  @Mock private GroupIndexCollection groupIndexes;
+  @Mock private ProjectIndexCollection projectIndexes;
+  @Mock private ChangeIndex changeIndex;
   @Mock private Configuration cfg;
   @Mock private Configuration.Index indexConfig;
   private final AtomicLong now = new AtomicLong(START_TIME);
@@ -50,7 +66,7 @@ public class IndexEventAckHandlerTest {
     TimeUtil.setCurrentMillisSupplier(now::get);
     when(cfg.index()).thenReturn(indexConfig);
     when(indexConfig.ackIntervalMs()).thenReturn(ACK_INTERVAL);
-    ackHandler = new IndexEventAckHandler(cfg);
+    ackHandler = newAckHandler();
   }
 
   @After
@@ -59,7 +75,7 @@ public class IndexEventAckHandlerTest {
   }
 
   @Test
-  public void shouldAckWhenIntervalIsDue() {
+  public void shouldAckWhenIntervalIsDue() throws Exception {
     ackHandler.ackIfDue(CHANGE_EVENT, ack);
     verifyNoInteractions(ack);
 
@@ -70,7 +86,7 @@ public class IndexEventAckHandlerTest {
   }
 
   @Test
-  public void shouldTrackPartitionsIndependently() {
+  public void shouldTrackPartitionsIndependently() throws Exception {
     now.addAndGet(ACK_INTERVAL);
 
     ackHandler.ackIfDue(CHANGE_EVENT, ack);
@@ -81,12 +97,33 @@ public class IndexEventAckHandlerTest {
   }
 
   @Test
-  public void shouldAckEveryEventWhenIntervalIsZero() {
+  public void shouldFlushMatchingIndexBeforeAck() throws Exception {
     when(indexConfig.ackIntervalMs()).thenReturn(0L);
-    ackHandler = new IndexEventAckHandler(cfg);
+    when(changeIndexes.getWriteIndexes()).thenReturn(List.of(changeIndex));
+    ackHandler = newAckHandler();
 
     ackHandler.ackIfDue(CHANGE_EVENT, ack);
 
-    verify(ack).ack(CHANGE_EVENT);
+    InOrder inOrder = inOrder(changeIndex, ack);
+    inOrder.verify(changeIndex).flushAndCommit();
+    inOrder.verify(ack).ack(CHANGE_EVENT);
+    verifyNoInteractions(accountIndexes, groupIndexes, projectIndexes);
+  }
+
+  @Test
+  public void shouldNotAckWhenFlushFails() throws Exception {
+    when(indexConfig.ackIntervalMs()).thenReturn(0L);
+    when(changeIndexes.getWriteIndexes()).thenReturn(List.of(changeIndex));
+    doThrow(new IOException("flush failed")).when(changeIndex).flushAndCommit();
+    ackHandler = newAckHandler();
+
+    assertThrows(IOException.class, () -> ackHandler.ackIfDue(CHANGE_EVENT, ack));
+
+    verifyNoInteractions(ack);
+  }
+
+  private IndexEventAckHandler newAckHandler() {
+    return new IndexEventAckHandler(
+        accountIndexes, changeIndexes, groupIndexes, projectIndexes, cfg);
   }
 }
