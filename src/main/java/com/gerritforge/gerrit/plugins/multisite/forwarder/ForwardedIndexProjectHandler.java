@@ -59,6 +59,15 @@ public class ForwardedIndexProjectHandler
   }
 
   @Override
+  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof ProjectIndexEvent event) {
+      return indexWhenReady(
+          event.projectName, event, () -> projectChecker.isUpToDate(Optional.of(event)));
+    }
+    return IndexingResult.IGNORED;
+  }
+
+  @Override
   protected void doIndex(String projectName, Optional<ProjectIndexEvent> event) {
     scheduleIndexing(projectName, event, this::reindex);
   }

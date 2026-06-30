@@ -20,13 +20,16 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ProjectListUpda
 import com.google.common.collect.ImmutableList;
 import com.google.gerrit.server.events.Event;
 import java.util.List;
+import java.util.function.Consumer;
 import org.junit.Test;
 
 public class ProjectUpdateEventSubscriberTest extends AbstractSubscriberTestBase {
+  private static Consumer<Event> NO_REQUEUE_ACTION = (e) -> {};
 
   @Test
   public void shouldRejectManualAckWhenRouterDoesNotSupportIt() {
-    assertThrows(IllegalStateException.class, objectUnderTest::getManualAckConsumer);
+    assertThrows(
+        IllegalStateException.class, () -> objectUnderTest.getManualAckConsumer(NO_REQUEUE_ACTION));
   }
 
   @SuppressWarnings("rawtypes")

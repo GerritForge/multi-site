@@ -27,6 +27,7 @@ import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public abstract class AbstractSubcriber {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
@@ -64,22 +65,29 @@ public abstract class AbstractSubcriber {
 
   public AckAwareConsumer<Event> getConsumer(boolean isAutoAck) {
     return (event, messageAcknowledgement) ->
-        processRecord(event, messageAcknowledgement, isAutoAck, AckMode.SUBSCRIBER_MANAGED);
+        processRecord(
+            event, messageAcknowledgement, isAutoAck, AckMode.SUBSCRIBER_MANAGED, e -> {});
   }
 
-  public AckAwareConsumer<Event> getManualAckConsumer() {
+  public AckAwareConsumer<Event> getManualAckConsumer(Consumer<Event> requeueAction) {
     if (!(eventRouter instanceof ForwardedEventManualAckingRouter<?>)) {
       throw new IllegalStateException("Router does not support manual acknowledgement");
     }
     return (event, messageAcknowledgement) ->
-        processRecord(event, messageAcknowledgement, /* isAutoAck */ false, AckMode.ROUTER_MANAGED);
+        processRecord(
+            event,
+            messageAcknowledgement, /* isAutoAck */
+            false,
+            AckMode.ROUTER_MANAGED,
+            requeueAction);
   }
 
   private void processRecord(
       Event event,
       MessageAcknowledgement<Event> messageAcknowledgement,
       boolean isAutoAck,
-      AckMode ackMode) {
+      AckMode ackMode,
+      Consumer<Event> requeueAction) {
     String sourceInstanceId = event.instanceId;
 
     if (Strings.isNullOrEmpty(sourceInstanceId)) {
@@ -93,11 +101,20 @@ public abstract class AbstractSubcriber {
     } else {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
-        route(event, messageAcknowledgement, isAutoAck, ackMode);
-      } catch (IOException e) {
-        logger.atSevere().withCause(e).log("Malformed event '%s'", event);
-        subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
-      } catch (PermissionBackendException | CacheNotFoundException e) {
+
+        switch (ackMode) {
+          case SUBSCRIBER_MANAGED:
+            route(event, messageAcknowledgement, isAutoAck);
+            break;
+
+          case ROUTER_MANAGED:
+            if (!routeManaged(event, messageAcknowledgement)) {
+              requeueAction.accept(event);
+              messageAcknowledgement.ack(event);
+            }
+            break;
+        }
+      } catch (IOException | PermissionBackendException | CacheNotFoundException e) {
         logger.atSevere().withCause(e).log("Cannot handle message '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
       } catch (MessageAcknowledgementException e) {
@@ -125,16 +142,18 @@ public abstract class AbstractSubcriber {
   }
 
   @SuppressWarnings("unchecked")
-  private void route(
-      Event event, MessageAcknowledgement<Event> ack, boolean isAutoAck, AckMode ackMode)
+  private boolean routeManaged(Event event, MessageAcknowledgement<Event> ack)
       throws IOException, PermissionBackendException, CacheNotFoundException {
-    if (ackMode == AckMode.ROUTER_MANAGED) {
-      ((ForwardedEventManualAckingRouter<Event>) eventRouter).route(event, ack);
-      subscriberMetrics.incrementSubscriberConsumedMessage();
-    } else {
-      eventRouter.route(event);
-      tryAckAndMarkAsConsumed(event, ack, isAutoAck);
-    }
+    boolean routeSuccessful =
+        (((ForwardedEventManualAckingRouter<Event>) eventRouter).route(event, ack));
+    subscriberMetrics.incrementSubscriberConsumedMessage();
+    return routeSuccessful;
+  }
+
+  private void route(Event event, MessageAcknowledgement<Event> ack, boolean isAutoAck)
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    eventRouter.route(event);
+    tryAckAndMarkAsConsumed(event, ack, isAutoAck);
   }
 
   @SuppressWarnings("unchecked")

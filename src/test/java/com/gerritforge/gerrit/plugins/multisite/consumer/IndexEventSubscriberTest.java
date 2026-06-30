@@ -38,6 +38,7 @@ import com.google.gerrit.server.util.time.TimeUtil;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -45,6 +46,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   private static final boolean DELETED = false;
   private static final int CHANGE_ID = 1;
   private static final String EMPTY_PROJECT_NAME = "";
+  private static final Consumer<Event> NO_REQUEUE_ACTION = (e) -> {};
 
   @Mock protected ChangeFinder changeFinderMock;
 
@@ -52,7 +54,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   public void shouldUseRouterManagedAckForPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
 
-    objectUnderTest.getManualAckConsumer().accept(event, ack);
+    objectUnderTest.getManualAckConsumer(NO_REQUEUE_ACTION).accept(event, ack);
 
     verify((IndexEventRouter) eventRouter).route(event, ack);
     verify(eventRouter, never()).route(event);
@@ -63,7 +65,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   public void shouldUseRouterManagedAckForDroppedPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, NODE_INSTANCE_ID, false);
 
-    objectUnderTest.getManualAckConsumer().accept(event, ack);
+    objectUnderTest.getManualAckConsumer(NO_REQUEUE_ACTION).accept(event, ack);
 
     verify((IndexEventRouter) eventRouter).ack(event, ack);
     verify((IndexEventRouter) eventRouter, never()).route(event, ack);

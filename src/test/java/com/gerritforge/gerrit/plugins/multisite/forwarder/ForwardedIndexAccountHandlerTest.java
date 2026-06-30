@@ -14,15 +14,20 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.index.AccountChecker;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.server.index.account.AccountIndexer;
+import com.google.gerrit.server.util.OneOffRequestContext;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,6 +44,9 @@ public class ForwardedIndexAccountHandlerTest {
   @Mock private AccountIndexer indexerMock;
   @Mock private Configuration config;
   @Mock private Configuration.Index index;
+  @Mock private AccountChecker accountChecker;
+  @Mock private OneOffRequestContext oneOffRequestContext;
+  @Mock private ScheduledExecutorService indexExecutor;
   private ForwardedIndexAccountHandler handler;
   private Account.Id id;
 
@@ -46,7 +54,9 @@ public class ForwardedIndexAccountHandlerTest {
   public void setUp() throws Exception {
     when(config.index()).thenReturn(index);
     when(index.numStripedLocks()).thenReturn(10);
-    handler = new ForwardedIndexAccountHandler(indexerMock, config);
+    handler =
+        new ForwardedIndexAccountHandler(
+            indexerMock, accountChecker, config, oneOffRequestContext, indexExecutor);
     id = Account.id(123);
   }
 
@@ -60,6 +70,26 @@ public class ForwardedIndexAccountHandlerTest {
   public void deleteIsSupported() throws Exception {
     handler.index(id, Operation.DELETE, Optional.empty());
     verify(indexerMock).index(id);
+  }
+
+  @Test
+  public void shouldIndexSynchronouslyWhenAccountIsReady() throws Exception {
+    AccountIndexEvent event = new AccountIndexEvent(id.get(), "target-sha", "instance-id", false);
+    when(accountChecker.isUpToDate(Optional.of(event))).thenReturn(true);
+
+    handler.handleSync(event);
+
+    verify(indexerMock).index(id);
+  }
+
+  @Test
+  public void shouldFailSynchronousIndexingWhenAccountIsNotReady() throws IOException {
+    AccountIndexEvent event = new AccountIndexEvent(id.get(), "target-sha", "instance-id", false);
+    when(accountChecker.isUpToDate(Optional.of(event))).thenReturn(false);
+
+    assertThat(handler.handleSync(event))
+        .isEqualTo(ForwardedIndexingHandlerWithRetries.IndexingResult.FAILURE);
+    verify(indexerMock, never()).index(id);
   }
 
   @Test

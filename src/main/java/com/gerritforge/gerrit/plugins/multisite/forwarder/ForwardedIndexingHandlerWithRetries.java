@@ -16,12 +16,13 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.UpToDateChecker;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
-import java.util.Map;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
@@ -37,7 +38,8 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   private final int maxTries;
   private final ScheduledExecutorService indexExecutor;
   protected final OneOffRequestContext oneOffCtx;
-  protected final Map<T, IndexingRetry> indexingRetryTaskMap = new ConcurrentHashMap<>();
+  protected final ConcurrentHashMap<T, IndexingRetry> indexingRetryTaskMap =
+      new ConcurrentHashMap<>();
 
   ForwardedIndexingHandlerWithRetries(
       ScheduledExecutorService indexExecutor,
@@ -52,11 +54,30 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     this.maxTries = indexConfig != null ? indexConfig.maxTries() : 0;
   }
 
+  public enum IndexingResult {
+    SUCCESS,
+    RETRY,
+    FAILURE,
+    IGNORED
+  }
+
   protected abstract void reindex(T id);
 
   protected abstract String indexName();
 
   protected abstract void attemptToIndex(T id);
+
+  protected IndexingResult indexWhenReady(T id, E e, BooleanSupplier ready) throws IOException {
+    if (ready.getAsBoolean()) {
+      runIndexTaskSynchronously(id, () -> reindex(id));
+      indexingRetryTaskMap.remove(id);
+      return IndexingResult.SUCCESS;
+    }
+
+    IndexingRetry retry =
+        indexingRetryTaskMap.computeIfAbsent(id, (k) -> new IndexingRetry(Optional.of(e)));
+    return retry.retryNumber++ < maxTries ? IndexingResult.RETRY : IndexingResult.FAILURE;
+  }
 
   protected boolean rescheduleIndex(T id) {
     IndexingRetry retry = indexingRetryTaskMap.get(id);
@@ -105,6 +126,13 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   }
 
   public void scheduleIndexing(T id, Optional<E> event, Consumer<T> indexOnce) {
+    if (newIndexingRetry(id, event, indexOnce)) {
+      return;
+    }
+    attemptToIndex(id);
+  }
+
+  private boolean newIndexingRetry(T id, Optional<E> event, Consumer<T> indexOnce) {
     IndexingRetry retry = new IndexingRetry(event);
     if (indexingRetryTaskMap.put(id, retry) != null) {
       indexOnce.accept(id);
@@ -113,9 +141,9 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
               + " name: {}, task id: {}",
           indexName(),
           id);
-      return;
+      return true;
     }
-    attemptToIndex(id);
+    return false;
   }
 
   public final void reindexAndCheckIsUpToDate(T id, UpToDateChecker<E> upToDateChecker) {
