@@ -13,10 +13,13 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.index.IndexEntityChecker;
 import com.gerritforge.gerrit.plugins.multisite.index.UpToDateChecker;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
-import java.util.Map;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -32,12 +35,17 @@ import java.util.function.Consumer;
  */
 public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEvent>
     extends ForwardedIndexingHandler<T, E> {
-
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private final int retryInterval;
   private final int maxTries;
   private final ScheduledExecutorService indexExecutor;
+
+  //  Avoid looping the local CPU and overloading the broker with retry messages, throttling to at
+  // most 1 message per second.
+  private static final long RETRY_POLL_INTERVAL_MSEC = 1000L;
   protected final OneOffRequestContext oneOffCtx;
-  protected final Map<T, IndexingRetry> indexingRetryTaskMap = new ConcurrentHashMap<>();
+  protected final ConcurrentHashMap<T, IndexingRetry> indexingRetryTaskMap =
+      new ConcurrentHashMap<>();
 
   ForwardedIndexingHandlerWithRetries(
       ScheduledExecutorService indexExecutor,
@@ -51,11 +59,60 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     this.maxTries = indexConfig != null ? indexConfig.maxTries() : 0;
   }
 
+  public enum IndexingResult {
+    SUCCESS,
+    RETRY,
+    FAILURE,
+    IGNORED
+  }
+
   protected abstract void reindex(T id);
 
   protected abstract String indexName();
 
   protected abstract void attemptToIndex(T id);
+
+  protected IndexingResult indexSyncIfConsistent(
+      T id, E e, IndexEntityChecker<T, E> entityChecker) {
+    IndexingRetry retry =
+        indexingRetryTaskMap.computeIfAbsent(id, (k) -> new IndexingRetry(Optional.of(e)));
+
+    if (!waitForNextRetry(
+        retry.getLastRetry().map(last -> last.until(Instant.now(), ChronoUnit.MILLIS)))) {
+      return IndexingResult.FAILURE;
+    }
+
+    if (entityChecker.isConsistent(id)) {
+      try (ForwardedContext ctx = ForwardedContext.open()) {
+        reindex(id);
+      }
+
+      if (entityChecker.isUpToDate(Optional.of(e))) {
+        indexingRetryTaskMap.remove(id);
+        return IndexingResult.SUCCESS;
+      }
+    }
+
+    if (retry.retryNumber >= maxTries) {
+      indexingRetryTaskMap.remove(id, retry);
+      return IndexingResult.FAILURE;
+    }
+
+    retry.incrementRetryNumber();
+    return IndexingResult.RETRY;
+  }
+
+  private boolean waitForNextRetry(Optional<Long> millisSinceRetry) {
+    if (millisSinceRetry.stream().anyMatch(millis -> millis < retryInterval)) {
+      try {
+        Thread.sleep(Math.min(RETRY_POLL_INTERVAL_MSEC, retryInterval - millisSinceRetry.get()));
+      } catch (InterruptedException ex) {
+        logger.atWarning().withCause(ex).log("Interrupted while waiting for indexing retry");
+        return false;
+      }
+    }
+    return true;
+  }
 
   protected boolean rescheduleIndex(T id) {
     IndexingRetry retry = indexingRetryTaskMap.get(id);
@@ -150,6 +207,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   public class IndexingRetry {
     private final Optional<E> event;
     private int retryNumber = 0;
+    private Instant lastRetry;
 
     public IndexingRetry(Optional<E> event) {
       this.event = event;
@@ -165,6 +223,11 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
 
     public void incrementRetryNumber() {
       ++retryNumber;
+      lastRetry = Instant.now();
+    }
+
+    public Optional<Instant> getLastRetry() {
+      return Optional.ofNullable(lastRetry);
     }
   }
 }
