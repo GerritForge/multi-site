@@ -107,6 +107,46 @@ public class ForwardedIndexChangeHandlerTest {
   }
 
   @Test
+  public void shouldIndexSynchronouslyWhenChangeBecomesReady() throws Exception {
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_CONSISTENT);
+
+    handler.handleSync(
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id"));
+
+    verify(indexerMock).index(changeNotes);
+  }
+
+  @Test
+  public void shouldFailSynchronousIndexingWhenChangeIsNotReady() throws Exception {
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_INCONSISTENT);
+
+    assertThrows(
+        IOException.class,
+        () ->
+            handler.handleSync(
+                new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id")));
+
+    verify(indexerMock, never()).index(any(ChangeNotes.class));
+  }
+
+  @Test
+  public void shouldDeleteAllProjectChangesSynchronously() throws Exception {
+    handler.handleSync(ChangeIndexEvent.allChangesDeletedForProject(TEST_PROJECT, "instance-id"));
+
+    verify(indexerMock).deleteAllForProject(Project.nameKey(TEST_PROJECT));
+  }
+
+  @Test
   public void changeIsStillIndexedEvenWhenOutdated() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_OUTDATED, CHANGE_CONSISTENT);
     handler.index(
