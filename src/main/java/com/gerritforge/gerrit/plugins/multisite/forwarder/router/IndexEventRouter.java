@@ -44,15 +44,18 @@ public class IndexEventRouter
   private final AllUsersName allUsersName;
   private final String gerritInstanceId;
   private final DynamicMap<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
+  private final IndexEventAckHandler ackHandler;
 
   @Inject
   public IndexEventRouter(
       ForwardedIndexAccountHandler indexAccountHandler,
       DynamicMap<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers,
+      IndexEventAckHandler ackHandler,
       AllUsersName allUsersName,
       @GerritInstanceId String gerritInstanceId) {
     this.indexAccountHandler = indexAccountHandler;
     this.indexHandlers = indexHandlers;
+    this.ackHandler = ackHandler;
     this.allUsersName = allUsersName;
     this.gerritInstanceId = gerritInstanceId;
   }
@@ -93,7 +96,7 @@ public class IndexEventRouter
 
   @Override
   public void ack(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
-    ack.ack(sourceEvent);
+    ackHandler.ackIfDue(sourceEvent, ack);
   }
 
   public void onRefReplicated(RefEvent replicationEvent) throws IOException {
