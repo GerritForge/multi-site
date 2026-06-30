@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -32,7 +33,10 @@ import java.util.Optional;
 import java.util.Set;
 
 public class IndexEventRouter
-    implements ForwardedEventRouter<IndexEvent>, EventListener, LifecycleListener {
+    implements ForwardedEventRouter<IndexEvent>,
+        ForwardedEventManualAckingRouter<IndexEvent>,
+        EventListener,
+        LifecycleListener {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final ForwardedIndexAccountHandler indexAccountHandler;
@@ -61,6 +65,17 @@ public class IndexEventRouter
     } else {
       logger.atInfo().log("No registered handlers to route event %s", sourceEvent.getType());
     }
+  }
+
+  @Override
+  public void route(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) throws IOException {
+    route(sourceEvent);
+    ack(sourceEvent, ack);
+  }
+
+  @Override
+  public void ack(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+    ack.ack(sourceEvent);
   }
 
   public void onRefReplicated(RefEvent replicationEvent) throws IOException {

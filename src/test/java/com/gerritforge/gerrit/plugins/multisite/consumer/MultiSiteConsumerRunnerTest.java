@@ -55,7 +55,7 @@ public class MultiSiteConsumerRunnerTest {
 
   @Test
   public void shouldSubscribeWithConfiguredGroupId() {
-    configureSubscriber(Optional.of(GROUP_ID));
+    configureTopicSubscriber(Optional.of(GROUP_ID));
 
     runner().start();
 
@@ -65,7 +65,7 @@ public class MultiSiteConsumerRunnerTest {
 
   @Test
   public void shouldSubscribeMultipleTopicsWithConfiguredGroupId() {
-    configureSubscriber(Optional.of(GROUP_ID));
+    configureTopicSubscriber(Optional.of(GROUP_ID));
     when(brokerCfg.getTopic(EventTopic.CACHE_TOPIC.topicAliasKey(), "GERRIT.EVENT.CACHE"))
         .thenReturn(CACHE_TOPIC);
     when(cacheSubscriber.getTopic()).thenReturn(EventTopic.CACHE_TOPIC);
@@ -89,7 +89,7 @@ public class MultiSiteConsumerRunnerTest {
 
   @Test
   public void shouldUseBrokerDefaultWhenGroupIdIsNotConfigured() {
-    configureSubscriber(Optional.empty());
+    configureTopicSubscriber(Optional.empty());
 
     runner().start();
 
@@ -99,7 +99,7 @@ public class MultiSiteConsumerRunnerTest {
 
   @Test
   public void shouldSubscribeToConfiguredIndexPartitions() {
-    configureSubscriber(Optional.of(GROUP_ID), INDEX_PARTITIONS);
+    configurePartitionSubscriber(Optional.of(GROUP_ID), INDEX_PARTITIONS);
 
     runner().start();
 
@@ -108,12 +108,23 @@ public class MultiSiteConsumerRunnerTest {
             verify(brokerApi)
                 .receiveAsyncWithPartition(
                     TOPIC, partition, groupIdForPartition(GROUP_ID, partition), consumer));
+    verify(subscriber).getManualAckConsumer();
     verify(brokerApi, never()).receiveAsync(eq(TOPIC), any());
   }
 
   @Test
+  public void shouldRequireManualAckForPartitionSubscriptions() {
+    configurePartitionSubscriber(Optional.of(GROUP_ID), INDEX_PARTITIONS);
+    when(brokerApi.isAutoAck()).thenReturn(true);
+
+    assertThrows(IllegalStateException.class, () -> runner().start());
+
+    verify(brokerApi, never()).receiveAsyncWithPartition(any(), any(), any(), any());
+  }
+
+  @Test
   public void shouldRequireGroupIdForPartitionSubscriptions() {
-    configureSubscriber(Optional.empty(), INDEX_PARTITIONS);
+    configurePartitionSubscriber(Optional.empty(), INDEX_PARTITIONS);
 
     assertThrows(IllegalStateException.class, () -> runner().start());
 
@@ -122,7 +133,7 @@ public class MultiSiteConsumerRunnerTest {
 
   @Test
   public void shouldFailWhenAnExpectedIndexPartitionIsNotConfigured() {
-    configureSubscriber(
+    configurePartitionSubscriber(
         Optional.of(GROUP_ID),
         List.of(ChangeIndexEvent.TYPE, ProjectIndexEvent.TYPE, GroupIndexEvent.TYPE));
 
@@ -132,18 +143,24 @@ public class MultiSiteConsumerRunnerTest {
   }
 
   private void configureSubscriber(Optional<String> groupId, List<String> partitions) {
-    when(brokerApi.isAutoAck()).thenReturn(true);
     when(cfg.broker()).thenReturn(brokerCfg);
     when(brokerCfg.getGroupId()).thenReturn(groupId);
     when(brokerCfg.getTopic(EventTopic.INDEX_TOPIC.topicAliasKey(), "GERRIT.EVENT.INDEX"))
         .thenReturn(TOPIC);
     when(eventsBrokerConfiguration.getPartitionsForTopic(TOPIC)).thenReturn(partitions);
     when(subscriber.getTopic()).thenReturn(EventTopic.INDEX_TOPIC);
+  }
+
+  private void configureTopicSubscriber(Optional<String> groupId) {
+    configureSubscriber(groupId, List.of());
+    when(brokerApi.isAutoAck()).thenReturn(true);
     when(subscriber.getConsumer(true)).thenReturn(consumer);
   }
 
-  private void configureSubscriber(Optional<String> groupId) {
-    configureSubscriber(groupId, List.of());
+  private void configurePartitionSubscriber(Optional<String> groupId, List<String> partitions) {
+    configureSubscriber(groupId, partitions);
+    when(brokerApi.isAutoAck()).thenReturn(false);
+    when(subscriber.getManualAckConsumer()).thenReturn(consumer);
   }
 
   private MultiSiteConsumerRunner runner() {
