@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import static com.gerritforge.gerrit.plugins.multisite.consumer.AbstractSubcriber.RequeueEventAction.NO_ACTION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
@@ -52,7 +54,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   public void shouldUseRouterManagedAckForPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
 
-    objectUnderTest.getManualAckConsumer().accept(event, ack);
+    objectUnderTest.getManualAckConsumer(NO_ACTION).accept(event, ack);
 
     verify((IndexEventRouter) eventRouter).route(event, ack);
     verify(eventRouter, never()).route(event);
@@ -60,10 +62,32 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   }
 
   @Test
+  public void shouldAckWhenRequeueSucceeds() throws Exception {
+    IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
+    MessageAcknowledgement<Event> messageAck = mock(MessageAcknowledgement.class);
+    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(false);
+
+    objectUnderTest.getManualAckConsumer((e) -> true).accept(event, messageAck);
+
+    verify(messageAck).ack(event);
+  }
+
+  @Test
+  public void shouldNotAckWhenRequeueFails() throws Exception {
+    IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
+    MessageAcknowledgement<Event> messageAck = mock(MessageAcknowledgement.class);
+    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(false);
+
+    objectUnderTest.getManualAckConsumer((e) -> false).accept(event, messageAck);
+
+    verify(messageAck, never()).ack(event);
+  }
+
+  @Test
   public void shouldUseRouterManagedAckForDroppedPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, NODE_INSTANCE_ID, false);
 
-    objectUnderTest.getManualAckConsumer().accept(event, ack);
+    objectUnderTest.getManualAckConsumer(NO_ACTION).accept(event, ack);
 
     verify((IndexEventRouter) eventRouter).ack(event, ack);
     verify((IndexEventRouter) eventRouter, never()).route(event, ack);
