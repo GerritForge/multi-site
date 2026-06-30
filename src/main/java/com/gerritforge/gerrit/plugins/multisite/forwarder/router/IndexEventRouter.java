@@ -83,7 +83,7 @@ public class IndexEventRouter
   }
 
   @Override
-  public void ack(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) {
+  public void ack(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) throws IOException {
     ackHandler.ackIfDue(sourceEvent, ack);
   }
 
