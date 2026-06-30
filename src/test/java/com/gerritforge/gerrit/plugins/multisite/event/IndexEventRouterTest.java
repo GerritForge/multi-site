@@ -12,6 +12,8 @@
 package com.gerritforge.gerrit.plugins.multisite.event;
 
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
+import static com.google.gerrit.testing.GerritJUnit.assertThrows;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -35,6 +37,7 @@ import com.google.gerrit.server.config.AllUsersName;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.util.Providers;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;
+import java.io.IOException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,8 +135,18 @@ public class IndexEventRouterTest {
 
     router.route(event, ack);
 
-    verify(indexChangeHandler).handle(event);
+    verify(indexChangeHandler).handleSync(event);
     verify(ack).ack(event);
+  }
+
+  @Test
+  public void shouldNotAckWhenSynchronousHandlingFails() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    doThrow(new IOException("index failed")).when(indexChangeHandler).handleSync(event);
+
+    assertThrows(IOException.class, () -> router.route(event, ack));
+
+    verifyNoInteractions(ack);
   }
 
   @Test
