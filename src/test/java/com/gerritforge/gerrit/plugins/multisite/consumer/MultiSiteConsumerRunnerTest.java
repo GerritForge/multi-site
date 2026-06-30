@@ -108,7 +108,7 @@ public class MultiSiteConsumerRunnerTest {
             verify(brokerApi)
                 .receiveAsyncWithPartition(
                     TOPIC, partition, groupIdForPartition(GROUP_ID, partition), consumer));
-    verify(subscriber).getManualAckConsumer();
+    verify(subscriber).getManualAckConsumer(any());
     verify(brokerApi, never()).receiveAsync(eq(TOPIC), any());
   }
 
@@ -160,7 +160,7 @@ public class MultiSiteConsumerRunnerTest {
   private void configurePartitionSubscriber(Optional<String> groupId, List<String> partitions) {
     configureSubscriber(groupId, partitions);
     when(brokerApi.isAutoAck()).thenReturn(false);
-    when(subscriber.getManualAckConsumer()).thenReturn(consumer);
+    when(subscriber.getManualAckConsumer(any())).thenReturn(consumer);
   }
 
   private MultiSiteConsumerRunner runner() {

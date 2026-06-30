@@ -25,10 +25,10 @@ public class ForwardedContext implements AutoCloseable {
     forwarded = setForwardedEvent(true);
   }
 
-    @Override
-    public void close() {
-      setForwardedEvent(forwarded);
-    }
+  @Override
+  public void close() {
+    setForwardedEvent(forwarded);
+  }
 
   public static ForwardedContext open() {
     return new ForwardedContext();
@@ -42,7 +42,7 @@ public class ForwardedContext implements AutoCloseable {
         isPullReplicationApplyObjectIndexing();
   }
 
-  private Boolean setForwardedEvent(Boolean b) {
+  public static Boolean setForwardedEvent(Boolean b) {
     Boolean forwarded = forwardedEvent.get();
     forwardedEvent.set(b);
     return forwarded;
