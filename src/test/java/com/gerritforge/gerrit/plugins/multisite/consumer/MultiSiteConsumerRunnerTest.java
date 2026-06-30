@@ -48,8 +48,8 @@ public class MultiSiteConsumerRunnerTest {
   @Mock private Configuration cfg;
   @Mock private Broker brokerCfg;
   @Mock private EventsBrokerConfiguration eventsBrokerConfiguration;
-  @Mock private AbstractSubcriber subscriber;
-  @Mock private AbstractSubcriber cacheSubscriber;
+  @Mock private AbstractSubscriber subscriber;
+  @Mock private AbstractSubscriber cacheSubscriber;
   @Mock private AckAwareConsumer<Event> consumer;
   @Mock private AckAwareConsumer<Event> cacheConsumer;
 
@@ -71,7 +71,7 @@ public class MultiSiteConsumerRunnerTest {
     when(cacheSubscriber.getTopic()).thenReturn(EventTopic.CACHE_TOPIC);
     when(cacheSubscriber.getConsumer(true)).thenReturn(cacheConsumer);
 
-    DynamicSet<AbstractSubcriber> consumers = new DynamicSet<>();
+    DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
     consumers.add("multi-site", cacheSubscriber);
     new MultiSiteConsumerRunner(
@@ -108,7 +108,7 @@ public class MultiSiteConsumerRunnerTest {
             verify(brokerApi)
                 .receiveAsyncWithPartition(
                     TOPIC, partition, groupIdForPartition(GROUP_ID, partition), consumer));
-    verify(subscriber).getManualAckConsumer();
+    verify(subscriber).getManualAckConsumer(any());
     verify(brokerApi, never()).receiveAsync(eq(TOPIC), any());
   }
 
@@ -160,11 +160,11 @@ public class MultiSiteConsumerRunnerTest {
   private void configurePartitionSubscriber(Optional<String> groupId, List<String> partitions) {
     configureSubscriber(groupId, partitions);
     when(brokerApi.isAutoAck()).thenReturn(false);
-    when(subscriber.getManualAckConsumer()).thenReturn(consumer);
+    when(subscriber.getManualAckConsumer(any())).thenReturn(consumer);
   }
 
   private MultiSiteConsumerRunner runner() {
-    DynamicSet<AbstractSubcriber> consumers = new DynamicSet<>();
+    DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
     return new MultiSiteConsumerRunner(
         DynamicItem.itemOf(BrokerApi.class, brokerApi), consumers, cfg, eventsBrokerConfiguration);

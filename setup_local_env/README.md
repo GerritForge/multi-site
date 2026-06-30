@@ -82,8 +82,7 @@ Usage: sh ./setup.sh [--option ]
 
 [--broker_type]                 events broker type; 'kafka', 'kinesis' or 'gcloud-pubsub'. Default 'kafka'
 
-[--broker-manual-ack]           Enable manual broker acknowledgement and configure the index topic
-                                for partition-aware consumption. Default false
+[--broker-auto-ack]             Enable automatic broker acknowledgement. Default false
 ```
 
 ## Limitations
