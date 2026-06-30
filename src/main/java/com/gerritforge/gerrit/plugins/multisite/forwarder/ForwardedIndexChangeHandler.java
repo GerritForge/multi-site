@@ -76,10 +76,39 @@ public class ForwardedIndexChangeHandler
   }
 
   @Override
+  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof ChangeIndexEvent event) {
+      String id = event.projectName + "~" + event.changeId;
+      if (ChangeIndexEvent.isAllChangesDeletedForProject(event)) {
+        try (ForwardedContext ctx = ForwardedContext.open()) {
+          indexer.deleteAllForProject(Project.nameKey(event.projectName));
+        }
+        return IndexingResult.SUCCESS;
+      } else if (event.deleted) {
+        index(id, DELETE, Optional.of(event));
+        return IndexingResult.SUCCESS;
+      } else {
+        return indexWhenReady(
+            id,
+            event,
+            (e) -> {
+              ChangeChecker checker = changeCheckerFactory.create(id);
+              return checker.getChangeNotes().isPresent()
+                  && checker.isChangeConsistent()
+                  && checker.isUpToDate(e);
+            });
+      }
+    }
+    return IndexingResult.IGNORED;
+  }
+
+  @Override
   protected void doIndex(String id, Optional<ChangeIndexEvent> indexEvent) {
     if (indexEvent.isPresent()
         && ChangeIndexEvent.isAllChangesDeletedForProject(indexEvent.get())) {
-      indexer.deleteAllForProject(Project.nameKey(indexEvent.get().projectName));
+      try (ForwardedContext ctx = ForwardedContext.open()) {
+        indexer.deleteAllForProject(Project.nameKey(indexEvent.get().projectName));
+      }
     } else {
       scheduleIndexing(id, indexEvent, this::indexIfConsistent);
     }
@@ -131,7 +160,8 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void reindex(String id) {
-    try (ManualRequestContext ctx = oneOffCtx.open()) {
+    try (ManualRequestContext ctx = oneOffCtx.open();
+        ForwardedContext fwdCtx = ForwardedContext.open()) {
       ChangeChecker checker = changeCheckerFactory.create(id);
       Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
       ChangeNotes notes = changeNotes.get();
@@ -147,30 +177,33 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
-    Preconditions.checkArgument(
-        indexEvent.isPresent(), "No event found when deleting change %s", id);
-    ChangeIndexEvent event = indexEvent.get();
-    if (event.projectName.isEmpty()) {
-      List<ChangeData> changes = queryProvider.get().byChangeNumber(Change.id(event.changeId));
-      ChangeData change = uniqueChange(id, changes);
-      if (change == null) {
-        log.warn("Skipping deletion from index for change {}", id);
-        return;
+    try (ForwardedContext ctx = ForwardedContext.open()) {
+      Preconditions.checkArgument(
+          indexEvent.isPresent(), "No event found when deleting change %s", id);
+      ChangeIndexEvent event = indexEvent.get();
+      if (event.projectName.isEmpty()) {
+        List<ChangeData> changes = queryProvider.get().byChangeNumber(Change.id(event.changeId));
+        ChangeData change = uniqueChange(id, changes);
+        if (change == null) {
+          log.warn("Skipping deletion from index for change {}", id);
+          return;
+        }
+        indexer.delete(change.change().getProject(), change.getId());
+      } else {
+        List<ChangeData> changes =
+            queryProvider
+                .get()
+                .byProjectChangeNumber(
+                    Project.nameKey(event.projectName), Change.id(event.changeId));
+        ChangeData change = uniqueChange(id, changes);
+        if (change == null) {
+          log.warn("Skipping deletion from index for change {}", id);
+          return;
+        }
+        indexer.delete(Project.nameKey(event.projectName), change.getId());
       }
-      indexer.delete(change.change().getProject(), change.getId());
-    } else {
-      List<ChangeData> changes =
-          queryProvider
-              .get()
-              .byProjectChangeNumber(Project.nameKey(event.projectName), Change.id(event.changeId));
-      ChangeData change = uniqueChange(id, changes);
-      if (change == null) {
-        log.warn("Skipping deletion from index for change {}", id);
-        return;
-      }
-      indexer.delete(Project.nameKey(event.projectName), change.getId());
+      log.debug("Change {} successfully deleted from index", id);
     }
-    log.debug("Change {} successfully deleted from index", id);
   }
 
   private ChangeData uniqueChange(String id, List<ChangeData> changes) {

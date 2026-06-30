@@ -38,6 +38,9 @@ public abstract class ForwardedIndexingHandler<T, E> {
 
   public abstract void handle(IndexEvent sourceEvent) throws IOException;
 
+  public abstract ForwardedIndexingHandlerWithRetries.IndexingResult handleSync(
+      IndexEvent sourceEvent) throws IOException;
+
   protected abstract void doIndex(T id, Optional<E> indexEvent);
 
   protected abstract void doDelete(T id, Optional<E> indexEvent);
@@ -52,18 +55,16 @@ public abstract class ForwardedIndexingHandler<T, E> {
    */
   public void index(T id, Operation operation, Optional<E> event) throws IOException {
     log.debug("{} {} {}", operation, id, event);
-    try (ForwardedContext ctx = ForwardedContext.open()) {
-      switch (operation) {
-        case INDEX:
-          doIndex(id, event);
-          break;
-        case DELETE:
-          doDelete(id, event);
-          break;
-        default:
-          log.error("unexpected operation: {}", operation);
-          break;
-      }
+    switch (operation) {
+      case INDEX:
+        doIndex(id, event);
+        break;
+      case DELETE:
+        doDelete(id, event);
+        break;
+      default:
+        log.error("unexpected operation: {}", operation);
+        break;
     }
   }
 }
