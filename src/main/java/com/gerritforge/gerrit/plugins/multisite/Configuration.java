@@ -79,6 +79,7 @@ public class Configuration {
   // common parameters to cache and index sections
   private static final int DEFAULT_INDEX_MAX_TRIES = 2;
   private static final int DEFAULT_INDEX_RETRY_INTERVAL = 30000;
+  private static final long DEFAULT_INDEX_ACK_INTERVAL_MS = Duration.ofMinutes(5).toMillis();
 
   private static final long DEFALULT_STREAM_EVENT_PUBLISH_TIMEOUT = 30000;
 
@@ -377,6 +378,7 @@ public class Configuration {
     static final String INDEX_SECTION = "index";
     static final String MAX_TRIES_KEY = "maxTries";
     static final String RETRY_INTERVAL_KEY = "retryInterval";
+    static final String ACK_INTERVAL_KEY = "ackInterval";
     static final String SYNCHRONIZE_FORCED_KEY = "synchronizeForced";
     static final String SYNCHRONIZE_KEY = "synchronize";
     static final boolean DEFAULT_SYNCHRONIZE_FORCED = true;
@@ -384,6 +386,7 @@ public class Configuration {
     private final int threadPoolSize;
     private final int retryInterval;
     private final int maxTries;
+    private final long ackIntervalMs;
 
     private final Map<String, Class<? extends ForwardedIndexingHandler<?, ? extends IndexEvent>>>
         synchronize;
@@ -423,6 +426,14 @@ public class Configuration {
       retryInterval =
           getInt(cfg, INDEX_SECTION, null, RETRY_INTERVAL_KEY, DEFAULT_INDEX_RETRY_INTERVAL);
       maxTries = getInt(cfg, INDEX_SECTION, null, MAX_TRIES_KEY, DEFAULT_INDEX_MAX_TRIES);
+      ackIntervalMs =
+          ConfigUtil.getTimeUnit(
+              cfg.get(),
+              INDEX_SECTION,
+              null,
+              ACK_INTERVAL_KEY,
+              DEFAULT_INDEX_ACK_INTERVAL_MS,
+              TimeUnit.MILLISECONDS);
       synchronizeForced =
           getBoolean(cfg, INDEX_SECTION, null, SYNCHRONIZE_FORCED_KEY, DEFAULT_SYNCHRONIZE_FORCED);
       synchronize = getSynchronizeIndex(cfg);
@@ -438,6 +449,10 @@ public class Configuration {
 
     public int maxTries() {
       return maxTries;
+    }
+
+    public long ackIntervalMs() {
+      return ackIntervalMs;
     }
 
     public boolean synchronizeForced() {
