@@ -38,6 +38,9 @@ public abstract class ForwardedIndexingHandler<T, E> {
 
   public abstract void handle(IndexEvent sourceEvent) throws IOException;
 
+  public abstract ForwardedIndexingHandlerWithRetries.IndexingResult handleSync(
+      IndexEvent sourceEvent) throws IOException;
+
   protected abstract void doIndex(T id, Optional<E> indexEvent);
 
   protected abstract void doDelete(T id, Optional<E> indexEvent);
