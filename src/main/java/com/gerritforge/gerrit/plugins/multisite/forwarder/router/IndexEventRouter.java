@@ -17,6 +17,7 @@ import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandlerWithRetries.IndexingResult;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Account;
@@ -68,9 +69,26 @@ public class IndexEventRouter
   }
 
   @Override
-  public void route(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack) throws IOException {
-    route(sourceEvent);
-    ack(sourceEvent, ack);
+  public boolean route(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+      throws IOException {
+    ForwardedIndexingHandler<?, ? extends IndexEvent> handler =
+        indexHandlers.get(GERRIT, sourceEvent.getType());
+    if (handler == null) {
+      throw new IllegalStateException(
+          String.format("No registered handlers to route event %s", sourceEvent.getType()));
+    }
+
+    switch (handler.handleSync(sourceEvent)) {
+      case IndexingResult.SUCCESS:
+        ack(sourceEvent, ack);
+        return true;
+
+      case IndexingResult.FAILURE:
+        logger.atWarning().log("Indexing of event %s failed", sourceEvent.getType());
+        return true;
+    }
+
+    return false;
   }
 
   @Override
