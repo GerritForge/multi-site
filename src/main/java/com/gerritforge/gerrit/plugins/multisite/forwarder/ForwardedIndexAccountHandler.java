@@ -55,6 +55,16 @@ public class ForwardedIndexAccountHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent) {
+    if (sourceEvent instanceof AccountIndexEvent event) {
+      Account.Id id = Account.id(event.accountId);
+      // TODO: AccountIndexEvent has no revision to confirm that the matching All-Users update has
+      // arrived. We need to implement that first.
+      runIndexTaskSynchronously(id, () -> doIndex(id, Optional.of(event)));
+    }
+  }
+
+  @Override
   protected void doIndex(Account.Id id, Optional<AccountIndexEvent> event) {
     indexer.index(id);
     log.debug("Account {} successfully indexed", id);

@@ -91,10 +91,7 @@ public abstract class AbstractSubcriber {
       try {
         msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
         route(event, messageAcknowledgement, isAutoAck, routerManagedAckRequested);
-      } catch (IOException e) {
-        logger.atSevere().withCause(e).log("Malformed event '%s'", event);
-        subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
-      } catch (PermissionBackendException | CacheNotFoundException e) {
+      } catch (IOException | PermissionBackendException | CacheNotFoundException e) {
         logger.atSevere().withCause(e).log("Cannot handle message '%s'", event);
         subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
       } catch (MessageAcknowledgementException e) {
