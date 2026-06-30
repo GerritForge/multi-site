@@ -69,8 +69,12 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   private void subscribe(AbstractSubcriber subscriber) {
     BrokerApi broker = brokerApi.get();
     String topic = subscriber.getTopic().topic(cfg);
-    AckAwareConsumer<Event> consumer = subscriber.getConsumer(broker.isAutoAck());
+    boolean autoAck = broker.isAutoAck();
     if (isPartitionAwareIndexTopic(subscriber, topic)) {
+      if (autoAck) {
+        throw new IllegalStateException(
+            "Partition-aware index subscriptions require manual acknowledgement");
+      }
       String groupId =
           cfg.broker()
               .getGroupId()
@@ -78,6 +82,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
                   () ->
                       new IllegalStateException(
                           "broker.groupId is required for partition-aware subscriptions"));
+      AckAwareConsumer<Event> consumer = subscriber.getManualAckConsumer();
       INDEX_PARTITIONS.forEach(
           partition ->
               broker.receiveAsyncWithPartition(
@@ -85,6 +90,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
       return;
     }
 
+    AckAwareConsumer<Event> consumer = subscriber.getConsumer(autoAck);
     Optional<String> groupId = cfg.broker().getGroupId();
     if (groupId.isPresent()) {
       broker.receiveAsync(topic, groupId.get(), consumer);

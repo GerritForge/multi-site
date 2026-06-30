@@ -15,6 +15,7 @@ import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedEventDispatcher;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexChangeHandler;
@@ -31,6 +32,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRout
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.PrivateInternals_DynamicMapImpl;
 import com.google.gerrit.server.config.AllUsersName;
+import com.google.gerrit.server.events.Event;
 import com.google.inject.util.Providers;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;
 import org.eclipse.jgit.lib.ObjectId;
@@ -49,6 +51,7 @@ public class IndexEventRouterTest {
   @Mock private ForwardedIndexGroupHandler indexGroupHandler;
   @Mock private ForwardedIndexProjectHandler indexProjectHandler;
   @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
+  @Mock private MessageAcknowledgement<Event> ack;
   private AllUsersName allUsersName = new AllUsersName("All-Users");
   PrivateInternals_DynamicMapImpl<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
 
@@ -121,6 +124,16 @@ public class IndexEventRouterTest {
     verify(indexChangeHandler).handle(event);
 
     verifyNoInteractions(indexAccountHandler, indexGroupHandler, indexProjectHandler);
+  }
+
+  @Test
+  public void shouldAckAfterRoutingManualAckEvent() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+
+    router.route(event, ack);
+
+    verify(indexChangeHandler).handle(event);
+    verify(ack).ack(event);
   }
 
   @Test
