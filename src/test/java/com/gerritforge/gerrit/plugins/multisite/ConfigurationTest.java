@@ -19,6 +19,7 @@ import static com.gerritforge.gerrit.plugins.multisite.Configuration.DEFAULT_THR
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Event.EVENT_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Forwarding.DEFAULT_SYNCHRONIZE;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Forwarding.SYNCHRONIZE_KEY;
+import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.COMMIT_INTERVAL_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.DEFAULT_SYNCHRONIZE_FORCED;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.INDEX_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.SYNCHRONIZE_FORCED_KEY;
@@ -138,6 +139,17 @@ public class ConfigurationTest {
 
     globalPluginConfig.setBoolean(INDEX_SECTION, null, SYNCHRONIZE_FORCED_KEY, false);
     assertThat(getConfiguration().index().synchronizeForced()).isFalse();
+  }
+
+  @Test
+  public void shouldGetIndexCommitInterval() {
+    int defaultCommitInterval = 300000;
+    int tenMinutes = 600000;
+    assertThat(getConfiguration().index().commitIntervalMs()).isEqualTo(defaultCommitInterval);
+
+    globalPluginConfig.setString(INDEX_SECTION, null, COMMIT_INTERVAL_KEY, "10 minutes");
+
+    assertThat(getConfiguration().index().commitIntervalMs()).isEqualTo(tenMinutes);
   }
 
   @Test
