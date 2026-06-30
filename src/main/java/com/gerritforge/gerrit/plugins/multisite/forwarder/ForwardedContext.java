@@ -42,7 +42,7 @@ public class ForwardedContext implements AutoCloseable {
         isPullReplicationApplyObjectIndexing();
   }
 
-  private Boolean setForwardedEvent(Boolean b) {
+  public static Boolean setForwardedEvent(Boolean b) {
     Boolean forwarded = forwardedEvent.get();
     forwardedEvent.set(b);
     return forwarded;
