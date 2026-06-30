@@ -26,7 +26,8 @@ public class ProjectUpdateEventSubscriberTest extends AbstractSubscriberTestBase
 
   @Test
   public void shouldRejectManualAckWhenRouterDoesNotSupportIt() {
-    assertThrows(IllegalStateException.class, objectUnderTest::getManualAckConsumer);
+    assertThrows(
+        IllegalStateException.class, () -> objectUnderTest.getManualAckConsumer(NO_ACTION));
   }
 
   @SuppressWarnings("rawtypes")

@@ -42,6 +42,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 @Ignore
 public abstract class AbstractSubscriberTestBase {
+  protected static final AbstractSubscriber.RequeueEventAction NO_ACTION = (e) -> true;
   protected static final String NODE_INSTANCE_ID = "node-instance-id";
   protected static final String INSTANCE_ID = "other-node-instance-id";
   protected static final String PROJECT_NAME = "project-name";
