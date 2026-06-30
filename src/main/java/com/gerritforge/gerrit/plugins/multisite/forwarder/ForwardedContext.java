@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+
 import static com.gerritforge.gerrit.plugins.replication.pull.api.PullReplicationEndpoints.APPLY_OBJECTS_API_ENDPOINT;
 import static com.gerritforge.gerrit.plugins.replication.pull.api.PullReplicationEndpoints.APPLY_OBJECT_API_ENDPOINT;
 
@@ -42,7 +43,7 @@ public class ForwardedContext implements AutoCloseable {
         isPullReplicationApplyObjectIndexing();
   }
 
-  private Boolean setForwardedEvent(Boolean b) {
+  public static Boolean setForwardedEvent(Boolean b) {
     Boolean forwarded = forwardedEvent.get();
     forwardedEvent.set(b);
     return forwarded;
