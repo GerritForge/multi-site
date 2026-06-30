@@ -21,5 +21,5 @@ public interface ForwardedEventManualAckingRouter<EventType extends Event> {
   void route(EventType event, MessageAcknowledgement<Event> ack)
       throws IOException, PermissionBackendException, CacheNotFoundException;
 
-  void ack(EventType event, MessageAcknowledgement<Event> ack);
+  void ack(EventType event, MessageAcknowledgement<Event> ack) throws IOException;
 }
