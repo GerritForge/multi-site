@@ -38,5 +38,5 @@ public interface ForwardedEventManualAckingRouter<EventType extends Event> {
    * @param event event to ack
    * @param ack ack handle
    */
-  void ack(EventType event, MessageAcknowledgement<Event> ack);
+  void ack(EventType event, MessageAcknowledgement<Event> ack) throws IOException;
 }

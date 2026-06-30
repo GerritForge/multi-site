@@ -88,8 +88,8 @@ Defaults to true.
     Defaults to 30000 (30 seconds).
 
 ```index.commitInterval```
-:   The minimum time between acknowledgements for each partition-level index
-    consumer. The interval is checked as events are processed. Set to `0` to
+    The minimum time between acknowledgements and index flushing for each partition-level index
+    consumer. The interval is checked as events are processed. Set to `0` to commit to the index and
     acknowledge every event.
 
     Defaults to 5 minutes.
