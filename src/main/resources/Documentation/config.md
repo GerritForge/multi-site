@@ -79,6 +79,12 @@ Defaults to true.
 
 ```index.retryInterval```
 :   The time interval in milliseconds between subsequent auto-retries.
+
+    With partition-level manual acknowledgement, an event that needs another
+    attempt is requeued and the current copy is acknowledged so that consumption
+    of the partition can continue. Once `index.maxTries` is reached, the event is
+    left unacknowledged so that it can be redelivered by the broker.
+
     Defaults to 30000 (30 seconds).
 
 ```broker.indexEventTopic```
