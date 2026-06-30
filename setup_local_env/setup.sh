@@ -355,7 +355,7 @@ function show_help {
   echo "[--enabled-https]               Enabled https; default true"
   echo
   echo "[--broker-type]                 events broker type; 'kafka', 'kinesis' or 'gcloud-pubsub'; default 'kafka'"
-  echo "[--broker-manual-ack]           Enable manual broker acknowledgement and index partitions; default false"
+  echo "[--broker-auto-ack]             Enable automatic broker acknowledgement; default false"
   echo
   echo "[--sudo]                        run docker commands with sudo"
   echo
@@ -470,8 +470,8 @@ case "$1" in
       exit 1
     fi
   ;;
-  "--broker-manual-ack" )
-    BROKER_MANUAL_ACK=true
+  "--broker-auto-ack" )
+    BROKER_MANUAL_ACK=false
     shift
   ;;
   "--sudo" )
@@ -509,7 +509,7 @@ export REPLICATION_DELAY_SEC=${REPLICATION_DELAY_SEC:-"5"}
 export SSH_ADVERTISED_PORT=${SSH_ADVERTISED_PORT:-"29418"}
 HTTPS_ENABLED=${HTTPS_ENABLED:-"false"}
 BROKER_TYPE=${BROKER_TYPE:-"kafka"}
-BROKER_MANUAL_ACK=${BROKER_MANUAL_ACK:-"false"}
+BROKER_MANUAL_ACK=${BROKER_MANUAL_ACK:-"true"}
 if [ "$BROKER_MANUAL_ACK" = "true" ]; then
   export BROKER_AUTO_ACK=false
 else
