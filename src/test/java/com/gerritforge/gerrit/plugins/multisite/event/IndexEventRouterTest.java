@@ -29,6 +29,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEven
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventAckHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import com.google.gerrit.extensions.registration.DynamicMap;
@@ -55,6 +56,7 @@ public class IndexEventRouterTest {
   @Mock private ForwardedIndexProjectHandler indexProjectHandler;
   @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
   @Mock private MessageAcknowledgement<Event> ack;
+  @Mock private IndexEventAckHandler ackHandler;
   private AllUsersName allUsersName = new AllUsersName("All-Users");
   PrivateInternals_DynamicMapImpl<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
 
@@ -68,7 +70,9 @@ public class IndexEventRouterTest {
         indexHandlers.put(GERRIT, ChangeIndexEvent.TYPE, Providers.of(indexChangeHandler));
     var unused3 =
         indexHandlers.put(GERRIT, ProjectIndexEvent.TYPE, Providers.of(indexProjectHandler));
-    router = new IndexEventRouter(indexAccountHandler, indexHandlers, allUsersName, INSTANCE_ID);
+    router =
+        new IndexEventRouter(
+            indexAccountHandler, indexHandlers, ackHandler, allUsersName, INSTANCE_ID);
   }
 
   @Test
@@ -136,7 +140,7 @@ public class IndexEventRouterTest {
     router.route(event, ack);
 
     verify(indexChangeHandler).handleSync(event);
-    verify(ack).ack(event);
+    verify(ackHandler).ackIfDue(event, ack);
   }
 
   @Test
@@ -146,7 +150,7 @@ public class IndexEventRouterTest {
 
     assertThrows(IOException.class, () -> router.route(event, ack));
 
-    verifyNoInteractions(ack);
+    verifyNoInteractions(ackHandler);
   }
 
   @Test
