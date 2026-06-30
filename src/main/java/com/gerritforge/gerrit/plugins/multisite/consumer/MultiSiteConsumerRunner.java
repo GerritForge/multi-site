@@ -81,7 +81,8 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
               () ->
                   new IllegalStateException(
                       "broker.groupId is required for partition-aware subscriptions"));
-      AckAwareConsumer<Event> consumer = subscriber.getManualAckConsumer();
+      AckAwareConsumer<Event> consumer =
+          subscriber.getManualAckConsumer((e) -> broker.send(topic, e));
       INDEX_PARTITIONS.forEach(
           partition ->
               broker.receiveAsyncWithPartition(
