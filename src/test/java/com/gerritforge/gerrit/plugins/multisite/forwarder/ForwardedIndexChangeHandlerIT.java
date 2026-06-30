@@ -104,7 +104,8 @@ public class ForwardedIndexChangeHandlerIT extends LightweightPluginDaemonTest {
   }
 
   // Ignoring this IT test end up using the AbstractFakeIndex anyway, which doesn't behave the same
-  // as the real Change Index when it comes to imported changes. and therefore it's not representative.
+  // as the real Change Index when it comes to imported changes. and therefore it's not
+  // representative.
   @Ignore
   @Test
   @GerritConfig(name = "gerrit.instanceId", value = "testInstanceId")
@@ -138,8 +139,7 @@ public class ForwardedIndexChangeHandlerIT extends LightweightPluginDaemonTest {
   /**
    * Creates a change whose NoteDb server ID is set to {@value IMPORTED_SERVER_ID}, causing the
    * index to store a virtual ID that differs from the physical change number. Mirrors the pattern
-   * used in Gerrit's {@code ChangeIT.createImportedChange}.
-   * Reported as Issue 527144297
+   * used in Gerrit's {@code ChangeIT.createImportedChange}. Reported as Issue 527144297
    */
   private PushOneCommit.Result createImportedChange() throws Exception {
     PushOneCommit.Result change = createChange();

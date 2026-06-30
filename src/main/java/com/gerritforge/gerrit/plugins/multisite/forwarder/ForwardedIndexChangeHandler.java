@@ -147,7 +147,8 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
-    Preconditions.checkArgument(indexEvent.isPresent(), "No event found when deleting change %s", id);
+    Preconditions.checkArgument(
+        indexEvent.isPresent(), "No event found when deleting change %s", id);
     ChangeIndexEvent event = indexEvent.get();
     if (event.projectName.isEmpty()) {
       List<ChangeData> changes = queryProvider.get().byChangeNumber(Change.id(event.changeId));
@@ -158,7 +159,10 @@ public class ForwardedIndexChangeHandler
       }
       indexer.delete(change.change().getProject(), change.getId());
     } else {
-      List<ChangeData> changes = queryProvider.get().byProjectChangeNumber(Project.nameKey(event.projectName), Change.id(event.changeId));
+      List<ChangeData> changes =
+          queryProvider
+              .get()
+              .byProjectChangeNumber(Project.nameKey(event.projectName), Change.id(event.changeId));
       ChangeData change = uniqueChange(id, changes);
       if (change == null) {
         log.warn("Skipping deletion from index for change {}", id);

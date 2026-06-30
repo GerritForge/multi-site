@@ -55,10 +55,13 @@ public class IndexEventRouterTest {
   @Before
   public void setUp() {
     indexHandlers = (PrivateInternals_DynamicMapImpl) DynamicMap.emptyMap();
-    var unused = indexHandlers.put(GERRIT, AccountIndexEvent.TYPE, Providers.of(indexAccountHandler));
+    var unused =
+        indexHandlers.put(GERRIT, AccountIndexEvent.TYPE, Providers.of(indexAccountHandler));
     var unused1 = indexHandlers.put(GERRIT, GroupIndexEvent.TYPE, Providers.of(indexGroupHandler));
-    var unused2 = indexHandlers.put(GERRIT, ChangeIndexEvent.TYPE, Providers.of(indexChangeHandler));
-    var unused3 = indexHandlers.put(GERRIT, ProjectIndexEvent.TYPE, Providers.of(indexProjectHandler));
+    var unused2 =
+        indexHandlers.put(GERRIT, ChangeIndexEvent.TYPE, Providers.of(indexChangeHandler));
+    var unused3 =
+        indexHandlers.put(GERRIT, ProjectIndexEvent.TYPE, Providers.of(indexProjectHandler));
     router = new IndexEventRouter(indexAccountHandler, indexHandlers, allUsersName, INSTANCE_ID);
   }
 
