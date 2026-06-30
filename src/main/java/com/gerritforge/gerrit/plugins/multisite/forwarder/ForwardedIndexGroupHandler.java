@@ -59,13 +59,23 @@ public class ForwardedIndexGroupHandler
   }
 
   @Override
+  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof GroupIndexEvent event) {
+      return indexWhenReady(event.groupUUID, event, groupChecker);
+    }
+    return IndexingResult.IGNORED;
+  }
+
+  @Override
   protected void doIndex(String uuid, Optional<GroupIndexEvent> event) {
     scheduleIndexing(uuid, event, this::reindex);
   }
 
   @Override
   protected void reindex(String id) {
+    try (ForwardedContext fwdCtx = ForwardedContext.open()) {
     indexer.index(AccountGroup.uuid(id));
+    }
   }
 
   @Override

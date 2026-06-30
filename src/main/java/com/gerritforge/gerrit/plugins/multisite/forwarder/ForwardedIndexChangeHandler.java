@@ -76,6 +76,33 @@ public class ForwardedIndexChangeHandler
   }
 
   @Override
+  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof ChangeIndexEvent event) {
+      String id = event.projectName + "~" + event.changeId;
+      if (ChangeIndexEvent.isAllChangesDeletedForProject(event)) {
+        try (ForwardedContext ctx = ForwardedContext.open()) {
+          indexer.deleteAllForProject(Project.nameKey(event.projectName));
+        }
+        return IndexingResult.SUCCESS;
+      } else if (event.deleted) {
+        index(id, DELETE, Optional.of(event));
+        return IndexingResult.SUCCESS;
+      } else {
+        return indexWhenReady(
+            id,
+            event,
+            (e) -> {
+              ChangeChecker checker = changeCheckerFactory.create(id);
+              return checker.getChangeNotes().isPresent()
+                  && checker.isChangeConsistent()
+                  && checker.isUpToDate(e);
+            });
+      }
+    }
+    return IndexingResult.IGNORED;
+  }
+
+  @Override
   protected void doIndex(String id, Optional<ChangeIndexEvent> indexEvent) {
     if (indexEvent.isPresent()
         && ChangeIndexEvent.isAllChangesDeletedForProject(indexEvent.get())) {
@@ -131,7 +158,8 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void reindex(String id) {
-    try (ManualRequestContext ctx = oneOffCtx.open()) {
+    try (ManualRequestContext ctx = oneOffCtx.open();
+    ForwardedContext fwdCtx = ForwardedContext.open()) {
       ChangeChecker checker = changeCheckerFactory.create(id);
       Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
       ChangeNotes notes = changeNotes.get();
