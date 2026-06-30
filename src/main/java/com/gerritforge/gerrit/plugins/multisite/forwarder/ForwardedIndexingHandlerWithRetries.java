@@ -16,12 +16,14 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.UpToDateChecker;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 /**
@@ -57,6 +59,27 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   protected abstract String indexName();
 
   protected abstract void attemptToIndex(T id);
+
+  protected void indexWhenReady(T id, BooleanSupplier ready) throws IOException {
+    for (int attempt = 0; attempt <= maxTries; attempt++) {
+      if (ready.getAsBoolean()) {
+        runIndexTaskSynchronously(id, () -> reindex(id));
+        return;
+      }
+      if (attempt < maxTries) {
+        try {
+          TimeUnit.MILLISECONDS.sleep(retryInterval);
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+          throw new IOException(
+              String.format("Interrupted while indexing %s %s", indexName(), id), e);
+        }
+      }
+    }
+    throw new IOException(
+        String.format(
+            "%s %s could not be indexed after %d attempt(s)", indexName(), id, maxTries + 1));
+  }
 
   protected boolean rescheduleIndex(T id) {
     IndexingRetry retry = indexingRetryTaskMap.get(id);
