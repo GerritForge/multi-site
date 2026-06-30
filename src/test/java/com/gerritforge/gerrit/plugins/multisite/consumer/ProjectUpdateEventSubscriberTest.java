@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import static com.gerritforge.gerrit.plugins.multisite.consumer.AbstractSubcriber.RequeueAction.NO_ACTION;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
@@ -26,7 +27,8 @@ public class ProjectUpdateEventSubscriberTest extends AbstractSubscriberTestBase
 
   @Test
   public void shouldRejectManualAckWhenRouterDoesNotSupportIt() {
-    assertThrows(IllegalStateException.class, objectUnderTest::getManualAckConsumer);
+    assertThrows(
+        IllegalStateException.class, () -> objectUnderTest.getManualAckConsumer(NO_ACTION));
   }
 
   @SuppressWarnings("rawtypes")

@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import static com.gerritforge.gerrit.plugins.multisite.consumer.AbstractSubcriber.RequeueAction.NO_ACTION;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -52,7 +53,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   public void shouldUseRouterManagedAckForPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
 
-    objectUnderTest.getManualAckConsumer().accept(event, ack);
+    objectUnderTest.getManualAckConsumer(NO_ACTION).accept(event, ack);
 
     verify((IndexEventRouter) eventRouter).route(event, ack);
     verify(eventRouter, never()).route(event);
@@ -63,7 +64,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   public void shouldUseRouterManagedAckForDroppedPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, NODE_INSTANCE_ID, false);
 
-    objectUnderTest.getManualAckConsumer().accept(event, ack);
+    objectUnderTest.getManualAckConsumer(NO_ACTION).accept(event, ack);
 
     verify((IndexEventRouter) eventRouter).ack(event, ack);
     verify((IndexEventRouter) eventRouter, never()).route(event, ack);
