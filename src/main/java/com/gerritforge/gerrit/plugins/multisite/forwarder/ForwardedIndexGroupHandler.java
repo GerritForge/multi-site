@@ -59,6 +59,13 @@ public class ForwardedIndexGroupHandler
   }
 
   @Override
+  public void handleSync(IndexEvent sourceEvent) throws IOException {
+    if (sourceEvent instanceof GroupIndexEvent event) {
+      indexWhenReady(event.groupUUID, () -> groupChecker.isUpToDate(Optional.of(event)));
+    }
+  }
+
+  @Override
   protected void doIndex(String uuid, Optional<GroupIndexEvent> event) {
     scheduleIndexing(uuid, event, this::reindex);
   }
