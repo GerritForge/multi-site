@@ -170,6 +170,9 @@ public abstract class AbstractSubscriber {
     try {
       ((ForwardedEventManualAckingRouter<Event>) eventRouter).ack(event, ack);
       subscriberMetrics.incrementSubscriberConsumedMessage();
+    } catch (IOException e) {
+      logger.atSevere().withCause(e).log("Cannot handle message '%s'", event);
+      subscriberMetrics.incrementSubscriberFailedToConsumeMessage();
     } catch (MessageAcknowledgementException e) {
       logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
       subscriberMetrics.incrementSubscriberFailedToAckMessage();
