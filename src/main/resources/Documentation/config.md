@@ -89,9 +89,9 @@ Defaults to true.
 
 ```index.commitInterval```
 :   The minimum time between index changes are committed to the index and messages
-    consequently acked to the broker subscriber. Acknowledgements happen for each
-    partition-level index consumer. The interval is checked as events are processed.
-    Set to `0` to acknowledge every event.
+    consequently acked to the broker subscriber. Acknowledgements and commit happen
+    for each partition-level index consumer. The interval is checked as events are
+    processed. Set to `0` to commit to the index and acknowledge every event.
 
     Defaults to 5 minutes.
 
