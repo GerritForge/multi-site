@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandlerWithRetries.IndexingResult;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.google.gerrit.entities.Change;
@@ -53,6 +54,7 @@ import org.mockito.stubbing.OngoingStubbing;
 public class ForwardedIndexChangeHandlerTest {
 
   private static final int TEST_CHANGE_NUMBER = 123;
+  public static final int MAX_INDEX_TRIES = 1;
   private static String TEST_PROJECT = "test/project";
   private static String TEST_CHANGE_ID = TEST_PROJECT + "~" + TEST_CHANGE_NUMBER;
   private static final boolean CHANGE_EXISTS = true;
@@ -83,7 +85,7 @@ public class ForwardedIndexChangeHandlerTest {
     when(ctxMock.open()).thenReturn(manualRequestContextMock);
     id = Change.id(TEST_CHANGE_NUMBER);
     when(configurationMock.index()).thenReturn(index);
-    when(index.maxTries()).thenReturn(1);
+    when(index.maxTries()).thenReturn(MAX_INDEX_TRIES);
     handler =
         new ForwardedIndexChangeHandler(
             indexerMock,
@@ -98,7 +100,53 @@ public class ForwardedIndexChangeHandlerTest {
   public void changeIsIndexedWhenUpToDate() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_UP_TO_DATE, CHANGE_CONSISTENT);
     handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
-    verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+    verify(indexerMock, times(MAX_INDEX_TRIES)).index(any(ChangeNotes.class));
+  }
+
+  @Test
+  public void shouldIndexSynchronouslyWhenChangeBecomesReady() throws Exception {
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_CONSISTENT);
+    ChangeIndexEvent changeIndexEvent =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+
+    for (int i = 0; i < MAX_INDEX_TRIES; i++) {
+      assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+    }
+    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.SUCCESS);
+
+    verify(indexerMock).index(changeNotes);
+  }
+
+  @Test
+  public void shouldFailSynchronousIndexingWhenChangeIsNotReady() throws Exception {
+    setupChangeAccessRelatedMocks(
+        CHANGE_EXISTS,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        CHANGE_UP_TO_DATE,
+        CHANGE_INCONSISTENT,
+        CHANGE_INCONSISTENT);
+
+    ChangeIndexEvent changeIndexEvent =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    for (int i = 0; i < MAX_INDEX_TRIES; i++) {
+      assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+    }
+    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.FAILURE);
+    assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
+
+    verify(indexerMock, never()).index(any(ChangeNotes.class));
+  }
+
+  @Test
+  public void shouldDeleteAllProjectChangesSynchronously() throws Exception {
+    handler.handleSync(ChangeIndexEvent.allChangesDeletedForProject(TEST_PROJECT, "instance-id"));
+
+    verify(indexerMock).deleteAllForProject(Project.nameKey(TEST_PROJECT));
   }
 
   @Test
@@ -107,8 +155,8 @@ public class ForwardedIndexChangeHandlerTest {
     handler.index(
         TEST_CHANGE_ID,
         Operation.INDEX,
-        Optional.of(new ChangeIndexEvent("foo", 1, false, "instance-id")));
-    verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+        Optional.of(new ChangeIndexEvent("foo", MAX_INDEX_TRIES, false, "instance-id")));
+    verify(indexerMock, times(MAX_INDEX_TRIES)).index(any(ChangeNotes.class));
   }
 
   @Test
@@ -122,15 +170,16 @@ public class ForwardedIndexChangeHandlerTest {
     handler.index(
         TEST_CHANGE_ID,
         Operation.INDEX,
-        Optional.of(new ChangeIndexEvent("foo", 1, false, "instance-id")));
+        Optional.of(new ChangeIndexEvent("foo", MAX_INDEX_TRIES, false, "instance-id")));
     verify(indexerMock, never()).index(any(ChangeNotes.class));
-    verify(indexExecutorMock, times(1)).schedule(any(Runnable.class), anyLong(), any());
+    verify(indexExecutorMock, times(MAX_INDEX_TRIES))
+        .schedule(any(Runnable.class), anyLong(), any());
 
     handler.index(
         TEST_CHANGE_ID,
         Operation.INDEX,
-        Optional.of(new ChangeIndexEvent("foo", 1, false, "instance-id")));
-    verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+        Optional.of(new ChangeIndexEvent("foo", MAX_INDEX_TRIES, false, "instance-id")));
+    verify(indexerMock, times(MAX_INDEX_TRIES)).index(any(ChangeNotes.class));
   }
 
   @Test
@@ -168,7 +217,7 @@ public class ForwardedIndexChangeHandlerTest {
     handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
     assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
-    verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+    verify(indexerMock, times(MAX_INDEX_TRIES)).index(any(ChangeNotes.class));
   }
 
   @Test
@@ -191,7 +240,7 @@ public class ForwardedIndexChangeHandlerTest {
     assertThat(thrown).hasMessageThat().isEqualTo("someMessage");
     assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
-    verify(indexerMock, times(1)).index(any(ChangeNotes.class));
+    verify(indexerMock, times(MAX_INDEX_TRIES)).index(any(ChangeNotes.class));
   }
 
   @Test
