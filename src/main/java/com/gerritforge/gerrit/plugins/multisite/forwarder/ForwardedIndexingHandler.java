@@ -40,6 +40,9 @@ public abstract class ForwardedIndexingHandler<T, E> {
 
   public abstract void handle(IndexEvent sourceEvent) throws IOException;
 
+  public abstract ForwardedIndexingHandlerWithRetries.IndexingResult handleSync(
+      IndexEvent sourceEvent) throws IOException;
+
   private final Striped<Lock> idLocks;
 
   protected abstract void doIndex(T id, Optional<E> indexEvent);
@@ -60,22 +63,30 @@ public abstract class ForwardedIndexingHandler<T, E> {
    */
   public void index(T id, Operation operation, Optional<E> event) throws IOException {
     log.debug("{} {} {}", operation, id, event);
+    runAsForwardedForIndexId(
+        id,
+        () -> {
+          switch (operation) {
+            case INDEX:
+              doIndex(id, event);
+              break;
+            case DELETE:
+              doDelete(id, event);
+              break;
+            default:
+              log.error("unexpected operation: {}", operation);
+              break;
+          }
+        });
+  }
+
+  protected void runAsForwardedForIndexId(T id, Runnable task) {
     try {
       Context.setForwardedEvent(true);
       Lock idLock = idLocks.get(id);
       idLock.lock();
       try {
-        switch (operation) {
-          case INDEX:
-            doIndex(id, event);
-            break;
-          case DELETE:
-            doDelete(id, event);
-            break;
-          default:
-            log.error("unexpected operation: {}", operation);
-            break;
-        }
+        task.run();
       } finally {
         idLock.unlock();
       }
