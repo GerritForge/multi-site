@@ -71,7 +71,7 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
   @Test
   public void shouldNotConsumeNonProjectEventTypeEvents()
       throws IOException, PermissionBackendException, CacheNotFoundException {
-    IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
+    IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID);
 
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
