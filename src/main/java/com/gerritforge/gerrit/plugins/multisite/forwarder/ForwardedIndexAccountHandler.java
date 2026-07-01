@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.DELETE;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
@@ -50,7 +51,8 @@ public class ForwardedIndexAccountHandler
   @Override
   public void handle(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof AccountIndexEvent accountIndexEvent) {
-      indexAsync(Account.id(accountIndexEvent.accountId), INDEX);
+      indexAsync(
+          Account.id(accountIndexEvent.accountId), accountIndexEvent.deleted ? DELETE : INDEX);
     }
   }
 
@@ -62,7 +64,11 @@ public class ForwardedIndexAccountHandler
 
   @Override
   protected void doDelete(Account.Id id, Optional<AccountIndexEvent> event) {
-    throw new UnsupportedOperationException("Delete from account index not supported");
+    // Gerrit doesn't have yet the direct exposure of the index's delete method
+    // and simply assumes that indexing an id that doesn't exist in cache means
+    // removing it from the index.
+    indexer.index(id);
+    log.debug("Account {} successfully removed", id);
   }
 
   public synchronized void indexAsync(Account.Id id, Operation operation) {
