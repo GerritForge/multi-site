@@ -19,14 +19,17 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEven
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.base.Objects;
+import com.google.gerrit.entities.Account;
 import com.google.gerrit.extensions.events.AccountIndexedListener;
 import com.google.gerrit.extensions.events.ChangeIndexedListener;
 import com.google.gerrit.extensions.events.GroupIndexedListener;
 import com.google.gerrit.extensions.events.ProjectIndexedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.inject.Inject;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
@@ -44,6 +47,7 @@ class IndexEventHandler
   private final Set<IndexTask> queuedTasks = Collections.newSetFromMap(new ConcurrentHashMap<>());
   private final ChangeCheckerImpl.Factory changeChecker;
   private final GroupChecker groupChecker;
+  private final AccountCache accountCache;
   private final String instanceId;
   private final CurrentRequestContext currCtx;
 
@@ -53,12 +57,14 @@ class IndexEventHandler
       DynamicSet<IndexEventForwarder> forwarders,
       ChangeCheckerImpl.Factory changeChecker,
       GroupChecker groupChecker,
+      AccountCache accountCache,
       @GerritInstanceId String instanceId,
       CurrentRequestContext currCtx) {
     this.forwarders = forwarders;
     this.executor = executor;
     this.changeChecker = changeChecker;
     this.groupChecker = groupChecker;
+    this.accountCache = accountCache;
     this.instanceId = instanceId;
     this.currCtx = currCtx;
   }
@@ -68,7 +74,14 @@ class IndexEventHandler
     currCtx.onlyWithContext(
         (ctx) -> {
           if (!Context.isForwardedEvent()) {
-            IndexAccountTask task = new IndexAccountTask(new AccountIndexEvent(id, instanceId));
+            Optional<String> targetSha =
+                accountCache
+                    .get(Account.id(id))
+                    .map(accountState -> accountState.account().metaId());
+            IndexAccountTask task =
+                new IndexAccountTask(
+                    new AccountIndexEvent(
+                        id, targetSha.orElse(null), instanceId, targetSha.isEmpty()));
             if (queuedTasks.add(task)) {
               executor.execute(task);
             }
