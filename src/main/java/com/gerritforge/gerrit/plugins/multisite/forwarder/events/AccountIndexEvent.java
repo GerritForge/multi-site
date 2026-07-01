@@ -12,15 +12,18 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder.events;
 
 import com.google.common.base.Objects;
+import com.google.gerrit.common.Nullable;
 
 public class AccountIndexEvent extends IndexEvent {
   public static final String TYPE = "account-index";
 
   public int accountId;
+  @Nullable public String targetSha;
 
-  public AccountIndexEvent(int accountId, String instanceId) {
+  public AccountIndexEvent(int accountId, @Nullable String targetSha, String instanceId) {
     super(TYPE, instanceId);
     this.accountId = accountId;
+    this.targetSha = targetSha;
   }
 
   @Override
@@ -28,11 +31,11 @@ public class AccountIndexEvent extends IndexEvent {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     AccountIndexEvent that = (AccountIndexEvent) o;
-    return accountId == that.accountId;
+    return accountId == that.accountId && Objects.equal(targetSha, that.targetSha);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(accountId);
+    return Objects.hashCode(accountId, targetSha);
   }
 }

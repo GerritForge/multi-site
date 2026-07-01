@@ -50,7 +50,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
   @Test
   public void shouldUseRouterManagedAckForPartitionEvents() throws Exception {
-    IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
+    IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID);
 
     objectUnderTest.getManualAckConsumer().accept(event, ack);
 
@@ -61,7 +61,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
   @Test
   public void shouldUseRouterManagedAckForDroppedPartitionEvents() throws Exception {
-    IndexEvent event = new AccountIndexEvent(1, NODE_INSTANCE_ID);
+    IndexEvent event = new AccountIndexEvent(1, null, NODE_INSTANCE_ID);
 
     objectUnderTest.getManualAckConsumer().accept(event, ack);
 
@@ -74,7 +74,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   @Test
   public void shouldConsumeNonProjectAndNonChangeIndexingEventsTypes()
       throws IOException, PermissionBackendException, CacheNotFoundException {
-    IndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
+    IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID);
 
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 

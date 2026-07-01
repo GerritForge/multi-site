@@ -70,7 +70,7 @@ public class IndexEventRouterTest {
 
   @Test
   public void routerShouldSendEventsToTheAppropriateHandler_AccountIndex() throws Exception {
-    final AccountIndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
+    final AccountIndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID);
     router.route(event);
 
     verify(indexAccountHandler).handle(event);
@@ -82,7 +82,7 @@ public class IndexEventRouterTest {
   public void streamEventRouterShouldTriggerAccountIndexFlush() throws Exception {
     StreamEventRouter streamEventRouter = new StreamEventRouter(forwardedEventDispatcher, router);
 
-    final AccountIndexEvent event = new AccountIndexEvent(1, INSTANCE_ID);
+    final AccountIndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID);
     router.route(event);
 
     verify(indexAccountHandler).handle(event);
