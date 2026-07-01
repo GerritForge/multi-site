@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 
 import static com.gerritforge.gerrit.plugins.replication.pull.api.PullReplicationEndpoints.APPLY_OBJECT_API_ENDPOINT;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -23,13 +24,18 @@ import static org.mockito.Mockito.when;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.IndexEventForwarder;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.google.gerrit.entities.Account;
 import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.account.AccountState;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.gerrit.server.util.RequestContext;
 import com.google.gerrit.server.util.ThreadLocalRequestContext;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.function.Consumer;
 import org.junit.Before;
@@ -43,6 +49,8 @@ public class IndexEventHandlerTest {
 
   private static final String INSTANCE_ID = "instance-id";
   private static final String PROJECT_NAME = "test_project";
+  private static final int ACCOUNT_ID = 2;
+  private static final String ACCOUNT_TARGET_SHA = "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef";
   private static final int CHANGE_ID = 1;
 
   private IndexEventHandler eventHandler;
@@ -50,6 +58,7 @@ public class IndexEventHandlerTest {
   @Mock private IndexEventForwarder forwarder;
   @Mock private ChangeCheckerImpl.Factory changeChecker;
   @Mock private ChangeChecker changeCheckerMock;
+  @Mock private AccountCache accountCache;
   @Mock private RequestContext mockCtx;
 
   private CurrentRequestContext currCtx =
@@ -68,6 +77,7 @@ public class IndexEventHandlerTest {
             asDynamicSet(forwarder),
             changeChecker,
             new TestGroupChecker(true),
+            accountCache,
             INSTANCE_ID,
             currCtx);
   }
@@ -118,6 +128,25 @@ public class IndexEventHandlerTest {
     verify(forwarder).index(any(), any());
   }
 
+  @Test
+  public void shouldAddAccountRevisionToIndexEvent() {
+    Account account =
+        Account.builder(Account.id(ACCOUNT_ID), Instant.EPOCH)
+            .setMetaId(ACCOUNT_TARGET_SHA)
+            .build();
+    when(accountCache.get(account.id())).thenReturn(Optional.of(AccountState.forAccount(account)));
+
+    eventHandler.onAccountIndexed(ACCOUNT_ID);
+
+    verify(forwarder)
+        .index(
+            any(),
+            argThat(
+                event ->
+                    event instanceof AccountIndexEvent accountEvent
+                        && ACCOUNT_TARGET_SHA.equals(accountEvent.targetSha)));
+  }
+
   private IndexEventHandler createIndexEventHandler(
       ChangeCheckerImpl.Factory changeChecker, boolean synchronizeForced) {
     ThreadLocalRequestContext threadLocalCtxMock = mock(ThreadLocalRequestContext.class);
@@ -131,6 +160,7 @@ public class IndexEventHandlerTest {
         asDynamicSet(forwarder),
         changeChecker,
         new TestGroupChecker(true),
+        accountCache,
         INSTANCE_ID,
         new CurrentRequestContext(threadLocalCtxMock, cfgMock, oneOffCtxMock));
   }
