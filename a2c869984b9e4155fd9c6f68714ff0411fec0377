@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c64d1b96_044310eb",
+        "filename": "setup_local_env/configs/gerrit.config",
+        "patchSetId": 19
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24e51147_b1f97995",
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c261edec_8b1aec28",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-07-02T13:18:06Z",
       "side": 1,
       "message": "Can we set this to `1` and always pass it?",
+      "range": {
+        "startLine": 200,
+        "startChar": 9,
+        "endLine": 200,
+        "endChar": 10
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0c41beb_3487d683",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c261edec_8b1aec28",
       "range": {
         "startLine": 200,
         "startChar": 9,
@@ -64,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5d3aac8_9140a32a",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecf0afdf_180c64d0",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 6
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e0aefa2_4f01c973",
@@ -77,6 +143,30 @@
       "writtenOn": "2026-07-02T13:18:06Z",
       "side": 1,
       "message": "```suggestion\n    create_kafka_topic \"gerrit_index\" \"$partitions\"\n```",
+      "range": {
+        "startLine": 224,
+        "startChar": 23,
+        "endLine": 224,
+        "endChar": 35
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2da7338a_bdeb0def",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e0aefa2_4f01c973",
       "range": {
         "startLine": 224,
         "startChar": 23,
@@ -110,6 +200,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efbdd291_bb76faba",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bfae96f_1a084d2c",
+      "range": {
+        "startLine": 255,
+        "startChar": 93,
+        "endLine": 255,
+        "endChar": 102
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d2492b3_3af7699e",
@@ -123,6 +237,30 @@
       "writtenOn": "2026-07-02T13:18:06Z",
       "side": 1,
       "message": "What about making it a flag? IT would simplify the logic:\n\n```bash\n\"--broker-manual-ack\" )\n  BROKER_MANUAL_ACK\u003dtrue\n  shift\n;;\n```",
+      "range": {
+        "startLine": 477,
+        "startChar": 2,
+        "endLine": 485,
+        "endChar": 4
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45e67e97_8c0ee8dd",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 19
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d2492b3_3af7699e",
       "range": {
         "startLine": 477,
         "startChar": 2,
@@ -158,6 +296,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2868ddf2_4d2efaea",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "I would keep `containsAll` to be honest.\nAny additional configured partition does not break index subscriptions and I would rather not make assumptions about what other partitions might be added for other consumers in the future, if any.\n\nWDYT?",
+      "parentUuid": "6d1716a4_4bfc452b",
+      "range": {
+        "startLine": 102,
+        "startChar": 65,
+        "endLine": 102,
+        "endChar": 76
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b4500df8_1cc7db5f",
         "filename": "src/main/resources/Documentation/config.md",
         "patchSetId": 19
@@ -169,6 +331,30 @@
       "writtenOn": "2026-07-02T13:18:06Z",
       "side": 1,
       "message": "Do we need to add a note about migration? I.e.: for installation moving from topic-level to partition-level, all the messages will be consumed from the beginning of the topic.",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 58
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02e62b3a_2797ecbf",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:18:58Z",
+      "side": 1,
+      "message": "I say this at L104-106.\n\n```\n    Changing the effective group id creates a new consumer and does not preserve its\n    offsets or checkpoints. To retain the current position, set this value to the consumer\n    identity already configured in the broker plugin before enabling it in multi-site.\n```\n\nIs that what you had in mind?",
+      "parentUuid": "b4500df8_1cc7db5f",
       "range": {
         "startLine": 101,
         "startChar": 0,
