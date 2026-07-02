@@ -318,6 +318,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a3ceda6_9e206a0b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 19
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-02T14:25:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2868ddf2_4d2efaea",
+      "range": {
+        "startLine": 102,
+        "startChar": 65,
+        "endLine": 102,
+        "endChar": 76
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b4500df8_1cc7db5f",
@@ -355,6 +379,30 @@
       "side": 1,
       "message": "I say this at L104-106.\n\n```\n    Changing the effective group id creates a new consumer and does not preserve its\n    offsets or checkpoints. To retain the current position, set this value to the consumer\n    identity already configured in the broker plugin before enabling it in multi-site.\n```\n\nIs that what you had in mind?",
       "parentUuid": "b4500df8_1cc7db5f",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 58
+      },
+      "revId": "a2c869984b9e4155fd9c6f68714ff0411fec0377",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caff1e57_0f502674",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 19
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-02T14:25:15Z",
+      "side": 1,
+      "message": "Ops sorry I missed it",
+      "parentUuid": "02e62b3a_2797ecbf",
       "range": {
         "startLine": 101,
         "startChar": 0,

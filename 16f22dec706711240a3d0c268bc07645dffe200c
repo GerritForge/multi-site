@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae534fc7_6f02edb2",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-02T14:25:15Z",
+      "side": 1,
+      "message": "```suggestion\n    if [ \"$stream\" \u003d \"gerrit_index\" ]; then\n      create_kinesis_stream \"$stream\" \"$index_partitions\"\n    fi\n```",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 6
+      },
+      "revId": "16f22dec706711240a3d0c268bc07645dffe200c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
