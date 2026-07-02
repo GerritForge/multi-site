@@ -22,6 +22,30 @@
       },
       "revId": "16f22dec706711240a3d0c268bc07645dffe200c",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f508282f_a02001e8",
+        "filename": "setup_local_env/setup.sh",
+        "patchSetId": 20
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-02T14:30:03Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "ae534fc7_6f02edb2",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 216,
+        "endChar": 6
+      },
+      "revId": "16f22dec706711240a3d0c268bc07645dffe200c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
