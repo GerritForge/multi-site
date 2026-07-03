@@ -142,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8adeede6_70d4b09d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-03T12:58:15Z",
+      "side": 1,
+      "message": "I was thinking of distinguishing between messages consumed and processed *successfully* and messages consumed and *dropped*. However, it is out of scope for this change.",
+      "parentUuid": "31ccfe3e_8cc65cf0",
+      "range": {
+        "startLine": 144,
+        "startChar": 24,
+        "endLine": 144,
+        "endChar": 58
+      },
+      "revId": "41fbba57823c6d7fd57b2f476d02a1ab0ccf2511",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d45deab9_d2055df5",
