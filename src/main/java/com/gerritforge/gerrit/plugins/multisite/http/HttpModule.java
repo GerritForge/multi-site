@@ -28,6 +28,7 @@ public class HttpModule extends ServletModule {
 
   @Override
   protected void configureServlets() {
+    install(new com.gerritforge.gerrit.plugins.bsl.HttpModule());
     if (config.event().synchronize() && config.replicationLagEnabled()) {
       serve(String.format("/%s", LAG_ENDPOINT_SEGMENT)).with(ReplicationStatusServlet.class);
     }
