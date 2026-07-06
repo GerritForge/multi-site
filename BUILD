@@ -23,6 +23,22 @@ gerrit_plugin(
         ":pull-replication-neverlink",
         ":replication-neverlink",
         "//plugins/gerrit-bsl-license",
+<<<<<<< PATCH SET (b4b3c807efc45816e9990b8ba8355e6254af9a09 Merge branch 'stable-3.14')
+    ],
+)
+
+gerrit_plugin_tests(
+    srcs = glob(["src/test/java/**/*.java"]),
+    plugin = PLUGIN,
+    resources = glob(["src/test/resources/**/*"]),
+    tags = ["local"],
+    deps = [
+        "//plugins/events-broker",
+        "//plugins/global-refdb",
+        "//plugins/pull-replication",
+        "//plugins/replication",
+=======
+>>>>>>> BASE      (b39a39616194801b16aa43160563a3cebec32b37 Redirect admin users to GerritForge's BSL awareness page)
     ],
 )
 
