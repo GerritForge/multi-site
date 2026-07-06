@@ -22,6 +22,7 @@ gerrit_plugin(
         ":global-refdb-neverlink",
         ":pull-replication-neverlink",
         ":replication-neverlink",
+        "//plugins/gerrit-bsl-license",
     ],
 )
 
