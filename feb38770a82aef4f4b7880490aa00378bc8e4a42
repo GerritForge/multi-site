@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c9d2b5d_b378badb",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/AccountEventIndexTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T22:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cffcb754_78412b69",
+      "range": {
+        "startLine": 29,
+        "startChar": 15,
+        "endLine": 29,
+        "endChar": 73
+      },
+      "revId": "feb38770a82aef4f4b7880490aa00378bc8e4a42",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ff4abe5_92c68c0d",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-07-08T21:34:51Z",
       "side": 1,
       "message": "The assertion isn\u0027t enough, we also need to assert the other fields.",
+      "revId": "feb38770a82aef4f4b7880490aa00378bc8e4a42",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1565c211_a96685ff",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/AccountEventIndexTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T22:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ff4abe5_92c68c0d",
       "revId": "feb38770a82aef4f4b7880490aa00378bc8e4a42",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }

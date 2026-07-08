@@ -77,6 +77,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b0baeef_f8ea2a32",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/AccountEventIndexTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T22:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7697f22c_d91a23fa",
+      "range": {
+        "startLine": 25,
+        "startChar": 29,
+        "endLine": 25,
+        "endChar": 38
+      },
+      "revId": "4514a91567dcc57144f278c18e9697bcac2d980c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8113df6b_3f9f5492",
@@ -90,6 +114,30 @@
       "writtenOn": "2026-07-06T07:45:11Z",
       "side": 1,
       "message": "Does this long string make sense?",
+      "range": {
+        "startLine": 27,
+        "startChar": 34,
+        "endLine": 27,
+        "endChar": 74
+      },
+      "revId": "4514a91567dcc57144f278c18e9697bcac2d980c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69d86d52_f372f70d",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/AccountEventIndexTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T22:01:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8113df6b_3f9f5492",
       "range": {
         "startLine": 27,
         "startChar": 34,
