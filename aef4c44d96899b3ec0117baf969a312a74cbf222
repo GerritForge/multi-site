@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a7e7192_5f289feb",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/AccountIndexEvent.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T21:53:03Z",
+      "side": 1,
+      "message": "We also need to introduce the `deleted` flag that indicates that the account index has been triggered from a delete operation.\n\nBy default is `false` as deletions weren\u0027t supported before.",
+      "revId": "aef4c44d96899b3ec0117baf969a312a74cbf222",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e630d51f_1fcb22bf",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/IndexEventHandler.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T21:53:03Z",
+      "side": 1,
+      "message": "This is way too defensive and risks keeping the `@Nullable` on the target SHA-1 of the AccountIndexEvent indefinitely.\n\nIf the account cannot be found, it doesn\u0027t mean we need to reindex without the SHA1; rather, it means the account has been deleted.",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 34
+      },
+      "revId": "aef4c44d96899b3ec0117baf969a312a74cbf222",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
