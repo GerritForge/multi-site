@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "efffea3e_35616bce",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/AccountIndexEvent.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T21:23:54Z",
+      "side": 1,
+      "message": "Actually, it\u0027s only used in tests and therefore can be removed altogether.",
+      "parentUuid": "f819b93a_58706df0",
+      "revId": "4514a91567dcc57144f278c18e9697bcac2d980c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7697f22c_d91a23fa",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/AccountEventIndexTest.java",
         "patchSetId": 4

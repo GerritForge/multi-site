@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c97bf61_68b56d9e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/AccountIndexEvent.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-08T21:23:54Z",
+      "side": 1,
+      "message": "We should also add a deserialisation test to ensure that it would be able to manage messages coming from earlier versions.",
+      "revId": "9d4ffe817258d87968ef8e94aa0698403e3958f3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
