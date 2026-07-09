@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b24b3cc_7769756c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-09T19:18:28Z",
+      "side": 1,
+      "message": "But delete calls:\n\n```\nListenableFuture\u003c?\u003e delete(Term term) {\n    return submit(() -\u003e writer.deleteDocuments(term));\n  }\n```\n\nAnyway, not a big deal.",
+      "parentUuid": "16729ffa_a02a5d65",
+      "range": {
+        "startLine": 71,
+        "startChar": 26,
+        "endLine": 71,
+        "endChar": 46
+      },
+      "revId": "50c6e50fdde2cc24087cf8243a50282d8ec57065",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76576cc2_924d0dc9",
