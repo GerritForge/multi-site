@@ -16,6 +16,24 @@
       "message": "We should also add the `deleted` flag in the payload.",
       "revId": "a746ee38bfa6e02b478994acbf1230b207602bd4",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b2236f2_850af1ff",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/event/MultiSiteEventDeserializerTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-09T07:48:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7b9fbe7_da532c83",
+      "revId": "a746ee38bfa6e02b478994acbf1230b207602bd4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
