@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8be2321b_a8e519c7",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-09T15:23:04Z",
+      "side": 1,
+      "message": "nit: deletion is asynchronous, hence we don\u0027t know if the account has really been removed. Maybe reword with \"deletion requested\"",
+      "range": {
+        "startLine": 71,
+        "startChar": 26,
+        "endLine": 71,
+        "endChar": 46
+      },
+      "revId": "50c6e50fdde2cc24087cf8243a50282d8ec57065",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76576cc2_924d0dc9",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/IndexEventHandlerTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-09T15:23:04Z",
+      "side": 1,
+      "message": "Since we have some logic considering a missing value from the cache as a deletion, I think it is worth adding a test for it.",
+      "revId": "50c6e50fdde2cc24087cf8243a50282d8ec57065",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
