@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16729ffa_a02a5d65",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-09T18:57:05Z",
+      "side": 1,
+      "message": "\u003e nit: deletion is asynchronous,\n\nAccording to the code, the deletion is synchronous, see `LuceneAccountIndex.java:L157`:\n\n```\n  @Override\n  public void delete(Account.Id key) {\n    try {\n      delete(idTerm(getSchema().hasField(ID_FIELD_SPEC), key)).get();\n    } catch (ExecutionException | InterruptedException e) {\n      throw new StorageException(e);\n    }\n  }\n```",
+      "parentUuid": "8be2321b_a8e519c7",
+      "range": {
+        "startLine": 71,
+        "startChar": 26,
+        "endLine": 71,
+        "endChar": 46
+      },
+      "revId": "50c6e50fdde2cc24087cf8243a50282d8ec57065",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "76576cc2_924d0dc9",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-07-09T15:23:04Z",
       "side": 1,
       "message": "Since we have some logic considering a missing value from the cache as a deletion, I think it is worth adding a test for it.",
+      "revId": "50c6e50fdde2cc24087cf8243a50282d8ec57065",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d8bd79_3bb52cdb",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/IndexEventHandlerTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-09T18:57:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76576cc2_924d0dc9",
       "revId": "50c6e50fdde2cc24087cf8243a50282d8ec57065",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
