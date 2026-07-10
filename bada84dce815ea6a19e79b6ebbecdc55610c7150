@@ -22,6 +22,52 @@
       },
       "revId": "bada84dce815ea6a19e79b6ebbecdc55610c7150",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7984b435_a841b371",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-10T12:25:30Z",
+      "side": 1,
+      "message": "Rather than sleeping, why don\u0027t we let the caller know that the reindexing wasn\u0027t possible and should be retried later?\n\nThe caller can decide to process another indexing in the meantime.",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 9
+      },
+      "revId": "bada84dce815ea6a19e79b6ebbecdc55610c7150",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50d95f7b_93c6a5a2",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-10T12:25:30Z",
+      "side": 1,
+      "message": "I believe this should be logged but NOT thrown as an `IOException`. The caller should know that reindexing wasn\u0027t possible.",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 94
+      },
+      "revId": "bada84dce815ea6a19e79b6ebbecdc55610c7150",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
