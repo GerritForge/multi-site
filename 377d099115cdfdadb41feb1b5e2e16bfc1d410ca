@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a925c8b_86dc55a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-11T01:30:31Z",
+      "side": 1,
+      "message": "The main issues are sorted, more work to do though before merging it.",
+      "revId": "377d099115cdfdadb41feb1b5e2e16bfc1d410ca",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
