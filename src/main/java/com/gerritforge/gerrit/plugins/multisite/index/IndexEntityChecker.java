@@ -1,4 +1,4 @@
-// Copyright (C) 2025 GerritForge, Inc.
+// Copyright (C) 2026 GerritForge, Inc.
 //
 // Licensed under the BSL 1.1 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,7 +11,14 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 
-/** Encapsulates the logic of verifying the up-to-date status of a project. */
-public interface ProjectChecker extends IndexEntityChecker<String, ProjectIndexEvent> {}
+/**
+ * Interface of a generic index entity checker that provides the ability to both check for
+ * up-to-date status (UpToDateChecker) and consistency (ConsistencyChecker).
+ *
+ * @param <K> Entity key type
+ * @param <E> Indexing event type
+ */
+public interface IndexEntityChecker<K, E extends IndexEvent>
+    extends UpToDateChecker<E>, ConsistencyChecker<K> {}
