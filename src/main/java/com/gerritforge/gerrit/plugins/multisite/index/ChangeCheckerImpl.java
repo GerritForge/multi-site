@@ -161,10 +161,11 @@ public class ChangeCheckerImpl implements ChangeChecker {
   @Override
   public boolean isChangeConsistent() {
     Optional<ChangeNotes> notes = getChangeNotes();
-    if (!notes.isPresent()) {
+    if (notes.isEmpty()) {
       log.warn("Unable to compute change notes for change {}", changeId);
-      return true;
+      return false;
     }
+
     ObjectId currentPatchSetCommitId = notes.get().getCurrentPatchSet().commitId();
     try (Repository repo = gitRepoMgr.openRepository(changeNotes.get().getProjectName());
         RevWalk walk = new RevWalk(repo)) {

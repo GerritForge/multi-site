@@ -58,7 +58,7 @@ public interface ChangeChecker extends UpToDateChecker<ChangeIndexEvent> {
   Optional<Long> getComputedChangeTs() throws IOException;
 
   /**
-   * Check if the local Change contains current patchset refs
+   * Check if the local Change has the associated ChangeNotes and contains current patchset refs
    *
    * @return true if local change contains meta and current patchset refs
    */

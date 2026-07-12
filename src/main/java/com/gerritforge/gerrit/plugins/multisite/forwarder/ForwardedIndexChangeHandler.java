@@ -92,27 +92,22 @@ public class ForwardedIndexChangeHandler
   }
 
   private boolean isChangeConsistent(String id) {
-    ChangeChecker checker = changeCheckerFactory.create(id);
-    Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
-    return changeNotes.isPresent() && checker.isChangeConsistent();
+    return changeCheckerFactory.create(id).isChangeConsistent();
   }
 
   @Override
   protected void attemptToIndex(String id) {
     ChangeChecker checker = changeCheckerFactory.create(id);
-    Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
-    boolean changeIsPresent = changeNotes.isPresent();
+    boolean changeIsPresent = checker.getChangeNotes().isPresent();
     boolean changeIsConsistent = checker.isChangeConsistent();
-    if (changeIsPresent && changeIsConsistent) {
+    if (changeIsConsistent) {
       reindexAndCheckIsUpToDate(id, checker);
     } else {
       IndexingRetry retry = indexingRetryTaskMap.get(id);
       log.warn(
           "Change {} {} in local Git repository (event={}) after {} attempt(s)",
           id,
-          !changeIsPresent
-              ? "not present yet"
-              : (changeIsConsistent ? "is" : "is not") + " consistent",
+          !changeIsPresent ? "not present yet" : "is not consistent",
           retry.getEvent(),
           retry.getRetryNumber());
 
@@ -121,9 +116,7 @@ public class ForwardedIndexChangeHandler
         log.error(
             "Change {} {} in the local Git repository (event={})",
             id,
-            !changeIsPresent
-                ? "could not be found"
-                : (changeIsConsistent ? "was" : "was not") + " consistent",
+            !changeIsPresent ? "could not be found" : "was not consistent",
             retry.getEvent());
       }
     }
