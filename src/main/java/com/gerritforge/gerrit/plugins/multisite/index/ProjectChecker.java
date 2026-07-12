@@ -14,5 +14,4 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 
 /** Encapsulates the logic of verifying the up-to-date status of a project. */
-public interface ProjectChecker
-    extends UpToDateChecker<ProjectIndexEvent>, ConsistencyChecker<String> {}
+public interface ProjectChecker extends EntityChecker<String, ProjectIndexEvent> {}

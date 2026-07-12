@@ -15,7 +15,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent
 import java.util.Optional;
 import org.eclipse.jgit.lib.ObjectId;
 
-public interface GroupChecker extends UpToDateChecker<GroupIndexEvent>, ConsistencyChecker<String> {
+public interface GroupChecker extends EntityChecker<String, GroupIndexEvent> {
 
   @Override
   boolean isUpToDate(Optional<GroupIndexEvent> groupIndexEvent);
