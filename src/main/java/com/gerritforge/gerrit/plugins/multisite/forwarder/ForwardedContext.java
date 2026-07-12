@@ -16,11 +16,24 @@ import static com.gerritforge.gerrit.plugins.replication.pull.api.PullReplicatio
 import static com.gerritforge.gerrit.plugins.replication.pull.api.PullReplicationEndpoints.APPLY_OBJECT_API_ENDPOINT;
 
 /** Allows to tag a forwarded event to avoid infinitely looping events. */
-public class Context {
+public class ForwardedContext implements AutoCloseable {
   public static final String PULL_REPLICATION_PLUGIN_NAME = "pull-replication";
   private static final ThreadLocal<Boolean> forwardedEvent = ThreadLocal.withInitial(() -> false);
 
-  private Context() {}
+  final boolean forwarded;
+
+  private ForwardedContext() {
+    forwarded = setForwardedEvent(true);
+  }
+
+    @Override
+    public void close() {
+      setForwardedEvent(forwarded);
+    }
+
+  public static ForwardedContext open() {
+    return new ForwardedContext();
+  }
 
   public static Boolean isForwardedEvent() {
     return forwardedEvent.get()
@@ -30,14 +43,10 @@ public class Context {
         isPullReplicationApplyObjectIndexing();
   }
 
-  public static Boolean setForwardedEvent(Boolean b) {
+  private Boolean setForwardedEvent(Boolean b) {
     Boolean forwarded = forwardedEvent.get();
     forwardedEvent.set(b);
     return forwarded;
-  }
-
-  public static void unsetForwardedEvent() {
-    forwardedEvent.remove();
   }
 
   public static boolean isPullReplicationApplyObjectIndexing() {
