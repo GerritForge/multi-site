@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /** Encapsulates the logic of verifying the up-to-date status of a change. */
-public interface ChangeChecker extends UpToDateChecker<ChangeIndexEvent>, ConsistencyChecker<String> {
+public interface ChangeChecker extends EntityChecker<String, ChangeIndexEvent> {
 
   /**
    * Return the Change nodes read from ReviewDb or NoteDb.
