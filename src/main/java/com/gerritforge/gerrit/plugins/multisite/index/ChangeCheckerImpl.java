@@ -88,6 +88,10 @@ public class ChangeCheckerImpl implements ChangeChecker {
 
   @Override
   public Optional<ChangeNotes> getChangeNotes() {
+    return getChangeNotes(changeId);
+}
+
+    private Optional<ChangeNotes> getChangeNotes(String changeId) {
     try (ManualRequestContext ctx = oneOffReqCtx.open()) {
       this.changeNotes = changeFinder.findOne(changeId);
       return changeNotes;
@@ -159,15 +163,15 @@ public class ChangeCheckerImpl implements ChangeChecker {
   }
 
   @Override
-  public boolean isChangeConsistent() {
-    Optional<ChangeNotes> notes = getChangeNotes();
+  public boolean isConsistent(String changeId) {
+    Optional<ChangeNotes> notes = getChangeNotes(changeId);
     if (notes.isEmpty()) {
       log.warn("Unable to compute change notes for change {}", changeId);
       return false;
     }
 
     ObjectId currentPatchSetCommitId = notes.get().getCurrentPatchSet().commitId();
-    try (Repository repo = gitRepoMgr.openRepository(changeNotes.get().getProjectName());
+    try (Repository repo = gitRepoMgr.openRepository(notes.get().getProjectName());
         RevWalk walk = new RevWalk(repo)) {
       walk.parseCommit(currentPatchSetCommitId);
     } catch (StorageException | MissingObjectException e) {
