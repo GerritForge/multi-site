@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e2ee738_16e5a7d8",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-12T08:18:17Z",
+      "side": 1,
+      "message": "I believe the `runIndexTaskSynchronously()` method name is misleading: the fact of having `Synchronously()` in the method name doesn\u0027t mean that the whole operation is synchronous at all. \n\nLet me rename it for clarity.\n\nNow it\u0027s clearly stated in the method that the operation will just run locking with a forwarded context, without any reference to whether it will be sync or async.",
+      "parentUuid": "eeb5e281_f266ecd1",
+      "range": {
+        "startLine": 71,
+        "startChar": 6,
+        "endLine": 71,
+        "endChar": 11
+      },
+      "revId": "bc361dca1dbee530e1d9e6948f00ace1076463d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e9707661_e9c20486",
