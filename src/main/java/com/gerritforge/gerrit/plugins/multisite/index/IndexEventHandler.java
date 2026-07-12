@@ -11,7 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedContext;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.IndexEventForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
@@ -73,7 +73,7 @@ class IndexEventHandler
   public void onAccountIndexed(int id) {
     currCtx.onlyWithContext(
         (ctx) -> {
-          if (!Context.isForwardedEvent()) {
+          if (!ForwardedContext.isForwardedEvent()) {
             Optional<String> targetSha =
                 accountCache
                     .get(Account.id(id))
@@ -106,7 +106,7 @@ class IndexEventHandler
 
   @Override
   public void onGroupIndexed(String groupUUID) {
-    if (!Context.isForwardedEvent()) {
+    if (!ForwardedContext.isForwardedEvent()) {
       IndexGroupTask task =
           new IndexGroupTask(
               new GroupIndexEvent(groupUUID, groupChecker.getGroupHead(groupUUID), instanceId));
@@ -118,7 +118,7 @@ class IndexEventHandler
 
   @Override
   public void onProjectIndexed(String projectName) {
-    if (!Context.isForwardedEvent()) {
+    if (!ForwardedContext.isForwardedEvent()) {
       IndexProjectTask task = new IndexProjectTask(new ProjectIndexEvent(projectName, instanceId));
       if (queuedTasks.add(task)) {
         executor.execute(task);
@@ -127,7 +127,7 @@ class IndexEventHandler
   }
 
   private void executeAllChangesDeletedForProject(String projectName) {
-    if (!Context.isForwardedEvent()) {
+    if (!ForwardedContext.isForwardedEvent()) {
       IndexChangeTask task =
           new IndexChangeTask(
               ChangeIndexEvent.allChangesDeletedForProject(projectName, instanceId));
@@ -138,7 +138,7 @@ class IndexEventHandler
   }
 
   private void executeIndexChangeTask(String projectName, int id) {
-    if (!Context.isForwardedEvent()) {
+    if (!ForwardedContext.isForwardedEvent()) {
       ChangeChecker checker = changeChecker.create(projectName + "~" + id);
 
       try {
@@ -164,7 +164,7 @@ class IndexEventHandler
   }
 
   private void executeDeleteChangeTask(String projectName, int id) {
-    if (!Context.isForwardedEvent()) {
+    if (!ForwardedContext.isForwardedEvent()) {
       IndexChangeTask task =
           new IndexChangeTask(new ChangeIndexEvent(projectName, id, true, instanceId));
       if (queuedTasks.add(task)) {

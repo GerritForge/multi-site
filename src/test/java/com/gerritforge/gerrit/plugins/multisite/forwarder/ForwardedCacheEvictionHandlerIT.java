@@ -181,14 +181,15 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
   public void shouldNotForwardProjectCacheEvictionsWhenEventIsForwarded() throws Exception {
     TestForwardingExecutorProvider cacheForwarder =
         plugin.getSysInjector().getInstance(TestForwardingExecutorProvider.class);
-    Context.setForwardedEvent(true);
-    projectCache.evict(allProjects);
+    try (ForwardedContext ctx = ForwardedContext.open()) {
+      projectCache.evict(allProjects);
 
-    evictionsCacheTracker.waitForExpectedEvictions();
-    assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))
-        .contains(allProjects);
+      evictionsCacheTracker.waitForExpectedEvictions();
+      assertThat(evictionsCacheTracker.trackedEvictionsFor(ProjectCacheImpl.CACHE_NAME))
+          .contains(allProjects);
 
-    assertThat(cacheForwarder.executions()).isEqualTo(0);
+      assertThat(cacheForwarder.executions()).isEqualTo(0);
+    }
   }
 
   @Test

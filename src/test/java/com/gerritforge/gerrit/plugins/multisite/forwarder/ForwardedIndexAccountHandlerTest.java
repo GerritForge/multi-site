@@ -99,15 +99,15 @@ public class ForwardedIndexAccountHandlerTest {
     doAnswer(
             (Answer<Void>)
                 invocation -> {
-                  assertThat(Context.isForwardedEvent()).isTrue();
+                  assertThat(ForwardedContext.isForwardedEvent()).isTrue();
                   return null;
                 })
         .when(indexerMock)
         .index(id);
 
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
     handler.index(id, Operation.INDEX, Optional.empty());
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
     verify(indexerMock).index(id);
   }
@@ -117,17 +117,17 @@ public class ForwardedIndexAccountHandlerTest {
     doAnswer(
             (Answer<Void>)
                 invocation -> {
-                  assertThat(Context.isForwardedEvent()).isTrue();
+                  assertThat(ForwardedContext.isForwardedEvent()).isTrue();
                   throw new IOException("someMessage");
                 })
         .when(indexerMock)
         .index(id);
 
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
     IOException thrown =
         assertThrows(IOException.class, () -> handler.index(id, Operation.INDEX, Optional.empty()));
     assertThat(thrown).hasMessageThat().isEqualTo("someMessage");
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
     verify(indexerMock).index(id);
   }
