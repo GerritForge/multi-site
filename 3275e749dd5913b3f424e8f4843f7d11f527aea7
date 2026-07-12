@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "691411ef_d490afd5",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 38
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-12T11:07:53Z",
+      "side": 1,
+      "message": "entityChecker",
+      "range": {
+        "startLine": 75,
+        "startChar": 74,
+        "endLine": 75,
+        "endChar": 79
+      },
+      "revId": "3275e749dd5913b3f424e8f4843f7d11f527aea7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
