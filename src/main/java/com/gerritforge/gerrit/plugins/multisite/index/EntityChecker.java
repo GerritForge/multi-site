@@ -11,7 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
-import com.google.gerrit.entities.Account;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 
-public interface AccountChecker extends EntityChecker<Account.Id, AccountIndexEvent> {}
+public interface EntityChecker<K, E extends IndexEvent>
+    extends UpToDateChecker<E>, ConsistencyChecker<K> {}
