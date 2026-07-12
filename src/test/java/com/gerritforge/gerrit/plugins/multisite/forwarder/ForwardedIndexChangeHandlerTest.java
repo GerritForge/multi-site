@@ -87,7 +87,6 @@ public class ForwardedIndexChangeHandlerTest {
     id = Change.id(TEST_CHANGE_NUMBER);
     when(changeCheckerFactoryMock.create(any())).thenReturn(changeCheckerAbsentMock);
     when(configurationMock.index()).thenReturn(index);
-    when(index.numStripedLocks()).thenReturn(10);
     when(index.maxTries()).thenReturn(1);
     handler =
         new ForwardedIndexChangeHandler(
