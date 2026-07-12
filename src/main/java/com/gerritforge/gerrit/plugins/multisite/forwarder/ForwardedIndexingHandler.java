@@ -81,8 +81,7 @@ public abstract class ForwardedIndexingHandler<T, E> {
   }
 
   protected void runAsForwardedForIndexId(T id, Runnable task) {
-    try {
-      Context.setForwardedEvent(true);
+    try (ForwardedContext ctx = ForwardedContext.open()) {
       Lock idLock = idLocks.get(id);
       idLock.lock();
       try {
@@ -90,8 +89,6 @@ public abstract class ForwardedIndexingHandler<T, E> {
       } finally {
         idLock.unlock();
       }
-    } finally {
-      Context.unsetForwardedEvent();
     }
   }
 }

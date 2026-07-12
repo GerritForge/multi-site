@@ -22,7 +22,6 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.IndexEventForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
@@ -94,7 +93,6 @@ public class IndexEventHandlerTest {
     String currentThreadName = Thread.currentThread().getName();
     try {
       Thread.currentThread().setName("pull-replication~" + APPLY_OBJECT_API_ENDPOINT);
-      Context.setForwardedEvent(false);
       lenient()
           .when(changeChecker.create(anyString()))
           .thenThrow(
