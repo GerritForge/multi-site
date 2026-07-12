@@ -52,7 +52,6 @@ public class ForwardedIndexProjectHandlerTest {
   @Before
   public void setUp() {
     when(configMock.index()).thenReturn(indexMock);
-    when(indexMock.numStripedLocks()).thenReturn(10);
     when(indexMock.retryInterval()).thenReturn(0);
     when(indexMock.maxTries()).thenReturn(2);
     when(projectCheckerMock.isUpToDate(any())).thenReturn(true);
