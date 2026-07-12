@@ -111,6 +111,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed522a11_0fd409da",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandler.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-12T08:18:54Z",
+      "side": 1,
+      "message": "Clarified that this is just running the lambda with locking and forwarded context.",
+      "parentUuid": "1270dbcf_8ab63dd7",
+      "range": {
+        "startLine": 82,
+        "startChar": 17,
+        "endLine": 82,
+        "endChar": 42
+      },
+      "revId": "bc361dca1dbee530e1d9e6948f00ace1076463d3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc5375eb_c3edbb8b",
