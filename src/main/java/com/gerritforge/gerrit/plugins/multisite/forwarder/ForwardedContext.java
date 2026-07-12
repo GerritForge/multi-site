@@ -48,7 +48,7 @@ public class ForwardedContext implements AutoCloseable {
     return previousForwardedState;
   }
 
-  public static boolean isPullReplicationApplyObjectIndexing() {
+  private static boolean isPullReplicationApplyObjectIndexing() {
     String threadName = Thread.currentThread().getName();
     return threadName.contains(PULL_REPLICATION_PLUGIN_NAME + "~" + APPLY_OBJECT_API_ENDPOINT)
         || threadName.contains(PULL_REPLICATION_PLUGIN_NAME + "~" + APPLY_OBJECTS_API_ENDPOINT);
