@@ -60,8 +60,7 @@ public abstract class ForwardedIndexingHandler<T, E> {
    */
   public void index(T id, Operation operation, Optional<E> event) throws IOException {
     log.debug("{} {} {}", operation, id, event);
-    try {
-      Context.setForwardedEvent(true);
+    try (ForwardedContext ctx = ForwardedContext.open()) {
       Lock idLock = idLocks.get(id);
       idLock.lock();
       try {
@@ -79,8 +78,6 @@ public abstract class ForwardedIndexingHandler<T, E> {
       } finally {
         idLock.unlock();
       }
-    } finally {
-      Context.unsetForwardedEvent();
     }
   }
 }

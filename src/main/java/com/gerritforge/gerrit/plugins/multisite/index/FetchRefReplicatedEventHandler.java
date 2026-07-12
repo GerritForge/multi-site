@@ -11,7 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.index;
 
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedContext;
 import com.gerritforge.gerrit.plugins.replication.pull.FetchRefReplicatedEvent;
 import com.gerritforge.gerrit.plugins.replication.pull.ReplicationState;
 import com.google.common.flogger.FluentLogger;
@@ -48,10 +48,8 @@ public class FetchRefReplicatedEventHandler implements EventListener {
 
   @Override
   public void onEvent(Event event) {
-    boolean isForwarded = Context.isForwardedEvent();
-    try {
-      Context.setForwardedEvent(true);
-
+    boolean isForwarded = ForwardedContext.isForwardedEvent();
+    try (ForwardedContext ctx = ForwardedContext.open()) {
       if (event instanceof FetchRefReplicatedEvent fetchRefReplicatedEvent && isLocalEvent(event)) {
         // This removal of the ':' prefix is needed because of Issue 426470297 in the
         // pull-replication plugin
@@ -131,8 +129,6 @@ public class FetchRefReplicatedEventHandler implements EventListener {
       }
     } catch (IOException e) {
       logger.atSevere().withCause(e).log("Unable to process event %s", event);
-    } finally {
-      Context.setForwardedEvent(isForwarded);
     }
   }
 

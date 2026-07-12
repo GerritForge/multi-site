@@ -11,7 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.cache;
 
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedContext;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwarderTask;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ProjectListUpdateForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
@@ -56,7 +56,7 @@ public class ProjectListUpdateHandler implements NewProjectCreatedListener, Proj
   }
 
   private void process(ProjectEvent event, boolean delete) {
-    if (!Context.isForwardedEvent()) {
+    if (!ForwardedContext.isForwardedEvent()) {
       executor.execute(
           new ProjectListUpdateTask(
               new ProjectListUpdateEvent(event.getProjectName(), delete, instanceId)));
