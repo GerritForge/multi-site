@@ -15,7 +15,6 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
@@ -44,8 +43,6 @@ public class ForwardedIndexAccountHandlerTest {
 
   @Before
   public void setUp() throws Exception {
-    when(config.index()).thenReturn(index);
-    when(index.numStripedLocks()).thenReturn(10);
     handler = new ForwardedIndexAccountHandler(indexerMock, config);
     id = Account.id(123);
   }

@@ -37,10 +37,6 @@ Configuration should be specified in the `$site_path/etc/@PLUGIN@.config` file.
     stream events.
     Defaults to true.
 
-```index.numStripedLocks```
-:   Number of striped locks to use during reindexing of secondary indexes.
-    Defaults to 10
-
 ```index.synchronize```
 :   Controls which types of index events should be synchronized across sites.
     It supports the following values:

@@ -43,7 +43,6 @@ public class ForwardedIndexAccountHandler
 
   @Inject
   ForwardedIndexAccountHandler(AccountIndexer indexer, Configuration config) {
-    super(config.index().numStripedLocks());
     this.indexer = indexer;
     this.accountsToIndex = new HashMap<>();
   }
