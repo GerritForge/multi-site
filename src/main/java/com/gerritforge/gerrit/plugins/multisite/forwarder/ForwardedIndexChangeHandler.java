@@ -92,14 +92,14 @@ public class ForwardedIndexChangeHandler
   }
 
   private boolean isChangeConsistent(String id) {
-    return changeCheckerFactory.create(id).isChangeConsistent();
+    return changeCheckerFactory.create(id).isConsistent(id);
   }
 
   @Override
   protected void attemptToIndex(String id) {
     ChangeChecker checker = changeCheckerFactory.create(id);
     boolean changeIsPresent = checker.getChangeNotes().isPresent();
-    boolean changeIsConsistent = checker.isChangeConsistent();
+    boolean changeIsConsistent = checker.isConsistent(id);
     if (changeIsConsistent) {
       reindexAndCheckIsUpToDate(id, checker);
     } else {
