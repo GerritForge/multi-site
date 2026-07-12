@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8db8ab4_3ab6178e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 39
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-12T22:39:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f640304f_c8793a22",
+      "range": {
+        "startLine": 93,
+        "startChar": 14,
+        "endLine": 95,
+        "endChar": 49
+      },
+      "revId": "c7e0770576108d1cd4d82f7deaf48f1744b063f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f69dc01_1a41c810",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-12T17:19:46Z",
       "side": 1,
       "message": "The `isUpToDate` is only used to reschedule a retry, not for conditioning the indexing.",
+      "range": {
+        "startLine": 96,
+        "startChar": 21,
+        "endLine": 96,
+        "endChar": 42
+      },
+      "revId": "c7e0770576108d1cd4d82f7deaf48f1744b063f8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00d4c0bf_212feeb0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 39
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-12T22:39:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f69dc01_1a41c810",
       "range": {
         "startLine": 96,
         "startChar": 21,
