@@ -159,7 +159,7 @@ public class ChangeCheckerImpl implements ChangeChecker {
   }
 
   @Override
-  public boolean isChangeConsistent() {
+  public boolean isConsistent() {
     Optional<ChangeNotes> notes = getChangeNotes();
     if (notes.isEmpty()) {
       log.warn("Unable to compute change notes for change {}", changeId);

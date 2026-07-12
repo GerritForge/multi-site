@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /** Encapsulates the logic of verifying the up-to-date status of a change. */
-public interface ChangeChecker extends UpToDateChecker<ChangeIndexEvent> {
+public interface ChangeChecker extends UpToDateChecker<ChangeIndexEvent>, ConsistencyChecker {
 
   /**
    * Return the Change nodes read from ReviewDb or NoteDb.
@@ -56,11 +56,4 @@ public interface ChangeChecker extends UpToDateChecker<ChangeIndexEvent> {
    * @throws IOException if an I/O error occurred while reading the local Change
    */
   Optional<Long> getComputedChangeTs() throws IOException;
-
-  /**
-   * Check if the local Change has the associated ChangeNotes and contains current patchset refs
-   *
-   * @return true if local change contains meta and current patchset refs
-   */
-  boolean isChangeConsistent();
 }
