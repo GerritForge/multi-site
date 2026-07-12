@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d9e8a6b_b4a1d9be",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 36
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-12T11:04:48Z",
+      "side": 1,
+      "message": "The name isn\u0027t telling the whole truth: this is an indexing which is guaranteed to be sync when it\u0027s ready, rather than the others.",
+      "range": {
+        "startLine": 75,
+        "startChar": 27,
+        "endLine": 75,
+        "endChar": 41
+      },
+      "revId": "06752d66fa7266cb854b6c6ea9761ffb7772e023",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
