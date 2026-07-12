@@ -79,8 +79,6 @@ public class Configuration {
   // common parameters to cache and index sections
   private static final int DEFAULT_INDEX_MAX_TRIES = 2;
   private static final int DEFAULT_INDEX_RETRY_INTERVAL = 30000;
-  private static final String NUM_STRIPED_LOCKS = "numStripedLocks";
-  private static final int DEFAULT_NUM_STRIPED_LOCKS = 10;
 
   private static final long DEFALULT_STREAM_EVENT_PUBLISH_TIMEOUT = 30000;
 
@@ -387,7 +385,6 @@ public class Configuration {
     private final int retryInterval;
     private final int maxTries;
 
-    private final int numStripedLocks;
     private final Map<String, Class<? extends ForwardedIndexingHandler<?, ? extends IndexEvent>>>
         synchronize;
     private final boolean synchronizeForced;
@@ -426,8 +423,6 @@ public class Configuration {
       retryInterval =
           getInt(cfg, INDEX_SECTION, null, RETRY_INTERVAL_KEY, DEFAULT_INDEX_RETRY_INTERVAL);
       maxTries = getInt(cfg, INDEX_SECTION, null, MAX_TRIES_KEY, DEFAULT_INDEX_MAX_TRIES);
-      numStripedLocks =
-          getInt(cfg, INDEX_SECTION, null, NUM_STRIPED_LOCKS, DEFAULT_NUM_STRIPED_LOCKS);
       synchronizeForced =
           getBoolean(cfg, INDEX_SECTION, null, SYNCHRONIZE_FORCED_KEY, DEFAULT_SYNCHRONIZE_FORCED);
       synchronize = getSynchronizeIndex(cfg);
@@ -443,10 +438,6 @@ public class Configuration {
 
     public int maxTries() {
       return maxTries;
-    }
-
-    public int numStripedLocks() {
-      return numStripedLocks;
     }
 
     public boolean synchronizeForced() {
