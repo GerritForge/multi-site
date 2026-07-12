@@ -13,16 +13,21 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.project.ProjectCache;
 import com.google.inject.Inject;
+import java.io.IOException;
 import java.util.Optional;
+import org.eclipse.jgit.lib.Repository;
 
 public class ProjectCheckerImpl implements ProjectChecker {
   private final ProjectCache projectCache;
+  private final GitRepositoryManager repoManager;
 
   @Inject
-  ProjectCheckerImpl(ProjectCache projectCache) {
+  ProjectCheckerImpl(ProjectCache projectCache, GitRepositoryManager repoManager) {
     this.projectCache = projectCache;
+    this.repoManager = repoManager;
   }
 
   @Override
@@ -30,5 +35,14 @@ public class ProjectCheckerImpl implements ProjectChecker {
     return indexEvent
         .flatMap(event -> projectCache.get(Project.nameKey(event.projectName)))
         .isPresent();
+  }
+
+  @Override
+  public boolean isConsistent(String projectName) {
+    try (Repository repo = repoManager.openRepository(Project.nameKey(projectName))) {
+      return true;
+    } catch (IOException e) {
+      return false;
+    }
   }
 }
