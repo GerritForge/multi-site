@@ -235,7 +235,7 @@ public class ForwardedIndexChangeHandlerTest {
     when(changeCheckerPresentMock.isUpToDate(any())).thenReturn(changeIsUpToDate);
 
     OngoingStubbing<Boolean> changeConsistentCall =
-        when(changeCheckerPresentMock.isChangeConsistent());
+        when(changeCheckerPresentMock.isConsistent(any()));
     for (boolean changeConsistent : changeConsistentReturnValues) {
       changeConsistentCall = changeConsistentCall.thenReturn(changeConsistent);
     }
