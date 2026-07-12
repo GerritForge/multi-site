@@ -63,15 +63,15 @@ public class ForwardedProjectListUpdateHandlerTest {
     doAnswer(
             (Answer<Void>)
                 invocation -> {
-                  assertThat(Context.isForwardedEvent()).isTrue();
+                  assertThat(ForwardedContext.isForwardedEvent()).isTrue();
                   return null;
                 })
         .when(projectCacheMock)
         .onCreateProject(PROJECT_KEY);
 
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
     handler.update(new ProjectListUpdateEvent(PROJECT_NAME, false, INSTANCE_ID));
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
     verify(projectCacheMock).onCreateProject(PROJECT_KEY);
   }
@@ -83,15 +83,15 @@ public class ForwardedProjectListUpdateHandlerTest {
     doAnswer(
             (Answer<Void>)
                 invocation -> {
-                  assertThat(Context.isForwardedEvent()).isTrue();
+                  assertThat(ForwardedContext.isForwardedEvent()).isTrue();
                   return null;
                 })
         .when(projectCacheMock)
         .remove(PROJECT_KEY);
 
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
     handler.update(new ProjectListUpdateEvent(PROJECT_NAME, true, INSTANCE_ID));
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
     verify(projectCacheMock).remove(PROJECT_KEY);
   }
@@ -101,19 +101,19 @@ public class ForwardedProjectListUpdateHandlerTest {
     doAnswer(
             (Answer<Void>)
                 invocation -> {
-                  assertThat(Context.isForwardedEvent()).isTrue();
+                  assertThat(ForwardedContext.isForwardedEvent()).isTrue();
                   throw new RuntimeException(SOME_MESSAGE);
                 })
         .when(projectCacheMock)
         .onCreateProject(PROJECT_KEY);
 
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
     RuntimeException thrown =
         assertThrows(
             RuntimeException.class,
             () -> handler.update(new ProjectListUpdateEvent(PROJECT_NAME, false, INSTANCE_ID)));
     assertThat(thrown).hasMessageThat().isEqualTo(SOME_MESSAGE);
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
     verify(projectCacheMock).onCreateProject(PROJECT_KEY);
   }
@@ -123,19 +123,19 @@ public class ForwardedProjectListUpdateHandlerTest {
     doAnswer(
             (Answer<Void>)
                 invocation -> {
-                  assertThat(Context.isForwardedEvent()).isTrue();
+                  assertThat(ForwardedContext.isForwardedEvent()).isTrue();
                   throw new RuntimeException(SOME_MESSAGE);
                 })
         .when(projectCacheMock)
         .remove(PROJECT_KEY);
 
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
     RuntimeException thrown =
         assertThrows(
             RuntimeException.class,
             () -> handler.update(new ProjectListUpdateEvent(PROJECT_NAME, true, INSTANCE_ID)));
     assertThat(thrown).hasMessageThat().isEqualTo(SOME_MESSAGE);
-    assertThat(Context.isForwardedEvent()).isFalse();
+    assertThat(ForwardedContext.isForwardedEvent()).isFalse();
 
     verify(projectCacheMock).remove(PROJECT_KEY);
   }

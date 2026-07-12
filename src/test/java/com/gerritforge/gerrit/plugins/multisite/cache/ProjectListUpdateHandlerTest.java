@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.cache.ProjectListUpdateHandler.ProjectListUpdateTask;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.Context;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedContext;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ProjectListUpdateForwarder;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -92,11 +92,11 @@ public class ProjectListUpdateHandlerTest {
 
   @Test
   public void shouldNotForwardIfAlreadyForwardedEvent() throws Exception {
-    Context.setForwardedEvent(true);
-    handler.onNewProjectCreated(mock(NewProjectCreatedListener.Event.class));
-    handler.onProjectDeleted(mock(ProjectDeletedListener.Event.class));
-    Context.unsetForwardedEvent();
-    verifyNoInteractions(forwarder);
+    try (ForwardedContext ctx = ForwardedContext.open()) {
+      handler.onNewProjectCreated(mock(NewProjectCreatedListener.Event.class));
+      handler.onProjectDeleted(mock(ProjectDeletedListener.Event.class));
+      verifyNoInteractions(forwarder);
+    }
   }
 
   @Test

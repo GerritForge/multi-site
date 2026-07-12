@@ -92,8 +92,8 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     Future<?> possiblyIgnoredError =
         indexExecutor.schedule(
             () -> {
-              try (ManualRequestContext ctx = oneOffCtx.open()) {
-                Context.setForwardedEvent(true);
+              try (ManualRequestContext ctx = oneOffCtx.open();
+                  ForwardedContext fwdCtx = ForwardedContext.open()) {
                 attemptToIndex(id);
               } catch (Exception e) {
                 log.warn("{} {} could not be indexed", indexName(), id, e);
