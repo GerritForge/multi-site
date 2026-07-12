@@ -80,11 +80,8 @@ public class ForwardedIndexChangeHandler
     if (sourceEvent instanceof ChangeIndexEvent event) {
       String id = event.projectName + "~" + event.changeId;
       if (ChangeIndexEvent.isAllChangesDeletedForProject(event)) {
-        Boolean forwarded = Context.setForwardedEvent(true);
-        try {
+        try (ForwardedContext ctx = ForwardedContext.open()) {
           indexer.deleteAllForProject(Project.nameKey(event.projectName));
-        } finally {
-          Context.setForwardedEvent(forwarded);
         }
         return IndexingResult.SUCCESS;
       } else if (event.deleted) {
