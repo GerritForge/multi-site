@@ -76,14 +76,7 @@ class GroupCheckerImpl implements GroupChecker {
 
   @Override
   public ObjectId getGroupHead(String groupUUID) {
-    try (Repository repo = repoManager.openRepository(allUsers)) {
-      return Optional.ofNullable(repo.exactRef(RefNames.refsGroups(AccountGroup.uuid(groupUUID))))
-          .map(Ref::getObjectId)
-          .orElse(ObjectId.zeroId());
-    } catch (Exception e) {
-      logger.atSevere().withCause(e).log("Fatal: could not get head of group %s.", groupUUID);
-      return ObjectId.zeroId();
-    }
+    return getGroupHeadOption(groupUUID).orElse(ObjectId.zeroId());
   }
 
   @VisibleForTesting
@@ -95,5 +88,20 @@ class GroupCheckerImpl implements GroupChecker {
       logger.atWarning().log("Commit %s does not exist in All-Users", sha1);
     }
     return false;
+  }
+
+  @Override
+  public boolean isConsistent(String groupUUID) {
+    return getGroupHeadOption(groupUUID).isPresent();
+  }
+
+  private Optional<ObjectId> getGroupHeadOption(String groupUUID) {
+    try (Repository repo = repoManager.openRepository(allUsers)) {
+      return Optional.ofNullable(repo.exactRef(RefNames.refsGroups(AccountGroup.uuid(groupUUID))))
+          .map(Ref::getObjectId);
+    } catch (Exception e) {
+      logger.atSevere().withCause(e).log("Fatal: could not get head of group %s.", groupUUID);
+      return Optional.empty();
+    }
   }
 }

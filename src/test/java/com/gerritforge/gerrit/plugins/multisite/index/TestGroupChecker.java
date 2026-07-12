@@ -36,4 +36,9 @@ public class TestGroupChecker implements GroupChecker {
   public ObjectId getGroupHead(String groupUUID) {
     return ObjectId.fromString(someObjectId);
   }
+
+  @Override
+  public boolean isConsistent(String groupUUID) {
+    return true;
+  }
 }
