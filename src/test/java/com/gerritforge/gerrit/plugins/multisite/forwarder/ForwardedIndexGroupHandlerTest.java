@@ -56,7 +56,6 @@ public class ForwardedIndexGroupHandlerTest {
   @Before
   public void setUp() throws Exception {
     when(config.index()).thenReturn(index);
-    when(index.numStripedLocks()).thenReturn(10);
     when(index.retryInterval()).thenReturn(RETRY_INTERVAL);
     when(index.maxTries()).thenReturn(MAX_TRIES);
     handler = groupHandler(true);

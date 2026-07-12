@@ -14,7 +14,6 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.DELETE;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.gerrit.entities.Account;
@@ -42,8 +41,7 @@ public class ForwardedIndexAccountHandler
   private Map<Account.Id, Operation> accountsToIndex;
 
   @Inject
-  ForwardedIndexAccountHandler(AccountIndexer indexer, Configuration config) {
-    super(config.index().numStripedLocks());
+  ForwardedIndexAccountHandler(AccountIndexer indexer) {
     this.indexer = indexer;
     this.accountsToIndex = new HashMap<>();
   }

@@ -43,7 +43,6 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
       ScheduledExecutorService indexExecutor,
       Configuration configuration,
       OneOffRequestContext oneOffCtx) {
-    super(configuration.index().numStripedLocks());
 
     Configuration.Index indexConfig = configuration.index();
     this.oneOffCtx = oneOffCtx;
