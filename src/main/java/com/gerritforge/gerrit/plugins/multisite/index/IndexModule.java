@@ -38,6 +38,7 @@ public class IndexModule extends LifecycleModule {
 
     bind(ProjectChecker.class).to(ProjectCheckerImpl.class);
     bind(GroupChecker.class).to(GroupCheckerImpl.class);
+    bind(AccountChecker.class).to(AccountCheckerImpl.class);
 
     install(ChangeCheckerImpl.module());
   }
