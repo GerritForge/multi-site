@@ -22,6 +22,30 @@
       },
       "revId": "bc4b786e5f4d6ba80389aa1066a8a5f3be7f7525",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17dcb1f0_5b701104",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ProjectCheckerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T20:27:22Z",
+      "side": 1,
+      "message": "Those are explicitly different: the repository is considered consistent as soon as the underlying Git repository exists and is recognised as such, so that it can be reindexed.\n\nA different argument is that the `isUpToDate` implementation is incomplete, because it should also check that the meta-ref on the repository (refs/meta/config) corresponds to the SHA1 in the `ProjectIndexEvent`.\n\nThe problem is that `ProjectIndexEvent` doesn\u0027t include the SHA1 yet, so a complete up-to-date check isn\u0027t possible.",
+      "parentUuid": "669139a7_6270a7cb",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 3
+      },
+      "revId": "bc4b786e5f4d6ba80389aa1066a8a5f3be7f7525",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
