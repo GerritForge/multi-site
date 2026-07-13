@@ -47,6 +47,54 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d93c4d3_d270587f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedContext.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T14:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2e2780d_83bcaad0",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 7
+      },
+      "revId": "c8d4327c4b51f3d5ea30df758ea45237e6877bbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33fa225d_5ea6d308",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedContext.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T14:11:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41e0f147_958eb202",
+      "range": {
+        "startLine": 22,
+        "startChar": 16,
+        "endLine": 22,
+        "endChar": 25
+      },
+      "revId": "c8d4327c4b51f3d5ea30df758ea45237e6877bbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0935c61_6b3127cf",
@@ -60,6 +108,30 @@
       "writtenOn": "2026-07-13T11:13:26Z",
       "side": 1,
       "message": "This seems a change in behaviour.\nPreviously the cleanup did:\n\n```\nContext.unsetForwardedEvent();\n```\n\nThis always removed the thread-local value, so the effective state became `false`.\n\nNow it seems like we are trying to restore the previous state.\n\n```\nsetForwardedEvent(forwarded);\n```\n\nIt seems more than just a refactoring, is this intentional?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 3
+      },
+      "revId": "c8d4327c4b51f3d5ea30df758ea45237e6877bbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7400b479_fda206db",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedContext.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T14:11:43Z",
+      "side": 1,
+      "message": "Because now it becomes more _usual_ to have it in a try() section, it is safer to restore the previous forwarded state instead of resetting it.",
+      "parentUuid": "b0935c61_6b3127cf",
       "range": {
         "startLine": 27,
         "startChar": 0,
