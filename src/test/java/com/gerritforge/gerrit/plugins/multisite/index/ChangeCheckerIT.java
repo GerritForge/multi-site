@@ -31,20 +31,21 @@ import org.junit.Test;
 public class ChangeCheckerIT extends LightweightPluginDaemonTest {
   private static final String TEST_BRANCH_REFS_HEADS = RefNames.fullName("master");
   private static final String NONEXISTENTSHA1 = "d3d192b8f704aec0c764cca427fdaca88db71513";
-  private ChangeCheckerImpl.Factory changeCheckerFactory;
+
+  ChangeChecker changeChecker;
 
   public static class TestModule extends AbstractModule {
+
     @Override
     protected void configure() {
-      install(ChangeCheckerImpl.module());
+      bind(ChangeChecker.class).to(ChangeCheckerImpl.class);
     }
   }
 
   @Override
   public void setUpTestPlugin() throws Exception {
     super.setUpTestPlugin();
-
-    changeCheckerFactory = plugin.getSysInjector().getInstance(ChangeCheckerImpl.Factory.class);
+    changeChecker = plugin.getSysInjector().getInstance(ChangeChecker.class);
   }
 
   @Test
@@ -61,8 +62,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
 
     RevCommit secondCommit = createCommit();
     assertThat(secondCommit.getId().getName()).isNotEqualTo(indexChangeEvent.targetSha);
-    assertThat(changeCheckerFactory.create(changeId).isUpToDate(Optional.of(indexChangeEvent)))
-        .isTrue();
+    assertThat(changeChecker.isUpToDate(Optional.of(indexChangeEvent))).isTrue();
   }
 
   @Test
@@ -76,8 +76,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
     indexChangeEvent.eventCreatedOn = changeCommitTs / 1000L;
     indexChangeEvent.targetSha = NONEXISTENTSHA1;
 
-    assertThat(changeCheckerFactory.create(changeId).isUpToDate(Optional.of(indexChangeEvent)))
-        .isFalse();
+    assertThat(changeChecker.isUpToDate(Optional.of(indexChangeEvent))).isFalse();
   }
 
   private ChangeIndexEvent newIndexChangeEvent(int changeNum) {
