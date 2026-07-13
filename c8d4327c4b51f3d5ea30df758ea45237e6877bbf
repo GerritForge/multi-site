@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41e0f147_958eb202",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedContext.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-13T11:13:26Z",
+      "side": 1,
+      "message": "I find this field name a little misleading. Unless I\u0027m reading the code incorrectly, it does not represent the _current_ forwarded state; it stores the previous state returned by `setForwardedEvent()`.\n\nCould we rename it to something like `previousForwardedState` or similar?",
+      "range": {
+        "startLine": 22,
+        "startChar": 16,
+        "endLine": 22,
+        "endChar": 25
+      },
+      "revId": "c8d4327c4b51f3d5ea30df758ea45237e6877bbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2e2780d_83bcaad0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedContext.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-13T11:13:26Z",
+      "side": 1,
+      "message": "nit: this could be private",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 7
+      },
+      "revId": "c8d4327c4b51f3d5ea30df758ea45237e6877bbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0935c61_6b3127cf",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedContext.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-13T11:13:26Z",
+      "side": 1,
+      "message": "This seems a change in behaviour.\nPreviously the cleanup did:\n\n```\nContext.unsetForwardedEvent();\n```\n\nThis always removed the thread-local value, so the effective state became `false`.\n\nNow it seems like we are trying to restore the previous state.\n\n```\nsetForwardedEvent(forwarded);\n```\n\nIt seems more than just a refactoring, is this intentional?",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 3
+      },
+      "revId": "c8d4327c4b51f3d5ea30df758ea45237e6877bbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
