@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c10412a9_1998abc4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-13T11:32:46Z",
+      "side": 0,
+      "message": "This is not longer used.",
+      "range": {
+        "startLine": 45,
+        "startChar": 53,
+        "endLine": 45,
+        "endChar": 75
+      },
+      "revId": "c8d4327c4b51f3d5ea30df758ea45237e6877bbf",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

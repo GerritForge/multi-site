@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b4cbd99_52331bfa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-13T11:32:46Z",
+      "side": 1,
+      "message": "Can you mention the relevant change `58430186f8d543810ad1948afa05ba1bc0350f8b`?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "ef139d801ebd27c182739009b3d062f6b079eafa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
