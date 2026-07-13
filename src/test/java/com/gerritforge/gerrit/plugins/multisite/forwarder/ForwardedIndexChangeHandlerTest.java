@@ -26,7 +26,6 @@ import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
-import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.exceptions.StorageException;
@@ -74,8 +73,6 @@ public class ForwardedIndexChangeHandlerTest {
   @Mock private Configuration.Index index;
   @Mock private ScheduledExecutorService indexExecutorMock;
   @Mock private GitRepositoryManager gitRepoMgrMock;
-  @Mock private ChangeCheckerImpl.Factory changeCheckerFactoryMock;
-  @Mock private ChangeChecker changeCheckerAbsentMock;
   @Mock private ChangeChecker changeCheckerPresentMock;
   @Mock private Provider<InternalChangeQuery> queryProviderMock;
   private ForwardedIndexChangeHandler handler;
@@ -85,7 +82,6 @@ public class ForwardedIndexChangeHandlerTest {
   public void setUp() throws Exception {
     when(ctxMock.open()).thenReturn(manualRequestContextMock);
     id = Change.id(TEST_CHANGE_NUMBER);
-    when(changeCheckerFactoryMock.create(any())).thenReturn(changeCheckerAbsentMock);
     when(configurationMock.index()).thenReturn(index);
     when(index.maxTries()).thenReturn(1);
     handler =
@@ -94,7 +90,7 @@ public class ForwardedIndexChangeHandlerTest {
             configurationMock,
             indexExecutorMock,
             ctxMock,
-            changeCheckerFactoryMock,
+            changeCheckerPresentMock,
             queryProviderMock);
   }
 
@@ -209,7 +205,10 @@ public class ForwardedIndexChangeHandlerTest {
   private void setupChangeAccessRelatedMocks(boolean changeExist, boolean changeUpToDate)
       throws Exception {
     setupChangeAccessRelatedMocks(
-        changeExist, DO_NOT_THROW_STORAGE_EXCEPTION, changeUpToDate, CHANGE_CONSISTENT);
+        changeExist,
+        DO_NOT_THROW_STORAGE_EXCEPTION,
+        changeUpToDate,
+        CHANGE_CONSISTENT && changeExist);
   }
 
   private void setupChangeAccessRelatedMocks(
@@ -225,8 +224,8 @@ public class ForwardedIndexChangeHandlerTest {
       boolean... changeConsistentReturnValues)
       throws StorageException {
     if (changeExists) {
-      when(changeCheckerFactoryMock.create(TEST_CHANGE_ID)).thenReturn(changeCheckerPresentMock);
-      when(changeCheckerPresentMock.getChangeNotes()).thenReturn(Optional.of(changeNotes));
+      when(changeCheckerPresentMock.getChangeNotes(TEST_CHANGE_ID))
+          .thenReturn(Optional.of(changeNotes));
       if (storageException) {
         doThrow(new StorageException("io-error")).when(indexerMock).index(any(ChangeNotes.class));
       }

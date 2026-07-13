@@ -22,9 +22,7 @@ import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
 import com.google.inject.Inject;
-import com.google.inject.Module;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.Singleton;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Optional;
@@ -37,25 +35,13 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Singleton
 public class ChangeCheckerImpl implements ChangeChecker {
   private static final Logger log = LoggerFactory.getLogger(ChangeCheckerImpl.class);
   private final GitRepositoryManager gitRepoMgr;
   private final OneOffRequestContext oneOffReqCtx;
-  private final String changeId;
   private final ChangeFinder changeFinder;
   private final String instanceId;
-  private Optional<Long> computedChangeTs = Optional.empty();
-  private Optional<ChangeNotes> changeNotes = Optional.empty();
-
-  public interface Factory {
-    public ChangeChecker create(String changeId);
-  }
-
-  public static Module module() {
-    return new FactoryModuleBuilder()
-        .implement(ChangeChecker.class, ChangeCheckerImpl.class)
-        .build(ChangeCheckerImpl.Factory.class);
-  }
 
   @Inject
   public ChangeCheckerImpl(
@@ -63,83 +49,66 @@ public class ChangeCheckerImpl implements ChangeChecker {
       ChangeFinder changeFinder,
       OneOffRequestContext oneOffReqCtx,
       @GerritInstanceId String instanceId,
-      @GerritServerConfig Config config,
-      @Assisted String changeId) {
+      @GerritServerConfig Config config) {
     this.changeFinder = changeFinder;
     this.gitRepoMgr = gitRepoMgr;
     this.oneOffReqCtx = oneOffReqCtx;
-    this.changeId = changeId;
     this.instanceId = instanceId;
   }
 
   @Override
-  public Optional<ChangeIndexEvent> newIndexEvent(String projectName, int changeId, boolean deleted)
-      throws IOException {
-    return getComputedChangeTs()
+  public Optional<ChangeIndexEvent> newIndexEvent(
+      String projectName, int changeNum, boolean deleted) {
+    String changeId = projectName + "~" + changeNum;
+    return getChangeNotes(changeId)
         .map(
-            ts -> {
+            changeNotes -> {
               ChangeIndexEvent event =
-                  new ChangeIndexEvent(projectName, changeId, deleted, instanceId);
-              event.eventCreatedOn = ts;
-              event.targetSha = getBranchTargetSha();
+                  new ChangeIndexEvent(projectName, changeNum, deleted, instanceId);
+              event.eventCreatedOn = getTsFromChange(changeNotes);
+              event.targetSha = getBranchTargetSha(changeNotes);
               return event;
             });
   }
 
   @Override
-  public Optional<ChangeNotes> getChangeNotes() {
-    return getChangeNotes(changeId);
-  }
-
-  private Optional<ChangeNotes> getChangeNotes(String changeId) {
+  public Optional<ChangeNotes> getChangeNotes(String changeId) {
     try (ManualRequestContext ctx = oneOffReqCtx.open()) {
-      this.changeNotes = changeFinder.findOne(changeId);
-      return changeNotes;
+      return changeFinder.findOne(changeId);
     }
   }
 
   @Override
-  public boolean isUpToDate(Optional<ChangeIndexEvent> indexEvent) {
-    getComputedChangeTs();
-    if (!computedChangeTs.isPresent()) {
-      log.warn("Unable to compute last updated ts for change {}", changeId);
+  public boolean isUpToDate(Optional<ChangeIndexEvent> indexEventOptional) {
+    if (indexEventOptional.isEmpty()) {
+      log.warn("Unable to compute last updated ts for change because of an empty indexEvent");
       return true;
     }
 
-    if (indexEvent.isPresent() && indexEvent.get().targetSha == null) {
-      return indexEvent.map(e -> (computedChangeTs.get() >= e.eventCreatedOn)).orElse(true);
+    ChangeIndexEvent indexEvent = indexEventOptional.get();
+
+    String changeId = indexEvent.projectName + "~" + indexEvent.changeId;
+    Optional<ChangeNotes> changeNotes = getChangeNotes(changeId);
+    if (changeNotes.isEmpty()) {
+      log.warn("Unable to compute last updated ts for change {}", changeId);
+      return true;
+    }
+    long computedChangeTs = getTsFromChange(changeNotes.get());
+
+    if (indexEvent.targetSha == null) {
+      return computedChangeTs >= indexEvent.eventCreatedOn;
     }
 
-    return indexEvent
-        .map(
-            e ->
-                (computedChangeTs.get() > e.eventCreatedOn)
-                    || ((computedChangeTs.get() == e.eventCreatedOn) && repositoryHas(e.targetSha)))
-        .orElse(true);
+    return (computedChangeTs > indexEvent.eventCreatedOn)
+        || ((computedChangeTs == indexEvent.eventCreatedOn)
+            && repositoryHas(changeNotes.get(), indexEvent.targetSha));
   }
 
-  @Override
-  public Optional<Long> getComputedChangeTs() {
-    if (!computedChangeTs.isPresent()) {
-      computedChangeTs = computeLastChangeTs();
-    }
-    return computedChangeTs;
-  }
-
-  @Override
-  public String toString() {
-    return "change-id="
-        + changeId
-        + "@"
-        + getComputedChangeTs().map(ChangeIndexEvent::format)
-        + "/"
-        + getBranchTargetSha();
-  }
-
-  private String getBranchTargetSha() {
+  private String getBranchTargetSha(ChangeNotes changeNotes) {
+    String changeId = changeNotes.getProjectName() + "~" + changeNotes.getChangeId().get();
     try {
-      try (Repository repo = gitRepoMgr.openRepository(changeNotes.get().getProjectName())) {
-        String refName = changeNotes.get().getChange().getDest().branch();
+      try (Repository repo = gitRepoMgr.openRepository(changeNotes.getProjectName())) {
+        String refName = changeNotes.getChange().getDest().branch();
         Ref ref = repo.exactRef(refName);
         if (ref == null) {
           log.warn("Unable to find target ref {} for change {}", refName, changeId);
@@ -153,8 +122,9 @@ public class ChangeCheckerImpl implements ChangeChecker {
     }
   }
 
-  private boolean repositoryHas(String targetSha) {
-    try (Repository repo = gitRepoMgr.openRepository(changeNotes.get().getProjectName())) {
+  private boolean repositoryHas(ChangeNotes changeNotes, String targetSha) {
+    String changeId = changeNotes.getProjectName() + "~" + changeNotes.getChangeId().get();
+    try (Repository repo = gitRepoMgr.openRepository(changeNotes.getProjectName())) {
       return repo.parseCommit(ObjectId.fromString(targetSha)) != null;
     } catch (IOException e) {
       log.warn("Unable to find SHA1 {} for change {}", targetSha, changeId, e);
@@ -190,10 +160,6 @@ public class ChangeCheckerImpl implements ChangeChecker {
           e);
     }
     return true;
-  }
-
-  private Optional<Long> computeLastChangeTs() {
-    return getChangeNotes().map(this::getTsFromChange);
   }
 
   private long getTsFromChange(ChangeNotes notes) {
