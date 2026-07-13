@@ -22,6 +22,29 @@
       },
       "revId": "ef139d801ebd27c182739009b3d062f6b079eafa",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25fb614b_d9be7116",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-13T13:52:43Z",
+      "side": 1,
+      "message": "I am not sure this change is equivalent to the high-availability one [1].\n\nThe HA change mentions that **sender-side locking** was not useful, because multiple senders could bypass one another anyway. This change goes beyond that and removes locking from the **receiver side**.\n\nThe commit message appears to suggest that the same HA rationale applies here, but \nthey do not seem equivalent to me.\n\nAre we sure it\u0027s safe to handle events for the same entity at the same time? For example, what happens if an INDEX and a DELETE event run concurrently, could they leave the index in the wrong state?\n\n[1] https://gerrit-review.googlesource.com/c/plugins/high-availability/+/391383",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "ef139d801ebd27c182739009b3d062f6b079eafa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
