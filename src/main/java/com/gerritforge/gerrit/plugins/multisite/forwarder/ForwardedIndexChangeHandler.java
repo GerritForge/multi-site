@@ -18,7 +18,6 @@ import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
-import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.Change;
@@ -47,8 +46,8 @@ import java.util.concurrent.ScheduledExecutorService;
 public class ForwardedIndexChangeHandler
     extends ForwardedIndexingHandlerWithRetries<String, ChangeIndexEvent> {
   private final ChangeIndexer indexer;
-  private final ChangeCheckerImpl.Factory changeCheckerFactory;
   private final Provider<InternalChangeQuery> queryProvider;
+  private final ChangeChecker changeChecker;
 
   @Inject
   ForwardedIndexChangeHandler(
@@ -56,11 +55,11 @@ public class ForwardedIndexChangeHandler
       Configuration configuration,
       @ForwardedIndexExecutor ScheduledExecutorService indexExecutor,
       OneOffRequestContext oneOffCtx,
-      ChangeCheckerImpl.Factory changeCheckerFactory,
+      ChangeChecker changeChecker,
       Provider<InternalChangeQuery> queryProvider) {
     super(indexExecutor, configuration, oneOffCtx);
     this.indexer = indexer;
-    this.changeCheckerFactory = changeCheckerFactory;
+    this.changeChecker = changeChecker;
     this.queryProvider = queryProvider;
   }
 
@@ -92,16 +91,15 @@ public class ForwardedIndexChangeHandler
   }
 
   private boolean isChangeConsistent(String id) {
-    return changeCheckerFactory.create(id).isConsistent(id);
+    return changeChecker.isConsistent(id);
   }
 
   @Override
   protected void attemptToIndex(String id) {
-    ChangeChecker checker = changeCheckerFactory.create(id);
-    boolean changeIsPresent = checker.getChangeNotes().isPresent();
-    boolean changeIsConsistent = checker.isConsistent(id);
+    boolean changeIsPresent = changeChecker.getChangeNotes(id).isPresent();
+    boolean changeIsConsistent = changeChecker.isConsistent(id);
     if (changeIsConsistent) {
-      reindexAndCheckIsUpToDate(id, checker);
+      reindexAndCheckIsUpToDate(id, changeChecker);
     } else {
       IndexingRetry retry = indexingRetryTaskMap.get(id);
       log.warn(
@@ -125,8 +123,7 @@ public class ForwardedIndexChangeHandler
   @Override
   protected void reindex(String id) {
     try (ManualRequestContext ctx = oneOffCtx.open()) {
-      ChangeChecker checker = changeCheckerFactory.create(id);
-      Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
+      Optional<ChangeNotes> changeNotes = changeChecker.getChangeNotes(id);
       ChangeNotes notes = changeNotes.get();
       var unused = notes.reload();
       indexer.index(notes);

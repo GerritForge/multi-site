@@ -12,7 +12,6 @@
 package com.gerritforge.gerrit.plugins.multisite.index;
 
 import static com.gerritforge.gerrit.plugins.replication.pull.api.PullReplicationEndpoints.APPLY_OBJECT_API_ENDPOINT;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.lenient;
@@ -55,7 +54,6 @@ public class IndexEventHandlerTest {
   private IndexEventHandler eventHandler;
 
   @Mock private IndexEventForwarder forwarder;
-  @Mock private ChangeCheckerImpl.Factory changeChecker;
   @Mock private ChangeChecker changeCheckerMock;
   @Mock private AccountCache accountCache;
   @Mock private RequestContext mockCtx;
@@ -74,7 +72,7 @@ public class IndexEventHandlerTest {
         new IndexEventHandler(
             MoreExecutors.directExecutor(),
             asDynamicSet(forwarder),
-            changeChecker,
+            changeCheckerMock,
             new TestGroupChecker(true),
             accountCache,
             INSTANCE_ID,
@@ -94,12 +92,12 @@ public class IndexEventHandlerTest {
     try {
       Thread.currentThread().setName("pull-replication~" + APPLY_OBJECT_API_ENDPOINT);
       lenient()
-          .when(changeChecker.create(anyString()))
+          .when(changeCheckerMock.isConsistent(any()))
           .thenThrow(
               new IllegalStateException("Change indexing event should have not been triggered"));
 
       eventHandler.onChangeIndexed(PROJECT_NAME, CHANGE_ID);
-      verifyNoInteractions(changeChecker);
+      verifyNoInteractions(changeCheckerMock);
     } finally {
       Thread.currentThread().setName(currentThreadName);
     }
@@ -108,19 +106,18 @@ public class IndexEventHandlerTest {
   @Test
   public void shouldNotForwardIndexChangeWhenContextIsMissingAndForcedIndexingDisabled()
       throws Exception {
-    eventHandler = createIndexEventHandler(changeChecker, false);
+    eventHandler = createIndexEventHandler(changeCheckerMock, false);
     eventHandler.onChangeIndexed(PROJECT_NAME, CHANGE_ID);
-    verifyNoInteractions(changeChecker);
+    verifyNoInteractions(changeCheckerMock);
     verifyNoInteractions(forwarder);
   }
 
   @Test
   public void shouldForwardIndexChangeWhenContextIsMissingAndForcedIndexingEnabled()
       throws Exception {
-    when(changeChecker.create(any())).thenReturn(changeCheckerMock);
     when(changeCheckerMock.newIndexEvent(PROJECT_NAME, CHANGE_ID, false))
         .thenReturn(Optional.of(new ChangeIndexEvent(PROJECT_NAME, CHANGE_ID, false, INSTANCE_ID)));
-    eventHandler = createIndexEventHandler(changeChecker, true);
+    eventHandler = createIndexEventHandler(changeCheckerMock, true);
     eventHandler.onChangeIndexed(PROJECT_NAME, CHANGE_ID);
     verify(changeCheckerMock).newIndexEvent(PROJECT_NAME, CHANGE_ID, false);
     verify(forwarder).index(any(), any());
@@ -160,7 +157,7 @@ public class IndexEventHandlerTest {
   }
 
   private IndexEventHandler createIndexEventHandler(
-      ChangeCheckerImpl.Factory changeChecker, boolean synchronizeForced) {
+      ChangeChecker changeChecker, boolean synchronizeForced) {
     ThreadLocalRequestContext threadLocalCtxMock = mock(ThreadLocalRequestContext.class);
     OneOffRequestContext oneOffCtxMock = mock(OneOffRequestContext.class);
     Configuration cfgMock = mock(Configuration.class);

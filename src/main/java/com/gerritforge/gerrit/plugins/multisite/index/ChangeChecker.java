@@ -22,9 +22,10 @@ public interface ChangeChecker extends IndexEntityChecker<String, ChangeIndexEve
   /**
    * Return the Change nodes read from ReviewDb or NoteDb.
    *
+   * @param changeId project~changeNumber change-id
    * @return notes of the Change
    */
-  Optional<ChangeNotes> getChangeNotes();
+  Optional<ChangeNotes> getChangeNotes(String changeId);
 
   /**
    * Create a new index event POJO associated with the current Change.
@@ -38,22 +39,4 @@ public interface ChangeChecker extends IndexEntityChecker<String, ChangeIndexEve
    */
   Optional<ChangeIndexEvent> newIndexEvent(String projectName, int changeId, boolean deleted)
       throws IOException;
-
-  /**
-   * Check if the local Change is aligned with the indexEvent received.
-   *
-   * @param indexEvent indexing event
-   * @return true if the local Change is up-to-date, false otherwise.
-   */
-  boolean isUpToDate(Optional<ChangeIndexEvent> indexEvent);
-
-  /**
-   * Return the last computed up-to-date Change time-stamp.
-   *
-   * <p>Compute the up-to-date Change time-stamp when it is invoked for the very first time.
-   *
-   * @return the Change timestamp epoch in seconds
-   * @throws IOException if an I/O error occurred while reading the local Change
-   */
-  Optional<Long> getComputedChangeTs() throws IOException;
 }

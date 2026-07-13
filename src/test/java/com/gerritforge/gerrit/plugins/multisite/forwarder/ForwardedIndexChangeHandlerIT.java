@@ -17,6 +17,7 @@ import static com.google.gerrit.entities.RefNames.changeMetaRef;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.gerritforge.gerrit.plugins.multisite.index.ChangeCheckerImpl;
 import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
@@ -66,13 +67,22 @@ public class ForwardedIndexChangeHandlerIT extends LightweightPluginDaemonTest {
     @Override
     protected void configure() {
       install(new ForwarderModule());
-      install(ChangeCheckerImpl.module());
       bind(ScheduledExecutorService.class)
           .annotatedWith(ForwardedIndexExecutor.class)
           .toInstance(new ScheduledThreadPoolExecutor(1));
       bind(SharedRefDbConfiguration.class)
           .toInstance(new SharedRefDbConfiguration(new Config(), "multi-site"));
+      bind(ChangeChecker.class).to(ChangeCheckerImpl.class);
     }
+  }
+
+  @Test
+  @GerritConfig(name = "gerrit.instanceId", value = "testInstanceId")
+  public void changeCheckerIsSingleton() {
+    ChangeChecker first = plugin.getSysInjector().getInstance(ChangeChecker.class);
+    ChangeChecker second = plugin.getSysInjector().getInstance(ChangeChecker.class);
+
+    assertThat(first).isSameInstanceAs(second);
   }
 
   @Test
