@@ -45,7 +45,7 @@ class IndexEventHandler
   private final Executor executor;
   private final DynamicSet<IndexEventForwarder> forwarders;
   private final Set<IndexTask> queuedTasks = Collections.newSetFromMap(new ConcurrentHashMap<>());
-  private final ChangeCheckerImpl.Factory changeChecker;
+  private final ChangeChecker changeChecker;
   private final GroupChecker groupChecker;
   private final AccountCache accountCache;
   private final String instanceId;
@@ -55,7 +55,7 @@ class IndexEventHandler
   IndexEventHandler(
       @IndexExecutor Executor executor,
       DynamicSet<IndexEventForwarder> forwarders,
-      ChangeCheckerImpl.Factory changeChecker,
+      ChangeChecker changeChecker,
       GroupChecker groupChecker,
       AccountCache accountCache,
       @GerritInstanceId String instanceId,
@@ -139,10 +139,8 @@ class IndexEventHandler
 
   private void executeIndexChangeTask(String projectName, int id) {
     if (!ForwardedContext.isForwardedEvent()) {
-      ChangeChecker checker = changeChecker.create(projectName + "~" + id);
-
       try {
-        checker
+        changeChecker
             .newIndexEvent(projectName, id, false)
             .map(
                 event -> {
