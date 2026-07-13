@@ -22,6 +22,30 @@
       },
       "revId": "7e9c5b51fe788465b1f4a9f2bc4d9b7b43507b06",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ac7e021_b3fb7be8",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/GroupCheckerImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T20:23:58Z",
+      "side": 1,
+      "message": "Yes, consistency doesn\u0027t mean being up-to-date; those are two separate interfaces.",
+      "parentUuid": "232ea04f_76c29ccd",
+      "range": {
+        "startLine": 95,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 53
+      },
+      "revId": "7e9c5b51fe788465b1f4a9f2bc4d9b7b43507b06",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
