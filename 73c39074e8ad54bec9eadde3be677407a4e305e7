@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f20cb8be_c1df3b5e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 53
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T07:28:55Z",
+      "side": 1,
+      "message": "This creates one checker per event: we should try to reuse a single checker\u0027s logic because the only thing that changes is the `changeId` here, as we do for the other checkers as well.",
+      "range": {
+        "startLine": 92,
+        "startChar": 52,
+        "endLine": 92,
+        "endChar": 89
+      },
+      "revId": "73c39074e8ad54bec9eadde3be677407a4e305e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7483ca3a_56267bd8",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 53
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T07:28:55Z",
+      "side": 1,
+      "message": "Unrelated change.",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 17
+      },
+      "revId": "73c39074e8ad54bec9eadde3be677407a4e305e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6c899f2_ddf863a2",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventRouter.java",
+        "patchSetId": 53
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T07:28:55Z",
+      "side": 1,
+      "message": "We are acking also the failures for now, however, we should plan for a DQL for all those events that were not processed and not retried.",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 88,
+        "endChar": 20
+      },
+      "revId": "73c39074e8ad54bec9eadde3be677407a4e305e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
