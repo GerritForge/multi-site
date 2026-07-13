@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "683d11a4_f3ec3ca4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 53
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T23:43:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f20cb8be_c1df3b5e",
+      "range": {
+        "startLine": 92,
+        "startChar": 52,
+        "endLine": 92,
+        "endChar": 89
+      },
+      "revId": "73c39074e8ad54bec9eadde3be677407a4e305e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7483ca3a_56267bd8",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-13T07:28:55Z",
       "side": 1,
       "message": "Unrelated change.",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 17
+      },
+      "revId": "73c39074e8ad54bec9eadde3be677407a4e305e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "162d8ea6_3ee3f89d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 53
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T23:43:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7483ca3a_56267bd8",
       "range": {
         "startLine": 159,
         "startChar": 0,
