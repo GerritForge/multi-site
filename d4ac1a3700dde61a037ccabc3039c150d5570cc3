@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "866c4eb4_33a1bcbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T08:00:20Z",
+      "side": 1,
+      "message": "This shouldn\u0027t a message-ack configuration, but rather a commit configuration because it influences both the flushing on Lucene and the acking on Kafka.",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "d4ac1a3700dde61a037ccabc3039c150d5570cc3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f6c1a10_77ca5f61",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T08:00:20Z",
+      "side": 1,
+      "message": "```suggestion\nAdd index.commitInterval to control how often index changes are committed to the index and messages consequently acked to the kafka subscriber.\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 21
+      },
+      "revId": "d4ac1a3700dde61a037ccabc3039c150d5570cc3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcecfd90_34d7a87f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T08:00:20Z",
+      "side": 1,
+      "message": "```suggestion\nstored independently in its own index. Apply the same acknowledgement timing\n```",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 32
+      },
+      "revId": "d4ac1a3700dde61a037ccabc3039c150d5570cc3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c77b9927_111fb896",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T08:00:20Z",
+      "side": 1,
+      "message": "```suggestion\nSet the interval to 0 to commit every change to the index and ack every message. A follow-up change\n```",
+      "range": {
+        "startLine": 16,
+        "startChar": 20,
+        "endLine": 16,
+        "endChar": 48
+      },
+      "revId": "d4ac1a3700dde61a037ccabc3039c150d5570cc3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
