@@ -45,6 +45,30 @@
       },
       "revId": "ef139d801ebd27c182739009b3d062f6b079eafa",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76e27de8_61681d41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-13T19:25:53Z",
+      "side": 1,
+      "message": "\u003e I am not sure this change is equivalent to the high-availability one [1].\n\u003e \n\u003e The HA change mentions that **sender-side locking** was not useful, because multiple senders could bypass one another anyway. This change goes beyond that and removes locking from the **receiver side**.\n\nThe high-availability removed the striped lock because they were not useful and, instead, caused deadlocks.\nEither on the sender or receiver side, they are just not solving any problem, but causing slowdowns and blockages.\n\nThe message you\u0027ve pointed out was for enforcing that they were also ineffective, because the reindexing was happening concurrently anyway, regardless of the locking.",
+      "parentUuid": "25fb614b_d9be7116",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "ef139d801ebd27c182739009b3d062f6b079eafa",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
