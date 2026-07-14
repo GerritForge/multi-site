@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b981ced_17fe2392",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-14T21:15:16Z",
+      "side": 1,
+      "message": "```suggestion\nIntroduce EntityChecker as UpToDateChecker + ConsistencyChecker\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 45,
+        "endLine": 7,
+        "endChar": 64
+      },
+      "revId": "5a86a815487c328bb6e06e2c7b31f6aea340eac3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "766dec6e_c7daff4f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/EntityChecker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-14T21:15:16Z",
+      "side": 1,
+      "message": "Can you add some JavaDocs explaining the purpose of this interface and what K and E represents?\n\nPerhaps something along the lines of:\n\n```\n/**\n * Checks whether an indexed entity is consistent with its source of truth and whether an index event is already reflected locally.\n *\n * @param \u003cK\u003e entity identifier type\n * @param \u003cE\u003e index event type\n */\n```",
+      "revId": "5a86a815487c328bb6e06e2c7b31f6aea340eac3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5615672_f96c62d3",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/EntityChecker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-14T21:15:16Z",
+      "side": 1,
+      "message": "I think the name `EntityChecker` is a bit vague, since this is specific to an entity that has an index, or that can be indexed.\n\nHow about `IndexEntityChecker` or something similar?",
+      "range": {
+        "startLine": 16,
+        "startChar": 17,
+        "endLine": 16,
+        "endChar": 30
+      },
+      "revId": "5a86a815487c328bb6e06e2c7b31f6aea340eac3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e7a3627_0c197e0c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/GroupChecker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-14T21:15:16Z",
+      "side": 1,
+      "message": "This should not be needed right? It is inherited by `EntityChecker`?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 64
+      },
+      "revId": "5a86a815487c328bb6e06e2c7b31f6aea340eac3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
