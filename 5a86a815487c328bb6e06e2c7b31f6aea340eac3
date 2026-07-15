@@ -88,6 +88,48 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0122af12_58def488",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/EntityChecker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-15T15:35:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5615672_f96c62d3",
+      "range": {
+        "startLine": 16,
+        "startChar": 17,
+        "endLine": 16,
+        "endChar": 30
+      },
+      "revId": "5a86a815487c328bb6e06e2c7b31f6aea340eac3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29b4f28c_8b6efa51",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/EntityChecker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-15T15:35:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "766dec6e_c7daff4f",
+      "revId": "5a86a815487c328bb6e06e2c7b31f6aea340eac3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e7a3627_0c197e0c",
@@ -101,6 +143,30 @@
       "writtenOn": "2026-07-14T21:15:16Z",
       "side": 1,
       "message": "This should not be needed right? It is inherited by `EntityChecker`?",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 64
+      },
+      "revId": "5a86a815487c328bb6e06e2c7b31f6aea340eac3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deace575_4d6ca08e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/GroupChecker.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-15T15:35:08Z",
+      "side": 1,
+      "message": "True, but it\u0027s not part of this change. I believe it was a bug introduced a few commits ago.\n\nAddressed with I8b965d230.",
+      "parentUuid": "6e7a3627_0c197e0c",
       "range": {
         "startLine": 20,
         "startChar": 0,
