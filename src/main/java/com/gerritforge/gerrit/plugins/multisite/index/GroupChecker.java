@@ -12,13 +12,9 @@
 package com.gerritforge.gerrit.plugins.multisite.index;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
-import java.util.Optional;
 import org.eclipse.jgit.lib.ObjectId;
 
 public interface GroupChecker extends IndexEntityChecker<String, GroupIndexEvent> {
-
-  @Override
-  boolean isUpToDate(Optional<GroupIndexEvent> groupIndexEvent);
 
   ObjectId getGroupHead(String groupUUID);
 }
