@@ -22,6 +22,30 @@
       },
       "revId": "c05cff05a13b1fae6b637d2f984a710e46514f75",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9040816e_e3265cae",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/AccountCheckerImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-15T07:38:38Z",
+      "side": 1,
+      "message": "+1 I think we shouldn\u0027t throw if `exactRef` is `null`",
+      "parentUuid": "6435cfde_0d8baad8",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 79
+      },
+      "revId": "c05cff05a13b1fae6b637d2f984a710e46514f75",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

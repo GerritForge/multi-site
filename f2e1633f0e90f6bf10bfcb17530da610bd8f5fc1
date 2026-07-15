@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7a63b2b_97628dcc",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/AccountCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-15T07:38:38Z",
+      "side": 1,
+      "message": "\u003e WDYT?\n\n+1. This behaviour diverges from the other indexes.",
+      "parentUuid": "0a9c0861_ed0bd48b",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 36
+      },
+      "revId": "f2e1633f0e90f6bf10bfcb17530da610bd8f5fc1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3690ba26_d28cd9be",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/AccountCheckerImpl.java",
         "patchSetId": 4
