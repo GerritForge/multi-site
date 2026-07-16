@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12920494_3f40be45",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-16T15:20:35Z",
+      "side": 1,
+      "message": "No need to. We can remove the `throw`from the interface in a separate change.",
+      "parentUuid": "3e3f51f9_7dec197f",
+      "range": {
+        "startLine": 61,
+        "startChar": 58,
+        "endLine": 61,
+        "endChar": 59
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bde3a6ed_9eac83cf",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "yes, I believe it is related.\n\nNow that the checker is a singleton, it no longer has a change ID stored in the instance and must get it from the event.\n\nSo we explicitly handle an empty event before accessing the change id.",
       "parentUuid": "bde3a6ed_9eac83cf",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 59
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85323c44_696bc6c0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-16T15:20:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "29c8e68b_4cc3e383",
       "range": {
         "startLine": 86,
         "startChar": 4,
