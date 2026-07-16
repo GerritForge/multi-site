@@ -185,6 +185,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a69013b_b90b4854",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:11:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bd0f75b_a8e3f77d",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 62
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "188bc9bb_707eb7c5",
