@@ -70,6 +70,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "582f032b_59d77871",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T14:33:08Z",
+      "side": 1,
+      "message": "Fair point. We now load ChangeNotes once and reuse the same instance for both the timestamp and repository check. We’ve applied the same fix to `newIndexEvent()`.\n\nA good side effect of this is that we no longer require `getComputedChangeTs`, which could only return `empty` when `ChangeNotes` was empty.\n\nthis is the diff of this particular change: [here](https://review.gerrithub.io/c/GerritForge/multi-site/+/1241908/4..5/src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java)",
+      "parentUuid": "2be2dbc3_840f0c2f",
+      "range": {
+        "startLine": 104,
+        "startChar": 11,
+        "endLine": 104,
+        "endChar": 25
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c51de72_84e30741",
