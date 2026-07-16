@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a91cb699_bb582b59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 64
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "No longer valid. Stripe locks have been removed from the codebase",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 71
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8270cdc_9f16b53d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 64
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "This is not true anymore.\n\non RETRY we publish a new copy and acknowledge the original instead. This changes the partition ordering, which doesn\u0027t seem obvious to me.\n\nI am not sure this logic belongs to this change, we should at least mention this in the docs and commit message.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a15691c_184e6a18",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 64
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "I think this is arguable and I preferred the default state to be auto acking to be honest.\n\nThere is a price to pay to have stronger acking guarantees, which is not necessarily wanted by default.\n\nI see this more as be an _opt-in_ choice.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e96b2666_02a10df4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "I don\u0027t think requeuing strategies belong to this change, but rather to 529865773.\n\nhttps://issues.gerritcodereview.com/issues/529865773",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 0
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12556d34_77265c11",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "I think we might be acking too eagerly here.\n\n`broker.send()` is asynchronous, but `RequeueEventAction` returns `void`, so we acknowledge the original but we don\u0027t know whether the new copy was published successfully and ff the publish fails, the event is lost.\n\nShould we not expose the `requeue` result and only acknowledge the original after it succeeds?",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 48
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9b131b5_65c39e09",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "Publishing a new copy here and breaking the ordering of the events seems wrong to me.\n\nIf the partition contains:\n```\nDELETE(A) → INDEX(A)\n```\n\nand `DELETE(A)` returns `RETRY`, we republish it at the end and acknowledge the original. The partition then become:\n\n```\nINDEX(A) → DELETE(A)\n```\n\nSo the newer index may succeed first, followed by the older delete, leaving the final index state wrong.\n\nCan we discuss about this?",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 72
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88d9be73_7c520b9c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "Deleted account events will never complete here.\nOnce the account ref is gone, `isConsistent()` keeps returning false, so `doDelete()` is never reached.\n\nI believe we should we handle `event.deleted` separately, as we already do for change events",
+      "range": {
+        "startLine": 74,
+        "startChar": 13,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bd0f75b_a8e3f77d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "This is wron",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 62
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "188bc9bb_707eb7c5",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T17:10:05Z",
+      "side": 1,
+      "message": "Are we actually respecting retryInterval here? For example, with a 10s interval this sleeps for 1s and then returns true, so we retry about 9s too early.",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 3
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
