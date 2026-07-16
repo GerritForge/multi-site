@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e3f51f9_7dec197f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T14:40:31Z",
+      "side": 1,
+      "message": "Yes, before this patch, `newIndexEvent()` declared throws `IOException`, but nothing in its implementation actually propagated one, so this is correct I believe.\n\nWe could split this into a separate change if you feel strongly, but I think is not worth it. WDYT?",
+      "parentUuid": "64b5c03c_dd8ceb23",
+      "range": {
+        "startLine": 61,
+        "startChar": 58,
+        "endLine": 61,
+        "endChar": 59
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bde3a6ed_9eac83cf",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
         "patchSetId": 4
