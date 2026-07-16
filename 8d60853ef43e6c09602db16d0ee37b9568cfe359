@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64b5c03c_dd8ceb23",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-16T09:24:41Z",
+      "side": 1,
+      "message": "We are now swallowing the IOException. Why not leave it to propagate?",
+      "range": {
+        "startLine": 61,
+        "startChar": 58,
+        "endLine": 61,
+        "endChar": 59
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde3a6ed_9eac83cf",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-16T09:24:41Z",
+      "side": 1,
+      "message": "Is this related to making the `ChangeCheckerImpl`a Singleton?",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 59
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2be2dbc3_840f0c2f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-16T09:24:41Z",
+      "side": 1,
+      "message": "This is called here and in `getComputedChangeTs`. The change note might change between the 2 calls.",
+      "range": {
+        "startLine": 104,
+        "startChar": 11,
+        "endLine": 104,
+        "endChar": 25
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c51de72_84e30741",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-16T09:24:41Z",
+      "side": 1,
+      "message": "We are not testing that the ChangeChecker is effectively a singleton, which is the purpose of the change. Might be worth adding a test.",
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb17a32a_e58a0edb",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-16T09:24:41Z",
+      "side": 1,
+      "message": "Why this is now needed?",
+      "range": {
+        "startLine": 211,
+        "startChar": 29,
+        "endLine": 211,
+        "endChar": 40
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
