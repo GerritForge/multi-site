@@ -73,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29c8e68b_4cc3e383",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T14:57:06Z",
+      "side": 1,
+      "message": "yes, I believe it is related.\n\nNow that the checker is a singleton, it no longer has a change ID stored in the instance and must get it from the event.\n\nSo we explicitly handle an empty event before accessing the change id.",
+      "parentUuid": "bde3a6ed_9eac83cf",
+      "range": {
+        "startLine": 86,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 59
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2be2dbc3_840f0c2f",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
         "patchSetId": 4
@@ -135,6 +159,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d70e4a7e_5f8967ae",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T14:57:06Z",
+      "side": 1,
+      "message": "Added a test.",
+      "parentUuid": "2c51de72_84e30741",
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb17a32a_e58a0edb",
@@ -148,6 +190,30 @@
       "writtenOn": "2026-07-16T09:24:41Z",
       "side": 1,
       "message": "Why this is now needed?",
+      "range": {
+        "startLine": 211,
+        "startChar": 29,
+        "endLine": 211,
+        "endChar": 40
+      },
+      "revId": "8d60853ef43e6c09602db16d0ee37b9568cfe359",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c6f147a_4f21e097",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-16T14:57:06Z",
+      "side": 1,
+      "message": "Previously, when `changeExist` was `false`, the factory returned `changeCheckerAbsentMock` and that was subbed with `isConsistent()` returning `false` by default.\n\nNow we only have `changeCheckerPresentMock`, so adding `\u0026\u0026 changeExist` is needed to keep the same behaviour for a missing change.",
+      "parentUuid": "fb17a32a_e58a0edb",
       "range": {
         "startLine": 211,
         "startChar": 29,
