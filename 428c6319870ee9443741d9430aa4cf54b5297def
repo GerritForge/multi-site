@@ -143,6 +143,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7cef35e3_54f291b0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T07:58:48Z",
+      "side": 1,
+      "message": "I don\u0027t understand why we have to implement this now.\nIf we can\u0027t handle a message `A` synchronously (after all the retry attempts), eventually we will give up.\nWe shouldn\u0027t ack message `A`, since we haven\u0027t processed it correctly.\n\nHowever, the next `polling` might still give the next message `B` in the partition.\nIf we do manage to process `B` correctly, we would be implicitly acking `A`, which would be wrong.\n\nThis is exactly issue [529865773](https://issues.gerritcodereview.com/issues/529865773), and I thought we should have handled what to do as part of _that_ effort.\n\nHaving this change decide on `requeuing` (rather than DLQ, dropping, or any other strategies) seems arbitrary and too much for this change.",
+      "parentUuid": "85ac17ac_b4f37e81",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 0
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "12556d34_77265c11",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
         "patchSetId": 64
@@ -190,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3af7243d_424716d0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T07:58:48Z",
+      "side": 1,
+      "message": "\u003e \u003e I think we might be acking too eagerly here.\n\u003e \u003e \n\u003e \u003e `broker.send()` is asynchronous\n\u003e \n\u003e The lines of code do not call `broker.send()` but `requeueAction.requeue(event)` which must be synchronous.\nTrue.\nThe requeueAction.requeue(event), however is implemented `MultiSiteConsumerRunner.javaL85`\n\n```\n(e) -\u003e broker.send(topic, e)\n```\n\n\u003e \n\u003e The comment should be for the block where the `requeueAction` is implemented.\n\u003e \n\u003e \u003e but `RequeueEventAction` returns `void`, so we acknowledge the original but we don\u0027t know whether the new copy was published successfully and ff the publish fails, the event is lost.\n\u003e \n\u003e Good point, so we need to ensure that `requeueAction` returns a `boolean` and ack the message *only if* the requeue was successful.\n\nYes, makes sense to me.",
+      "parentUuid": "1ca5b532_55501b2f",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 48
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9b131b5_65c39e09",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
         "patchSetId": 64
@@ -225,6 +273,30 @@
       "side": 1,
       "message": "This isn\u0027t an event-source system, but a reindexing propagation of entities replicated using the Git protocol.\n\nThe cause you\u0027re mentioning isn\u0027t realistic: how can you reindex a deleted entity?\n\nWhat it *could* happen is: `INDEX(A)` + `DELETE(A)` may become `DELETE(A)` + `INDEX(A)`.\n\nThe final state is that the entity is deleted, which is correct. So I don\u0027t see any issues here.",
       "parentUuid": "a9b131b5_65c39e09",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 72
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec00eb68_708a4ef4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T07:58:48Z",
+      "side": 1,
+      "message": "\u003e This isn\u0027t an event-source system, but a reindexing propagation of entities replicated using the Git protocol.\n\u003e \n\u003e The cause you\u0027re mentioning isn\u0027t realistic: how can you reindex a deleted entity?\n\nYou can achieve this by deleting and recreating the same entity, that will translate to DELETE from the index and then INDEX again, no?.\n\n\u003e \n\u003e What it *could* happen is: `INDEX(A)` + `DELETE(A)` may become `DELETE(A)` + `INDEX(A)`.\n\u003e \n\u003e The final state is that the entity is deleted, which is correct. So I don\u0027t see any issues here.",
+      "parentUuid": "5350343f_a2e14ee1",
       "range": {
         "startLine": 85,
         "startChar": 0,
