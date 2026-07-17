@@ -116,6 +116,30 @@
       },
       "revId": "73c39074e8ad54bec9eadde3be677407a4e305e7",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "456e78e9_e85ff1cb",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventRouter.java",
+        "patchSetId": 53
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T15:45:42Z",
+      "side": 1,
+      "message": "We are _not_ acking failures.\nAcking is happening for\n\n- dropped events: AbstractSubcriber.java L174\n- success handling: IndexEventRouter L83\n- `RETRY` or `IGNORED`: AbstractSubcriber.java L125\n\nBecause of it we are subject to https://issues.gerritcodereview.com/issues/529865773\nI will add a comment explaining this.",
+      "parentUuid": "c6c899f2_ddf863a2",
+      "range": {
+        "startLine": 88,
+        "startChar": 8,
+        "endLine": 88,
+        "endChar": 20
+      },
+      "revId": "73c39074e8ad54bec9eadde3be677407a4e305e7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
