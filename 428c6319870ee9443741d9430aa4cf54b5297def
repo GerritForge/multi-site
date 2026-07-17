@@ -96,6 +96,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66128e03_1840b987",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 64
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T15:19:36Z",
+      "side": 1,
+      "message": "Yes, that\u0027s what I meant.\n\nWhen we spin up the test environment, I\u0027d expect it to use auto-acking by default, since that\u0027s also the default for a multi-site installation unless manual acknowledgement is explicitly enabled.\n\nI think the test environment should default to what most existing deployments are likely to use, which is auto-acking, IMHO.\n\nWe can change it if you feel strongly about this, but changing the default alone would make the CLI not work as-is.\n\nAt the moment we have `--broker-manual-ack` to opt into manual acknowledgement, but no equivalent flag to switch back to auto-acking.",
+      "parentUuid": "3a731836_004ffe23",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e96b2666_02a10df4",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
         "patchSetId": 64
@@ -155,6 +179,30 @@
       "side": 1,
       "message": "I don\u0027t understand why we have to implement this now.\nIf we can\u0027t handle a message `A` synchronously (after all the retry attempts), eventually we will give up.\nWe shouldn\u0027t ack message `A`, since we haven\u0027t processed it correctly.\n\nHowever, the next `polling` might still give the next message `B` in the partition.\nIf we do manage to process `B` correctly, we would be implicitly acking `A`, which would be wrong.\n\nThis is exactly issue [529865773](https://issues.gerritcodereview.com/issues/529865773), and I thought we should have handled what to do as part of _that_ effort.\n\nHaving this change decide on `requeuing` (rather than DLQ, dropping, or any other strategies) seems arbitrary and too much for this change.",
       "parentUuid": "85ac17ac_b4f37e81",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 0
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c4980a_d6ccbbbe",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T15:19:36Z",
+      "side": 1,
+      "message": "Discussed f2f.\nThe reason we have to implement this now is that we **cannot** wait for a potentially long time for an event to be handled, because that could potentially hold up the consumption of the entire partition for a long time.\n\nThe current proposed solution is to acknowledge the current event, but first requeue it so that it can be attempted again later, without holding up the queue.\n\nWe discussed the concern that this reordering might affect the final state, but it is not the case since INDEX operations are idempotent.",
+      "parentUuid": "7cef35e3_54f291b0",
       "range": {
         "startLine": 48,
         "startChar": 0,
@@ -307,6 +355,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e17292e8_8520e065",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T15:19:36Z",
+      "side": 1,
+      "message": "An update on all index-events behaviour when deleted.\n\n* *GROUP* - Once removed, a group cannot be re-created; it will have a new group id.\n* *ACCOUNT* - Once removed, an account cannot be re-created; it will have a new account id.\n* *CHANGE* - Once removed, a change cannot be re-created; it will be a new change.\n* *PROJECT* - Once removed, there is no project-index message that is sent: the reindex gets handled by the project_list_update handler, which removes from the projectCache and then removes the project from the index.\n\nSo you were right @luca.milanesio@gmail.com\nGiven the above, I think we are fine, because it is not possible to have the inversion of delete and index messages.",
+      "parentUuid": "ec00eb68_708a4ef4",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 72
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88d9be73_7c520b9c",
@@ -403,6 +475,53 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36854c47_f0692f06",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T15:19:36Z",
+      "side": 1,
+      "message": "The current code works, and the account is removed from the index.\nI will fix this part of the code so that `isConsistent` is only called in non-`delete` cases.",
+      "parentUuid": "1ffbb70e_d8af6f42",
+      "range": {
+        "startLine": 74,
+        "startChar": 13,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "685e285e_2ef663bf",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T15:19:36Z",
+      "side": 1,
+      "message": "If we decide that this message has been re-tried too many times, we return failure.\nIn this case, I believe we should still remove it from the `indexingRetryTaskMap` because the change is not in retry mode anymore.\n\nThe next event we get for the same entity should restart its number of retries from 0.",
+      "range": {
+        "startLine": 97,
+        "startChar": 62,
+        "endLine": 97,
+        "endChar": 85
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "188bc9bb_707eb7c5",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
         "patchSetId": 64
@@ -438,6 +557,30 @@
       "side": 1,
       "message": "\u003e Are we actually respecting retryInterval here? For example, with a 10s interval this sleeps for 1s and then returns true\n\nI don\u0027t understand the statement: where does the 10 - 9 \u003d 1 formula come from?",
       "parentUuid": "188bc9bb_707eb7c5",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 3
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6db23315_d1a49e0b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T15:19:36Z",
+      "side": 1,
+      "message": "\u003e \u003e Are we actually respecting retryInterval here? For example, with a 10s interval this sleeps for 1s and then returns true\n\u003e \n\u003e I don\u0027t understand the statement: where does the 10 - 9 \u003d 1 formula come from?\n\nIt was just an example to explain the problem.\n\n`RETRY_POLL_INTERVAL_MSEC \u003d 1000ms` // hardcoded\n`retryInterval \u003d 10000ms`  // configured\n`millisSinceRetry \u003d 1000ms` // millis since we tried last\n\nWith these variables as input, we would be waiting for 1000ms, rather than for 9 seconds:\n\n```\nThread.sleep(Math.min(1000ms, 10000ms - 1000ms));\n```\n\nDid you want to use Max here?",
+      "parentUuid": "351635cf_e858c848",
       "range": {
         "startLine": 101,
         "startChar": 0,
