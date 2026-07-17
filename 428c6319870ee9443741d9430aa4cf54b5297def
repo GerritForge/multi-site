@@ -168,6 +168,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9b16672_bbcfdbed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 64
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T16:35:05Z",
+      "side": 1,
+      "message": "\u003e Yes, that\u0027s what I meant.\n\u003e \n\u003e When we spin up the test environment, I\u0027d expect it to use auto-acking by default, since that\u0027s also the default for a multi-site installation unless manual acknowledgement is explicitly enabled.\n\nI believe the future is the manual acking, so it is best IMHO to focus on validating that as the primary target.\n\n\u003e I think the test environment should default to what most existing deployments are likely to use, which is auto-acking, IMHO.\n\nThat justifies my choice, then, what\u0027s most likely the future default.\n\n\u003e We can change it if you feel strongly about this, but changing the default alone would make the CLI not work as-is.\n\u003e \n\u003e At the moment we have `--broker-manual-ack` to opt into manual acknowledgement, but no equivalent flag to switch back to auto-acking.\n\nNot a strong opinion, but I struggled for around 10-15\u0027 to understand why the setup wasn\u0027t configuring the manual acking, that\u0027s why I flipped the switch.",
+      "parentUuid": "66128e03_1840b987",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e96b2666_02a10df4",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
         "patchSetId": 64
@@ -701,6 +725,30 @@
       "side": 1,
       "message": "\u003e \u003e Are we actually respecting retryInterval here? For example, with a 10s interval this sleeps for 1s and then returns true\n\u003e \n\u003e I don\u0027t understand the statement: where does the 10 - 9 \u003d 1 formula come from?\n\nIt was just an example to explain the problem.\n\n`RETRY_POLL_INTERVAL_MSEC \u003d 1000ms` // hardcoded\n`retryInterval \u003d 10000ms`  // configured\n`millisSinceRetry \u003d 1000ms` // millis since we tried last\n\nWith these variables as input, we would be waiting for 1000ms, rather than for 9 seconds:\n\n```\nThread.sleep(Math.min(1000ms, 10000ms - 1000ms));\n```\n\nDid you want to use Max here?",
       "parentUuid": "351635cf_e858c848",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 3
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8dd6307_4b6b0d25",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T16:35:05Z",
+      "side": 1,
+      "message": "No, that\u0027s the correct formula.\n\nWe always use the retry interval; the 1s sleep is just for avoiding short loops of requeueing.",
+      "parentUuid": "6db23315_d1a49e0b",
       "range": {
         "startLine": 101,
         "startChar": 0,
