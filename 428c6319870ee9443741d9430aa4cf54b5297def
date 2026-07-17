@@ -761,6 +761,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebab9dac_6013b70a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T16:51:17Z",
+      "side": 1,
+      "message": "I understand the `1s` sleep is meant to throttle the requeue loop, but I\u0027m still missing something.\n\nWe sleep for at most `one` second, return `true`, and then continue with `isConsistent()`, even if most of `retryInterval` is still left.\n\nSo aren\u0027t we retrying early rather than waiting for the configured interval?\nWhat stops the indexing attempt after that sleep?",
+      "parentUuid": "f8dd6307_4b6b0d25",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 3
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3663702a_972f9e50",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
         "patchSetId": 64
