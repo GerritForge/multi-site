@@ -809,6 +809,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f604995c_b0e1a26b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T21:17:00Z",
+      "side": 1,
+      "message": "I see, I believe we need to also check if it\u0027s the time of the next retry or not at L85, and not just the `isConsistent()`.",
+      "parentUuid": "ebab9dac_6013b70a",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 3
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3663702a_972f9e50",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
         "patchSetId": 64
