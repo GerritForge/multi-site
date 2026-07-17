@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df6dca7_455f49d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 64
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T16:16:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a91cb699_bb582b59",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 71
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8270cdc_9f16b53d",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-07-16T17:10:05Z",
       "side": 1,
       "message": "This is not true anymore.\n\non RETRY we publish a new copy and acknowledge the original instead. This changes the partition ordering, which doesn\u0027t seem obvious to me.\n\nI am not sure this logic belongs to this change, we should at least mention this in the docs and commit message.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c93523c5_6f0d6841",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 64
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T16:16:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8270cdc_9f16b53d",
       "range": {
         "startLine": 23,
         "startChar": 0,
@@ -284,6 +332,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe96bec9_9eb5421b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T16:16:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3af7243d_424716d0",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 48
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9b131b5_65c39e09",
@@ -510,6 +582,30 @@
       "writtenOn": "2026-07-17T15:19:36Z",
       "side": 1,
       "message": "If we decide that this message has been re-tried too many times, we return failure.\nIn this case, I believe we should still remove it from the `indexingRetryTaskMap` because the change is not in retry mode anymore.\n\nThe next event we get for the same entity should restart its number of retries from 0.",
+      "range": {
+        "startLine": 97,
+        "startChar": 62,
+        "endLine": 97,
+        "endChar": 85
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6b9b1e8_1f9efd09",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-17T16:16:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "685e285e_2ef663bf",
       "range": {
         "startLine": 97,
         "startChar": 62,
