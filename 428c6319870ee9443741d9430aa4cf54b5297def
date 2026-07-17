@@ -119,6 +119,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85ac17ac_b4f37e81",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T07:20:54Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t think requeuing strategies belong to this change, but rather to 529865773.\n\u003e \n\u003e https://issues.gerritcodereview.com/issues/529865773\n\nYou can find another strategy for retrying, of course, but you can\u0027t leave this change without that logic implemented.\n\nIf requeuing isn\u0027t an option, you\u0027d need to find another option.",
+      "parentUuid": "e96b2666_02a10df4",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 0
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "12556d34_77265c11",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
         "patchSetId": 64
@@ -142,6 +166,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ca5b532_55501b2f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubcriber.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T07:20:54Z",
+      "side": 1,
+      "message": "\u003e I think we might be acking too eagerly here.\n\u003e \n\u003e `broker.send()` is asynchronous\n\nThe lines of code do not call `broker.send()` but `requeueAction.requeue(event)` which must be synchronous.\n\nThe comment should be for the block where the `requeueAction` is implemented.\n\n\u003e but `RequeueEventAction` returns `void`, so we acknowledge the original but we don\u0027t know whether the new copy was published successfully and ff the publish fails, the event is lost.\n\nGood point, so we need to ensure that `requeueAction` returns a `boolean` and ack the message *only if* the requeue was successful.",
+      "parentUuid": "12556d34_77265c11",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 48
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9b131b5_65c39e09",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
         "patchSetId": 64
@@ -153,6 +201,30 @@
       "writtenOn": "2026-07-16T17:10:05Z",
       "side": 1,
       "message": "Publishing a new copy here and breaking the ordering of the events seems wrong to me.\n\nIf the partition contains:\n```\nDELETE(A) → INDEX(A)\n```\n\nand `DELETE(A)` returns `RETRY`, we republish it at the end and acknowledge the original. The partition then become:\n\n```\nINDEX(A) → DELETE(A)\n```\n\nSo the newer index may succeed first, followed by the older delete, leaving the final index state wrong.\n\nCan we discuss about this?",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 72
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5350343f_a2e14ee1",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T07:20:54Z",
+      "side": 1,
+      "message": "This isn\u0027t an event-source system, but a reindexing propagation of entities replicated using the Git protocol.\n\nThe cause you\u0027re mentioning isn\u0027t realistic: how can you reindex a deleted entity?\n\nWhat it *could* happen is: `INDEX(A)` + `DELETE(A)` may become `DELETE(A)` + `INDEX(A)`.\n\nThe final state is that the entity is deleted, which is correct. So I don\u0027t see any issues here.",
+      "parentUuid": "a9b131b5_65c39e09",
       "range": {
         "startLine": 85,
         "startChar": 0,
@@ -235,6 +307,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ffbb70e_d8af6f42",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexAccountHandler.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T07:20:54Z",
+      "side": 1,
+      "message": "Good point: I also believe that deleted accounts never worked before. Maybe needs a separate ad-hoc fix *before* this change?",
+      "parentUuid": "88d9be73_7c520b9c",
+      "range": {
+        "startLine": 74,
+        "startChar": 13,
+        "endLine": 74,
+        "endChar": 34
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "188bc9bb_707eb7c5",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
         "patchSetId": 64
@@ -246,6 +342,30 @@
       "writtenOn": "2026-07-16T17:10:05Z",
       "side": 1,
       "message": "Are we actually respecting retryInterval here? For example, with a 10s interval this sleeps for 1s and then returns true, so we retry about 9s too early.",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 112,
+        "endChar": 3
+      },
+      "revId": "428c6319870ee9443741d9430aa4cf54b5297def",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "351635cf_e858c848",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 64
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-17T07:20:54Z",
+      "side": 1,
+      "message": "\u003e Are we actually respecting retryInterval here? For example, with a 10s interval this sleeps for 1s and then returns true\n\nI don\u0027t understand the statement: where does the 10 - 9 \u003d 1 formula come from?",
+      "parentUuid": "188bc9bb_707eb7c5",
       "range": {
         "startLine": 101,
         "startChar": 0,
