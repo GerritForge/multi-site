@@ -25,7 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class BatchIndexEventSubscriber extends AbstractSubcriber {
+public class BatchIndexEventSubscriber extends AbstractSubscriber {
   private final ProjectsFilter projectsFilter;
 
   @Inject
