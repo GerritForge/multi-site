@@ -106,7 +106,7 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
   }
 
   @Override
-  protected AbstractSubcriber objectUnderTest() {
+  protected AbstractSubscriber objectUnderTest() {
     return new StreamEventSubscriber(
         (StreamEventRouter) eventRouter,
         asDynamicSet(droppedEventListeners),

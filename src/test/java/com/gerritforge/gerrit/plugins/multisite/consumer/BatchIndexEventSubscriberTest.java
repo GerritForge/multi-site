@@ -61,7 +61,7 @@ public class BatchIndexEventSubscriberTest extends AbstractSubscriberTestBase {
   }
 
   @Override
-  protected AbstractSubcriber objectUnderTest() {
+  protected AbstractSubscriber objectUnderTest() {
     return new BatchIndexEventSubscriber(
         (IndexEventRouter) eventRouter,
         asDynamicSet(droppedEventListeners),

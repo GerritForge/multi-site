@@ -40,7 +40,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
           ProjectIndexEvent.TYPE,
           GroupIndexEvent.TYPE);
 
-  private final DynamicSet<AbstractSubcriber> consumers;
+  private final DynamicSet<AbstractSubscriber> consumers;
   private DynamicItem<BrokerApi> brokerApi;
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
@@ -48,7 +48,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   @Inject
   public MultiSiteConsumerRunner(
       DynamicItem<BrokerApi> brokerApi,
-      DynamicSet<AbstractSubcriber> consumers,
+      DynamicSet<AbstractSubscriber> consumers,
       Configuration cfg,
       EventsBrokerConfiguration eventsBrokerConfiguration) {
     this.consumers = consumers;
@@ -66,7 +66,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   @Override
   public void stop() {}
 
-  private void subscribe(AbstractSubcriber subscriber) {
+  private void subscribe(AbstractSubscriber subscriber) {
     BrokerApi broker = brokerApi.get();
     String topic = subscriber.getTopic().topic(cfg);
     boolean autoAck = broker.isAutoAck();
@@ -97,7 +97,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
     }
   }
 
-  private boolean isPartitionAwareIndexTopic(AbstractSubcriber subscriber, String topic) {
+  private boolean isPartitionAwareIndexTopic(AbstractSubscriber subscriber, String topic) {
     if (subscriber.getTopic() != EventTopic.INDEX_TOPIC) {
       return false;
     }
