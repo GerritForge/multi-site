@@ -41,7 +41,7 @@ public class ProjectUpdateEventSubscriberTest extends AbstractSubscriberTestBase
   }
 
   @Override
-  protected AbstractSubcriber objectUnderTest() {
+  protected AbstractSubscriber objectUnderTest() {
     return new ProjectUpdateEventSubscriber(
         (ProjectListUpdateRouter) eventRouter,
         asDynamicSet(droppedEventListeners),

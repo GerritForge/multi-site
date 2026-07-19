@@ -57,7 +57,7 @@ public abstract class AbstractSubscriberTestBase {
   @SuppressWarnings("rawtypes")
   protected ForwardedEventRouter eventRouter;
 
-  protected AbstractSubcriber objectUnderTest;
+  protected AbstractSubscriber objectUnderTest;
   protected TestAck ack;
 
   @Before
@@ -182,7 +182,7 @@ public abstract class AbstractSubscriberTestBase {
     reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
   }
 
-  protected abstract AbstractSubcriber objectUnderTest();
+  protected abstract AbstractSubscriber objectUnderTest();
 
   protected abstract List<Event> events();
 

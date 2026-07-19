@@ -28,7 +28,7 @@ import com.google.inject.Singleton;
 import java.util.Optional;
 
 @Singleton
-public class IndexEventSubscriber extends AbstractSubcriber {
+public class IndexEventSubscriber extends AbstractSubscriber {
   private final ProjectsFilter projectsFilter;
   private final ChangeFinder changeFinder;
 
