@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class CacheEvictionEventSubscriber extends AbstractSubcriber {
+public class CacheEvictionEventSubscriber extends AbstractSubscriber {
   @Inject
   public CacheEvictionEventSubscriber(
       CacheEvictionEventRouter eventRouter,

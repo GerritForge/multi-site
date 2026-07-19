@@ -48,8 +48,8 @@ public class MultiSiteConsumerRunnerTest {
   @Mock private Configuration cfg;
   @Mock private Broker brokerCfg;
   @Mock private EventsBrokerConfiguration eventsBrokerConfiguration;
-  @Mock private AbstractSubcriber subscriber;
-  @Mock private AbstractSubcriber cacheSubscriber;
+  @Mock private AbstractSubscriber subscriber;
+  @Mock private AbstractSubscriber cacheSubscriber;
   @Mock private AckAwareConsumer<Event> consumer;
   @Mock private AckAwareConsumer<Event> cacheConsumer;
 
@@ -71,7 +71,7 @@ public class MultiSiteConsumerRunnerTest {
     when(cacheSubscriber.getTopic()).thenReturn(EventTopic.CACHE_TOPIC);
     when(cacheSubscriber.getConsumer(true)).thenReturn(cacheConsumer);
 
-    DynamicSet<AbstractSubcriber> consumers = new DynamicSet<>();
+    DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
     consumers.add("multi-site", cacheSubscriber);
     new MultiSiteConsumerRunner(
@@ -164,7 +164,7 @@ public class MultiSiteConsumerRunnerTest {
   }
 
   private MultiSiteConsumerRunner runner() {
-    DynamicSet<AbstractSubcriber> consumers = new DynamicSet<>();
+    DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
     return new MultiSiteConsumerRunner(
         DynamicItem.itemOf(BrokerApi.class, brokerApi), consumers, cfg, eventsBrokerConfiguration);

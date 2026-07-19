@@ -24,7 +24,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class StreamEventSubscriber extends AbstractSubcriber {
+public class StreamEventSubscriber extends AbstractSubscriber {
   private final ProjectsFilter projectsFilter;
 
   @Inject

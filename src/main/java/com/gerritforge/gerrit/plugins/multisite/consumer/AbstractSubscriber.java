@@ -28,7 +28,7 @@ import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
 
-public abstract class AbstractSubcriber {
+public abstract class AbstractSubscriber {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private enum AckMode {
@@ -43,7 +43,7 @@ public abstract class AbstractSubcriber {
   private SubscriberMetrics subscriberMetrics;
   private final String topic;
 
-  public AbstractSubcriber(
+  public AbstractSubscriber(
       ForwardedEventRouter eventRouter,
       DynamicSet<DroppedEventListener> droppedEventListeners,
       @GerritInstanceId String gerritInstanceId,

@@ -129,7 +129,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   }
 
   @Override
-  protected AbstractSubcriber objectUnderTest() {
+  protected AbstractSubscriber objectUnderTest() {
     return new IndexEventSubscriber(
         (IndexEventRouter) eventRouter,
         asDynamicSet(droppedEventListeners),
