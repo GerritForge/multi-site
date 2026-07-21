@@ -22,6 +22,30 @@
       },
       "revId": "593ed5d1262453d7934c24b5a51f18b18c27eda5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37293831_b5f48972",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 73
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-21T14:43:09Z",
+      "side": 0,
+      "message": "This handling already existed before the change to be honest.\nHere we only combine `IOException`, `PermissionBackendException` and `CacheNotFoundException` because they now receive the same handling.",
+      "parentUuid": "8aa7be99_321c29c1",
+      "range": {
+        "startLine": 97,
+        "startChar": 8,
+        "endLine": 99,
+        "endChar": 70
+      },
+      "revId": "593ed5d1262453d7934c24b5a51f18b18c27eda5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
