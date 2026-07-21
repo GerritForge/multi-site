@@ -49,6 +49,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ae9b2a9_3c0be177",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 73
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-21T13:59:36Z",
+      "side": 1,
+      "message": "Why we weren\u0027t setting the context before?",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 58
+      },
+      "revId": "6872f1b660876f7c82e69ed6436c676bf5568541",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1279e879_0697e5ff",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventRouter.java",
         "patchSetId": 73
