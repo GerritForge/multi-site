@@ -142,6 +142,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32c98c65_4d536b68",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 73
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-22T07:12:17Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a2e350f5_ad9ce9e1",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 58
+      },
+      "revId": "6872f1b660876f7c82e69ed6436c676bf5568541",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1279e879_0697e5ff",
