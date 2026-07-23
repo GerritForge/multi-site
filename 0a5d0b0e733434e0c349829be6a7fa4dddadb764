@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6cd84be_5d58e9db",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventAckHandler.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-23T15:53:20Z",
+      "side": 1,
+      "message": "Missing Javadocs",
+      "revId": "0a5d0b0e733434e0c349829be6a7fa4dddadb764",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee0ceaaa_fe1f7666",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventAckHandler.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-23T15:53:20Z",
+      "side": 1,
+      "message": "This can be a singleton",
+      "revId": "0a5d0b0e733434e0c349829be6a7fa4dddadb764",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fbcf551_348e7cac",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventAckHandler.java",
+        "patchSetId": 27
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-23T15:53:20Z",
+      "side": 1,
+      "message": "Indexes events other than the changes one, might be sparse. This might mean that projects, account or group partitions can repeatedly reprocess already-handled events after consumer restarts.\n\nMight be worth acking at least the first message at startup.",
+      "range": {
+        "startLine": 34,
+        "startChar": 27,
+        "endLine": 34,
+        "endChar": 35
+      },
+      "revId": "0a5d0b0e733434e0c349829be6a7fa4dddadb764",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
