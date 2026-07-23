@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e6c8806b_798327bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 15
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-23T23:40:59Z",
+      "side": 1,
+      "message": "Not done? The headline is still the same.",
+      "parentUuid": "90337f5a_8a41a416",
+      "range": {
+        "startLine": 7,
+        "startChar": 7,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "d4ac1a3700dde61a037ccabc3039c150d5570cc3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f6c1a10_77ca5f61",
         "filename": "/COMMIT_MSG",
         "patchSetId": 15

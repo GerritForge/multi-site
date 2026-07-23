@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fdbd9bc_9b017c42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 30
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-07-23T23:40:59Z",
+      "side": 1,
+      "message": "What if we receive a burst of many events in a short time: would we risk to go over the limit of the events-broker batching of messages for acking?",
+      "range": {
+        "startLine": 9,
+        "startChar": 36,
+        "endLine": 9,
+        "endChar": 73
+      },
+      "revId": "fa4ecadad34c009e9b4fb30b3ca2833ab2618de8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
