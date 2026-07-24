@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a67d7e6_85abfa21",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-24T06:13:53Z",
+      "side": 1,
+      "message": "Maybe we can be more specific: \"Cannot commit index before acking message\"",
+      "range": {
+        "startLine": 174,
+        "startChar": 42,
+        "endLine": 174,
+        "endChar": 64
+      },
+      "revId": "4e5e261d41ec4dbae86fb3bdeec7b0a5ba47c0a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1edc02f3_ff9f2b55",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventAckHandler.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-24T06:13:53Z",
+      "side": 1,
+      "message": "`flush` and `ack` are both in the `synchronized` block. If the operations are slow we would block other operations. \n\nMight be worth moving `flush` and `ack` outside the `synchronized` block. WDYT?",
+      "range": {
+        "startLine": 80,
+        "startChar": 5,
+        "endLine": 81,
+        "endChar": 33
+      },
+      "revId": "4e5e261d41ec4dbae86fb3bdeec7b0a5ba47c0a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a30be6da_b4864b46",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/IndexEventAckHandler.java",
+        "patchSetId": 24
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-24T06:13:53Z",
+      "side": 1,
+      "message": "I don\u0027t think is a big deal since the `commitIntervalMs` will be in the order of minutes, however, `now` is taken before the `flush` and `ack`, hence the `lastAckByEventType` will be updated including the time spent for those operations, skewing the real time when the `ack` happened. WDYT?",
+      "range": {
+        "startLine": 82,
+        "startChar": 46,
+        "endLine": 82,
+        "endChar": 49
+      },
+      "revId": "4e5e261d41ec4dbae86fb3bdeec7b0a5ba47c0a6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
