@@ -46,6 +46,30 @@
       },
       "revId": "fa4ecadad34c009e9b4fb30b3ca2833ab2618de8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf7d8c82_011e0d94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 30
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-07-28T10:21:46Z",
+      "side": 1,
+      "message": "Discussed f2f.\n- Issue 515709509 will be worked on separately. events-kafka internal implementation does not affect this patch implementation directly.\n\n- I have added a documentation section explaining that:\n   1. longer intervals can increase memory usage during bursts of events.\n   2. The interval should be kept well below the broker retention period.",
+      "parentUuid": "02b6a515_81614455",
+      "range": {
+        "startLine": 9,
+        "startChar": 36,
+        "endLine": 9,
+        "endChar": 73
+      },
+      "revId": "fa4ecadad34c009e9b4fb30b3ca2833ab2618de8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
