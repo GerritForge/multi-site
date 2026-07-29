@@ -68,7 +68,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
     objectUnderTest.getManualAckConsumer((e) -> true).accept(event, messageAck);
 
-    verify(messageAck).ack(event);
+    verify((IndexEventRouter) eventRouter).ack(event, messageAck);
   }
 
   @Test
@@ -79,7 +79,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
     objectUnderTest.getManualAckConsumer((e) -> false).accept(event, messageAck);
 
-    verify(messageAck, never()).ack(event);
+    verify((IndexEventRouter) eventRouter, never()).ack(event, messageAck);
   }
 
   @Test

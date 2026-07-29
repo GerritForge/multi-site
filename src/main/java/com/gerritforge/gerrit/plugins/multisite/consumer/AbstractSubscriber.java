@@ -119,7 +119,7 @@ public abstract class AbstractSubscriber {
 
           case ROUTER_MANAGED:
             if (!routeManaged(event, messageAcknowledgement) && requeueAction.requeue(event)) {
-              messageAcknowledgement.ack(event);
+              manualAckingRouter().ack(event, messageAcknowledgement);
             }
             break;
         }
@@ -159,16 +159,14 @@ public abstract class AbstractSubscriber {
 
   private boolean routeManaged(Event event, MessageAcknowledgement<Event> ack)
       throws IOException, PermissionBackendException, CacheNotFoundException {
-    boolean routeSuccessful =
-        (((ForwardedEventManualAckingRouter<Event>) eventRouter).route(event, ack));
+    boolean routeSuccessful = manualAckingRouter().route(event, ack);
     subscriberMetrics.incrementSubscriberConsumedMessage();
     return routeSuccessful;
   }
 
-  @SuppressWarnings("unchecked")
   private void tryRouterAck(Event event, MessageAcknowledgement<Event> ack) {
     try {
-      ((ForwardedEventManualAckingRouter<Event>) eventRouter).ack(event, ack);
+      manualAckingRouter().ack(event, ack);
       subscriberMetrics.incrementSubscriberConsumedMessage();
     } catch (IOException e) {
       logger.atSevere().withCause(e).log(
@@ -178,6 +176,11 @@ public abstract class AbstractSubscriber {
       logger.atSevere().withCause(e).log("Cannot ack message '%s'", event);
       subscriberMetrics.incrementSubscriberFailedToAckMessage();
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private ForwardedEventManualAckingRouter<Event> manualAckingRouter() {
+    return (ForwardedEventManualAckingRouter<Event>) eventRouter;
   }
 
   private void tryAckAndMarkAsConsumed(
