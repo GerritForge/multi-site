@@ -45,17 +45,20 @@ public class IndexEventRouter
   private final String gerritInstanceId;
   private final DynamicMap<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
   private final IndexEventAckHandler ackHandler;
+  private final IndexEventMetrics metrics;
 
   @Inject
   public IndexEventRouter(
       ForwardedIndexAccountHandler indexAccountHandler,
       DynamicMap<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers,
       IndexEventAckHandler ackHandler,
+      IndexEventMetrics metrics,
       AllUsersName allUsersName,
       @GerritInstanceId String gerritInstanceId) {
     this.indexAccountHandler = indexAccountHandler;
     this.indexHandlers = indexHandlers;
     this.ackHandler = ackHandler;
+    this.metrics = metrics;
     this.allUsersName = allUsersName;
     this.gerritInstanceId = gerritInstanceId;
   }
@@ -95,6 +98,7 @@ public class IndexEventRouter
         // TODO: Leaving failed events unacknowledged exposes us to
         // https://issues.gerritcodereview.com/issues/529865773
         logger.atWarning().log("Indexing of event %s failed", sourceEvent.getType());
+        metrics.incrementTerminalFailure(sourceEvent.getType());
         return true;
     }
 
