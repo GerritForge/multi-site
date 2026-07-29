@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.broker;
 
 import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
 import com.google.gerrit.metrics.Counter1;
+import com.google.gerrit.metrics.Counter2;
 import com.google.gerrit.metrics.MetricMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -24,6 +25,8 @@ public class BrokerMetrics extends MultiSiteMetrics {
 
   private final Counter1<String> brokerPublisherSuccessCounter;
   private final Counter1<String> brokerPublisherFailureCounter;
+  private final Counter2<String, String> brokerRequeueSuccessCounter;
+  private final Counter2<String, String> brokerRequeueFailureCounter;
 
   @Inject
   public BrokerMetrics(MetricMaker metricMaker) {
@@ -40,6 +43,20 @@ public class BrokerMetrics extends MultiSiteMetrics {
             rateDescription(
                 "errors", "Number of messages failed to publish by the broker publisher"),
             stringField(PUBLISHER_FAILURE_COUNTER, "Broker failed to publish message count"));
+
+    this.brokerRequeueSuccessCounter =
+        metricMaker.newCounter(
+            "multi_site/broker/broker_message_requeue_counter",
+            rateDescription("messages", "Number of messages successfully requeued"),
+            stringField("topic", "Topic"),
+            stringField("event_type", "Event type"));
+
+    this.brokerRequeueFailureCounter =
+        metricMaker.newCounter(
+            "multi_site/broker/broker_message_requeue_failure_counter",
+            rateDescription("errors", "Number of messages failed to requeue"),
+            stringField("topic", "Topic"),
+            stringField("event_type", "Event type"));
   }
 
   public void incrementBrokerPublishedMessage() {
@@ -48,5 +65,13 @@ public class BrokerMetrics extends MultiSiteMetrics {
 
   public void incrementBrokerFailedToPublishMessage() {
     brokerPublisherFailureCounter.increment(PUBLISHER_FAILURE_COUNTER);
+  }
+
+  public void incrementBrokerRequeuedMessage(String topic, String eventType) {
+    brokerRequeueSuccessCounter.increment(topic, eventType);
+  }
+
+  public void incrementBrokerFailedToRequeueMessage(String topic, String eventType) {
+    brokerRequeueFailureCounter.increment(topic, eventType);
   }
 }

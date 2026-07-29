@@ -87,7 +87,12 @@ public class BrokerApiWrapper implements BrokerApi {
   }
 
   public ListenableFuture<Boolean> requeue(String topic, Event message) {
-    return send(topic, message, MessageLogger.Direction.REQUEUE);
+    try {
+      return send(topic, message, MessageLogger.Direction.REQUEUE);
+    } catch (RuntimeException e) {
+      metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+      throw e;
+    }
   }
 
   private ListenableFuture<Boolean> send(
@@ -100,9 +105,9 @@ public class BrokerApiWrapper implements BrokerApi {
           public void onSuccess(Boolean result) {
             if (result) {
               msgLog.log(direction, topic, message);
-              metrics.incrementBrokerPublishedMessage();
+              incrementSuccessMetric(direction, topic, message);
             } else {
-              metrics.incrementBrokerFailedToPublishMessage();
+              incrementFailureMetric(direction, topic, message);
             }
           }
 
@@ -113,12 +118,30 @@ public class BrokerApiWrapper implements BrokerApi {
                 message.toString(),
                 topic,
                 throwable.getMessage());
-            metrics.incrementBrokerFailedToPublishMessage();
+            incrementFailureMetric(direction, topic, message);
           }
         },
         executor);
 
     return resfultF;
+  }
+
+  private void incrementSuccessMetric(
+      MessageLogger.Direction direction, String topic, Event message) {
+    if (direction == MessageLogger.Direction.REQUEUE) {
+      metrics.incrementBrokerRequeuedMessage(topic, message.getType());
+    } else {
+      metrics.incrementBrokerPublishedMessage();
+    }
+  }
+
+  private void incrementFailureMetric(
+      MessageLogger.Direction direction, String topic, Event message) {
+    if (direction == MessageLogger.Direction.REQUEUE) {
+      metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+    } else {
+      metrics.incrementBrokerFailedToPublishMessage();
+    }
   }
 
   @Override
