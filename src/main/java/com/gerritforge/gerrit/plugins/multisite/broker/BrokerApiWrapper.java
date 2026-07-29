@@ -99,7 +99,15 @@ public class BrokerApiWrapper implements BrokerApi {
           @Override
           public void onSuccess(Boolean result) {
             msgLog.log(direction, topic, message);
-            metrics.incrementBrokerPublishedMessage();
+            if (direction == MessageLogger.Direction.REQUEUE) {
+              if (result) {
+                metrics.incrementBrokerRequeuedMessage(topic, message.getType());
+              } else {
+                metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+              }
+            } else {
+              metrics.incrementBrokerPublishedMessage();
+            }
           }
 
           @Override
@@ -109,7 +117,11 @@ public class BrokerApiWrapper implements BrokerApi {
                 message.toString(),
                 topic,
                 throwable.getMessage());
-            metrics.incrementBrokerFailedToPublishMessage();
+            if (direction == MessageLogger.Direction.REQUEUE) {
+              metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+            } else {
+              metrics.incrementBrokerFailedToPublishMessage();
+            }
           }
         },
         executor);
