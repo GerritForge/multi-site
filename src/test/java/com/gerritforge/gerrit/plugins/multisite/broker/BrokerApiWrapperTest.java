@@ -64,6 +64,31 @@ public class BrokerApiWrapperTest {
   }
 
   @Test
+  public void shouldPublishMessageFromSameInstance() {
+    SettableFuture<Boolean> resultF = SettableFuture.create();
+    resultF.set(true);
+    when(brokerApi.send(any(), any())).thenReturn(resultF);
+
+    objectUnderTest.send(topic, event);
+
+    verify(brokerApi).send(topic, event);
+    verify(msgLog).log(MessageLogger.Direction.PUBLISH, topic, event);
+  }
+
+  @Test
+  public void shouldRequeueMessageFromAnotherInstance() {
+    SettableFuture<Boolean> resultF = SettableFuture.create();
+    resultF.set(true);
+    event.instanceId = "other-instance-id";
+    when(brokerApi.send(any(), any())).thenReturn(resultF);
+
+    objectUnderTest.requeue(topic, event);
+
+    verify(brokerApi).send(topic, event);
+    verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, event);
+  }
+
+  @Test
   public void shouldIncrementBrokerFailedMetricCounterWhenMessagePublishingFailed() {
     SettableFuture<Boolean> resultF = SettableFuture.create();
     resultF.setException(new Exception("Force Future failure"));
