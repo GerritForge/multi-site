@@ -34,6 +34,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class BrokerApiWrapperTest {
   private static final String DEFAULT_INSTANCE_ID = "instance-id";
+  private static final String EVENT_TYPE = "event-type";
   @Mock private BrokerMetrics brokerMetrics;
   @Mock private BrokerApi brokerApi;
   @Mock Event event;
@@ -68,12 +69,38 @@ public class BrokerApiWrapperTest {
     SettableFuture<Boolean> resultF = SettableFuture.create();
     resultF.set(true);
     event.instanceId = "other-instance-id";
+    when(event.getType()).thenReturn(EVENT_TYPE);
     when(brokerApi.send(any(), any())).thenReturn(resultF);
 
     objectUnderTest.requeue(topic, event);
 
     verify(brokerApi).send(topic, event);
     verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, event);
+    verify(brokerMetrics).incrementBrokerRequeuedMessage(topic, EVENT_TYPE);
+  }
+
+  @Test
+  public void shouldIncrementFailedRequeueMetricWhenBrokerReturnsFalse() {
+    SettableFuture<Boolean> resultF = SettableFuture.create();
+    resultF.set(false);
+    when(event.getType()).thenReturn(EVENT_TYPE);
+    when(brokerApi.send(any(), any())).thenReturn(resultF);
+
+    objectUnderTest.requeue(topic, event);
+
+    verify(brokerMetrics, only()).incrementBrokerFailedToRequeueMessage(topic, EVENT_TYPE);
+  }
+
+  @Test
+  public void shouldIncrementFailedRequeueMetricWhenBrokerFails() {
+    SettableFuture<Boolean> resultF = SettableFuture.create();
+    resultF.setException(new Exception("Force Future failure"));
+    when(event.getType()).thenReturn(EVENT_TYPE);
+    when(brokerApi.send(any(), any())).thenReturn(resultF);
+
+    objectUnderTest.requeue(topic, event);
+
+    verify(brokerMetrics, only()).incrementBrokerFailedToRequeueMessage(topic, EVENT_TYPE);
   }
 
   @Test
