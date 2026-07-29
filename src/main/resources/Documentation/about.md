@@ -78,6 +78,15 @@ documentation.
 
 `metric=plugins/multi-site/multi_site/broker/broker_message_publisher_failure_counter/broker_msg_publisher_failure_counter, type=com.codahale.metrics.Meter`
 
+### Broker message requeue
+* Broker message requeue count
+
+`metric=plugins/multi-site/multi_site/broker/broker_message_requeue_counter/<topic>/<event_type>, type=com.codahale.metrics.Meter`
+
+* Broker failed to requeue message count
+
+`metric=plugins/multi-site/multi_site/broker/broker_message_requeue_failure_counter/<topic>/<event_type>, type=com.codahale.metrics.Meter`
+
 ### Message subscriber
 * Subscriber message consumed count
 
