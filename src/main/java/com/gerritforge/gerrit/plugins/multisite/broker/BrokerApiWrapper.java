@@ -87,7 +87,12 @@ public class BrokerApiWrapper implements BrokerApi {
   }
 
   public ListenableFuture<Boolean> requeue(String topic, Event message) {
-    return send(topic, message, MessageLogger.Direction.REQUEUE);
+    try {
+      return send(topic, message, MessageLogger.Direction.REQUEUE);
+    } catch (RuntimeException e) {
+      metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+      throw e;
+    }
   }
 
   private ListenableFuture<Boolean> send(
@@ -99,7 +104,15 @@ public class BrokerApiWrapper implements BrokerApi {
           @Override
           public void onSuccess(Boolean result) {
             msgLog.log(direction, topic, message);
-            metrics.incrementBrokerPublishedMessage();
+            if (direction == MessageLogger.Direction.REQUEUE) {
+              if (result) {
+                metrics.incrementBrokerRequeuedMessage(topic, message.getType());
+              } else {
+                metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+              }
+            } else {
+              metrics.incrementBrokerPublishedMessage();
+            }
           }
 
           @Override
@@ -109,7 +122,11 @@ public class BrokerApiWrapper implements BrokerApi {
                 message.toString(),
                 topic,
                 throwable.getMessage());
-            metrics.incrementBrokerFailedToPublishMessage();
+            if (direction == MessageLogger.Direction.REQUEUE) {
+              metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+            } else {
+              metrics.incrementBrokerFailedToPublishMessage();
+            }
           }
         },
         executor);
