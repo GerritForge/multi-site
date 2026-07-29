@@ -34,6 +34,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventAckHandler;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventMetrics;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import com.google.gerrit.extensions.registration.DynamicMap;
@@ -61,6 +62,7 @@ public class IndexEventRouterTest {
   @Mock private ForwardedEventDispatcher forwardedEventDispatcher;
   @Mock private MessageAcknowledgement<Event> ack;
   @Mock private IndexEventAckHandler ackHandler;
+  @Mock private IndexEventMetrics metrics;
   private AllUsersName allUsersName = new AllUsersName("All-Users");
   PrivateInternals_DynamicMapImpl<ForwardedIndexingHandler<?, ? extends IndexEvent>> indexHandlers;
 
@@ -76,7 +78,7 @@ public class IndexEventRouterTest {
         indexHandlers.put(GERRIT, ProjectIndexEvent.TYPE, Providers.of(indexProjectHandler));
     router =
         new IndexEventRouter(
-            indexAccountHandler, indexHandlers, ackHandler, allUsersName, INSTANCE_ID);
+            indexAccountHandler, indexHandlers, ackHandler, metrics, allUsersName, INSTANCE_ID);
   }
 
   @Test
@@ -167,6 +169,18 @@ public class IndexEventRouterTest {
 
     assertThrows(IOException.class, () -> router.route(event, ack));
 
+    verifyNoInteractions(ackHandler);
+  }
+
+  @Test
+  public void shouldCountTerminalFailure() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    when(indexChangeHandler.handleSync(event))
+        .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.FAILURE);
+
+    router.route(event, ack);
+
+    verify(metrics).incrementTerminalFailure(ChangeIndexEvent.TYPE);
     verifyNoInteractions(ackHandler);
   }
 
