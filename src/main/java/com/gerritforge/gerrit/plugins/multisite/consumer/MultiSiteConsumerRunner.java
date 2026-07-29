@@ -12,9 +12,9 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
-import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
+import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
@@ -22,7 +22,6 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
-import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
@@ -41,18 +40,18 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
           GroupIndexEvent.TYPE);
 
   private final DynamicSet<AbstractSubscriber> consumers;
-  private DynamicItem<BrokerApi> brokerApi;
+  private final BrokerApiWrapper brokerApiWrapper;
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
 
   @Inject
   public MultiSiteConsumerRunner(
-      DynamicItem<BrokerApi> brokerApi,
+      BrokerApiWrapper brokerApiWrapper,
       DynamicSet<AbstractSubscriber> consumers,
       Configuration cfg,
       EventsBrokerConfiguration eventsBrokerConfiguration) {
     this.consumers = consumers;
-    this.brokerApi = brokerApi;
+    this.brokerApiWrapper = brokerApiWrapper;
     this.cfg = cfg;
     this.eventsBrokerConfiguration = eventsBrokerConfiguration;
   }
@@ -67,7 +66,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   public void stop() {}
 
   private void subscribe(AbstractSubscriber subscriber) {
-    BrokerApi broker = brokerApi.get();
+    BrokerApiWrapper broker = brokerApiWrapper;
     String topic = subscriber.getTopic().topic(cfg);
     boolean autoAck = broker.isAutoAck();
     Optional<String> groupId = cfg.broker().getGroupId();
@@ -81,8 +80,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
               () ->
                   new IllegalStateException(
                       "broker.groupId is required for partition-aware subscriptions"));
-      AckAwareConsumer<Event> consumer =
-          subscriber.getManualAckConsumer((e) -> requeue(broker, topic, e));
+      AckAwareConsumer<Event> consumer = subscriber.getManualAckConsumer((e) -> requeue(topic, e));
       INDEX_PARTITIONS.forEach(
           partition ->
               broker.receiveAsyncWithPartition(
@@ -98,9 +96,9 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
     }
   }
 
-  private boolean requeue(BrokerApi broker, String topic, Event event) {
+  private boolean requeue(String topic, Event event) {
     try {
-      return broker.send(topic, event).get();
+      return brokerApiWrapper.requeue(topic, event).get();
     } catch (Exception e) {
       logger.atSevere().withCause(e).log("Cannot requeue event %s to topic %s", event, topic);
       return false;
