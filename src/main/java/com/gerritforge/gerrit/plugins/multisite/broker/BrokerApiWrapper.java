@@ -83,13 +83,22 @@ public class BrokerApiWrapper implements BrokerApi {
       return resultFuture;
     }
 
+    return send(topic, message, MessageLogger.Direction.PUBLISH);
+  }
+
+  public ListenableFuture<Boolean> requeue(String topic, Event message) {
+    return send(topic, message, MessageLogger.Direction.REQUEUE);
+  }
+
+  private ListenableFuture<Boolean> send(
+      String topic, Event message, MessageLogger.Direction direction) {
     ListenableFuture<Boolean> resfultF = apiDelegate.get().send(topic, message);
     Futures.addCallback(
         resfultF,
         new FutureCallback<Boolean>() {
           @Override
           public void onSuccess(Boolean result) {
-            msgLog.log(MessageLogger.Direction.PUBLISH, topic, message);
+            msgLog.log(direction, topic, message);
             metrics.incrementBrokerPublishedMessage();
           }
 
