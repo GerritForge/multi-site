@@ -100,6 +100,10 @@ documentation.
 
 `metric=plugins/multi-site/multi_site/subscriber/subscriber_message_consumer_failure_counter/subscriber_msg_consumer_poll_failure_counter, type=com.codahale.metrics.Meter`
 
+* Index event terminal failure count
+
+`metric=plugins/multi-site/multi_site/subscriber/subscriber_index_event_terminal_failure_counter/<event_type>, type=com.codahale.metrics.Meter`
+
 ### Replication lag
 
 * Subscriber replication lag (sec behind the producer)
