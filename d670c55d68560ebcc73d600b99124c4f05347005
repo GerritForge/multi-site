@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1a6d72c_e89e9f7c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-31T07:16:48Z",
+      "side": 1,
+      "message": "Do we also log in case of requeue failure? Or should this be moved to line 109?\nThe current logic only logs success.",
+      "range": {
+        "startLine": 106,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84be649b_7e59aa57",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-31T07:16:48Z",
+      "side": 1,
+      "message": "Why do we have this logic for the requeuing, while we don\u0027t for the publishing?",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 112,
+        "endChar": 15
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88a90395_7c3f3649",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerMetrics.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-07-31T07:16:48Z",
+      "side": 1,
+      "message": "Keep description consistent with publishing metrics",
+      "range": {
+        "startLine": 57,
+        "startChar": 39,
+        "endLine": 57,
+        "endChar": 76
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
