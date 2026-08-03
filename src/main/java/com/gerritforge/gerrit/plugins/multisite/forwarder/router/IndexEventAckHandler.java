@@ -46,6 +46,7 @@ public class IndexEventAckHandler {
   private final ChangeIndexCollection changeIndexes;
   private final GroupIndexCollection groupIndexes;
   private final ProjectIndexCollection projectIndexes;
+  private final IndexEventMetrics metrics;
   private final long commitIntervalMs;
   private final Map<String, Long> lastAckByEventType = new ConcurrentHashMap<>();
 
@@ -55,11 +56,13 @@ public class IndexEventAckHandler {
       ChangeIndexCollection changeIndexes,
       GroupIndexCollection groupIndexes,
       ProjectIndexCollection projectIndexes,
+      IndexEventMetrics metrics,
       Configuration cfg) {
     this.accountIndexes = accountIndexes;
     this.changeIndexes = changeIndexes;
     this.groupIndexes = groupIndexes;
     this.projectIndexes = projectIndexes;
+    this.metrics = metrics;
     this.commitIntervalMs = cfg.index().commitIntervalMs();
   }
 
@@ -75,6 +78,7 @@ public class IndexEventAckHandler {
         || TimeUtil.nowMs() - lastAck >= commitIntervalMs) {
       flush(indexesFor(event));
       acknowledgement.ack(event);
+      metrics.resetEventsPendingAcknowledgement(event.getType());
       lastAckByEventType.put(event.getType(), TimeUtil.nowMs());
     }
   }

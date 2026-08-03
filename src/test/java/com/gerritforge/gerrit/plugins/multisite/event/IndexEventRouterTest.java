@@ -152,6 +152,18 @@ public class IndexEventRouterTest {
   }
 
   @Test
+  public void shouldIncrementEventsPendingAcknowledgementWhenRoutingManualAckEvent()
+      throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    when(indexChangeHandler.handleSync(event))
+        .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.SUCCESS);
+
+    router.route(event, ack);
+
+    verify(metrics).incrementEventsPendingAcknowledgement(ChangeIndexEvent.TYPE);
+  }
+
+  @Test
   public void shouldAckIgnoredManualAckEvent() throws Exception {
     ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
     when(indexChangeHandler.handleSync(eq(event)))

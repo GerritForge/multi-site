@@ -84,6 +84,7 @@ public class IndexEventRouter
           String.format("No registered handlers to route event %s", sourceEvent.getType()));
     }
 
+    metrics.incrementEventsPendingAcknowledgement(sourceEvent.getType());
     switch (handler.handleSync(sourceEvent)) {
       case IndexingResult.SUCCESS:
         ack(sourceEvent, ack);
