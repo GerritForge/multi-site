@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4bc216a2_7dcff52d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T09:45:52Z",
+      "side": 1,
+      "message": "That\u0027s existing `BrokerApiWrapper` behaviour rather than something introduced by these metrics. I\u0027ll fix the logging separately, then rebase this change on top and adjust it.",
+      "parentUuid": "d1a6d72c_e89e9f7c",
+      "range": {
+        "startLine": 106,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "84be649b_7e59aa57",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
         "patchSetId": 4
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccf3ac5d_f29f414b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T09:45:52Z",
+      "side": 1,
+      "message": "Good point. Publishing currently counts also `false` results. That\u0027s an existing bug as well. I will fix it separately.",
+      "parentUuid": "84be649b_7e59aa57",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 112,
+        "endChar": 15
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88a90395_7c3f3649",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerMetrics.java",
         "patchSetId": 4
@@ -60,6 +108,30 @@
       "writtenOn": "2026-07-31T07:16:48Z",
       "side": 1,
       "message": "Keep description consistent with publishing metrics",
+      "range": {
+        "startLine": 57,
+        "startChar": 39,
+        "endLine": 57,
+        "endChar": 76
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8065c3f5_987f3c0a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerMetrics.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T09:45:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88a90395_7c3f3649",
       "range": {
         "startLine": 57,
         "startChar": 39,
