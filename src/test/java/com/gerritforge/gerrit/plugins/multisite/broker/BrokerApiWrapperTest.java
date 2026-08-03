@@ -64,6 +64,18 @@ public class BrokerApiWrapperTest {
   }
 
   @Test
+  public void shouldIncrementFailureMetricAndNotLogWhenPublishingReturnsFalse() {
+    SettableFuture<Boolean> resultF = SettableFuture.create();
+    resultF.set(false);
+    when(brokerApi.send(any(), any())).thenReturn(resultF);
+
+    objectUnderTest.send(topic, event);
+
+    verify(msgLog, never()).log(MessageLogger.Direction.PUBLISH, topic, event);
+    verify(brokerMetrics, only()).incrementBrokerFailedToPublishMessage();
+  }
+
+  @Test
   public void shouldRequeueMessageFromAnotherInstance() {
     SettableFuture<Boolean> resultF = SettableFuture.create();
     resultF.set(true);
@@ -74,6 +86,18 @@ public class BrokerApiWrapperTest {
 
     verify(brokerApi).send(topic, event);
     verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, event);
+  }
+
+  @Test
+  public void shouldIncrementFailureMetricAndNotLogWhenRequeueReturnsFalse() {
+    SettableFuture<Boolean> resultF = SettableFuture.create();
+    resultF.set(false);
+    when(brokerApi.send(any(), any())).thenReturn(resultF);
+
+    objectUnderTest.requeue(topic, event);
+
+    verify(msgLog, never()).log(MessageLogger.Direction.REQUEUE, topic, event);
+    verify(brokerMetrics, only()).incrementBrokerFailedToPublishMessage();
   }
 
   @Test
