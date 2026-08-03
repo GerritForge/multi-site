@@ -48,6 +48,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd05856a_112083ad",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T10:07:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bc216a2_7dcff52d",
+      "range": {
+        "startLine": 106,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84be649b_7e59aa57",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Good point. Publishing currently counts also `false` results. That\u0027s an existing bug as well. I will fix it separately.",
       "parentUuid": "84be649b_7e59aa57",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 112,
+        "endChar": 15
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0eb435_7d66d062",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T10:07:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccf3ac5d_f29f414b",
       "range": {
         "startLine": 108,
         "startChar": 14,
