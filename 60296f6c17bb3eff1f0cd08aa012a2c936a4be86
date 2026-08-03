@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08a3377c_1f9e3440",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-08-03T12:59:31Z",
+      "side": 1,
+      "message": "is `broker` still needed here? Can we not reuse `brokerApiWrapper` directly at this point?",
+      "range": {
+        "startLine": 69,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 47
+      },
+      "revId": "60296f6c17bb3eff1f0cd08aa012a2c936a4be86",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
