@@ -72,6 +72,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9444775f_2e2bcd1f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T10:25:10Z",
+      "side": 1,
+      "message": "Done at [1]\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1244293/2",
+      "parentUuid": "cd05856a_112083ad",
+      "range": {
+        "startLine": 106,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 50
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84be649b_7e59aa57",
@@ -133,6 +157,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "ccf3ac5d_f29f414b",
+      "range": {
+        "startLine": 108,
+        "startChar": 14,
+        "endLine": 112,
+        "endChar": 15
+      },
+      "revId": "d670c55d68560ebcc73d600b99124c4f05347005",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f76d01c8_073cc673",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T10:25:10Z",
+      "side": 1,
+      "message": "Done at [1]\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1244293/2",
+      "parentUuid": "5f0eb435_7d66d062",
       "range": {
         "startLine": 108,
         "startChar": 14,
