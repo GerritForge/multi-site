@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f96b95a_f2db8a2b",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapperTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-08-03T13:07:15Z",
+      "side": 1,
+      "message": "Could also verify that the non-reque publish metric wasn\u0027t increased.\nSame for the other tests as appropriate.",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 91
+      },
+      "revId": "7a2c385d3bc511e7dc9d93f5bea6593d9a67bf3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
