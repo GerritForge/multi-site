@@ -20,8 +20,8 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.google.common.util.concurrent.SettableFuture;
 import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.ProjectCreatedEvent;
@@ -56,19 +56,15 @@ public class BrokerApiWrapperTest {
 
   @Test
   public void shouldIncrementBrokerMetricCounterWhenMessagePublished() {
-    SettableFuture<Boolean> resultF = SettableFuture.create();
-    resultF.set(true);
-    when(brokerApi.send(any(), any())).thenReturn(resultF);
+    brokerReturns(true);
     objectUnderTest.send(topic, event);
     verify(brokerMetrics, only()).incrementBrokerPublishedMessage();
   }
 
   @Test
   public void shouldRequeueMessageFromAnotherInstance() {
-    SettableFuture<Boolean> resultF = SettableFuture.create();
-    resultF.set(true);
+    brokerReturns(true);
     event.instanceId = "other-instance-id";
-    when(brokerApi.send(any(), any())).thenReturn(resultF);
 
     objectUnderTest.requeue(topic, event);
 
@@ -78,9 +74,7 @@ public class BrokerApiWrapperTest {
 
   @Test
   public void shouldIncrementBrokerFailedMetricCounterWhenMessagePublishingFailed() {
-    SettableFuture<Boolean> resultF = SettableFuture.create();
-    resultF.setException(new Exception("Force Future failure"));
-    when(brokerApi.send(any(), any())).thenReturn(resultF);
+    brokerFails(new Exception("Force Future failure"));
     objectUnderTest.send(topic, event);
     verify(brokerMetrics, only()).incrementBrokerFailedToPublishMessage();
   }
@@ -111,5 +105,13 @@ public class BrokerApiWrapperTest {
     event.instanceId = "";
     objectUnderTest.send(topic, event);
     verify(brokerApi, never()).send(any(), eq(event));
+  }
+
+  private void brokerReturns(boolean result) {
+    when(brokerApi.send(any(), any())).thenReturn(Futures.immediateFuture(result));
+  }
+
+  private void brokerFails(Throwable failure) {
+    when(brokerApi.send(any(), any())).thenReturn(Futures.immediateFailedFuture(failure));
   }
 }
