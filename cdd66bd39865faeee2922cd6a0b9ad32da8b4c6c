@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b390b829_bf2cd251",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T08:44:36Z",
+      "side": 1,
+      "message": "nit: the method name is now misleading. It suggests that the change is _reindexed_ and _then_ we check for _is up-to-date_, but this is no longer true.\n\nConsider renaming it to something like `checkIsUpToDateAndReindex()` or `reindexWhenSourceIsUpToDate()`, or something similar.",
+      "range": {
+        "startLine": 124,
+        "startChar": 20,
+        "endLine": 124,
+        "endChar": 45
+      },
+      "revId": "cdd66bd39865faeee2922cd6a0b9ad32da8b4c6c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
