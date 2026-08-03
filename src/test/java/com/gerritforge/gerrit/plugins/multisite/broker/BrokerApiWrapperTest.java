@@ -72,6 +72,16 @@ public class BrokerApiWrapperTest {
   }
 
   @Test
+  public void shouldIncrementFailureMetricAndNotLogWhenPublishingReturnsFalse() {
+    brokerReturns(false);
+
+    objectUnderTest.send(topic, event);
+
+    verify(msgLog, never()).log(MessageLogger.Direction.PUBLISH, topic, event);
+    verify(brokerMetrics, only()).incrementBrokerFailedToPublishMessage();
+  }
+
+  @Test
   public void shouldRequeueMessageFromAnotherInstance() {
     brokerReturns(true);
     event.instanceId = "other-instance-id";
