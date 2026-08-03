@@ -12,14 +12,19 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
 import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
+import com.google.gerrit.metrics.CallbackMetric1;
 import com.google.gerrit.metrics.Counter1;
+import com.google.gerrit.metrics.Description;
 import com.google.gerrit.metrics.MetricMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Singleton
 public class IndexEventMetrics extends MultiSiteMetrics {
   private final Counter1<String> terminalFailureCounter;
+  private final Map<String, Long> eventsPendingAcknowledgement = new ConcurrentHashMap<>();
 
   @Inject
   public IndexEventMetrics(MetricMaker metricMaker) {
@@ -28,9 +33,29 @@ public class IndexEventMetrics extends MultiSiteMetrics {
             "multi_site/subscriber/manual_ack/index_event_terminal_failure_counter",
             rateDescription("errors", "Number of index events ending in terminal failure"),
             stringField("event_type", "Index event type"));
+
+    CallbackMetric1<String, Long> eventsPendingAcknowledgementMetric =
+        metricMaker.newCallbackMetric(
+            "multi_site/subscriber/manual_ack/index_event_pending_acknowledgement",
+            Long.class,
+            new Description("Number of processed index events pending acknowledgement")
+                .setGauge()
+                .setUnit("messages"),
+            stringField("event_type", "Index event type"));
+    metricMaker.newTrigger(
+        eventsPendingAcknowledgementMetric,
+        () -> eventsPendingAcknowledgement.forEach(eventsPendingAcknowledgementMetric::set));
   }
 
   public void incrementManualAckTerminalFailure(String eventType) {
     terminalFailureCounter.increment(eventType);
+  }
+
+  public void incrementEventsPendingAcknowledgement(String eventType) {
+    eventsPendingAcknowledgement.merge(eventType, 1L, Long::sum);
+  }
+
+  public void resetEventsPendingAcknowledgement(String eventType) {
+    eventsPendingAcknowledgement.put(eventType, 0L);
   }
 }

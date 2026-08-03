@@ -20,6 +20,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
+import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
@@ -57,6 +58,7 @@ public class IndexEventAckHandlerTest {
   @Mock private GroupIndexCollection groupIndexes;
   @Mock private ProjectIndexCollection projectIndexes;
   @Mock private ChangeIndex changeIndex;
+  @Mock private IndexEventMetrics metrics;
   @Mock private Configuration cfg;
   @Mock private Configuration.Index indexConfig;
   private final AtomicLong now = new AtomicLong(START_TIME);
@@ -121,6 +123,13 @@ public class IndexEventAckHandlerTest {
   }
 
   @Test
+  public void shouldResetEventsPendingAcknowledgementAfterAck() throws Exception {
+    ackHandler.ackIfDue(CHANGE_EVENT, ack);
+
+    verify(metrics).resetEventsPendingAcknowledgement(ChangeIndexEvent.TYPE);
+  }
+
+  @Test
   public void shouldNotAckWhenFlushFails() throws Exception {
     when(indexConfig.commitIntervalMs()).thenReturn(0L);
     when(changeIndexes.getWriteIndexes()).thenReturn(List.of(changeIndex));
@@ -132,8 +141,28 @@ public class IndexEventAckHandlerTest {
     verifyNoInteractions(ack);
   }
 
+  @Test
+  public void shouldNotResetEventsPendingAcknowledgementWhenFlushFails() throws Exception {
+    when(changeIndexes.getWriteIndexes()).thenReturn(List.of(changeIndex));
+    doThrow(new IOException("flush failed")).when(changeIndex).flushAndCommit();
+
+    assertThrows(IOException.class, () -> ackHandler.ackIfDue(CHANGE_EVENT, ack));
+
+    verifyNoInteractions(metrics);
+  }
+
+  @Test
+  public void shouldNotResetEventsPendingAcknowledgementWhenAckFails() throws Exception {
+    doThrow(new MessageAcknowledgementException("ack failed")).when(ack).ack(CHANGE_EVENT);
+
+    assertThrows(
+        MessageAcknowledgementException.class, () -> ackHandler.ackIfDue(CHANGE_EVENT, ack));
+
+    verifyNoInteractions(metrics);
+  }
+
   private IndexEventAckHandler newAckHandler() {
     return new IndexEventAckHandler(
-        accountIndexes, changeIndexes, groupIndexes, projectIndexes, cfg);
+        accountIndexes, changeIndexes, groupIndexes, projectIndexes, metrics, cfg);
   }
 }
