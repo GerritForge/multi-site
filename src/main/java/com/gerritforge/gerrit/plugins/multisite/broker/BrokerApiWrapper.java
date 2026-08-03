@@ -98,8 +98,12 @@ public class BrokerApiWrapper implements BrokerApi {
         new FutureCallback<Boolean>() {
           @Override
           public void onSuccess(Boolean result) {
-            msgLog.log(direction, topic, message);
-            metrics.incrementBrokerPublishedMessage();
+            if (result) {
+              msgLog.log(direction, topic, message);
+              metrics.incrementBrokerPublishedMessage();
+            } else {
+              metrics.incrementBrokerFailedToPublishMessage();
+            }
           }
 
           @Override
