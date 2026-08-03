@@ -22,6 +22,30 @@
       },
       "revId": "72ec193cf53f4dadd743864374a1e92d6d9bbe48",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24066de7_6bf86398",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapperTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-03T15:15:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b556c8f_7f04185d",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 74
+      },
+      "revId": "72ec193cf53f4dadd743864374a1e92d6d9bbe48",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
