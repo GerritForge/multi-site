@@ -104,6 +104,10 @@ documentation.
 
 `metric=plugins/multi-site/multi_site/subscriber/manual_ack/index_event_terminal_failure_counter/<event_type>, type=com.codahale.metrics.Meter`
 
+* Unacknowledged index event count
+
+`metric=plugins/multi-site/multi_site/subscriber/manual_ack/index_event_unacknowledged/<event_type>, type=com.codahale.metrics.Gauge`
+
 ### Replication lag
 
 * Subscriber replication lag (sec behind the producer)
