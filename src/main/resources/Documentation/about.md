@@ -102,7 +102,11 @@ documentation.
 
 * Index event terminal failure count
 
-`metric=plugins/multi-site/multi_site/subscriber/subscriber_index_event_terminal_failure_counter/<event_type>, type=com.codahale.metrics.Meter`
+`metric=plugins/multi-site/multi_site/subscriber/manual_ack/index_event_terminal_failure_counter/<event_type>, type=com.codahale.metrics.Meter`
+
+* Unacknowledged index event count
+
+`metric=plugins/multi-site/multi_site/subscriber/manual_ack/index_event_unacknowledged/<event_type>, type=com.codahale.metrics.Gauge`
 
 ### Replication lag
 
