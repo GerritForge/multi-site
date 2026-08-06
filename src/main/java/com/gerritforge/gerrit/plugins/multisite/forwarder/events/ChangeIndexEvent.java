@@ -59,7 +59,7 @@ public class ChangeIndexEvent extends IndexEvent {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(projectName, changeId, targetSha, deleted);
+    return Objects.hashCode(projectName, changeId, targetSha, deleted, instanceId, eventCreatedOn);
   }
 
   @Override
@@ -69,6 +69,8 @@ public class ChangeIndexEvent extends IndexEvent {
     ChangeIndexEvent that = (ChangeIndexEvent) o;
     return changeId == that.changeId
         && deleted == that.deleted
+        && instanceId == that.instanceId
+        && eventCreatedOn == that.eventCreatedOn
         && Objects.equal(projectName, that.projectName)
         && Objects.equal(targetSha, that.targetSha);
   }
