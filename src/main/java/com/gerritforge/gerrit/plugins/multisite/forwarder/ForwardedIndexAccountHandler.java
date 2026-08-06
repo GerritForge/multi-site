@@ -98,7 +98,7 @@ public class ForwardedIndexAccountHandler
 
   @Override
   protected void attemptToIndex(Account.Id id) {
-    reindexAndCheckIsUpToDate(id, accountChecker);
+    reindexIfUpToDate(id, accountChecker);
   }
 
   @Override
