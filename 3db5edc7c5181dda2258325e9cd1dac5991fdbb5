@@ -51,6 +51,24 @@
       "parentUuid": "923d369b_a8b03b17",
       "revId": "3db5edc7c5181dda2258325e9cd1dac5991fdbb5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f821d41b_776e03bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-06T17:55:35Z",
+      "side": 1,
+      "message": "\u003e I think the equals should honor all the fields, so I\u0027d still push this through.\n\nI believe in this case we should also add `instanceId` in the equality (could be a follow up)",
+      "parentUuid": "d04bbdaf_3ee40227",
+      "revId": "3db5edc7c5181dda2258325e9cd1dac5991fdbb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
