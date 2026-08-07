@@ -69,6 +69,42 @@
       "parentUuid": "d04bbdaf_3ee40227",
       "revId": "3db5edc7c5181dda2258325e9cd1dac5991fdbb5",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5e94dd9_4972839e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-08-07T08:42:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c3532ab_492808fb",
+      "revId": "3db5edc7c5181dda2258325e9cd1dac5991fdbb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b3757aa_09386940",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-08-07T08:42:16Z",
+      "side": 1,
+      "message": "\u003e I believe in this case we should also add instanceId in the equality (could be a follow up)\n\nMakes sense to me. Let me add it in this change.",
+      "parentUuid": "f821d41b_776e03bb",
+      "revId": "3db5edc7c5181dda2258325e9cd1dac5991fdbb5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
