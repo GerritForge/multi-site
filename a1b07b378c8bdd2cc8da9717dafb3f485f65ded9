@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d66f67a8_73ba55c3",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/ChangeIndexEventTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-07T08:43:02Z",
+      "side": 1,
+      "message": "nit: `eventCreatedOn` is a primitive `long`, you could just avoid unnecessary boxing:\n\n```\neventCreatedOn \u003d\u003d that.eventCreatedOn\n```",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 64
+      },
+      "revId": "a1b07b378c8bdd2cc8da9717dafb3f485f65ded9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
