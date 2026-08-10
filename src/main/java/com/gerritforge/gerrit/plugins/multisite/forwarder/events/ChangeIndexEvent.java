@@ -24,6 +24,7 @@ public class ChangeIndexEvent extends IndexEvent {
   public String projectName;
   public int changeId;
   public String targetSha;
+  public String metaSha;
   public boolean deleted;
 
   /**
@@ -59,7 +60,8 @@ public class ChangeIndexEvent extends IndexEvent {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(projectName, changeId, targetSha, deleted, instanceId, eventCreatedOn);
+    return Objects.hashCode(
+        projectName, changeId, targetSha, metaSha, deleted, instanceId, eventCreatedOn);
   }
 
   @Override
@@ -72,7 +74,8 @@ public class ChangeIndexEvent extends IndexEvent {
         && eventCreatedOn == that.eventCreatedOn
         && Objects.equal(instanceId, that.instanceId)
         && Objects.equal(projectName, that.projectName)
-        && Objects.equal(targetSha, that.targetSha);
+        && Objects.equal(targetSha, that.targetSha)
+        && Objects.equal(metaSha, that.metaSha);
   }
 
   @Override
@@ -82,6 +85,7 @@ public class ChangeIndexEvent extends IndexEvent {
         .add("project", projectName)
         .add("changeId", changeId)
         .add("targetSha", targetSha)
+        .add("metaSha", metaSha)
         .add("deleted", deleted)
         .toString();
   }
