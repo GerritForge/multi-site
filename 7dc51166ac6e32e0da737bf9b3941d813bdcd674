@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a69155e1_c10be243",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-08-10T17:39:42Z",
+      "side": 1,
+      "message": "I believe this approach creates a few limitations with how we can unload/reload multi-site compared to the previous version. Not sure it\u0027ll be good enough.",
+      "revId": "7dc51166ac6e32e0da737bf9b3941d813bdcd674",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
