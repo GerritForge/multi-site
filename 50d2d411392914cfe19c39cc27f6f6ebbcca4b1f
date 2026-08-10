@@ -1,4 +1,28 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed86f2f_7a0c9959",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/ChangeIndexEvent.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-10T05:52:51Z",
+      "side": 1,
+      "message": "The base abstract class `Event` has three fields:\n\n```\n  public final String type;\n  public long eventCreatedOn \u003d TimeUtil.nowMs() / 1000L;\n  public String instanceId;\n```\n\nWe should either check all of them, or best would be in the `Event` abstract class and delegating the equals to the super class for checking those three fields.",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 53
+      },
+      "revId": "50d2d411392914cfe19c39cc27f6f6ebbcca4b1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ],
   "submitRequirementResults": []
 }
