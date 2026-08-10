@@ -22,6 +22,30 @@
       },
       "revId": "50d2d411392914cfe19c39cc27f6f6ebbcca4b1f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d687d45a_755a250f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/ChangeIndexEvent.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-08-10T14:32:33Z",
+      "side": 1,
+      "message": "Added here: https://gerrit-review.googlesource.com/c/gerrit/+/617021",
+      "parentUuid": "fed86f2f_7a0c9959",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 53
+      },
+      "revId": "50d2d411392914cfe19c39cc27f6f6ebbcca4b1f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ],
   "submitRequirementResults": []
