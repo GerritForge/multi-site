@@ -18,10 +18,13 @@ import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
 import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestPlugin;
 import com.google.gerrit.acceptance.config.GerritConfig;
+import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.restapi.RestApiException;
 import com.google.inject.AbstractModule;
+import java.io.IOException;
 import java.util.Optional;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;
 
@@ -79,6 +82,29 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
     assertThat(changeChecker.isUpToDate(Optional.of(indexChangeEvent))).isFalse();
   }
 
+  @Test
+  @GerritConfig(name = "gerrit.instanceId", value = "test-instance")
+  public void shouldPopulateMetaSHA1() throws Exception {
+    int changeNum = newChangeNum();
+
+    ChangeIndexEvent event =
+        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+
+    assertThat(event.metaSha).isEqualTo(metaSha(changeNum));
+  }
+
+  @Test
+  @GerritConfig(name = "gerrit.instanceId", value = "test-instance")
+  public void shouldNotBeUpToDateIfMetaSHA1Absent() throws Exception {
+    int changeNum = newChangeNum();
+    ChangeIndexEvent event =
+        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+    event.targetSha = null;
+    event.metaSha = NONEXISTENTSHA1;
+
+    assertThat(changeChecker.isUpToDate(Optional.of(event))).isFalse();
+  }
+
   private ChangeIndexEvent newIndexChangeEvent(int changeNum) {
     ChangeIndexEvent indexChangeEvent =
         new ChangeIndexEvent(project.get(), changeNum, false, instanceId);
@@ -100,6 +126,12 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
   private long changeCommitTs(int changeNum) throws RestApiException {
     long changeCommitTs = gApi.changes().id(project.get(), changeNum).get().updated.getTime();
     return changeCommitTs;
+  }
+
+  private String metaSha(int changeNum) throws IOException {
+    try (Repository repo = repoManager.openRepository(project)) {
+      return repo.exactRef(RefNames.changeMetaRef(Change.id(changeNum))).getObjectId().getName();
+    }
   }
 
   private RevCommit createCommit() throws Exception {

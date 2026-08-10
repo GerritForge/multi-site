@@ -20,6 +20,7 @@ public class ChangeIndexEventTest {
   private static final String PROJECT_NAME = "test-project";
   private static final int CHANGE_ID = 1;
   private static final String TARGET_SHA = "abcd1234";
+  private static final String META_SHA = "1234abcd";
 
   @Test
   public void shouldBeEqualWhenEventCreatedOnIsTheSame() {
@@ -58,9 +59,19 @@ public class ChangeIndexEventTest {
     assertThat(event).isNotEqualTo(eventWithDifferentInstanceId);
   }
 
+  @Test
+  public void shouldNotBeEqualWhenMetaShaIsDifferent() {
+    ChangeIndexEvent event = newChangeIndexEvent(INSTANCE_ID, 1000L);
+    ChangeIndexEvent eventWithDifferentMetaSha = newChangeIndexEvent(INSTANCE_ID, 1000L);
+    eventWithDifferentMetaSha.metaSha = "anotherMetaSha";
+
+    assertThat(event).isNotEqualTo(eventWithDifferentMetaSha);
+  }
+
   private static ChangeIndexEvent newChangeIndexEvent(String instanceId, long eventCreatedOn) {
     ChangeIndexEvent event = new ChangeIndexEvent(PROJECT_NAME, CHANGE_ID, false, instanceId);
     event.targetSha = TARGET_SHA;
+    event.metaSha = META_SHA;
     event.eventCreatedOn = eventCreatedOn;
 
     return event;
