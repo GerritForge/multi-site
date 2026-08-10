@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.index;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.google.gerrit.entities.Change;
+import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.server.change.ChangeFinder;
 import com.google.gerrit.server.config.GerritInstanceId;
@@ -58,17 +59,19 @@ public class ChangeCheckerImpl implements ChangeChecker {
 
   @Override
   public Optional<ChangeIndexEvent> newIndexEvent(
-      String projectName, int changeNum, boolean deleted) {
+      String projectName, int changeNum, boolean deleted) throws IOException {
     String changeId = projectName + "~" + changeNum;
-    return getChangeNotes(changeId)
-        .map(
-            changeNotes -> {
-              ChangeIndexEvent event =
-                  new ChangeIndexEvent(projectName, changeNum, deleted, instanceId);
-              event.eventCreatedOn = getTsFromChange(changeNotes);
-              event.targetSha = getBranchTargetSha(changeNotes);
-              return event;
-            });
+    Optional<ChangeNotes> changeNotes = getChangeNotes(changeId);
+    if (changeNotes.isEmpty()) {
+      return Optional.empty();
+    }
+
+    ChangeNotes notes = changeNotes.get();
+    ChangeIndexEvent event = new ChangeIndexEvent(projectName, changeNum, deleted, instanceId);
+    event.eventCreatedOn = getTsFromChange(notes);
+    event.targetSha = getBranchTargetSha(notes);
+    event.metaSha = getMetaSha(notes);
+    return Optional.of(event);
   }
 
   @Override
@@ -95,13 +98,12 @@ public class ChangeCheckerImpl implements ChangeChecker {
     }
     long computedChangeTs = getTsFromChange(changeNotes.get());
 
-    if (indexEvent.targetSha == null) {
-      return computedChangeTs >= indexEvent.eventCreatedOn;
-    }
-
     return (computedChangeTs > indexEvent.eventCreatedOn)
         || ((computedChangeTs == indexEvent.eventCreatedOn)
-            && repositoryHas(changeNotes.get(), indexEvent.targetSha));
+            && (indexEvent.targetSha == null
+                || repositoryHas(changeNotes.get(), indexEvent.targetSha))
+            && (indexEvent.metaSha == null
+                || repositoryHas(changeNotes.get(), indexEvent.metaSha)));
   }
 
   private String getBranchTargetSha(ChangeNotes changeNotes) {
@@ -122,12 +124,25 @@ public class ChangeCheckerImpl implements ChangeChecker {
     }
   }
 
-  private boolean repositoryHas(ChangeNotes changeNotes, String targetSha) {
+  private String getMetaSha(ChangeNotes changeNotes) throws IOException {
     String changeId = changeNotes.getProjectName() + "~" + changeNotes.getChangeId().get();
     try (Repository repo = gitRepoMgr.openRepository(changeNotes.getProjectName())) {
-      return repo.parseCommit(ObjectId.fromString(targetSha)) != null;
+      String refName = RefNames.changeMetaRef(changeNotes.getChangeId());
+      Ref ref = repo.exactRef(refName);
+      if (ref == null) {
+        throw new IOException(
+            String.format("Unable to find meta ref %s for change %s", refName, changeId));
+      }
+      return ref.getTarget().getObjectId().getName();
+    }
+  }
+
+  private boolean repositoryHas(ChangeNotes changeNotes, String sha1ToCheck) {
+    String changeId = changeNotes.getProjectName() + "~" + changeNotes.getChangeId().get();
+    try (Repository repo = gitRepoMgr.openRepository(changeNotes.getProjectName())) {
+      return repo.parseCommit(ObjectId.fromString(sha1ToCheck)) != null;
     } catch (IOException e) {
-      log.warn("Unable to find SHA1 {} for change {}", targetSha, changeId, e);
+      log.warn("Unable to find SHA1 {} for change {}", sha1ToCheck, changeId, e);
       return false;
     }
   }
