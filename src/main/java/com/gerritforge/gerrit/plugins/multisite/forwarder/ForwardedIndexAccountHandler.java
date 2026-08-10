@@ -75,7 +75,7 @@ public class ForwardedIndexAccountHandler
         index(id, DELETE, Optional.of(event));
         return IndexingResult.SUCCESS;
       }
-      return indexSyncIfConsistent(id, event, accountChecker);
+      return indexSyncIfConsistentAndUpToDate(id, event, accountChecker);
     }
     return IndexingResult.IGNORED;
   }

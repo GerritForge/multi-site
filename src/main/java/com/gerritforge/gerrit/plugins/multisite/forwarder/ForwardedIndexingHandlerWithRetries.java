@@ -72,7 +72,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
 
   protected abstract void attemptToIndex(T id);
 
-  protected IndexingResult indexSyncIfConsistent(
+  protected IndexingResult indexSyncIfConsistentAndUpToDate(
       T id, E e, IndexEntityChecker<T, E> entityChecker) {
     IndexingRetry retry =
         indexingRetryTaskMap.computeIfAbsent(id, (k) -> new IndexingRetry(Optional.of(e)));
@@ -88,15 +88,13 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
       return IndexingResult.RETRY;
     }
 
-    if (entityChecker.isConsistent(id)) {
+    if (entityChecker.isConsistent(id) && entityChecker.isUpToDate(Optional.of(e))) {
       try (ForwardedContext ctx = ForwardedContext.open()) {
         reindex(id);
       }
 
-      if (entityChecker.isUpToDate(Optional.of(e))) {
-        indexingRetryTaskMap.remove(id);
-        return IndexingResult.SUCCESS;
-      }
+      indexingRetryTaskMap.remove(id);
+      return IndexingResult.SUCCESS;
     }
 
     if (retry.retryNumber >= maxTries) {

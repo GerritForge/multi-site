@@ -61,7 +61,7 @@ public class ForwardedIndexProjectHandler
   @Override
   public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof ProjectIndexEvent event) {
-      return indexSyncIfConsistent(event.projectName, event, projectChecker);
+      return indexSyncIfConsistentAndUpToDate(event.projectName, event, projectChecker);
     }
     return IndexingResult.IGNORED;
   }
