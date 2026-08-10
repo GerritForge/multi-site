@@ -24,10 +24,13 @@ import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class MultiSiteConsumerRunner implements LifecycleListener {
@@ -38,32 +41,55 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
           AccountIndexEvent.TYPE,
           ProjectIndexEvent.TYPE,
           GroupIndexEvent.TYPE);
+  private static final long SUBSCRIPTION_RETRY_DELAY_MS = 500;
 
   private final DynamicSet<AbstractSubscriber> consumers;
   private final BrokerApiWrapper brokerApiWrapper;
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
+  private final WorkQueue workQueue;
+  private ScheduledExecutorService executor;
 
   @Inject
   public MultiSiteConsumerRunner(
       BrokerApiWrapper brokerApiWrapper,
       DynamicSet<AbstractSubscriber> consumers,
       Configuration cfg,
-      EventsBrokerConfiguration eventsBrokerConfiguration) {
+      EventsBrokerConfiguration eventsBrokerConfiguration,
+      WorkQueue workQueue) {
     this.consumers = consumers;
     this.brokerApiWrapper = brokerApiWrapper;
     this.cfg = cfg;
     this.eventsBrokerConfiguration = eventsBrokerConfiguration;
+    this.workQueue = workQueue;
   }
 
   @Override
   public void start() {
-    logger.atInfo().log("starting consumers");
-    consumers.forEach(this::subscribe);
+    executor = workQueue.createQueue(1, "Multi-Site-Subscriber");
+    executor.execute(this::subscribeWhenBrokerPluginIsBound);
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+    executor.shutdown();
+  }
+
+  private void subscribeWhenBrokerPluginIsBound() {
+    if (brokerApiWrapper.isBrokerPluginBound()) {
+      subscribeAll();
+      executor.shutdown();
+      return;
+    }
+
+    executor.schedule(
+        this::subscribeWhenBrokerPluginIsBound, SUBSCRIPTION_RETRY_DELAY_MS, TimeUnit.MILLISECONDS);
+  }
+
+  void subscribeAll() {
+    logger.atInfo().log("starting consumers");
+    consumers.forEach(this::subscribe);
+  }
 
   private void subscribe(AbstractSubscriber subscriber) {
     String topic = subscriber.getTopic().topic(cfg);
