@@ -22,6 +22,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.gerrit.extensions.registration.DynamicItem;
+import com.google.gerrit.extensions.registration.PluginName;
 import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
@@ -188,5 +189,10 @@ public class BrokerApiWrapper implements BrokerApi {
   @Override
   public boolean isAutoAck() {
     return apiDelegate.get().isAutoAck();
+  }
+
+  // The events-broker placeholder is bound by Gerrit itself, a real broker always by a plugin.
+  public boolean isBrokerPluginBound() {
+    return !PluginName.GERRIT.equals(apiDelegate.getPluginName());
   }
 }

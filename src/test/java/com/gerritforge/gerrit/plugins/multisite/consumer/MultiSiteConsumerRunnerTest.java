@@ -31,6 +31,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.git.WorkQueue;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
@@ -45,6 +46,7 @@ public class MultiSiteConsumerRunnerTest {
   private static final String GROUP_ID = "multi-site-group";
   @Mock private BrokerApiWrapper brokerApi;
   @Mock private Configuration cfg;
+  @Mock private WorkQueue workQueue;
   @Mock private Broker brokerCfg;
   @Mock private EventsBrokerConfiguration eventsBrokerConfiguration;
   @Mock private AbstractSubscriber subscriber;
@@ -56,7 +58,7 @@ public class MultiSiteConsumerRunnerTest {
   public void shouldSubscribeWithConfiguredGroupId() {
     configureTopicSubscriber(Optional.of(GROUP_ID));
 
-    runner().start();
+    runner().subscribeAll();
 
     verify(brokerApi).receiveAsync(TOPIC, GROUP_ID, consumer);
     verify(brokerApi, never()).receiveAsync(TOPIC, consumer);
@@ -73,7 +75,8 @@ public class MultiSiteConsumerRunnerTest {
     DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
     consumers.add("multi-site", cacheSubscriber);
-    new MultiSiteConsumerRunner(brokerApi, consumers, cfg, eventsBrokerConfiguration).start();
+    new MultiSiteConsumerRunner(brokerApi, consumers, cfg, eventsBrokerConfiguration, workQueue)
+        .subscribeAll();
 
     verify(brokerApi).receiveAsync(TOPIC, GROUP_ID, consumer);
     verify(brokerApi).receiveAsync(CACHE_TOPIC, GROUP_ID, cacheConsumer);
@@ -85,7 +88,7 @@ public class MultiSiteConsumerRunnerTest {
   public void shouldUseBrokerDefaultWhenGroupIdIsNotConfigured() {
     configureTopicSubscriber(Optional.empty());
 
-    runner().start();
+    runner().subscribeAll();
 
     verify(brokerApi).receiveAsync(TOPIC, consumer);
     verify(brokerApi, never()).receiveAsync(TOPIC, GROUP_ID, consumer);
@@ -95,7 +98,7 @@ public class MultiSiteConsumerRunnerTest {
   public void shouldSubscribeToConfiguredIndexPartitions() {
     configurePartitionSubscriber(Optional.of(GROUP_ID), INDEX_PARTITIONS);
 
-    runner().start();
+    runner().subscribeAll();
 
     INDEX_PARTITIONS.forEach(
         partition ->
@@ -111,7 +114,7 @@ public class MultiSiteConsumerRunnerTest {
     configurePartitionSubscriber(Optional.of(GROUP_ID), INDEX_PARTITIONS);
     when(brokerApi.isAutoAck()).thenReturn(true);
 
-    assertThrows(IllegalStateException.class, () -> runner().start());
+    assertThrows(IllegalStateException.class, () -> runner().subscribeAll());
 
     verify(brokerApi, never()).receiveAsyncWithPartition(any(), any(), any(), any());
   }
@@ -120,7 +123,7 @@ public class MultiSiteConsumerRunnerTest {
   public void shouldRequireGroupIdForPartitionSubscriptions() {
     configurePartitionSubscriber(Optional.empty(), INDEX_PARTITIONS);
 
-    assertThrows(IllegalStateException.class, () -> runner().start());
+    assertThrows(IllegalStateException.class, () -> runner().subscribeAll());
 
     verify(brokerApi, never()).receiveAsyncWithPartition(any(), any(), any(), any());
   }
@@ -131,7 +134,7 @@ public class MultiSiteConsumerRunnerTest {
         Optional.of(GROUP_ID),
         List.of(ChangeIndexEvent.TYPE, ProjectIndexEvent.TYPE, GroupIndexEvent.TYPE));
 
-    assertThrows(IllegalStateException.class, () -> runner().start());
+    assertThrows(IllegalStateException.class, () -> runner().subscribeAll());
 
     verify(brokerApi, never()).receiveAsyncWithPartition(any(), any(), any(), any());
   }
@@ -160,6 +163,7 @@ public class MultiSiteConsumerRunnerTest {
   private MultiSiteConsumerRunner runner() {
     DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
-    return new MultiSiteConsumerRunner(brokerApi, consumers, cfg, eventsBrokerConfiguration);
+    return new MultiSiteConsumerRunner(
+        brokerApi, consumers, cfg, eventsBrokerConfiguration, workQueue);
   }
 }
