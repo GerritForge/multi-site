@@ -79,6 +79,44 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
     assertThat(changeChecker.isUpToDate(Optional.of(indexChangeEvent))).isFalse();
   }
 
+  @Test
+  @GerritConfig(name = "gerrit.instanceId", value = "test-instance")
+  public void shouldPopulateMetaSHA1() throws Exception {
+    int changeNum = newChangeNum();
+
+    ChangeIndexEvent event =
+        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+
+    assertThat(event.metaSha).isEqualTo(metaSha(changeNum));
+  }
+
+  @Test
+  @GerritConfig(name = "gerrit.instanceId", value = "test-instance")
+  public void shouldNotBeUpToDateIfMetaSHA1Absent() throws Exception {
+    int changeNum = newChangeNum();
+    ChangeIndexEvent event =
+        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+    event.targetSha = null;
+    event.metaSha = NONEXISTENTSHA1;
+
+    assertThat(changeChecker.isUpToDate(Optional.of(event))).isFalse();
+  }
+
+  @Test
+  @GerritConfig(name = "gerrit.instanceId", value = "test-instance")
+  public void shouldBeUpToDateIfMetaSHA1HasAdvanced() throws Exception {
+    int changeNum = newChangeNum();
+    ChangeIndexEvent event =
+        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+    event.targetSha = null;
+
+    gApi.changes().id(project.get(), changeNum).topic("new-topic");
+    event.eventCreatedOn = changeCommitTs(changeNum) / 1000L;
+
+    assertThat(metaSha(changeNum)).isNotEqualTo(event.metaSha);
+    assertThat(changeChecker.isUpToDate(Optional.of(event))).isTrue();
+  }
+
   private ChangeIndexEvent newIndexChangeEvent(int changeNum) {
     ChangeIndexEvent indexChangeEvent =
         new ChangeIndexEvent(project.get(), changeNum, false, instanceId);
@@ -100,6 +138,10 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
   private long changeCommitTs(int changeNum) throws RestApiException {
     long changeCommitTs = gApi.changes().id(project.get(), changeNum).get().updated.getTime();
     return changeCommitTs;
+  }
+
+  private String metaSha(int changeNum) throws RestApiException {
+    return gApi.changes().id(project.get(), changeNum).get().metaRevId;
   }
 
   private RevCommit createCommit() throws Exception {
