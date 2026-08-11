@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6d3f659e_41677f43",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-11T14:29:44Z",
+      "side": 1,
+      "message": "\u003e The two cases are a bit different in my view.\n\u003e \n\u003e The target branch may have been deleted while the change still exists\n\nYes, but this is the indexing event of a change: if the change has been created or updated, the branch *must* exist. Any reindexing would also fail if the target branch doesn\u0027t exist.\n\n\u003e The meta ref is different because a change just cannot exist without it; that is an error, and returning `null` would hide an inconsistent state.\n\nNo, the change could have been deleted, and therefore, the `/meta` could be absent, which is a valid use case.",
+      "parentUuid": "5e60ba8d_d691463d",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 38
+      },
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e5a2540_14bf4474",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
         "patchSetId": 5
