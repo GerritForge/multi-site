@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a83d9f8_b1030ba3",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-11T14:53:16Z",
+      "side": 1,
+      "message": "\u003e \u003e The two cases are a bit different in my view.\n\u003e \u003e \n\u003e \u003e The target branch may have been deleted while the change still exists\n\u003e \n\u003e Yes, but this is the indexing event of a change: if the change has been created or updated, the branch *must* exist. Any reindexing would also fail if the target branch doesn\u0027t exist.\n\nYou\u0027re right that Gerrit does not allow deleting a target branch while it has open changes.\n\nHowever, you can still abandon the change targeting a deleted branch. Also, if changes targeting a deleted branch have been merged, they will still exist.\n\nAfter the branch deletion, these changes can still be reindexed without any issues.\nYou can add a post-merge -1, for example, or a comment.\n\nI tested this, and changes targeting the deleted branch are handled correctly at the moment in multi-site and reindexed as expected.\n\n\n\u003e \n\u003e \u003e The meta ref is different because a change just cannot exist without it; that is an error, and returning `null` would hide an inconsistent state.\n\u003e \n\u003e No, the change could have been deleted, and therefore, the `/meta` could be absent, which is a valid use case.\n\nThis is different.\nDeleted changes take a different path: `onChangeDeleted()` creates a `deleted\u003dtrue` event directly and does not call `getMetaSha()`.",
+      "parentUuid": "6d3f659e_41677f43",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 38
+      },
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e5a2540_14bf4474",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
         "patchSetId": 5
