@@ -88,7 +88,7 @@ public class ForwardedIndexChangeHandler
         return IndexingResult.SUCCESS;
       }
 
-      return indexSyncIfConsistent(changeId, event, changeChecker);
+      return indexSyncIfConsistentAndUpToDate(changeId, event, changeChecker);
     }
     return IndexingResult.IGNORED;
   }

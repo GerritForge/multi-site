@@ -125,6 +125,17 @@ public class ForwardedIndexChangeHandlerTest {
   }
 
   @Test
+  public void shouldNotIndexSynchronouslyWhenChangeIsNotUpToDate() throws Exception {
+    setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_OUTDATED, CHANGE_CONSISTENT);
+    ChangeIndexEvent changeIndexEvent =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+
+    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+
+    verify(indexerMock, never()).index(any(ChangeNotes.class));
+  }
+
+  @Test
   public void shouldFailSynchronousIndexingWhenChangeIsNotReady() throws Exception {
     setupChangeAccessRelatedMocks(
         CHANGE_EXISTS,

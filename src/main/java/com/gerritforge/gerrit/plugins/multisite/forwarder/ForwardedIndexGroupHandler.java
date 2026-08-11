@@ -61,7 +61,7 @@ public class ForwardedIndexGroupHandler
   @Override
   public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
     if (sourceEvent instanceof GroupIndexEvent event) {
-      return indexSyncIfConsistent(event.groupUUID, event, groupChecker);
+      return indexSyncIfConsistentAndUpToDate(event.groupUUID, event, groupChecker);
     }
     return IndexingResult.IGNORED;
   }
