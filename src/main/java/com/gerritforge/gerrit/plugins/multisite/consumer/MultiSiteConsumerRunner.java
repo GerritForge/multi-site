@@ -12,6 +12,8 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.BrokerApiPluginListener;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
@@ -22,6 +24,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
@@ -30,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-public class MultiSiteConsumerRunner implements LifecycleListener {
+public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPluginListener {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   static final List<String> INDEX_PARTITIONS =
       List.of(
@@ -43,27 +46,54 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   private final BrokerApiWrapper brokerApiWrapper;
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
+  private final DynamicItem<BrokerApi> brokerApiItem;
+  private boolean subscribed;
 
   @Inject
   public MultiSiteConsumerRunner(
       BrokerApiWrapper brokerApiWrapper,
       DynamicSet<AbstractSubscriber> consumers,
       Configuration cfg,
-      EventsBrokerConfiguration eventsBrokerConfiguration) {
+      EventsBrokerConfiguration eventsBrokerConfiguration,
+      DynamicItem<BrokerApi> brokerApiItem) {
     this.consumers = consumers;
     this.brokerApiWrapper = brokerApiWrapper;
     this.cfg = cfg;
     this.eventsBrokerConfiguration = eventsBrokerConfiguration;
+    this.brokerApiItem = brokerApiItem;
+  }
+
+  @Override
+  public DynamicItem<BrokerApi> brokerApiDynamicItem() {
+    return brokerApiItem;
   }
 
   @Override
   public void start() {
-    logger.atInfo().log("starting consumers");
-    consumers.forEach(this::subscribe);
+    onBrokerApiChanged();
   }
 
   @Override
-  public void stop() {}
+  public synchronized void stop() {
+    subscribed = false;
+  }
+
+  @Override
+  public synchronized void onBrokerApiChanged() {
+    boolean brokerApiBound = isBrokerApiBound();
+    if (brokerApiBound == subscribed) {
+      return;
+    }
+
+    subscribed = brokerApiBound;
+    if (!brokerApiBound) {
+      logger.atInfo().log("No broker plugin bound, waiting before starting consumers");
+      return;
+    }
+
+    logger.atInfo().log("starting consumers");
+    consumers.forEach(this::subscribe);
+  }
 
   private void subscribe(AbstractSubscriber subscriber) {
     String topic = subscriber.getTopic().topic(cfg);
