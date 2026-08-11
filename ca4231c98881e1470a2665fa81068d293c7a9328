@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5e60ba8d_d691463d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-11T12:33:54Z",
+      "side": 1,
+      "message": "The two cases are a bit different in my view.\n\nThe target branch may have been deleted while the change still exists, so `targetSha \u003d null` is valid. I think it would be wrong to raise an exception for this.\n\nThe meta ref is different because a change just cannot exist without it; that is an error, and returning `null` would hide an inconsistent state.\n\nWDYT?",
+      "parentUuid": "2a5fd7f1_3f2ae474",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 38
+      },
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e5a2540_14bf4474",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
         "patchSetId": 5
@@ -37,6 +61,24 @@
       "writtenOn": "2026-08-11T07:48:46Z",
       "side": 1,
       "message": "Can we avoid opening the repo multiple times?",
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c787d6f9_b1ebb760",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-11T12:33:54Z",
+      "side": 1,
+      "message": "Done, I am now passing `repo` to `getMetaSha`.",
+      "parentUuid": "2e5a2540_14bf4474",
       "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -58,6 +100,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67ddfa8c_4283076b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-11T12:33:54Z",
+      "side": 1,
+      "message": "Done, I am now passing `repo` to `repositoryHas`.",
+      "parentUuid": "94c6d9af_66baed4f",
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a1de28_88d907b7",
@@ -71,6 +131,24 @@
       "writtenOn": "2026-08-11T07:48:46Z",
       "side": 1,
       "message": "Can we avoid opening the repo multiple times?",
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e6c5326_f7bfa744",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerIT.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-11T12:33:54Z",
+      "side": 1,
+      "message": "We are using `gApi` now.",
+      "parentUuid": "19a1de28_88d907b7",
       "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
