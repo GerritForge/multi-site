@@ -24,11 +24,13 @@ import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.lifecycle.LifecycleModule;
 import com.google.gerrit.server.git.WorkQueue;
+import com.google.gerrit.server.plugins.StartPluginListener;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.ProvisionException;
 import com.google.inject.Scopes;
+import com.google.inject.internal.UniqueAnnotations;
 
 public class PluginModule extends LifecycleModule {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
@@ -59,6 +61,9 @@ public class PluginModule extends LifecycleModule {
 
       install(new BrokerForwarderModule());
       listener().to(MultiSiteConsumerRunner.class);
+      bind(StartPluginListener.class)
+          .annotatedWith(UniqueAnnotations.create())
+          .to(MultiSiteConsumerRunner.class);
 
       install(new ReplicationStatusModule(workQueue));
     }
