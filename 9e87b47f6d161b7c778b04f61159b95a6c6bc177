@@ -41,6 +41,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "943a7056_edaa723b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-11T16:44:26Z",
+      "side": 1,
+      "message": "Yep good point. The same applies for `repositoryHa`, so I have changed it there as well.",
+      "parentUuid": "cd8127e5_958bda8a",
+      "range": {
+        "startLine": 74,
+        "startChar": 39,
+        "endLine": 74,
+        "endChar": 44
+      },
+      "revId": "9e87b47f6d161b7c778b04f61159b95a6c6bc177",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b6dbbfb_7700ab2f",
