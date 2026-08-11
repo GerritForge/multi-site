@@ -12,6 +12,7 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.BrokerApiBoundNotifier;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
@@ -43,27 +44,55 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   private final BrokerApiWrapper brokerApiWrapper;
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
+  private final BrokerApiBoundNotifier brokerApiBoundNotifier;
+  private final Runnable subscribeCallback = this::subscribeIfBrokerPluginIsBound;
+  private boolean subscribed;
 
   @Inject
   public MultiSiteConsumerRunner(
       BrokerApiWrapper brokerApiWrapper,
       DynamicSet<AbstractSubscriber> consumers,
       Configuration cfg,
-      EventsBrokerConfiguration eventsBrokerConfiguration) {
+      EventsBrokerConfiguration eventsBrokerConfiguration,
+      BrokerApiBoundNotifier brokerApiBoundNotifier) {
     this.consumers = consumers;
     this.brokerApiWrapper = brokerApiWrapper;
     this.cfg = cfg;
     this.eventsBrokerConfiguration = eventsBrokerConfiguration;
+    this.brokerApiBoundNotifier = brokerApiBoundNotifier;
   }
 
   @Override
   public void start() {
-    logger.atInfo().log("starting consumers");
-    consumers.forEach(this::subscribe);
+    logger.atFine().log("[broker-bound-trace] multi-site registering for broker bound events");
+    brokerApiBoundNotifier.addListener(subscribeCallback);
+    subscribeIfBrokerPluginIsBound();
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+    logger.atFine().log("[broker-bound-trace] multi-site deregistering from broker bound events");
+    brokerApiBoundNotifier.removeListener(subscribeCallback);
+  }
+
+  // Broker plugins bind their BrokerApi after multi-site has started, until then the events-broker
+  // placeholder is bound and reports an acknowledgement mode that is not the real broker's.
+  private void subscribeIfBrokerPluginIsBound() {
+    if (subscribed) {
+      logger.atFine().log("[broker-bound-trace] multi-site already subscribed, ignoring");
+      return;
+    }
+
+    if (!brokerApiBoundNotifier.isBrokerPluginBound()) {
+      logger.atFine().log("[broker-bound-trace] multi-site waiting, no broker plugin bound yet");
+      return;
+    }
+
+    logger.atFine().log("[broker-bound-trace] multi-site subscribing, broker plugin is bound");
+    logger.atInfo().log("starting consumers");
+    consumers.forEach(this::subscribe);
+    subscribed = true;
+  }
 
   private void subscribe(AbstractSubscriber subscriber) {
     String topic = subscriber.getTopic().topic(cfg);
