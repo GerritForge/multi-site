@@ -12,6 +12,9 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.BrokerApiBoundNotifier;
+import com.gerritforge.gerrit.eventbroker.BrokerApiSubscriber;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
@@ -30,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-public class MultiSiteConsumerRunner implements LifecycleListener {
+public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiSubscriber {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   static final List<String> INDEX_PARTITIONS =
       List.of(
@@ -43,27 +46,55 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   private final BrokerApiWrapper brokerApiWrapper;
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
+  private final BrokerApiBoundNotifier brokerApiBoundNotifier;
+  private BrokerApi subscribedTo;
 
   @Inject
   public MultiSiteConsumerRunner(
       BrokerApiWrapper brokerApiWrapper,
       DynamicSet<AbstractSubscriber> consumers,
       Configuration cfg,
-      EventsBrokerConfiguration eventsBrokerConfiguration) {
+      EventsBrokerConfiguration eventsBrokerConfiguration,
+      BrokerApiBoundNotifier brokerApiBoundNotifier) {
     this.consumers = consumers;
     this.brokerApiWrapper = brokerApiWrapper;
     this.cfg = cfg;
     this.eventsBrokerConfiguration = eventsBrokerConfiguration;
+    this.brokerApiBoundNotifier = brokerApiBoundNotifier;
   }
 
   @Override
   public void start() {
-    logger.atInfo().log("starting consumers");
-    consumers.forEach(this::subscribe);
+    logger.atFine().log("[broker-bound-trace] multi-site registering for broker bound events");
+    brokerApiBoundNotifier.addListener(this);
+    subscribe();
   }
 
   @Override
-  public void stop() {}
+  public void stop() {
+    logger.atFine().log("[broker-bound-trace] multi-site deregistering from broker bound events");
+    brokerApiBoundNotifier.removeListener(this);
+  }
+
+  @Override
+  public void subscribe() {
+    Optional<BrokerApi> boundBrokerApi = brokerApiBoundNotifier.boundBrokerApi();
+    if (boundBrokerApi.isEmpty()) {
+      logger.atFine().log("[broker-bound-trace] multi-site waiting, no broker plugin bound yet");
+      return;
+    }
+
+    if (boundBrokerApi.get() == subscribedTo) {
+      logger.atFine().log(
+          "[broker-bound-trace] multi-site already subscribed to the bound broker, ignoring");
+      return;
+    }
+
+    logger.atFine().log("[broker-bound-trace] multi-site subscribing, broker plugin is bound");
+    logger.atInfo().log("starting consumers");
+    consumers.forEach(this::subscribe);
+    subscribedTo = boundBrokerApi.get();
+  }
 
   private void subscribe(AbstractSubscriber subscriber) {
     String topic = subscriber.getTopic().topic(cfg);
