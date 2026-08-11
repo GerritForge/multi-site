@@ -56,8 +56,10 @@ Help
 ```bash
 Usage: sh ./setup.sh [--option ]
 
-[--release-war-file]            Location to release.war file
-[--multisite-lib-file]          Location to lib multi-site.jar file
+[--release-war-file]            Location to release.war file; default bazel-bin/release.war
+[--multisite-lib-file]          Location to lib multi-site.jar file; default bazel-bin/plugins/multi-site/multi-site.jar
+[--eventsbroker-lib-file]       Location to lib events-broker.jar file; default bazel-bin/plugins/events-broker/events-broker.jar
+[--globalrefdb-lib-file]        Location to lib global-refdb.jar file; default bazel-bin/plugins/global-refdb/global-refdb.jar
 
 [--new-deployment]              Cleans up previous gerrit deployment and re-installs it. default true
 [--get-websession-plugin]       Download websession-broker plugin from CI lastSuccessfulBuild; default true
