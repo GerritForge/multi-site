@@ -12,6 +12,9 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.BrokerApiLoadedListener;
+import com.gerritforge.gerrit.eventbroker.BrokerApiPluginLoadedNotifier;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
@@ -30,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-public class MultiSiteConsumerRunner implements LifecycleListener {
+public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiLoadedListener {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   static final List<String> INDEX_PARTITIONS =
       List.of(
@@ -43,27 +46,50 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   private final BrokerApiWrapper brokerApiWrapper;
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
+  private final BrokerApiPluginLoadedNotifier brokerApiPluginLoadedNotifier;
+  private BrokerApi subscribedTo;
 
   @Inject
   public MultiSiteConsumerRunner(
       BrokerApiWrapper brokerApiWrapper,
       DynamicSet<AbstractSubscriber> consumers,
       Configuration cfg,
-      EventsBrokerConfiguration eventsBrokerConfiguration) {
+      EventsBrokerConfiguration eventsBrokerConfiguration,
+      BrokerApiPluginLoadedNotifier brokerApiPluginLoadedNotifier) {
     this.consumers = consumers;
     this.brokerApiWrapper = brokerApiWrapper;
     this.cfg = cfg;
     this.eventsBrokerConfiguration = eventsBrokerConfiguration;
+    this.brokerApiPluginLoadedNotifier = brokerApiPluginLoadedNotifier;
   }
 
   @Override
   public void start() {
-    logger.atInfo().log("starting consumers");
-    consumers.forEach(this::subscribe);
+    brokerApiLoaded();
   }
 
   @Override
   public void stop() {}
+
+  @Override
+  public void brokerApiLoaded() {
+    Optional<BrokerApi> boundBrokerApi = brokerApiPluginLoadedNotifier.boundBrokerApi();
+    if (boundBrokerApi.isEmpty()) {
+      logger.atFine().log("[broker-bound-trace] multi-site waiting, no broker plugin bound yet");
+      return;
+    }
+
+    if (boundBrokerApi.get() == subscribedTo) {
+      logger.atFine().log(
+          "[broker-bound-trace] multi-site already subscribed to the bound broker, ignoring");
+      return;
+    }
+
+    logger.atFine().log("[broker-bound-trace] multi-site subscribing, broker plugin is bound");
+    logger.atInfo().log("starting consumers");
+    consumers.forEach(this::subscribe);
+    subscribedTo = boundBrokerApi.get();
+  }
 
   private void subscribe(AbstractSubscriber subscriber) {
     String topic = subscriber.getTopic().topic(cfg);

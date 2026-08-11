@@ -21,6 +21,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.BrokerApiPluginLoadedNotifier;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration.Broker;
@@ -45,6 +47,8 @@ public class MultiSiteConsumerRunnerTest {
   private static final String GROUP_ID = "multi-site-group";
   @Mock private BrokerApiWrapper brokerApi;
   @Mock private Configuration cfg;
+  @Mock private BrokerApiPluginLoadedNotifier brokerApiPluginLoadedNotifier;
+  @Mock private BrokerApi boundBrokerApi;
   @Mock private Broker brokerCfg;
   @Mock private EventsBrokerConfiguration eventsBrokerConfiguration;
   @Mock private AbstractSubscriber subscriber;
@@ -73,7 +77,9 @@ public class MultiSiteConsumerRunnerTest {
     DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
     consumers.add("multi-site", cacheSubscriber);
-    new MultiSiteConsumerRunner(brokerApi, consumers, cfg, eventsBrokerConfiguration).start();
+    new MultiSiteConsumerRunner(
+            brokerApi, consumers, cfg, eventsBrokerConfiguration, brokerApiPluginLoadedNotifier)
+        .start();
 
     verify(brokerApi).receiveAsync(TOPIC, GROUP_ID, consumer);
     verify(brokerApi).receiveAsync(CACHE_TOPIC, GROUP_ID, cacheConsumer);
@@ -137,6 +143,7 @@ public class MultiSiteConsumerRunnerTest {
   }
 
   private void configureSubscriber(Optional<String> groupId, List<String> partitions) {
+    when(brokerApiPluginLoadedNotifier.boundBrokerApi()).thenReturn(Optional.of(boundBrokerApi));
     when(cfg.broker()).thenReturn(brokerCfg);
     when(brokerCfg.getGroupId()).thenReturn(groupId);
     when(brokerCfg.getTopic(EventTopic.INDEX_TOPIC.topicAliasKey(), "GERRIT.EVENT.INDEX"))
@@ -160,6 +167,7 @@ public class MultiSiteConsumerRunnerTest {
   private MultiSiteConsumerRunner runner() {
     DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
-    return new MultiSiteConsumerRunner(brokerApi, consumers, cfg, eventsBrokerConfiguration);
+    return new MultiSiteConsumerRunner(
+        brokerApi, consumers, cfg, eventsBrokerConfiguration, brokerApiPluginLoadedNotifier);
   }
 }

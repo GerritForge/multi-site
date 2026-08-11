@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite;
 
+import com.gerritforge.gerrit.eventbroker.BrokerApiLoadedListener;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectDeletedSharedDbCleanup;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
 import com.gerritforge.gerrit.plugins.multisite.consumer.MultiSiteConsumerRunner;
@@ -59,6 +60,7 @@ public class PluginModule extends LifecycleModule {
 
       install(new BrokerForwarderModule());
       listener().to(MultiSiteConsumerRunner.class);
+      DynamicSet.bind(binder(), BrokerApiLoadedListener.class).to(MultiSiteConsumerRunner.class);
 
       install(new ReplicationStatusModule(workQueue));
     }
