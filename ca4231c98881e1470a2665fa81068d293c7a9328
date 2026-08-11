@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4dc080ad_5dc8c45e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-11T15:39:48Z",
+      "side": 1,
+      "message": "\u003e \u003e \u003e The two cases are a bit different in my view.\n\u003e \u003e \u003e \n\u003e \u003e \u003e The target branch may have been deleted while the change still exists\n\u003e \u003e \n\u003e \u003e Yes, but this is the indexing event of a change: if the change has been created or updated, the branch *must* exist. Any reindexing would also fail if the target branch doesn\u0027t exist.\n\u003e \n\u003e You\u0027re right that Gerrit does not allow deleting a target branch while it has open changes.\n\u003e \n\u003e However, you can still abandon the change targeting a deleted branch. Also, if changes targeting a deleted branch have been merged, they will still exist.\n\u003e \n\u003e After the branch deletion, these changes can still be reindexed without any issues.\n\u003e You can add a post-merge -1, for example, or a comment.\n\u003e \n\u003e I tested this, and changes targeting the deleted branch are handled correctly at the moment in multi-site and reindexed as expected.\n\u003e \n\nPoint taken.\n\n\u003e \u003e \u003e The meta ref is different because a change just cannot exist without it; that is an error, and returning `null` would hide an inconsistent state.\n\u003e \u003e \n\u003e \u003e No, the change could have been deleted, and therefore, the `/meta` could be absent, which is a valid use case.\n\u003e \n\u003e This is different.\n\u003e Deleted changes take a different path: `onChangeDeleted()` creates a `deleted\u003dtrue` event directly and does not call `getMetaSha()`.\n\nTrue, but you could still receive the reindexing request for a change that did not arrive yet.\nThis class is used on the receiver side when checking if the changes are up-to-date for reindexing, therefore the `/meta` may not exist yet and that\u0027s fine, not an exception case.\n\nThe danger here is that this class is *also* used on the sender side for creating the events, which is unusual.\n\nI acknowledge the fact that the `/meta` not existing on the sender side is exceptional, but it isn\u0027t on the receiver side.\n\nEither we split the responsibility of this class into two classes *or* we move this logic (if the `/meta` doesn\u0027t exist, throw an exception) on the `newIndexEvent()` method, and not leave it at the class level where it could be misused.\n\nWhat do you think?",
+      "parentUuid": "5a83d9f8_b1030ba3",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 38
+      },
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2e5a2540_14bf4474",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
         "patchSetId": 5

@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7509f17e_79a6b6b9",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-11T15:39:48Z",
+      "side": 1,
+      "message": "Unrelated: we should move to Flogger.",
+      "revId": "9e87b47f6d161b7c778b04f61159b95a6c6bc177",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd8127e5_958bda8a",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-11T15:39:48Z",
+      "side": 1,
+      "message": "You don\u0027t need to pass the nodes here, because you already have the `changeNum` and the `projectName`.\n\n\n\n```suggestion\n      event.metaSha \u003d getMetaSha(repo, notes);\n```",
+      "range": {
+        "startLine": 74,
+        "startChar": 39,
+        "endLine": 74,
+        "endChar": 44
+      },
+      "revId": "9e87b47f6d161b7c778b04f61159b95a6c6bc177",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b6dbbfb_7700ab2f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-11T15:39:48Z",
+      "side": 1,
+      "message": "If this is a regular and valid case, we should not add a warning but simply a trace.",
+      "revId": "9e87b47f6d161b7c778b04f61159b95a6c6bc177",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
