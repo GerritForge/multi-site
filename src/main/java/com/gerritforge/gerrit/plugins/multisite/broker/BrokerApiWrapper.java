@@ -17,6 +17,7 @@ import com.gerritforge.gerrit.eventbroker.TopicSubscriber;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithGroupId;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.google.common.base.Strings;
+import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -27,11 +28,9 @@ import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
 import java.util.Set;
 import java.util.concurrent.Executor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class BrokerApiWrapper implements BrokerApi {
-  private static final Logger log = LoggerFactory.getLogger(BrokerApiWrapper.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private final Executor executor;
   private final DynamicItem<BrokerApi> apiDelegate;
   private final BrokerMetrics metrics;
@@ -56,12 +55,7 @@ public class BrokerApiWrapper implements BrokerApi {
     try {
       return send(topic, event).get();
     } catch (Throwable e) {
-      log.error(
-          "Failed to publish event '{}' to topic '{}' - error: {} - stack trace: {}",
-          event,
-          topic,
-          e.getMessage(),
-          e.getStackTrace());
+      log.atSevere().withCause(e).log("Failed to publish event '%s' to topic '%s'", event, topic);
       metrics.incrementBrokerFailedToPublishMessage();
       return false;
     }
@@ -76,9 +70,8 @@ public class BrokerApiWrapper implements BrokerApi {
     }
 
     if (Strings.isNullOrEmpty(message.instanceId)) {
-      log.warn(
-          "Dropping event '{}' because event instance id cannot be null or empty",
-          message.toString());
+      log.atWarning().log(
+          "Dropping event '%s' because event instance id cannot be null or empty", message);
       resultFuture.set(true);
       return resultFuture;
     }
@@ -113,11 +106,8 @@ public class BrokerApiWrapper implements BrokerApi {
 
           @Override
           public void onFailure(Throwable throwable) {
-            log.error(
-                "Failed to publish message '{}' to topic '{}' - error: {}",
-                message.toString(),
-                topic,
-                throwable.getMessage());
+            log.atSevere().withCause(throwable).log(
+                "Failed to publish message '%s' to topic '%s'", message, topic);
             incrementFailureMetric(direction, topic, message);
           }
         },
