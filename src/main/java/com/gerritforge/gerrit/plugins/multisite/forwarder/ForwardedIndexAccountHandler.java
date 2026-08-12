@@ -88,7 +88,7 @@ public class ForwardedIndexAccountHandler
   @Override
   protected void reindex(Account.Id id) {
     indexer.index(id);
-    log.debug("Account {} successfully indexed", id);
+    log.atFiner().log("Account %s successfully indexed", id);
   }
 
   @Override
@@ -107,7 +107,7 @@ public class ForwardedIndexAccountHandler
     // and simply assumes that indexing an id that doesn't exist in cache means
     // removing it from the index.
     indexer.index(id);
-    log.debug("Account {} successfully removed", id);
+    log.atFiner().log("Account %s successfully removed", id);
   }
 
   public synchronized void indexAsync(Account.Id id, Operation operation) {
@@ -126,7 +126,7 @@ public class ForwardedIndexAccountHandler
       index(account.getKey(), account.getValue(), Optional.empty());
       return true;
     } catch (IOException e) {
-      log.error("Account {} index failed", account.getKey(), e);
+      log.atSevere().withCause(e).log("Account %s index failed", account.getKey());
       return false;
     }
   }

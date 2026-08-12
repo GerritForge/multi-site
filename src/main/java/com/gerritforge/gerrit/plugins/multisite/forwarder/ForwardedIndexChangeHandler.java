@@ -127,8 +127,8 @@ public class ForwardedIndexChangeHandler
       reindexIfUpToDate(id, changeChecker);
     } else {
       IndexingRetry retry = indexingRetryTaskMap.get(id);
-      log.warn(
-          "Change {} {} in local Git repository (event={}) after {} attempt(s)",
+      log.atWarning().log(
+          "Change %s %s in local Git repository (event=%s) after %d attempt(s)",
           id,
           !changeIsPresent ? "not present yet" : "is not consistent",
           retry.getEvent(),
@@ -136,11 +136,9 @@ public class ForwardedIndexChangeHandler
 
       retry.incrementRetryNumber();
       if (!rescheduleIndex(id)) {
-        log.error(
-            "Change {} {} in the local Git repository (event={})",
-            id,
-            !changeIsPresent ? "could not be found" : "was not consistent",
-            retry.getEvent());
+        log.atSevere().log(
+            "Change %s %s in the local Git repository (event=%s)",
+            id, !changeIsPresent ? "could not be found" : "was not consistent", retry.getEvent());
       }
     }
   }
@@ -169,7 +167,7 @@ public class ForwardedIndexChangeHandler
       List<ChangeData> changes = queryProvider.get().byChangeNumber(Change.id(event.changeId));
       ChangeData change = uniqueChange(id, changes);
       if (change == null) {
-        log.warn("Skipping deletion from index for change {}", id);
+        log.atWarning().log("Skipping deletion from index for change %s", id);
         return;
       }
       indexer.delete(change.change().getProject(), change.getId());
@@ -180,21 +178,21 @@ public class ForwardedIndexChangeHandler
               .byProjectChangeNumber(Project.nameKey(event.projectName), Change.id(event.changeId));
       ChangeData change = uniqueChange(id, changes);
       if (change == null) {
-        log.warn("Skipping deletion from index for change {}", id);
+        log.atWarning().log("Skipping deletion from index for change %s", id);
         return;
       }
       indexer.delete(Project.nameKey(event.projectName), change.getId());
     }
-    log.debug("Change {} successfully deleted from index", id);
+    log.atFiner().log("Change %s successfully deleted from index", id);
   }
 
   private ChangeData uniqueChange(String id, List<ChangeData> changes) {
     if (changes.isEmpty()) {
-      log.warn("Change {} not found in index", id);
+      log.atWarning().log("Change %s not found in index", id);
       return null;
     }
     if (changes.size() > 1) {
-      log.warn("Multiple changes with the same number {} were found", id);
+      log.atWarning().log("Multiple changes with the same number %s were found", id);
       return null;
     }
     return changes.getFirst();

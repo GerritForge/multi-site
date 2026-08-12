@@ -121,33 +121,26 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   protected boolean rescheduleIndex(T id) {
     IndexingRetry retry = indexingRetryTaskMap.get(id);
     if (retry == null) {
-      log.debug(
-          "{} {} successfully indexed by different task, rescheduling isn't needed",
-          indexName(),
-          id);
+      log.atFiner().log(
+          "%s %s successfully indexed by different task, rescheduling isn't needed",
+          indexName(), id);
       return true;
     }
     if (retry.getRetryNumber() > maxTries) {
-      log.error(
-          "{} {} could not be indexed after {} retries. {} index could be stale.",
-          indexName(),
-          id,
-          retry.getRetryNumber(),
-          indexName());
+      log.atSevere().log(
+          "%s %s could not be indexed after %s retries. %s index could be stale.",
+          indexName(), id, retry.getRetryNumber(), indexName());
       if (!indexingRetryTaskMap.remove(id, retry)) {
-        log.debug(
-            "{} {} not removed from retry map because of racy addition of a new retry indexing"
+        log.atFiner().log(
+            "%s %s not removed from retry map because of racy addition of a new retry indexing"
                 + " retry");
       }
       return false;
     }
 
-    log.warn(
-        "Retrying for the #{} time to index {} {} after {} msecs",
-        retry.getRetryNumber(),
-        indexName(),
-        id,
-        retryInterval);
+    log.atWarning().log(
+        "Retrying for the #%s time to index %s %s after %s msecs",
+        retry.getRetryNumber(), indexName(), id, retryInterval);
     @SuppressWarnings("unused")
     Future<?> possiblyIgnoredError =
         indexExecutor.schedule(
@@ -156,7 +149,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
                   ForwardedContext fwdCtx = ForwardedContext.open()) {
                 attemptToIndex(id);
               } catch (Exception e) {
-                log.warn("{} {} could not be indexed", indexName(), id, e);
+                log.atWarning().log("%s %s could not be indexed", indexName(), id);
               }
             },
             retryInterval,
@@ -168,11 +161,10 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     IndexingRetry retry = new IndexingRetry(event);
     if (indexingRetryTaskMap.put(id, retry) != null) {
       indexOnce.accept(id);
-      log.debug(
+      log.atFiner().log(
           "Skipping indexing because there is already a running task for the specified id. Index"
-              + " name: {}, task id: {}",
-          indexName(),
-          id);
+              + " name: %s, task id: %s",
+          indexName(), id);
       return;
     }
     attemptToIndex(id);
@@ -181,11 +173,11 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   public final void reindexIfUpToDate(T id, UpToDateChecker<E> upToDateChecker) {
     IndexingRetry retry = indexingRetryTaskMap.get(id);
     if (retry == null) {
-      log.warn("{} {} successfully indexed by different task", indexName(), id);
+      log.atWarning().log("%s %s successfully indexed by different task", indexName(), id);
       return;
     }
     if (!upToDateChecker.isUpToDate(retry.getEvent())) {
-      log.warn("{} {} is not up-to-date. Rescheduling", indexName(), id);
+      log.atWarning().log("%s %s is not up-to-date. Rescheduling", indexName(), id);
       retry.incrementRetryNumber();
       rescheduleIndex(id);
       return;
@@ -194,17 +186,15 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     reindex(id);
 
     if (retry.getRetryNumber() > 0) {
-      log.warn(
-          "{} {} has been eventually indexed after {} attempt(s)",
-          indexName(),
-          id,
-          retry.getRetryNumber());
+      log.atWarning().log(
+          "%s %s has been eventually indexed after %s attempt(s)",
+          indexName(), id, retry.getRetryNumber());
     } else {
-      log.debug("{} {} successfully indexed", indexName(), id);
+      log.atFiner().log("%s %s successfully indexed", indexName(), id);
     }
     if (!indexingRetryTaskMap.remove(id, retry)) {
-      log.debug(
-          "{} {} not removed from retry map because of racy addition of a new retry indexing"
+      log.atFiner().log(
+          "%s %s not removed from retry map because of racy addition of a new retry indexing"
               + " retry");
     }
   }

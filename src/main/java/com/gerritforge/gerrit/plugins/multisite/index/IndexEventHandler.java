@@ -19,6 +19,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEven
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.base.Objects;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.extensions.events.AccountIndexedListener;
 import com.google.gerrit.extensions.events.ChangeIndexedListener;
@@ -33,15 +34,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class IndexEventHandler
     implements ChangeIndexedListener,
         AccountIndexedListener,
         GroupIndexedListener,
         ProjectIndexedListener {
-  private static final Logger log = LoggerFactory.getLogger(IndexEventHandler.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private final Executor executor;
   private final DynamicSet<IndexEventForwarder> forwarders;
   private final Set<IndexTask> queuedTasks = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -156,7 +155,8 @@ class IndexEventHandler
                   }
                 });
       } catch (Exception e) {
-        log.warn("Unable to create task to handle change {}~{}", projectName, id, e);
+        log.atSevere().withCause(e).log(
+            "Unable to create task to handle change %s~%s", projectName, id);
       }
     }
   }

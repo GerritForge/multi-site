@@ -12,10 +12,9 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
+import com.google.common.flogger.FluentLogger;
 import java.io.IOException;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Base class to handle forwarded indexing. This class is meant to be extended by classes used on
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * no concurrent indexing is done for the same id.
  */
 public abstract class ForwardedIndexingHandler<T, E> {
-  protected final Logger log = LoggerFactory.getLogger(getClass());
+  protected final FluentLogger log = FluentLogger.forEnclosingClass();
 
   public enum Operation {
     INDEX,
@@ -54,7 +53,7 @@ public abstract class ForwardedIndexingHandler<T, E> {
    * @throws IOException If an error occur while indexing.
    */
   public void index(T id, Operation operation, Optional<E> event) throws IOException {
-    log.debug("{} {} {}", operation, id, event);
+    log.atFiner().log("%s %s %s", operation, id, event);
     try (ForwardedContext ctx = ForwardedContext.open()) {
       switch (operation) {
         case INDEX:
@@ -64,7 +63,7 @@ public abstract class ForwardedIndexingHandler<T, E> {
           doDelete(id, event);
           break;
         default:
-          log.error("unexpected operation: {}", operation);
+          log.atSevere().log("unexpected operation: %s", operation);
           break;
       }
     }
