@@ -116,7 +116,7 @@ public class IndexEventHandlerTest {
   public void shouldForwardIndexChangeWhenContextIsMissingAndForcedIndexingEnabled()
       throws Exception {
     when(changeCheckerMock.newIndexEvent(PROJECT_NAME, CHANGE_ID, false))
-        .thenReturn(Optional.of(new ChangeIndexEvent(PROJECT_NAME, CHANGE_ID, false, INSTANCE_ID)));
+        .thenReturn(new ChangeIndexEvent(PROJECT_NAME, CHANGE_ID, false, INSTANCE_ID));
     eventHandler = createIndexEventHandler(changeCheckerMock, true);
     eventHandler.onChangeIndexed(PROJECT_NAME, CHANGE_ID);
     verify(changeCheckerMock).newIndexEvent(PROJECT_NAME, CHANGE_ID, false);

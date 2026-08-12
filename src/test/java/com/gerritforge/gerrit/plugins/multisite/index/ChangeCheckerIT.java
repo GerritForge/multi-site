@@ -84,8 +84,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
   public void shouldPopulateMetaSHA1() throws Exception {
     int changeNum = newChangeNum();
 
-    ChangeIndexEvent event =
-        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+    ChangeIndexEvent event = changeChecker.newIndexEvent(project.get(), changeNum, false);
 
     assertThat(event.metaSha).isEqualTo(metaSha(changeNum));
   }
@@ -94,8 +93,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
   @GerritConfig(name = "gerrit.instanceId", value = "test-instance")
   public void shouldNotBeUpToDateIfMetaSHA1Absent() throws Exception {
     int changeNum = newChangeNum();
-    ChangeIndexEvent event =
-        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+    ChangeIndexEvent event = changeChecker.newIndexEvent(project.get(), changeNum, false);
     event.targetSha = null;
     event.metaSha = NONEXISTENTSHA1;
 
@@ -106,8 +104,7 @@ public class ChangeCheckerIT extends LightweightPluginDaemonTest {
   @GerritConfig(name = "gerrit.instanceId", value = "test-instance")
   public void shouldBeUpToDateIfMetaSHA1HasAdvanced() throws Exception {
     int changeNum = newChangeNum();
-    ChangeIndexEvent event =
-        changeChecker.newIndexEvent(project.get(), changeNum, false).orElseThrow();
+    ChangeIndexEvent event = changeChecker.newIndexEvent(project.get(), changeNum, false);
     event.targetSha = null;
 
     gApi.changes().id(project.get(), changeNum).topic("new-topic");
