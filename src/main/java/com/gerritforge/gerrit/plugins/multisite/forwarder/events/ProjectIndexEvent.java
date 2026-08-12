@@ -28,11 +28,11 @@ public class ProjectIndexEvent extends IndexEvent {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ProjectIndexEvent that = (ProjectIndexEvent) o;
-    return Objects.equal(projectName, that.projectName);
+    return Objects.equal(projectName, that.projectName) && super.equals(that);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(projectName);
+    return Objects.hashCode(projectName) + super.hashCode();
   }
 }

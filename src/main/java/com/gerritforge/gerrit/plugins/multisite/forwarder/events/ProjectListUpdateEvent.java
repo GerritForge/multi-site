@@ -27,7 +27,7 @@ public class ProjectListUpdateEvent extends MultiSiteEvent {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(projectName, remove);
+    return Objects.hashCode(projectName, remove) + super.hashCode();
   }
 
   @Override
@@ -35,6 +35,8 @@ public class ProjectListUpdateEvent extends MultiSiteEvent {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ProjectListUpdateEvent that = (ProjectListUpdateEvent) o;
-    return remove == that.remove && Objects.equal(projectName, that.projectName);
+    return remove == that.remove
+        && Objects.equal(projectName, that.projectName)
+        && super.equals(that);
   }
 }
