@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7fe3a3c_6f285f6c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-12T04:59:12Z",
+      "side": 1,
+      "message": "Done in the follow up https://review.gerrithub.io/c/GerritForge/multi-site/+/1245345/1",
+      "parentUuid": "7509f17e_79a6b6b9",
+      "revId": "9e87b47f6d161b7c778b04f61159b95a6c6bc177",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd8127e5_958bda8a",
