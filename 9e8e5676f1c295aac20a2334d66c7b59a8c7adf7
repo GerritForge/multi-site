@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe7344b9_e6ce2656",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-12T10:42:07Z",
+      "side": 1,
+      "message": "Fixed with [1]\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1245368/1",
+      "parentUuid": "22e97883_499c6ec3",
+      "range": {
+        "startLine": 61,
+        "startChar": 9,
+        "endLine": 61,
+        "endChar": 35
+      },
+      "revId": "9e8e5676f1c295aac20a2334d66c7b59a8c7adf7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40a4c4be_2072291a",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-08-12T10:41:21Z",
       "side": 1,
       "message": "nit: small typo here",
+      "range": {
+        "startLine": 69,
+        "startChar": 17,
+        "endLine": 69,
+        "endChar": 76
+      },
+      "revId": "9e8e5676f1c295aac20a2334d66c7b59a8c7adf7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "608cef4d_0b7e1333",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-08-12T10:42:07Z",
+      "side": 1,
+      "message": "Fixed with [1]\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1245367/1",
+      "parentUuid": "40a4c4be_2072291a",
       "range": {
         "startLine": 69,
         "startChar": 17,
