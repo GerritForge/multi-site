@@ -27,7 +27,7 @@ public class CacheEvictionEvent extends MultiSiteEvent {
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(cacheName, key);
+    return Objects.hashCode(cacheName, key) + super.hashCode();
   }
 
   @Override
@@ -35,6 +35,8 @@ public class CacheEvictionEvent extends MultiSiteEvent {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     CacheEvictionEvent that = (CacheEvictionEvent) o;
-    return Objects.equal(cacheName, that.cacheName) && Objects.equal(key, that.key);
+    return Objects.equal(cacheName, that.cacheName)
+        && Objects.equal(key, that.key)
+        && super.equals(o);
   }
 }

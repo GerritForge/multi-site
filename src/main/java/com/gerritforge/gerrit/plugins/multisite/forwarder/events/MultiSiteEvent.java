@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder.events;
 import static com.google.gerrit.server.events.EventTypes.register;
 
 import com.google.gerrit.server.events.Event;
+import java.util.Objects;
 
 public abstract class MultiSiteEvent extends Event {
 
@@ -29,5 +30,24 @@ public abstract class MultiSiteEvent extends Event {
   protected MultiSiteEvent(String type, String instanceId) {
     super(type);
     this.instanceId = instanceId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Event)) {
+      return false;
+    }
+    MultiSiteEvent event = (MultiSiteEvent) o;
+    return eventCreatedOn == event.eventCreatedOn
+        && Objects.equals(type, event.type)
+        && Objects.equals(instanceId, event.instanceId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, eventCreatedOn, instanceId);
   }
 }
