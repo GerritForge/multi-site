@@ -65,8 +65,7 @@ public class ChangeCheckerImpl implements ChangeChecker {
       if (changeNotes.isEmpty()) {
         throw new IOException(
             String.format(
-                "Unable to get ChangeNotes for on project %s for change %s",
-                projectName, changeId));
+                "Unable to get ChangeNotes for project %s for change %s", projectName, changeId));
       }
 
       ChangeNotes notes = changeNotes.get();
