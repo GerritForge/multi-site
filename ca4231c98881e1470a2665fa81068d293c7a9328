@@ -120,6 +120,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad345f60_2b019d67",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-12T04:18:56Z",
+      "side": 1,
+      "message": "It looks like that part of the code is totally redundant: the change SHA1 is returned by the `ChangeNotes.getRevision()` method.",
+      "parentUuid": "4dc080ad_5dc8c45e",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 38
+      },
+      "revId": "ca4231c98881e1470a2665fa81068d293c7a9328",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e5a2540_14bf4474",
