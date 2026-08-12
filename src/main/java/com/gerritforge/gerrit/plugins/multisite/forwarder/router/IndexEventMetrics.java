@@ -44,7 +44,13 @@ public class IndexEventMetrics extends MultiSiteMetrics {
             stringField("event_type", "Index event type"));
     metricMaker.newTrigger(
         eventsPendingAcknowledgementMetric,
-        () -> eventsPendingAcknowledgement.forEach(eventsPendingAcknowledgementMetric::set));
+        () -> {
+          if (eventsPendingAcknowledgement.isEmpty()) {
+            eventsPendingAcknowledgementMetric.forceCreate("");
+          } else {
+            eventsPendingAcknowledgement.forEach(eventsPendingAcknowledgementMetric::set);
+          }
+        });
   }
 
   public void incrementManualAckTerminalFailure(String eventType) {
