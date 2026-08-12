@@ -80,6 +80,24 @@
       "message": "If this is a regular and valid case, we should not add a warning but simply a trace.",
       "revId": "9e87b47f6d161b7c778b04f61159b95a6c6bc177",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44982380_caff537c",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-12T04:28:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9b6dbbfb_7700ab2f",
+      "revId": "9e87b47f6d161b7c778b04f61159b95a6c6bc177",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
