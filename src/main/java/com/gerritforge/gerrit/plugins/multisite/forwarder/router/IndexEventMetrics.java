@@ -12,6 +12,10 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
 import com.gerritforge.gerrit.plugins.multisite.MultiSiteMetrics;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.gerrit.metrics.CallbackMetric1;
 import com.google.gerrit.metrics.Counter1;
 import com.google.gerrit.metrics.Description;
@@ -42,6 +46,10 @@ public class IndexEventMetrics extends MultiSiteMetrics {
                 .setGauge()
                 .setUnit("messages"),
             stringField("event_type", "Index event type"));
+    eventsPendingAcknowledgementMetric.forceCreate(ChangeIndexEvent.TYPE);
+    eventsPendingAcknowledgementMetric.forceCreate(AccountIndexEvent.TYPE);
+    eventsPendingAcknowledgementMetric.forceCreate(ProjectIndexEvent.TYPE);
+    eventsPendingAcknowledgementMetric.forceCreate(GroupIndexEvent.TYPE);
     metricMaker.newTrigger(
         eventsPendingAcknowledgementMetric,
         () -> eventsPendingAcknowledgement.forEach(eventsPendingAcknowledgementMetric::set));
