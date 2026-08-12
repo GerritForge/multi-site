@@ -31,11 +31,13 @@ public class GroupIndexEvent extends IndexEvent {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     GroupIndexEvent that = (GroupIndexEvent) o;
-    return Objects.equal(groupUUID, that.groupUUID) && Objects.equal(sha1, that.sha1);
+    return Objects.equal(groupUUID, that.groupUUID)
+        && Objects.equal(sha1, that.sha1)
+        && super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(groupUUID, sha1);
+    return Objects.hashCode(groupUUID, sha1) + super.hashCode();
   }
 }

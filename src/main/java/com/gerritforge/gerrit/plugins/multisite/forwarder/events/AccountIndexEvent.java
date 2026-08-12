@@ -36,11 +36,12 @@ public class AccountIndexEvent extends IndexEvent {
     AccountIndexEvent that = (AccountIndexEvent) o;
     return accountId == that.accountId
         && Objects.equal(targetSha, that.targetSha)
-        && deleted == that.deleted;
+        && deleted == that.deleted
+        && super.equals(o);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(accountId, targetSha, deleted);
+    return Objects.hashCode(accountId, targetSha, deleted) + super.hashCode();
   }
 }
