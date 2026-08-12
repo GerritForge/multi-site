@@ -57,8 +57,8 @@ public class ChangeCheckerImpl implements ChangeChecker {
   }
 
   @Override
-  public Optional<ChangeIndexEvent> newIndexEvent(
-      String projectName, int changeNum, boolean deleted) throws IOException {
+  public ChangeIndexEvent newIndexEvent(String projectName, int changeNum, boolean deleted)
+      throws IOException {
     String changeId = projectName + "~" + changeNum;
     try (Repository repo = gitRepoMgr.openRepository(Project.nameKey(projectName))) {
       Optional<ChangeNotes> changeNotes = getChangeNotes(changeId);
@@ -73,7 +73,7 @@ public class ChangeCheckerImpl implements ChangeChecker {
       event.metaSha = changeNotes.get().getRevision().getName();
       event.eventCreatedOn = getTsFromChange(notes);
       event.targetSha = getBranchTargetSha(repo, notes);
-      return Optional.of(event);
+      return event;
     }
   }
 
