@@ -12,6 +12,7 @@
 package com.gerritforge.gerrit.plugins.multisite.index;
 
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.exceptions.StorageException;
@@ -33,12 +34,10 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 public class ChangeCheckerImpl implements ChangeChecker {
-  private static final Logger log = LoggerFactory.getLogger(ChangeCheckerImpl.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private final GitRepositoryManager gitRepoMgr;
   private final OneOffRequestContext oneOffReqCtx;
   private final ChangeFinder changeFinder;
@@ -89,7 +88,8 @@ public class ChangeCheckerImpl implements ChangeChecker {
   @Override
   public boolean isUpToDate(Optional<ChangeIndexEvent> indexEventOptional) {
     if (indexEventOptional.isEmpty()) {
-      log.warn("Unable to compute last updated ts for change because of an empty indexEvent");
+      log.atWarning().log(
+          "Unable to compute last updated ts for change because of an empty indexEvent");
       return true;
     }
 
@@ -98,7 +98,7 @@ public class ChangeCheckerImpl implements ChangeChecker {
     String changeId = indexEvent.projectName + "~" + indexEvent.changeId;
     Optional<ChangeNotes> changeNotes = getChangeNotes(changeId);
     if (changeNotes.isEmpty()) {
-      log.warn("Unable to compute last updated ts for change {}", changeId);
+      log.atWarning().log("Unable to compute last updated ts for change %s", changeId);
       return true;
     }
     long computedChangeTs = getTsFromChange(changeNotes.get());
@@ -114,12 +114,13 @@ public class ChangeCheckerImpl implements ChangeChecker {
       String refName = changeNotes.getChange().getDest().branch();
       Ref ref = repo.exactRef(refName);
       if (ref == null) {
-        log.trace("Unable to find target ref {} for change {}", refName, changeId);
+        log.atFiner().log("Unable to find target ref %s for change %s", refName, changeId);
         return null;
       }
       return ref.getTarget().getObjectId().getName();
     } catch (IOException e) {
-      log.warn("Unable to resolve target branch SHA for change {}", changeId, e);
+      log.atWarning().withCause(e).log(
+          "Unable to resolve target branch SHA for change %s", changeId);
       return null;
     }
   }
@@ -128,7 +129,8 @@ public class ChangeCheckerImpl implements ChangeChecker {
     try {
       return repo.parseCommit(ObjectId.fromString(sha1ToCheck)) != null;
     } catch (IOException e) {
-      log.warn("Unable to find SHA1 {} for change {}", sha1ToCheck, changeId, e);
+      log.atWarning().withCause(e).log(
+          "Unable to find SHA1 %s for change %s", sha1ToCheck, changeId, e);
       return false;
     }
   }
@@ -143,7 +145,7 @@ public class ChangeCheckerImpl implements ChangeChecker {
       return (indexEvent.targetSha == null || repositoryHas(repo, changeId, indexEvent.targetSha))
           && (indexEvent.metaSha == null || repositoryHas(repo, changeId, indexEvent.metaSha));
     } catch (IOException e) {
-      log.warn("Unable to open repository for change {}", changeId, e);
+      log.atWarning().log("Unable to open repository for change %s", changeId, e);
       return false;
     }
   }
@@ -152,7 +154,7 @@ public class ChangeCheckerImpl implements ChangeChecker {
   public boolean isConsistent(String changeId) {
     Optional<ChangeNotes> notes = getChangeNotes(changeId);
     if (notes.isEmpty()) {
-      log.warn("Unable to compute change notes for change {}", changeId);
+      log.atWarning().log("Unable to compute change notes for change %s", changeId);
       return false;
     }
 
@@ -161,14 +163,14 @@ public class ChangeCheckerImpl implements ChangeChecker {
         RevWalk walk = new RevWalk(repo)) {
       walk.parseCommit(currentPatchSetCommitId);
     } catch (StorageException | MissingObjectException e) {
-      log.warn(
+      log.atWarning().log(
           String.format(
               "Consistency check failed for change %s, missing current patchset commit %s",
               changeId, currentPatchSetCommitId.getName()),
           e);
       return false;
     } catch (IOException e) {
-      log.warn(
+      log.atWarning().log(
           String.format(
               "Cannot check consistency for change %s, current patchset commit %s. Assuming change"
                   + " is consistent",
