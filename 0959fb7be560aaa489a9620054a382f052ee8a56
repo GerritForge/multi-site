@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43334b8b_dc644a3b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/index/ChangeCheckerImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-08-12T10:48:15Z",
+      "side": 1,
+      "message": "```suggestion\n                \"Unable to get ChangeNotes for project %s for change %s\", projectName, changeId));\n```",
+      "range": {
+        "startLine": 68,
+        "startChar": 16,
+        "endLine": 68,
+        "endChar": 97
+      },
+      "revId": "0959fb7be560aaa489a9620054a382f052ee8a56",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
