@@ -31,6 +31,7 @@ import com.google.common.base.Strings;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.server.config.ConfigUtil;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
@@ -52,12 +53,10 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.storage.file.FileBasedConfig;
 import org.eclipse.jgit.util.FS;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 public class Configuration {
-  private static final Logger log = LoggerFactory.getLogger(Configuration.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
 
   public static final String PLUGIN_NAME = "multi-site";
   public static final String MULTI_SITE_CONFIG = PLUGIN_NAME + ".config";
@@ -257,10 +256,11 @@ public class Configuration {
           () -> {
             String fileConfigFileName = fileConfig.getFile().getPath();
             try {
-              log.info("Loading configuration from {}", fileConfigFileName);
+              log.atInfo().log("Loading configuration from %s", fileConfigFileName);
               fileConfig.load();
             } catch (IOException | ConfigInvalidException e) {
-              log.error("Unable to load configuration from " + fileConfigFileName, e);
+              log.atSevere().withCause(e).log(
+                  "Unable to load configuration from %s", fileConfigFileName);
             }
             return fileConfig;
           });
@@ -295,8 +295,8 @@ public class Configuration {
     try {
       return cfg.get().getInt(section, subSection, name, defaultValue);
     } catch (IllegalArgumentException e) {
-      log.error("invalid value for {}; using default value {}", name, defaultValue);
-      log.debug("Failed to retrieve integer value: {}", e.getMessage(), e);
+      log.atWarning().withCause(e).log(
+          "invalid value for %s; using default value %s", name, defaultValue);
       return defaultValue;
     }
   }
@@ -306,8 +306,8 @@ public class Configuration {
     try {
       return cfg.get().getLong(section, subSection, name, defaultValue);
     } catch (IllegalArgumentException e) {
-      log.error("invalid value for {}; using default value {}", name, defaultValue);
-      log.debug("Failed to retrieve long value: {}", e.getMessage(), e);
+      log.atWarning().withCause(e).log(
+          "invalid value for %s; using default value %s", name, defaultValue);
       return defaultValue;
     }
   }
@@ -576,8 +576,8 @@ public class Configuration {
     try {
       return cfg.get().getBoolean(section, subsection, name, defaultValue);
     } catch (IllegalArgumentException e) {
-      log.error("invalid value for {}; using default value {}", name, defaultValue);
-      log.debug("Failed to retrieve boolean value: {}", e.getMessage(), e);
+      log.atWarning().withCause(e).log(
+          "invalid value for %s; using default value %s", name, defaultValue);
       return defaultValue;
     }
   }
