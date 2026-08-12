@@ -18,11 +18,14 @@ import com.gerritforge.gerrit.plugins.multisite.consumer.ReplicationStatusModule
 import com.gerritforge.gerrit.plugins.multisite.consumer.SubscriberModule;
 import com.gerritforge.gerrit.plugins.multisite.event.EventModule;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.broker.BrokerForwarderModule;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.StreamEventRouter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.lifecycle.LifecycleModule;
+import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -55,6 +58,10 @@ public class PluginModule extends LifecycleModule {
         || config.event().synchronize()) {
       install(new EventModule(config));
       bind(BrokerApiWrapper.class).in(Scopes.SINGLETON);
+      bind(IndexEventRouter.class).in(Scopes.SINGLETON);
+      bind(StreamEventRouter.class).in(Scopes.SINGLETON);
+      listener().to(IndexEventRouter.class);
+      DynamicSet.bind(binder(), EventListener.class).to(IndexEventRouter.class);
       install(new SubscriberModule());
 
       install(new BrokerForwarderModule());
