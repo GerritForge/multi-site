@@ -37,6 +37,6 @@ public interface ChangeChecker extends IndexEntityChecker<String, ChangeIndexEve
    * @return new IndexEvent
    * @throws IOException if the current Change cannot read
    */
-  Optional<ChangeIndexEvent> newIndexEvent(String projectName, int changeId, boolean deleted)
+  ChangeIndexEvent newIndexEvent(String projectName, int changeId, boolean deleted)
       throws IOException;
 }

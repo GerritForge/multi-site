@@ -139,21 +139,14 @@ class IndexEventHandler
   private void executeIndexChangeTask(String projectName, int id) {
     if (!ForwardedContext.isForwardedEvent()) {
       try {
-        changeChecker
-            .newIndexEvent(projectName, id, false)
-            .map(
-                event -> {
-                  if (Thread.currentThread().getName().contains("Batch")) {
-                    return new BatchIndexChangeTask(event);
-                  }
-                  return new IndexChangeTask(event);
-                })
-            .ifPresent(
-                task -> {
-                  if (queuedTasks.add(task)) {
-                    executor.execute(task);
-                  }
-                });
+        ChangeIndexEvent event = changeChecker.newIndexEvent(projectName, id, false);
+        IndexTask task =
+            Thread.currentThread().getName().contains("Batch")
+                ? new BatchIndexChangeTask(event)
+                : new IndexChangeTask(event);
+        if (queuedTasks.add(task)) {
+          executor.execute(task);
+        }
       } catch (Exception e) {
         log.atSevere().withCause(e).log(
             "Unable to create task to handle change %s~%s", projectName, id);
