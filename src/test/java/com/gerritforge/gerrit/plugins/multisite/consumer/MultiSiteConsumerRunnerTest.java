@@ -21,6 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration.Broker;
@@ -29,8 +30,10 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEven
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.plugins.Plugin;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
@@ -51,12 +54,14 @@ public class MultiSiteConsumerRunnerTest {
   @Mock private AbstractSubscriber cacheSubscriber;
   @Mock private AckAwareConsumer<Event> consumer;
   @Mock private AckAwareConsumer<Event> cacheConsumer;
+  @Mock private DynamicItem<BrokerApi> brokerApiDynamicItem;
+  @Mock private Plugin pluginMock;
 
   @Test
   public void shouldSubscribeWithConfiguredGroupId() {
     configureTopicSubscriber(Optional.of(GROUP_ID));
 
-    runner().start();
+    runner().onStartBrokerApiPlugin();
 
     verify(brokerApi).receiveAsync(TOPIC, GROUP_ID, consumer);
     verify(brokerApi, never()).receiveAsync(TOPIC, consumer);
@@ -73,7 +78,9 @@ public class MultiSiteConsumerRunnerTest {
     DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
     consumers.add("multi-site", cacheSubscriber);
-    new MultiSiteConsumerRunner(brokerApi, consumers, cfg, eventsBrokerConfiguration).start();
+    new MultiSiteConsumerRunner(
+            brokerApi, consumers, cfg, eventsBrokerConfiguration, brokerApiDynamicItem)
+        .onStartBrokerApiPlugin(pluginMock);
 
     verify(brokerApi).receiveAsync(TOPIC, GROUP_ID, consumer);
     verify(brokerApi).receiveAsync(CACHE_TOPIC, GROUP_ID, cacheConsumer);
@@ -85,7 +92,7 @@ public class MultiSiteConsumerRunnerTest {
   public void shouldUseBrokerDefaultWhenGroupIdIsNotConfigured() {
     configureTopicSubscriber(Optional.empty());
 
-    runner().start();
+    runner().onStartBrokerApiPlugin(pluginMock);
 
     verify(brokerApi).receiveAsync(TOPIC, consumer);
     verify(brokerApi, never()).receiveAsync(TOPIC, GROUP_ID, consumer);
@@ -95,7 +102,7 @@ public class MultiSiteConsumerRunnerTest {
   public void shouldSubscribeToConfiguredIndexPartitions() {
     configurePartitionSubscriber(Optional.of(GROUP_ID), INDEX_PARTITIONS);
 
-    runner().start();
+    runner().onStartPlugin(pluginMock);
 
     INDEX_PARTITIONS.forEach(
         partition ->
@@ -111,7 +118,7 @@ public class MultiSiteConsumerRunnerTest {
     configurePartitionSubscriber(Optional.of(GROUP_ID), INDEX_PARTITIONS);
     when(brokerApi.isAutoAck()).thenReturn(true);
 
-    assertThrows(IllegalStateException.class, () -> runner().start());
+    assertThrows(IllegalStateException.class, () -> runner().onStartPlugin(pluginMock));
 
     verify(brokerApi, never()).receiveAsyncWithPartition(any(), any(), any(), any());
   }
@@ -120,7 +127,7 @@ public class MultiSiteConsumerRunnerTest {
   public void shouldRequireGroupIdForPartitionSubscriptions() {
     configurePartitionSubscriber(Optional.empty(), INDEX_PARTITIONS);
 
-    assertThrows(IllegalStateException.class, () -> runner().start());
+    assertThrows(IllegalStateException.class, () -> runner().onStartPlugin(pluginMock));
 
     verify(brokerApi, never()).receiveAsyncWithPartition(any(), any(), any(), any());
   }
@@ -131,7 +138,7 @@ public class MultiSiteConsumerRunnerTest {
         Optional.of(GROUP_ID),
         List.of(ChangeIndexEvent.TYPE, ProjectIndexEvent.TYPE, GroupIndexEvent.TYPE));
 
-    assertThrows(IllegalStateException.class, () -> runner().start());
+    assertThrows(IllegalStateException.class, () -> runner().onStartPlugin(pluginMock));
 
     verify(brokerApi, never()).receiveAsyncWithPartition(any(), any(), any(), any());
   }
@@ -160,6 +167,7 @@ public class MultiSiteConsumerRunnerTest {
   private MultiSiteConsumerRunner runner() {
     DynamicSet<AbstractSubscriber> consumers = new DynamicSet<>();
     consumers.add("multi-site", subscriber);
-    return new MultiSiteConsumerRunner(brokerApi, consumers, cfg, eventsBrokerConfiguration);
+    return new MultiSiteConsumerRunner(
+        brokerApi, consumers, cfg, eventsBrokerConfiguration, brokerApiDynamicItem);
   }
 }
