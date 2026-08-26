@@ -14,7 +14,6 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
-import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
@@ -41,7 +40,6 @@ public abstract class AbstractSubscriber {
   private final ForwardedEventRouter eventRouter;
   private final DynamicSet<DroppedEventListener> droppedEventListeners;
   private final String instanceId;
-  private final MessageLogger msgLog;
   private SubscriberMetrics subscriberMetrics;
   private final String topic;
 
@@ -55,13 +53,11 @@ public abstract class AbstractSubscriber {
       ForwardedEventRouter eventRouter,
       DynamicSet<DroppedEventListener> droppedEventListeners,
       @GerritInstanceId String gerritInstanceId,
-      MessageLogger msgLog,
       SubscriberMetrics subscriberMetrics,
       Configuration cfg) {
     this.eventRouter = eventRouter;
     this.droppedEventListeners = droppedEventListeners;
     this.instanceId = gerritInstanceId;
-    this.msgLog = msgLog;
     this.subscriberMetrics = subscriberMetrics;
     this.topic = getTopic().topic(cfg);
   }
@@ -110,8 +106,6 @@ public abstract class AbstractSubscriber {
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else {
       try {
-        msgLog.log(MessageLogger.Direction.CONSUME, topic, event);
-
         switch (ackMode) {
           case SUBSCRIBER_MANAGED:
             route(event, messageAcknowledgement, isAutoAck);

@@ -157,7 +157,6 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
         (IndexEventRouter) eventRouter,
         asDynamicSet(droppedEventListeners),
         NODE_INSTANCE_ID,
-        msgLog,
         subscriberMetrics,
         cfg,
         projectsFilter,

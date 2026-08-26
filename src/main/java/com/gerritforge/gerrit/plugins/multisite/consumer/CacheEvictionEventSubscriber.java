@@ -11,7 +11,6 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
-import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.CacheEvictionEventRouter;
@@ -28,11 +27,10 @@ public class CacheEvictionEventSubscriber extends AbstractSubscriber {
       CacheEvictionEventRouter eventRouter,
       DynamicSet<DroppedEventListener> droppedEventListeners,
       @GerritInstanceId String instanceId,
-      MessageLogger msgLog,
       SubscriberMetrics subscriberMetrics,
       Configuration cfg) {
 
-    super(eventRouter, droppedEventListeners, instanceId, msgLog, subscriberMetrics, cfg);
+    super(eventRouter, droppedEventListeners, instanceId, subscriberMetrics, cfg);
   }
 
   @Override

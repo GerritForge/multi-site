@@ -11,10 +11,8 @@
 
 package com.gerritforge.gerrit.plugins.multisite.broker;
 
-import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
-import com.gerritforge.gerrit.eventbroker.TopicSubscriber;
-import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithGroupId;
+import com.gerritforge.gerrit.eventbroker.BrokerApiLoggingWrapper;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.google.common.base.Strings;
 import com.google.common.flogger.FluentLogger;
@@ -26,15 +24,12 @@ import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
-import java.util.Set;
 import java.util.concurrent.Executor;
 
-public class BrokerApiWrapper implements BrokerApi {
+public class BrokerApiWrapper extends BrokerApiLoggingWrapper {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private final Executor executor;
-  private final DynamicItem<BrokerApi> apiDelegate;
   private final BrokerMetrics metrics;
-  private final MessageLogger msgLog;
   private final String nodeInstanceId;
 
   @Inject
@@ -44,10 +39,9 @@ public class BrokerApiWrapper implements BrokerApi {
       BrokerMetrics metrics,
       MessageLogger msgLog,
       @GerritInstanceId String instanceId) {
-    this.apiDelegate = apiDelegate;
+    super(apiDelegate, msgLog);
     this.executor = executor;
     this.metrics = metrics;
-    this.msgLog = msgLog;
     this.nodeInstanceId = instanceId;
   }
 
@@ -76,39 +70,22 @@ public class BrokerApiWrapper implements BrokerApi {
       return resultFuture;
     }
 
-    return send(topic, message, MessageLogger.Direction.PUBLISH);
-  }
-
-  public ListenableFuture<Boolean> requeue(String topic, Event message) {
-    try {
-      return send(topic, message, MessageLogger.Direction.REQUEUE);
-    } catch (RuntimeException e) {
-      metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
-      throw e;
-    }
-  }
-
-  private ListenableFuture<Boolean> send(
-      String topic, Event message, MessageLogger.Direction direction) {
-    ListenableFuture<Boolean> resfultF = apiDelegate.get().send(topic, message);
+    ListenableFuture<Boolean> resfultF = super.send(topic, message);
     Futures.addCallback(
         resfultF,
         new FutureCallback<Boolean>() {
           @Override
           public void onSuccess(Boolean result) {
             if (result) {
-              msgLog.log(direction, topic, message);
-              incrementSuccessMetric(direction, topic, message);
+              metrics.incrementBrokerPublishedMessage();
             } else {
-              incrementFailureMetric(direction, topic, message);
+              metrics.incrementBrokerFailedToPublishMessage();
             }
           }
 
           @Override
           public void onFailure(Throwable throwable) {
-            log.atSevere().withCause(throwable).log(
-                "Failed to publish message '%s' to topic '%s'", message, topic);
-            incrementFailureMetric(direction, topic, message);
+            metrics.incrementBrokerFailedToPublishMessage();
           }
         },
         executor);
@@ -116,67 +93,33 @@ public class BrokerApiWrapper implements BrokerApi {
     return resfultF;
   }
 
-  private void incrementSuccessMetric(
-      MessageLogger.Direction direction, String topic, Event message) {
-    if (direction == MessageLogger.Direction.REQUEUE) {
-      metrics.incrementBrokerRequeuedMessage(topic, message.getType());
-    } else {
-      metrics.incrementBrokerPublishedMessage();
-    }
-  }
+  public ListenableFuture<Boolean> requeue(String topic, Event message) {
+    try {
+      ListenableFuture<Boolean> resfultF =
+          super.send(topic, message, MessageLogger.Direction.REQUEUE);
+      Futures.addCallback(
+          resfultF,
+          new FutureCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+              if (result) {
+                metrics.incrementBrokerRequeuedMessage(topic, message.getType());
+              } else {
+                metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+              }
+            }
 
-  private void incrementFailureMetric(
-      MessageLogger.Direction direction, String topic, Event message) {
-    if (direction == MessageLogger.Direction.REQUEUE) {
+            @Override
+            public void onFailure(Throwable throwable) {
+              metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
+            }
+          },
+          executor);
+
+      return resfultF;
+    } catch (RuntimeException e) {
       metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
-    } else {
-      metrics.incrementBrokerFailedToPublishMessage();
+      throw e;
     }
-  }
-
-  @Override
-  public void receiveAsync(String topic, AckAwareConsumer<Event> messageConsumer) {
-    apiDelegate.get().receiveAsync(topic, messageConsumer);
-  }
-
-  @Override
-  public void receiveAsync(String topic, String groupId, AckAwareConsumer<Event> consumer) {
-    apiDelegate.get().receiveAsync(topic, groupId, consumer);
-  }
-
-  @Override
-  public void receiveAsyncWithPartition(
-      String topic, String partition, String groupId, AckAwareConsumer<Event> consumer) {
-    apiDelegate.get().receiveAsyncWithPartition(topic, partition, groupId, consumer);
-  }
-
-  @Override
-  public void disconnect() {
-    apiDelegate.get().disconnect();
-  }
-
-  @Override
-  public void disconnect(String topic, String groupId) {
-    apiDelegate.get().disconnect(topic, groupId);
-  }
-
-  @Override
-  public Set<TopicSubscriber> topicSubscribers() {
-    return apiDelegate.get().topicSubscribers();
-  }
-
-  @Override
-  public void replayAllEvents(String topic) {
-    apiDelegate.get().replayAllEvents(topic);
-  }
-
-  @Override
-  public Set<TopicSubscriberWithGroupId> topicSubscribersWithGroupId() {
-    return apiDelegate.get().topicSubscribersWithGroupId();
-  }
-
-  @Override
-  public boolean isAutoAck() {
-    return apiDelegate.get().isAutoAck();
   }
 }
