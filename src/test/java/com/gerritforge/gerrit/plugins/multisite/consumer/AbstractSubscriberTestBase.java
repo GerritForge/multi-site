@@ -21,7 +21,6 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
-import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration.Broker;
@@ -49,7 +48,6 @@ public abstract class AbstractSubscriberTestBase {
   protected static final boolean MANUAL_ACK = false;
 
   @Mock protected DroppedEventListener droppedEventListeners;
-  @Mock protected MessageLogger msgLog;
   @Mock protected SubscriberMetrics subscriberMetrics;
   @Mock protected Configuration cfg;
   @Mock protected Broker brokerCfg;

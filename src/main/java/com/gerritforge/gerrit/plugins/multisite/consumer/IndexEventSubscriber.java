@@ -11,7 +11,6 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
-import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
@@ -37,12 +36,11 @@ public class IndexEventSubscriber extends AbstractSubscriber {
       IndexEventRouter eventRouter,
       DynamicSet<DroppedEventListener> droppedEventListeners,
       @GerritInstanceId String instanceId,
-      MessageLogger msgLog,
       SubscriberMetrics subscriberMetrics,
       Configuration cfg,
       ProjectsFilter projectsFilter,
       ChangeFinder changeFinder) {
-    super(eventRouter, droppedEventListeners, instanceId, msgLog, subscriberMetrics, cfg);
+    super(eventRouter, droppedEventListeners, instanceId, subscriberMetrics, cfg);
     this.projectsFilter = projectsFilter;
     this.changeFinder = changeFinder;
   }
