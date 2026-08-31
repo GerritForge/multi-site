@@ -179,4 +179,8 @@ public class BrokerApiWrapper implements BrokerApi {
   public boolean isAutoAck() {
     return apiDelegate.get().isAutoAck();
   }
+
+  public DynamicItem<BrokerApi> brokerApiDynamicItem() {
+    return apiDelegate;
+  }
 }
