@@ -12,6 +12,8 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.BrokerApiPluginListener;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
@@ -22,6 +24,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
 import com.google.inject.Inject;
@@ -30,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Singleton
-public class MultiSiteConsumerRunner implements LifecycleListener {
+public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPluginListener {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   static final List<String> INDEX_PARTITIONS =
       List.of(
@@ -58,12 +61,11 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
 
   @Override
   public void start() {
-    logger.atInfo().log("starting consumers");
-    consumers.forEach(this::subscribe);
+    DynamicItem<BrokerApi> di = brokerApiDynamicItem();
+    if (di != null && di.get() != null) {
+      onBrokerApiStarted();
+    }
   }
-
-  @Override
-  public void stop() {}
 
   private void subscribe(AbstractSubscriber subscriber) {
     String topic = subscriber.getTopic().topic(cfg);
@@ -123,4 +125,18 @@ public class MultiSiteConsumerRunner implements LifecycleListener {
   protected static String groupIdForPartition(String groupId, String partition) {
     return groupId + "-" + partition;
   }
+
+  @Override
+  public DynamicItem<BrokerApi> brokerApiDynamicItem() {
+    return brokerApiWrapper.brokerApiDynamicItem();
+  }
+
+  @Override
+  public void onBrokerApiStarted() {
+    logger.atInfo().log("starting consumers");
+    consumers.forEach(this::subscribe);
+  }
+
+  @Override
+  public void stop() {}
 }
