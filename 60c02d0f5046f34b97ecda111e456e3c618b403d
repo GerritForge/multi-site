@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccc4c34d_d5c9ad3f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-31T07:54:53Z",
+      "side": 1,
+      "message": "Commit messages should be in imperative form.\n\n\n\n```suggestion\nWith Ia3d99d8af6, events-broker exposes a listener that allows to\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 51,
+        "endLine": 9,
+        "endChar": 65
+      },
+      "revId": "60c02d0f5046f34b97ecda111e456e3c618b403d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6c07fa4_31456fa9",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-31T07:54:53Z",
+      "side": 1,
+      "message": "Why do we need this check?\nEven if we subscribe to the in-progress broker, it will then be re-subscribed again when a new broker is registered/loaded.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 5
+      },
+      "revId": "60c02d0f5046f34b97ecda111e456e3c618b403d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31da725a_fe04fca4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-08-31T07:54:53Z",
+      "side": 1,
+      "message": "This isn\u0027t useful, as it can be derived from the `DynamicItem`, and I do not see the point of returning anything other than the name of the plugin exposing the `DynamicItem`.\n\nWhat\u0027s the rationale of defining and overriding it?",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 3
+      },
+      "revId": "60c02d0f5046f34b97ecda111e456e3c618b403d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
