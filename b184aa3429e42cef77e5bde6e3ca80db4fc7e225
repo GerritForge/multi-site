@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40891db1_20030b69",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-01T08:22:59Z",
+      "side": 1,
+      "message": "What is the full configuration you\u0027re referring to?",
+      "range": {
+        "startLine": 12,
+        "startChar": 20,
+        "endLine": 12,
+        "endChar": 56
+      },
+      "revId": "b184aa3429e42cef77e5bde6e3ca80db4fc7e225",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "944f91dc_b8decb9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-01T08:22:59Z",
+      "side": 1,
+      "message": "I believe there is a general problem here: how do you handle the transition from a broker being unbound to a new broker being bound? It isn\u0027t just during startup, but re-binding may happen at any time.",
+      "range": {
+        "startLine": 14,
+        "startChar": 37,
+        "endLine": 14,
+        "endChar": 65
+      },
+      "revId": "b184aa3429e42cef77e5bde6e3ca80db4fc7e225",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8ff9c2a_ab7fcc87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-01T08:22:59Z",
+      "side": 1,
+      "message": "Just remove the in-process broker from events-broker.",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 62
+      },
+      "revId": "b184aa3429e42cef77e5bde6e3ca80db4fc7e225",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c3f1443_7e54fe1d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-01T08:22:59Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be something that `multi-site` takes care of.",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 3
+      },
+      "revId": "b184aa3429e42cef77e5bde6e3ca80db4fc7e225",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
