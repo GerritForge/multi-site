@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5c30d30_4f6fe1f2",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 17
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-01T22:00:39Z",
+      "side": 1,
+      "message": "This message is misleading: the plugin isn\u0027t waiting here.\n\n\n\n```suggestion\n      logger.atInfo().log(\"No broker plugin bound, not starting consumers yet\");\n```",
+      "range": {
+        "startLine": 75,
+        "startChar": 51,
+        "endLine": 75,
+        "endChar": 58
+      },
+      "revId": "bf444f9d0128743178f6db688ed4e14587771499",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
