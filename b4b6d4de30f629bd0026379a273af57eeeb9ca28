@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33660b7e_d5949705",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunnerTest.java",
+        "patchSetId": 18
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-02T13:28:29Z",
+      "side": 1,
+      "message": "This isn\u0027t a broker api, but a simple string. Is that expected?",
+      "range": {
+        "startLine": 183,
+        "startChar": 38,
+        "endLine": 183,
+        "endChar": 51
+      },
+      "revId": "b4b6d4de30f629bd0026379a273af57eeeb9ca28",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
