@@ -104,6 +104,36 @@ public class MultiSiteEventDeserializerTest {
     assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
   }
 
+  @Test
+  public void eventDeserializerShouldParseRequeuedAccountIndexEvent() {
+    AccountIndexEvent testAccountIndexEvent =
+        new AccountIndexEvent(TEST_ACCOUNT_ID, TEST_SHA1, TEST_INSTANCE_ID, false);
+    testAccountIndexEvent.requeued = true;
+    testAccountIndexEvent.retryCount = 2;
+    testAccountIndexEvent.requeuedOn = 123456789L;
+    testAccountIndexEvent.requeuedByInstanceId = "requeuing-instance-id";
+    String eventJson =
+        String.format(
+            "{"
+                + "\"type\": \"%s\","
+                + "\"instanceId\":\"%s\","
+                + "\"eventCreatedOn\":%d,"
+                + "\"accountId\":%d,"
+                + "\"targetSha\":\"%s\","
+                + "\"requeued\":true,"
+                + "\"retryCount\":2,"
+                + "\"requeuedOn\":123456789,"
+                + "\"requeuedByInstanceId\":\"requeuing-instance-id\""
+                + "}",
+            AccountIndexEvent.TYPE,
+            TEST_INSTANCE_ID,
+            testAccountIndexEvent.eventCreatedOn,
+            TEST_ACCOUNT_ID,
+            TEST_SHA1);
+
+    assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
+  }
+
   private static void assertAccountIndexEventEquals(
       Event event, AccountIndexEvent expectedAccountIndexEvent) {
     assertThat(event).isInstanceOf(AccountIndexEvent.class);

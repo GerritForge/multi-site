@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.broker;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.eq;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gerrit.extensions.registration.DynamicItem;
@@ -35,7 +37,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class BrokerApiWrapperTest {
   private static final String DEFAULT_INSTANCE_ID = "instance-id";
-  private static final String EVENT_TYPE = "event-type";
   @Mock private BrokerMetrics brokerMetrics;
   @Mock private BrokerApi brokerApi;
   @Mock Event event;
@@ -86,45 +87,73 @@ public class BrokerApiWrapperTest {
   @Test
   public void shouldRequeueMessageFromAnotherInstance() {
     brokerReturns(true);
-    event.instanceId = "other-instance-id";
-    when(event.getType()).thenReturn(EVENT_TYPE);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
 
-    objectUnderTest.requeue(topic, event);
+    objectUnderTest.requeue(topic, multiSiteEvent);
 
-    verify(brokerApi).send(topic, event);
-    verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, event);
-    verify(brokerMetrics).incrementBrokerRequeuedMessage(topic, EVENT_TYPE);
+    verify(brokerApi).send(topic, multiSiteEvent);
+    verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, multiSiteEvent);
+    verify(brokerMetrics).incrementBrokerRequeuedMessage(topic, AccountIndexEvent.TYPE);
+  }
+
+  @Test
+  public void shouldMarkMultiSiteEventAsRequeuedBeforePublishing() {
+    brokerReturns(true);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
+    long beforeRequeue = System.currentTimeMillis() / 1000;
+
+    objectUnderTest.requeue(topic, multiSiteEvent);
+
+    assertThat(multiSiteEvent.requeued).isTrue();
+    assertThat(multiSiteEvent.retryCount).isEqualTo(1);
+    assertThat(multiSiteEvent.requeuedOn).isAtLeast(beforeRequeue);
+    assertThat(multiSiteEvent.requeuedByInstanceId).isEqualTo(DEFAULT_INSTANCE_ID);
+    verify(brokerApi).send(topic, multiSiteEvent);
+  }
+
+  @Test
+  public void shouldIncrementMultiSiteEventRetryCountOnEveryRequeue() {
+    brokerReturns(true);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
+
+    objectUnderTest.requeue(topic, multiSiteEvent);
+    objectUnderTest.requeue(topic, multiSiteEvent);
+
+    assertThat(multiSiteEvent.retryCount).isEqualTo(2);
   }
 
   @Test
   public void shouldIncrementFailedRequeueMetricWhenBrokerReturnsFalse() {
     brokerReturns(false);
-    when(event.getType()).thenReturn(EVENT_TYPE);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
 
-    objectUnderTest.requeue(topic, event);
+    objectUnderTest.requeue(topic, multiSiteEvent);
 
-    verify(msgLog, never()).log(MessageLogger.Direction.REQUEUE, topic, event);
-    verify(brokerMetrics, only()).incrementBrokerFailedToRequeueMessage(topic, EVENT_TYPE);
+    verify(msgLog, never()).log(MessageLogger.Direction.REQUEUE, topic, multiSiteEvent);
+    verify(brokerMetrics, only())
+        .incrementBrokerFailedToRequeueMessage(topic, AccountIndexEvent.TYPE);
   }
 
   @Test
   public void shouldIncrementFailedRequeueMetricWhenBrokerFails() {
     brokerFails(new Exception("Force Future failure"));
-    when(event.getType()).thenReturn(EVENT_TYPE);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
 
-    objectUnderTest.requeue(topic, event);
+    objectUnderTest.requeue(topic, multiSiteEvent);
 
-    verify(brokerMetrics, only()).incrementBrokerFailedToRequeueMessage(topic, EVENT_TYPE);
+    verify(brokerMetrics, only())
+        .incrementBrokerFailedToRequeueMessage(topic, AccountIndexEvent.TYPE);
   }
 
   @Test
   public void shouldIncrementFailedRequeueMetricWhenBrokerThrows() {
-    when(event.getType()).thenReturn(EVENT_TYPE);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
     when(brokerApi.send(any(), any())).thenThrow(new RuntimeException("Unexpected exception"));
 
-    assertThrows(RuntimeException.class, () -> objectUnderTest.requeue(topic, event));
+    assertThrows(RuntimeException.class, () -> objectUnderTest.requeue(topic, multiSiteEvent));
 
-    verify(brokerMetrics, only()).incrementBrokerFailedToRequeueMessage(topic, EVENT_TYPE);
+    verify(brokerMetrics, only())
+        .incrementBrokerFailedToRequeueMessage(topic, AccountIndexEvent.TYPE);
   }
 
   @Test
