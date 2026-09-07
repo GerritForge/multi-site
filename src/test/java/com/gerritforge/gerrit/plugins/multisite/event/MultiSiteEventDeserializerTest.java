@@ -28,6 +28,7 @@ public class MultiSiteEventDeserializerTest {
   private static final String TEST_INSTANCE_ID = "test-instance-id";
   private static final int TEST_ACCOUNT_ID = 1000000;
   private static final String TEST_SHA1 = "326eca95ad32aa5b65a576db03aa221a545050cd";
+  private Gson gson;
   private EventDeserializer deserializer;
 
   @BeforeClass
@@ -37,7 +38,7 @@ public class MultiSiteEventDeserializerTest {
 
   @Before
   public void setUp() {
-    Gson gson = new EventGsonProvider().get();
+    gson = new EventGsonProvider().get();
     deserializer = new EventDeserializer(gson);
   }
 
@@ -60,7 +61,9 @@ public class MultiSiteEventDeserializerTest {
             TEST_ACCOUNT_ID,
             TEST_SHA1);
 
-    assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
+    MultiSiteEvent event = (MultiSiteEvent) deserializer.deserialize(eventJson);
+    assertAccountIndexEventEquals(event, testAccountIndexEvent);
+    assertThat(event.meta).isNull();
   }
 
   @Test
@@ -102,6 +105,52 @@ public class MultiSiteEventDeserializerTest {
             TEST_ACCOUNT_ID);
 
     assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
+  }
+
+  @Test
+  public void eventDeserializerShouldParseRequeuedAccountIndexEvent() {
+    AccountIndexEvent testAccountIndexEvent =
+        new AccountIndexEvent(TEST_ACCOUNT_ID, TEST_SHA1, TEST_INSTANCE_ID, false);
+    testAccountIndexEvent.meta = new MultiSiteEvent.Meta();
+    testAccountIndexEvent.meta.requeue =
+        new MultiSiteEvent.Requeue(2, 123456789L, "requeuing-instance-id");
+    String eventJson =
+        String.format(
+            "{"
+                + "\"type\": \"%s\","
+                + "\"instanceId\":\"%s\","
+                + "\"eventCreatedOn\":%d,"
+                + "\"accountId\":%d,"
+                + "\"targetSha\":\"%s\","
+                + "\"meta\":{"
+                + "\"requeue\":{"
+                + "\"retryCount\":2,"
+                + "\"requeuedOn\":123456789,"
+                + "\"requeuedByInstanceId\":\"requeuing-instance-id\""
+                + "}"
+                + "}"
+                + "}",
+            AccountIndexEvent.TYPE,
+            TEST_INSTANCE_ID,
+            testAccountIndexEvent.eventCreatedOn,
+            TEST_ACCOUNT_ID,
+            TEST_SHA1);
+
+    assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
+  }
+
+  @Test
+  public void eventSerializerShouldOmitMetaWhenEventWasNotRequeued() {
+    AccountIndexEvent accountIndexEvent =
+        new AccountIndexEvent(TEST_ACCOUNT_ID, TEST_SHA1, TEST_INSTANCE_ID, false);
+
+    String json = gson.toJson(accountIndexEvent, Event.class);
+
+    assertThat(json).doesNotContain("\"meta\"");
+    assertThat(json).doesNotContain("\"requeued\"");
+    assertThat(json).doesNotContain("\"retryCount\"");
+    assertThat(json).doesNotContain("\"requeuedOn\"");
+    assertThat(json).doesNotContain("\"requeuedByInstanceId\"");
   }
 
   private static void assertAccountIndexEventEquals(
