@@ -13,9 +13,16 @@ package com.gerritforge.gerrit.plugins.multisite.event;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.CacheEvictionEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectListUpdateEvent;
 import com.google.gerrit.server.events.Event;
 import java.util.Objects;
+import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Test;
 
 public class MultiSiteEventTest {
@@ -28,11 +35,21 @@ public class MultiSiteEventTest {
     private TestEvent() {
       super(TYPE, NO_INSTANCE_ID);
     }
+
+    @Override
+    public TestEvent copy() {
+      return copyBaseTo(new TestEvent());
+    }
   }
 
   private static class OtherTestEvent extends MultiSiteEvent {
     private OtherTestEvent() {
       super("other-test-event", NO_INSTANCE_ID);
+    }
+
+    @Override
+    public OtherTestEvent copy() {
+      return copyBaseTo(new OtherTestEvent());
     }
   }
 
@@ -42,6 +59,11 @@ public class MultiSiteEventTest {
     private DerivedEvent(int derivedEventField) {
       super(TYPE, NO_INSTANCE_ID);
       this.derivedEventField = derivedEventField;
+    }
+
+    @Override
+    public DerivedEvent copy() {
+      return copyBaseTo(new DerivedEvent(derivedEventField));
     }
 
     @Override
@@ -118,10 +140,70 @@ public class MultiSiteEventTest {
     assertThat(event).isNotEqualTo(eventWithDifferentType);
   }
 
+  @Test
+  public void copyCreatesDifferentInstanceWithSameFields() {
+    DerivedEvent event = new DerivedEvent(1);
+    event.eventCreatedOn = CREATED_ON;
+    event.instanceId = INSTANCE_ID;
+    event.markRequeued("previous-instance-id");
+
+    DerivedEvent copy = event.copy();
+
+    assertThat(copy).isNotSameInstanceAs(event);
+    assertThat(copy).isEqualTo(event);
+    assertThat(copy.hashCode()).isEqualTo(event.hashCode());
+    assertThat(copy.meta).isNotSameInstanceAs(event.meta);
+    assertThat(copy.meta.requeue()).isNotSameInstanceAs(event.meta.requeue());
+  }
+
+  @Test
+  public void copyDoesNotShareRequeueMetadataWithOriginalEvent() {
+    DerivedEvent event = new DerivedEvent(1);
+    event.eventCreatedOn = CREATED_ON;
+    event.instanceId = INSTANCE_ID;
+    event.markRequeued("previous-instance-id");
+
+    DerivedEvent copy = event.copy();
+    copy.markRequeued("new-instance-id");
+
+    assertThat(event.getRetryCount()).isEqualTo(1);
+    assertThat(event.getRequeuedByInstanceId()).isEqualTo("previous-instance-id");
+    assertThat(copy.getRetryCount()).isEqualTo(2);
+    assertThat(copy.getRequeuedByInstanceId()).isEqualTo("new-instance-id");
+  }
+
+  @Test
+  public void copyPreservesConcreteEventFields() {
+    ChangeIndexEvent changeIndexEvent =
+        new ChangeIndexEvent("test-project", 1, /* deleted= */ false, INSTANCE_ID);
+    changeIndexEvent.targetSha = "target-sha";
+    changeIndexEvent.metaSha = "meta-sha";
+
+    assertCopyPreservesFields(
+        new AccountIndexEvent(1, "account-sha", INSTANCE_ID, /* deleted= */ false));
+    assertCopyPreservesFields(new CacheEvictionEvent("test-cache", "test-cache-key", INSTANCE_ID));
+    assertCopyPreservesFields(changeIndexEvent);
+    assertCopyPreservesFields(new GroupIndexEvent("group-uuid", ObjectId.zeroId(), INSTANCE_ID));
+    assertCopyPreservesFields(new ProjectIndexEvent("test-project", INSTANCE_ID));
+    assertCopyPreservesFields(
+        new ProjectListUpdateEvent("test-project", /* remove= */ false, INSTANCE_ID));
+  }
+
   private static Event newTestEvent(long eventCreatedOn, String instanceId) {
     Event event = new TestEvent();
     event.eventCreatedOn = eventCreatedOn;
     event.instanceId = instanceId;
     return event;
+  }
+
+  private static void assertCopyPreservesFields(MultiSiteEvent event) {
+    event.eventCreatedOn = CREATED_ON;
+    event.markRequeued("previous-instance-id");
+
+    MultiSiteEvent copy = event.copy();
+
+    assertThat(copy).isNotSameInstanceAs(event);
+    assertThat(copy).isEqualTo(event);
+    assertThat(copy.hashCode()).isEqualTo(event.hashCode());
   }
 }

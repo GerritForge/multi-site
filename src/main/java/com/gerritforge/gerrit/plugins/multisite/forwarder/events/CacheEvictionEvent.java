@@ -26,6 +26,11 @@ public class CacheEvictionEvent extends MultiSiteEvent {
   }
 
   @Override
+  public CacheEvictionEvent copy() {
+    return copyBaseTo(new CacheEvictionEvent(cacheName, key, instanceId));
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hashCode(cacheName, key) + super.hashCode();
   }
