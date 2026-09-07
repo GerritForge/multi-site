@@ -208,7 +208,17 @@ public class IndexEventRouterTest {
 
   @Test
   public void routerShouldIgnoreNotRecognisedEvents() throws Exception {
-    final IndexEvent newEventType = new IndexEvent("new-type", INSTANCE_ID) {};
+    class NewIndexEvent extends IndexEvent {
+      private NewIndexEvent() {
+        super("new-type", INSTANCE_ID);
+      }
+
+      @Override
+      public NewIndexEvent copy() {
+        return copyBaseTo(new NewIndexEvent());
+      }
+    }
+    final IndexEvent newEventType = new NewIndexEvent();
 
     router.route(newEventType);
     verifyNoInteractions(
