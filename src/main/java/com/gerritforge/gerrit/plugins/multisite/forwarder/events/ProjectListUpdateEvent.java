@@ -26,6 +26,11 @@ public class ProjectListUpdateEvent extends MultiSiteEvent {
   }
 
   @Override
+  public ProjectListUpdateEvent copy() {
+    return copyBaseTo(new ProjectListUpdateEvent(projectName, remove, instanceId));
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hashCode(projectName, remove) + super.hashCode();
   }
