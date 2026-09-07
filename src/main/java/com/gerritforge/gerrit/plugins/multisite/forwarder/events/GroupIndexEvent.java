@@ -27,6 +27,11 @@ public class GroupIndexEvent extends IndexEvent {
     this.sha1 = sha1;
   }
 
+  @Override
+  public GroupIndexEvent copy() {
+    return copyBaseTo(new GroupIndexEvent(groupUUID, sha1, instanceId));
+  }
+
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
