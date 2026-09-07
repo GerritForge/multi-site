@@ -21,6 +21,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEve
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.base.Preconditions;
 import com.google.common.flogger.FluentLogger;
@@ -109,7 +110,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
               () ->
                   new IllegalStateException(
                       "broker.groupId is required for partition-aware subscriptions"));
-      AckAwareConsumer<Event> consumer = subscriber.getManualAckConsumer((e) -> requeue(topic, e));
+      AckAwareConsumer<Event> consumer = subscriber.getManualAckConsumer((e) -> requeue(topic, (MultiSiteEvent) e));
       INDEX_PARTITIONS.forEach(
           partition ->
               brokerApiWrapper.receiveAsyncWithPartition(
@@ -125,7 +126,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
     }
   }
 
-  private boolean requeue(String topic, Event event) {
+  private boolean requeue(String topic, MultiSiteEvent event) {
     try {
       return brokerApiWrapper.requeue(topic, event).get();
     } catch (Exception e) {

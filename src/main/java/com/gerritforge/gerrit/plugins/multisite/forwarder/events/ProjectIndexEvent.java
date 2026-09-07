@@ -24,6 +24,11 @@ public class ProjectIndexEvent extends IndexEvent {
   }
 
   @Override
+  public ProjectIndexEvent copy() {
+    return copyBaseTo(new ProjectIndexEvent(projectName, instanceId));
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
