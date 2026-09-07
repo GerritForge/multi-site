@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.broker;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.eq;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gerrit.extensions.registration.DynamicItem;
@@ -94,6 +96,32 @@ public class BrokerApiWrapperTest {
     verify(brokerApi).send(topic, event);
     verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, event);
     verify(brokerMetrics).incrementBrokerRequeuedMessage(topic, EVENT_TYPE);
+  }
+
+  @Test
+  public void shouldMarkMultiSiteEventAsRequeuedBeforePublishing() {
+    brokerReturns(true);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
+    long beforeRequeue = System.currentTimeMillis() / 1000;
+
+    objectUnderTest.requeue(topic, multiSiteEvent);
+
+    assertThat(multiSiteEvent.requeued).isTrue();
+    assertThat(multiSiteEvent.retryCount).isEqualTo(1);
+    assertThat(multiSiteEvent.requeuedOn).isAtLeast(beforeRequeue);
+    assertThat(multiSiteEvent.requeuedByInstanceId).isEqualTo(DEFAULT_INSTANCE_ID);
+    verify(brokerApi).send(topic, multiSiteEvent);
+  }
+
+  @Test
+  public void shouldIncrementMultiSiteEventRetryCountOnEveryRequeue() {
+    brokerReturns(true);
+    AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
+
+    objectUnderTest.requeue(topic, multiSiteEvent);
+    objectUnderTest.requeue(topic, multiSiteEvent);
+
+    assertThat(multiSiteEvent.retryCount).isEqualTo(2);
   }
 
   @Test

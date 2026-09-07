@@ -14,9 +14,14 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder.events;
 import static com.google.gerrit.server.events.EventTypes.register;
 
 import com.google.gerrit.server.events.Event;
+import java.time.Instant;
 import java.util.Objects;
 
 public abstract class MultiSiteEvent extends Event {
+  public boolean requeued;
+  public int retryCount;
+  public long requeuedOn;
+  public String requeuedByInstanceId;
 
   public static void registerEventTypes() {
     register(ChangeIndexEvent.TYPE, ChangeIndexEvent.class);
@@ -32,22 +37,34 @@ public abstract class MultiSiteEvent extends Event {
     this.instanceId = instanceId;
   }
 
+  public void markRequeued(String requeuedByInstanceId) {
+    requeued = true;
+    retryCount++;
+    requeuedOn = Instant.now().getEpochSecond();
+    this.requeuedByInstanceId = requeuedByInstanceId;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Event)) {
+    if (!(o instanceof MultiSiteEvent)) {
       return false;
     }
     MultiSiteEvent event = (MultiSiteEvent) o;
     return eventCreatedOn == event.eventCreatedOn
+        && requeued == event.requeued
+        && retryCount == event.retryCount
+        && requeuedOn == event.requeuedOn
         && Objects.equals(type, event.type)
-        && Objects.equals(instanceId, event.instanceId);
+        && Objects.equals(instanceId, event.instanceId)
+        && Objects.equals(requeuedByInstanceId, event.requeuedByInstanceId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, eventCreatedOn, instanceId);
+    return Objects.hash(
+        type, eventCreatedOn, instanceId, requeued, retryCount, requeuedOn, requeuedByInstanceId);
   }
 }
