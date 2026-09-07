@@ -28,11 +28,21 @@ public class MultiSiteEventTest {
     private TestEvent() {
       super(TYPE, NO_INSTANCE_ID);
     }
+
+    @Override
+    public TestEvent copy() {
+      return copyBaseTo(new TestEvent());
+    }
   }
 
   private static class OtherTestEvent extends MultiSiteEvent {
     private OtherTestEvent() {
       super("other-test-event", NO_INSTANCE_ID);
+    }
+
+    @Override
+    public OtherTestEvent copy() {
+      return copyBaseTo(new OtherTestEvent());
     }
   }
 
@@ -42,6 +52,11 @@ public class MultiSiteEventTest {
     private DerivedEvent(int derivedEventField) {
       super(TYPE, NO_INSTANCE_ID);
       this.derivedEventField = derivedEventField;
+    }
+
+    @Override
+    public DerivedEvent copy() {
+      return copyBaseTo(new DerivedEvent(derivedEventField));
     }
 
     @Override

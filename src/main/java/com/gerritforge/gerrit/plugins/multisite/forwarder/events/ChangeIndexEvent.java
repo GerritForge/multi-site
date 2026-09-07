@@ -59,6 +59,14 @@ public class ChangeIndexEvent extends IndexEvent {
   }
 
   @Override
+  public ChangeIndexEvent copy() {
+    ChangeIndexEvent event = new ChangeIndexEvent(projectName, changeId, deleted, instanceId);
+    event.targetSha = targetSha;
+    event.metaSha = metaSha;
+    return copyBaseTo(event);
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hashCode(projectName, changeId, targetSha, metaSha, deleted) + super.hashCode();
   }
