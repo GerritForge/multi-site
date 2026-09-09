@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e62565bc_6e561ea6",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-09-09T15:08:57Z",
+      "side": 1,
+      "message": "Do we always consume only \u0027MultiSiteEvent\u0027, never `ProjectEvent` or `RefUpdateEvent`, etc?\n\nIf so, at the very list we could:\n\n```\nif (message instanceof MultiSiteEvent multiSiteEvent) {\n  multiSiteEvent.markRequeued(nodeInstanceId);\n}\n```",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 32
+      },
+      "revId": "fd16d127f6f7a20d4a9c2abbab98aebfbf278bf3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d9f071b_03aad34d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-09-09T15:08:57Z",
+      "side": 1,
+      "message": "What if this `send` fails? we would have still erroneously mutated the event at L85.",
+      "revId": "fd16d127f6f7a20d4a9c2abbab98aebfbf278bf3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f50321f_3fac5d39",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/MultiSiteEvent.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-09-09T15:08:57Z",
+      "side": 1,
+      "message": "Would it make sense to introduce a `meta.requeue` section for these fields?\n\nThey are transport/requeue metadata rather than part of the event payload itself.\n\nNesting them would keep the top-level schema cleaner and leave meta extensible for other metadata categories in the future.\n\nIf we do this, we could also drop the explicit `requeued` boolean.\n\n```\n{\n  \"type\": \"...\",\n  \"instanceId\": \"...\",\n  \"eventCreatedOn\": 123,\n  \"meta\": {\n    \"requeue\": {\n      \"retryCount\": 2,\n      \"requeuedOn\": 123456789,\n      \"requeuedByInstanceId\": \"instance-a\"\n    }\n  }\n}\n```\n\n\nWe would also make sure that when `meta` it is not defined it doesn\u0027t get serialized.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 37
+      },
+      "revId": "fd16d127f6f7a20d4a9c2abbab98aebfbf278bf3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
