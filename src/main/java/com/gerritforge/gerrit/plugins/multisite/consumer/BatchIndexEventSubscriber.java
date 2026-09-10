@@ -11,9 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
-import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
-import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
@@ -33,11 +31,9 @@ public class BatchIndexEventSubscriber extends AbstractSubscriber {
       IndexEventRouter eventRouter,
       DynamicSet<DroppedEventListener> droppedEventListeners,
       @GerritInstanceId String instanceId,
-      MessageLogger msgLog,
       SubscriberMetrics subscriberMetrics,
-      Configuration cfg,
       ProjectsFilter projectsFilter) {
-    super(eventRouter, droppedEventListeners, instanceId, msgLog, subscriberMetrics, cfg);
+    super(eventRouter, droppedEventListeners, instanceId, subscriberMetrics);
     this.projectsFilter = projectsFilter;
   }
 

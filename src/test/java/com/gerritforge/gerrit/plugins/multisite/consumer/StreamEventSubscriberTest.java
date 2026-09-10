@@ -111,9 +111,7 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
         (StreamEventRouter) eventRouter,
         asDynamicSet(droppedEventListeners),
         NODE_INSTANCE_ID,
-        msgLog,
         subscriberMetrics,
-        cfg,
         projectsFilter);
   }
 }

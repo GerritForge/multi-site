@@ -20,7 +20,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
-import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gerrit.extensions.registration.DynamicItem;
@@ -39,7 +38,6 @@ public class BrokerApiWrapperTest {
   @Mock private BrokerMetrics brokerMetrics;
   @Mock private BrokerApi brokerApi;
   @Mock Event event;
-  @Mock MessageLogger msgLog;
   private String topic = "index";
 
   private BrokerApiWrapper objectUnderTest;
@@ -52,7 +50,6 @@ public class BrokerApiWrapperTest {
             MoreExecutors.directExecutor(),
             DynamicItem.itemOf(BrokerApi.class, brokerApi),
             brokerMetrics,
-            msgLog,
             DEFAULT_INSTANCE_ID);
   }
 
@@ -64,22 +61,20 @@ public class BrokerApiWrapperTest {
   }
 
   @Test
-  public void shouldLogPublishedMessage() {
+  public void shouldPublishMessage() {
     brokerReturns(true);
 
     objectUnderTest.send(topic, event);
 
     verify(brokerApi).send(topic, event);
-    verify(msgLog).log(MessageLogger.Direction.PUBLISH, topic, event);
   }
 
   @Test
-  public void shouldIncrementFailureMetricAndNotLogWhenPublishingReturnsFalse() {
+  public void shouldIncrementFailureMetricWhenPublishingReturnsFalse() {
     brokerReturns(false);
 
     objectUnderTest.send(topic, event);
 
-    verify(msgLog, never()).log(MessageLogger.Direction.PUBLISH, topic, event);
     verify(brokerMetrics, only()).incrementBrokerFailedToPublishMessage();
   }
 
@@ -92,7 +87,6 @@ public class BrokerApiWrapperTest {
     objectUnderTest.requeue(topic, event);
 
     verify(brokerApi).send(topic, event);
-    verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, event);
     verify(brokerMetrics).incrementBrokerRequeuedMessage(topic, EVENT_TYPE);
   }
 
@@ -103,7 +97,6 @@ public class BrokerApiWrapperTest {
 
     objectUnderTest.requeue(topic, event);
 
-    verify(msgLog, never()).log(MessageLogger.Direction.REQUEUE, topic, event);
     verify(brokerMetrics, only()).incrementBrokerFailedToRequeueMessage(topic, EVENT_TYPE);
   }
 
