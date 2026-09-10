@@ -21,7 +21,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
-import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -41,7 +40,6 @@ public class BrokerApiWrapperTest {
   @Mock private BrokerMetrics brokerMetrics;
   @Mock private BrokerApi brokerApi;
   @Mock Event event;
-  @Mock MessageLogger msgLog;
   private String topic = "index";
 
   private BrokerApiWrapper objectUnderTest;
@@ -54,7 +52,6 @@ public class BrokerApiWrapperTest {
             MoreExecutors.directExecutor(),
             DynamicItem.itemOf(BrokerApi.class, brokerApi),
             brokerMetrics,
-            msgLog,
             DEFAULT_INSTANCE_ID);
   }
 
@@ -66,22 +63,20 @@ public class BrokerApiWrapperTest {
   }
 
   @Test
-  public void shouldLogPublishedMessage() {
+  public void shouldPublishMessage() {
     brokerReturns(true);
 
     objectUnderTest.send(topic, event);
 
     verify(brokerApi).send(topic, event);
-    verify(msgLog).log(MessageLogger.Direction.PUBLISH, topic, event);
   }
 
   @Test
-  public void shouldIncrementFailureMetricAndNotLogWhenPublishingReturnsFalse() {
+  public void shouldIncrementFailureMetricWhenPublishingReturnsFalse() {
     brokerReturns(false);
 
     objectUnderTest.send(topic, event);
 
-    verify(msgLog, never()).log(MessageLogger.Direction.PUBLISH, topic, event);
     verify(brokerMetrics, only()).incrementBrokerFailedToPublishMessage();
   }
 
@@ -95,7 +90,6 @@ public class BrokerApiWrapperTest {
     Event sentEvent = captureSentEvent();
     assertThat(sentEvent).isInstanceOf(AccountIndexEvent.class);
     assertThat(sentEvent).isNotSameInstanceAs(multiSiteEvent);
-    verify(msgLog).log(MessageLogger.Direction.REQUEUE, topic, sentEvent);
     verify(brokerMetrics).incrementBrokerRequeuedMessage(topic, AccountIndexEvent.TYPE);
   }
 
@@ -135,7 +129,6 @@ public class BrokerApiWrapperTest {
 
     objectUnderTest.requeue(topic, multiSiteEvent);
 
-    verify(msgLog, never()).log(eq(MessageLogger.Direction.REQUEUE), eq(topic), any());
     verify(brokerMetrics, only())
         .incrementBrokerFailedToRequeueMessage(topic, AccountIndexEvent.TYPE);
   }
