@@ -67,6 +67,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "546b991e_a11cbffe",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-09-10T14:18:39Z",
+      "side": 1,
+      "message": "If `send` fails and we don\u0027t ack the message the message might never be processed [1]. This is true for \"normal\" messages and requeued messages.\n\n[1]: https://issues.gerritcodereview.com/issues/529865773",
+      "parentUuid": "6d9f071b_03aad34d",
+      "revId": "fd16d127f6f7a20d4a9c2abbab98aebfbf278bf3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3f50321f_3fac5d39",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/MultiSiteEvent.java",
         "patchSetId": 2
