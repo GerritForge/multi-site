@@ -35,7 +35,6 @@ public class BrokerApiWrapper implements BrokerApi {
   private final Executor executor;
   private final DynamicItem<BrokerApi> apiDelegate;
   private final BrokerMetrics metrics;
-  private final MessageLogger msgLog;
   private final String nodeInstanceId;
 
   @Inject
@@ -43,12 +42,10 @@ public class BrokerApiWrapper implements BrokerApi {
       @BrokerExecutor Executor executor,
       DynamicItem<BrokerApi> apiDelegate,
       BrokerMetrics metrics,
-      MessageLogger msgLog,
       @GerritInstanceId String instanceId) {
     this.apiDelegate = apiDelegate;
     this.executor = executor;
     this.metrics = metrics;
-    this.msgLog = msgLog;
     this.nodeInstanceId = instanceId;
   }
 
@@ -93,6 +90,8 @@ public class BrokerApiWrapper implements BrokerApi {
 
   private ListenableFuture<Boolean> send(
       String topic, Event message, MessageLogger.Direction direction) {
+    // TODO: the broker logs every message as PUBLISH, so requeues are not reported as REQUEUE in
+    // the message log until BrokerApi exposes a direction-aware send.
     ListenableFuture<Boolean> resfultF = apiDelegate.get().send(topic, message);
     Futures.addCallback(
         resfultF,
@@ -100,7 +99,6 @@ public class BrokerApiWrapper implements BrokerApi {
           @Override
           public void onSuccess(Boolean result) {
             if (result) {
-              msgLog.log(direction, topic, message);
               incrementSuccessMetric(direction, topic, message);
             } else {
               incrementFailureMetric(direction, topic, message);
