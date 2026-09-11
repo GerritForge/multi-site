@@ -25,6 +25,7 @@ import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.lifecycle.LifecycleModule;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.gerrit.server.plugins.StartPluginListener;
+import com.google.gerrit.server.plugins.StopPluginListener;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -62,6 +63,9 @@ public class PluginModule extends LifecycleModule {
       install(new BrokerForwarderModule());
       listener().to(MultiSiteConsumerRunner.class);
       bind(StartPluginListener.class)
+          .annotatedWith(UniqueAnnotations.create())
+          .to(MultiSiteConsumerRunner.class);
+      bind(StopPluginListener.class)
           .annotatedWith(UniqueAnnotations.create())
           .to(MultiSiteConsumerRunner.class);
 
