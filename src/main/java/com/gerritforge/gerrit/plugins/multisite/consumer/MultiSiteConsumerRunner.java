@@ -22,6 +22,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEven
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.google.common.base.Preconditions;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicItem;
@@ -47,6 +48,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
   private final DynamicItem<BrokerApi> brokerApiItem;
+  private volatile boolean brokerApiImplPluginStarted;
 
   @Inject
   public MultiSiteConsumerRunner(
@@ -69,7 +71,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
 
   @Override
   public void start() {
-    if (isBrokerApiStarted()) {
+    if (isBrokerApiBound()) {
       onBrokerApiStarted();
     } else {
       logger.atInfo().log("No broker plugin bound, not starting consumers yet");
@@ -81,8 +83,16 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
 
   @Override
   public synchronized void onBrokerApiStarted() {
+    Preconditions.checkState(!brokerApiImplPluginStarted, "BrokerApi implementation plugin cannot be started more than once");
     logger.atInfo().log("starting consumers");
     consumers.forEach(this::subscribe);
+    brokerApiImplPluginStarted = true;
+  }
+
+  @Override
+  public synchronized void beforeBrokerApiStopped() {
+    Preconditions.checkState(brokerApiImplPluginStarted, "BrokerApi implementation plugin cannot be stopped more than once");
+    brokerApiImplPluginStarted = false;
   }
 
   private void subscribe(AbstractSubscriber subscriber) {
