@@ -22,6 +22,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEven
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.google.common.base.Preconditions;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicItem;
@@ -47,6 +48,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
   private Configuration cfg;
   private final EventsBrokerConfiguration eventsBrokerConfiguration;
   private final DynamicItem<BrokerApi> brokerApiItem;
+  private volatile boolean connectedToBroker;
 
   @Inject
   public MultiSiteConsumerRunner(
@@ -82,7 +84,15 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
   @Override
   public synchronized void onBrokerApiStarted() {
     logger.atInfo().log("starting consumers");
+    Preconditions.checkState(!connectedToBroker, "Broker api has already been started");
     consumers.forEach(this::subscribe);
+    subscribedToTopics = true;
+  }
+
+  @Override
+  public synchronized void beforeBrokerApiStopped() {
+    Preconditions.checkState(!connectedToBroker, "Double events-broker plugin stop detected");
+    connectedToBroker = false;
   }
 
   private void subscribe(AbstractSubscriber subscriber) {
