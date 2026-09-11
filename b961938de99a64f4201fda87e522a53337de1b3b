@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f97d921_424cac3e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/events/MultiSiteEvent.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-09-11T07:54:39Z",
+      "side": 1,
+      "message": "Could these just be `record`s instead? In master we are using `java21`",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 3
+      },
+      "revId": "b961938de99a64f4201fda87e522a53337de1b3b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
