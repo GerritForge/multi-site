@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4a4a9c8_b28ee587",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-09-14T13:40:08Z",
+      "side": 1,
+      "message": "I think this `copy()` approach is a bit too invasive; it requires us to implement `copy()` for each existing type and maintain it in the future.\n\nSeems a lot of code, imho.\n\nI liked better the original approach you suggested:\n\n\n```\nif (message instanceof MultiSiteEvent multiSiteEvent) {\n  MultiSiteEvent requeuedEvent \u003d\n      (MultiSiteEvent) gson.fromJson(gson.toJson(multiSiteEvent), Event.class);\n  requeuedEvent.markRequeued(nodeInstanceId);\n  return send(topic, requeuedEvent, MessageLogger.Direction.REQUEUE);\n}\nreturn send(topic, message, MessageLogger.Direction.REQUEUE);\n```\n\nThe `EventDeserializer` should do the right thing and preserve the specifics of the `MultiSiteEvent` (`ChangeIndexEvent`, `CacheEvictionEvent`), because we called `MultiSiteEvent.registerEventTypes()`.\n\nCan you just add a test covering this case to make sure the requeued object is the expected one? Especially around `CacheEvictionEvent.key` which is declared as `Object`.",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 7
+      },
+      "revId": "ecef13baf905a4912298309daa98f31cbf64e453",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
