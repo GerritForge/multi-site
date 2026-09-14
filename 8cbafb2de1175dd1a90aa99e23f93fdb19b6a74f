@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30115132_3ae724a3",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapperTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-09-14T15:27:26Z",
+      "side": 1,
+      "message": "nit: unrelated",
+      "revId": "8cbafb2de1175dd1a90aa99e23f93fdb19b6a74f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
