@@ -16,6 +16,24 @@
       "message": "nit: unrelated",
       "revId": "8cbafb2de1175dd1a90aa99e23f93fdb19b6a74f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d194798c_85b9911f",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapperTest.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-09-14T16:32:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30115132_3ae724a3",
+      "revId": "8cbafb2de1175dd1a90aa99e23f93fdb19b6a74f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
