@@ -22,6 +22,30 @@
       },
       "revId": "c5cf77e054855f03587ab65969f8c19295627b82",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57b7e697_192543d1",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-09-14T15:02:29Z",
+      "side": 1,
+      "message": "You are correct. I had to create a copy of the original message to requeue to avoid this issue. See the last patchset.",
+      "parentUuid": "c9eb6370_e22c52a1",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 13
+      },
+      "revId": "c5cf77e054855f03587ab65969f8c19295627b82",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

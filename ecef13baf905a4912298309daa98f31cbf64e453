@@ -22,6 +22,30 @@
       },
       "revId": "ecef13baf905a4912298309daa98f31cbf64e453",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "159c5ee3_95f86076",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-09-14T15:02:29Z",
+      "side": 1,
+      "message": "\u003e I think this copy() approach is a bit too invasive; it requires us to implement copy() for each existing type and maintain it in the future.\n\nThe alternative approach of deserializing the Event every time we need to requeue a message would be slow, considering requeuing is happening often.\n\nI know implementing a `copy()` for each subclass requires some boilerplate, however I don\u0027t think we will need new `MultiSiteEvents` in the foreseeable future.\n\nWDYT?",
+      "parentUuid": "e4a4a9c8_b28ee587",
+      "range": {
+        "startLine": 85,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 7
+      },
+      "revId": "ecef13baf905a4912298309daa98f31cbf64e453",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
