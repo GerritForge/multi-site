@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9eb6370_e22c52a1",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-09-14T07:49:04Z",
+      "side": 1,
+      "message": "I am not sure this is correct anymore.\n\nThe new `requeue` method now mutates the event after it has been registered as a manual-ack kay for Kafka and Kinesis, for example (in the `HashMap\u003cEvent, ...\u003e`).\n\nWhen looking up the event in that hash, we will now be using the mutated event and we won\u0027t find it, resulting in `Invalid or already acked Event`.\n\nWe should be using the event _before_ its mutation, I believe.\nCan you try to replicate this, maybe and see what happens?",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 13
+      },
+      "revId": "c5cf77e054855f03587ab65969f8c19295627b82",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
