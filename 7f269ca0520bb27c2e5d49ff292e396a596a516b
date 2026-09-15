@@ -22,6 +22,30 @@
       },
       "revId": "7f269ca0520bb27c2e5d49ff292e396a596a516b",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8348fa5e_30e65dd6",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-09-15T08:13:44Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "ba5a9434_c6d1cf14",
+      "range": {
+        "startLine": 93,
+        "startChar": 27,
+        "endLine": 93,
+        "endChar": 45
+      },
+      "revId": "7f269ca0520bb27c2e5d49ff292e396a596a516b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

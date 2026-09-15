@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bfa5ad1_8d738144",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-09-15T08:13:44Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "bac1ee27_17db3d30",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 21
+      },
+      "revId": "9c09a1c8572d4e99fcb45ca8d35c8518c37a398e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cae3e680_b5690664",
