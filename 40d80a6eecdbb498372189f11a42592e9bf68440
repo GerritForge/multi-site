@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8ff2585_c17c8e4d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-15T19:42:59Z",
+      "side": 1,
+      "message": "This method belongs to the `BrokerApiWrapper` of the `multi-site` plugin. What is the situation where it could receive an event that isn\u0027t a `MultiSiteEvent`?",
+      "range": {
+        "startLine": 85,
+        "startChar": 6,
+        "endLine": 85,
+        "endChar": 59
+      },
+      "revId": "40d80a6eecdbb498372189f11a42592e9bf68440",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
