@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba5a9434_c6d1cf14",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-15T07:59:46Z",
+      "side": 1,
+      "message": "```suggestion\n  public synchronized void beforeBrokerApiStopped() {\n```",
+      "range": {
+        "startLine": 93,
+        "startChar": 27,
+        "endLine": 93,
+        "endChar": 45
+      },
+      "revId": "7f269ca0520bb27c2e5d49ff292e396a596a516b",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}

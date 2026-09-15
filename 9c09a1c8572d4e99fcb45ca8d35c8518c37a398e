@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bac1ee27_17db3d30",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-15T07:59:46Z",
+      "side": 1,
+      "message": "```suggestion\n    subscribedToTopics \u003d true;\n```",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 21
+      },
+      "revId": "9c09a1c8572d4e99fcb45ca8d35c8518c37a398e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cae3e680_b5690664",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/MultiSiteConsumerRunner.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-15T07:59:46Z",
+      "side": 1,
+      "message": "```suggestion\n    Preconditions.check(subscribedToTopics, \"Double events-broker implement plugin stop detected\");\n    subscribedToTopics \u003d false;\n```",
+      "range": {
+        "startLine": 94,
+        "startChar": 4,
+        "endLine": 94,
+        "endChar": 21
+      },
+      "revId": "9c09a1c8572d4e99fcb45ca8d35c8518c37a398e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
