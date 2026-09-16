@@ -82,9 +82,9 @@ public class BrokerApiWrapper implements BrokerApi {
 
   public ListenableFuture<Boolean> requeue(String topic, MultiSiteEvent message) {
     try {
-        MultiSiteEvent requeuedEvent = message.copy();
-        requeuedEvent.markRequeued(nodeInstanceId);
-        return send(topic, requeuedEvent, MessageLogger.Direction.REQUEUE);
+      MultiSiteEvent requeuedEvent = message.copy();
+      requeuedEvent.markRequeued(nodeInstanceId);
+      return send(topic, requeuedEvent, MessageLogger.Direction.REQUEUE);
     } catch (RuntimeException e) {
       metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
       throw e;

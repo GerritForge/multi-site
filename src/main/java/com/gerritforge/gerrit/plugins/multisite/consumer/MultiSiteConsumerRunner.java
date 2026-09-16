@@ -84,7 +84,9 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
 
   @Override
   public synchronized void onBrokerApiStarted() {
-    Preconditions.checkState(!brokerApiImplPluginStarted, "BrokerApi implementation plugin cannot be started more than once");
+    Preconditions.checkState(
+        !brokerApiImplPluginStarted,
+        "BrokerApi implementation plugin cannot be started more than once");
     logger.atInfo().log("starting consumers");
     consumers.forEach(this::subscribe);
     brokerApiImplPluginStarted = true;
@@ -92,7 +94,9 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
 
   @Override
   public synchronized void beforeBrokerApiStopped() {
-    Preconditions.checkState(brokerApiImplPluginStarted, "BrokerApi implementation plugin cannot be stopped more than once");
+    Preconditions.checkState(
+        brokerApiImplPluginStarted,
+        "BrokerApi implementation plugin cannot be stopped more than once");
     brokerApiImplPluginStarted = false;
   }
 
@@ -110,7 +114,8 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
               () ->
                   new IllegalStateException(
                       "broker.groupId is required for partition-aware subscriptions"));
-      AckAwareConsumer<Event> consumer = subscriber.getManualAckConsumer((e) -> requeue(topic, (MultiSiteEvent) e));
+      AckAwareConsumer<Event> consumer =
+          subscriber.getManualAckConsumer((e) -> requeue(topic, (MultiSiteEvent) e));
       INDEX_PARTITIONS.forEach(
           partition ->
               brokerApiWrapper.receiveAsyncWithPartition(
