@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d891535e_c04ebb7b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-16T14:48:29Z",
+      "side": 1,
+      "message": "```suggestion\n  public ListenableFuture\u003cBoolean\u003e requeue(String topic, MultiSiteEvent message) {\n```",
+      "range": {
+        "startLine": 83,
+        "startChar": 57,
+        "endLine": 83,
+        "endChar": 62
+      },
+      "revId": "85742239f86ead0a4a431356ceaaf68f5240a14e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
