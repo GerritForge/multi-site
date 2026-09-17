@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00a5dd96_bf19af47",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-17T06:06:21Z",
+      "side": 1,
+      "message": "@syntonyze@gmail.com I believe we may need https://gerrit-review.googlesource.com/c/modules/events-broker/+/628561 after all.",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 70
+      },
+      "revId": "52ab5f3c948419d76145fdff4230d331cabdc6f1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
