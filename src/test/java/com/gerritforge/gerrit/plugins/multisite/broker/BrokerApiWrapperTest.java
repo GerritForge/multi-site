@@ -15,6 +15,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
@@ -87,7 +88,7 @@ public class BrokerApiWrapperTest {
 
     objectUnderTest.requeue(topic, multiSiteEvent);
 
-    Event sentEvent = captureSentEvent();
+    Event sentEvent = captureRequeueEvent();
     assertThat(sentEvent).isInstanceOf(AccountIndexEvent.class);
     assertThat(sentEvent).isNotSameInstanceAs(multiSiteEvent);
     verify(brokerMetrics).incrementBrokerRequeuedMessage(topic, AccountIndexEvent.TYPE);
@@ -101,7 +102,7 @@ public class BrokerApiWrapperTest {
 
     objectUnderTest.requeue(topic, multiSiteEvent);
 
-    AccountIndexEvent sentEvent = (AccountIndexEvent) captureSentEvent();
+    AccountIndexEvent sentEvent = (AccountIndexEvent) captureRequeueEvent();
     assertThat(multiSiteEvent.isRequeued()).isFalse();
     assertThat(sentEvent.isRequeued()).isTrue();
     assertThat(sentEvent.getRetryCount()).isEqualTo(1);
@@ -117,7 +118,7 @@ public class BrokerApiWrapperTest {
 
     objectUnderTest.requeue(topic, multiSiteEvent);
 
-    AccountIndexEvent sentEvent = (AccountIndexEvent) captureSentEvent();
+    AccountIndexEvent sentEvent = (AccountIndexEvent) captureRequeueEvent();
     assertThat(multiSiteEvent.getRetryCount()).isEqualTo(1);
     assertThat(sentEvent.getRetryCount()).isEqualTo(2);
   }
@@ -147,7 +148,7 @@ public class BrokerApiWrapperTest {
   @Test
   public void shouldIncrementFailedRequeueMetricWhenBrokerThrows() {
     AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
-    when(brokerApi.send(any(), any())).thenThrow(new RuntimeException("Unexpected exception"));
+    when(brokerApi.requeue(any(), any())).thenThrow(new RuntimeException("Unexpected exception"));
 
     assertThrows(RuntimeException.class, () -> objectUnderTest.requeue(topic, multiSiteEvent));
 
@@ -191,16 +192,26 @@ public class BrokerApiWrapperTest {
   }
 
   private void brokerReturns(boolean result) {
-    when(brokerApi.send(any(), any())).thenReturn(Futures.immediateFuture(result));
+    lenient().when(brokerApi.send(any(), any())).thenReturn(Futures.immediateFuture(result));
+    lenient().when(brokerApi.requeue(any(), any())).thenReturn(Futures.immediateFuture(result));
   }
 
   private void brokerFails(Throwable failure) {
-    when(brokerApi.send(any(), any())).thenReturn(Futures.immediateFailedFuture(failure));
+    lenient().when(brokerApi.send(any(), any())).thenReturn(Futures.immediateFailedFuture(failure));
+    lenient()
+        .when(brokerApi.requeue(any(), any()))
+        .thenReturn(Futures.immediateFailedFuture(failure));
   }
 
   private Event captureSentEvent() {
     ArgumentCaptor<Event> sentEvent = ArgumentCaptor.forClass(Event.class);
     verify(brokerApi).send(eq(topic), sentEvent.capture());
+    return sentEvent.getValue();
+  }
+
+  private Event captureRequeueEvent() {
+    ArgumentCaptor<Event> sentEvent = ArgumentCaptor.forClass(Event.class);
+    verify(brokerApi).requeue(eq(topic), sentEvent.capture());
     return sentEvent.getValue();
   }
 }
