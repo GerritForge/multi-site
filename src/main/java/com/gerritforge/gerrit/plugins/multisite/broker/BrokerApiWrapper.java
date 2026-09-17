@@ -17,6 +17,7 @@ import com.gerritforge.gerrit.eventbroker.TopicSubscriber;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithGroupId;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.FutureCallback;
@@ -74,25 +75,33 @@ public class BrokerApiWrapper implements BrokerApi {
       return resultFuture;
     }
 
-    return send(topic, message, MessageLogger.Direction.PUBLISH);
+    return addMetricsCallback(
+        topic, message, MessageLogger.Direction.PUBLISH, apiDelegate.get().send(topic, message));
   }
 
-  public ListenableFuture<Boolean> requeue(String topic, MultiSiteEvent message) {
+  @Override
+  public ListenableFuture<Boolean> requeue(String topic, Event message) {
+    Preconditions.checkArgument(
+        message instanceof MultiSiteEvent, "requeue() supports only MultiSiteEvent");
     try {
-      MultiSiteEvent requeuedEvent = message.copy();
+      MultiSiteEvent requeuedEvent = ((MultiSiteEvent) message).copy();
       requeuedEvent.markRequeued(nodeInstanceId);
-      return send(topic, requeuedEvent, MessageLogger.Direction.REQUEUE);
+      return addMetricsCallback(
+          topic,
+          requeuedEvent,
+          MessageLogger.Direction.REQUEUE,
+          apiDelegate.get().requeue(topic, requeuedEvent));
     } catch (RuntimeException e) {
       metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
       throw e;
     }
   }
 
-  private ListenableFuture<Boolean> send(
-      String topic, Event message, MessageLogger.Direction direction) {
-    // TODO: the broker logs every message as PUBLISH, so requeues are not reported as REQUEUE in
-    // the message log until BrokerApi exposes a direction-aware send.
-    ListenableFuture<Boolean> resfultF = apiDelegate.get().send(topic, message);
+  private ListenableFuture<Boolean> addMetricsCallback(
+      String topic,
+      Event message,
+      MessageLogger.Direction direction,
+      ListenableFuture<Boolean> resfultF) {
     Futures.addCallback(
         resfultF,
         new FutureCallback<Boolean>() {
