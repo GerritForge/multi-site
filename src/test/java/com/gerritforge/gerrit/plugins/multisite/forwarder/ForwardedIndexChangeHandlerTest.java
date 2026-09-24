@@ -56,6 +56,7 @@ public class ForwardedIndexChangeHandlerTest {
   private static final int TEST_CHANGE_NUMBER = 123;
   private static final int MAX_INDEX_TRIES = 1;
   private static final int RETRY_INTERVAL = 5000;
+  private static final int RETRY_POLL_INTERVAL = 1000;
   private static final int EVENT_CHANGE_NUMBER = 1;
   private static String TEST_PROJECT = "test/project";
   private static String TEST_CHANGE_ID = TEST_PROJECT + "~" + TEST_CHANGE_NUMBER;
@@ -88,6 +89,7 @@ public class ForwardedIndexChangeHandlerTest {
     id = Change.id(TEST_CHANGE_NUMBER);
     when(configurationMock.index()).thenReturn(index);
     when(index.maxTries()).thenReturn(MAX_INDEX_TRIES);
+    when(index.retryPollInterval()).thenReturn(RETRY_POLL_INTERVAL);
     handler =
         new ForwardedIndexChangeHandler(
             indexerMock,

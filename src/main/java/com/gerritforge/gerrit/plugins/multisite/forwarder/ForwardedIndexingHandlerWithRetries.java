@@ -37,12 +37,9 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     extends ForwardedIndexingHandler<T, E> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private final int retryInterval;
+  private final int retryPollInterval;
   private final int maxTries;
   private final ScheduledExecutorService indexExecutor;
-
-  //  Avoid looping the local CPU and overloading the broker with retry messages, throttling to at
-  // most 1 message per second.
-  private static final long RETRY_POLL_INTERVAL_MSEC = 1000L;
   protected final OneOffRequestContext oneOffCtx;
   protected final ConcurrentHashMap<T, IndexingRetry> indexingRetryTaskMap =
       new ConcurrentHashMap<>();
@@ -56,6 +53,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
     this.oneOffCtx = oneOffCtx;
     this.indexExecutor = indexExecutor;
     this.retryInterval = indexConfig != null ? indexConfig.retryInterval() : 0;
+    this.retryPollInterval = indexConfig != null ? indexConfig.retryPollInterval() : 0;
     this.maxTries = indexConfig != null ? indexConfig.maxTries() : 0;
   }
 
@@ -109,7 +107,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   private boolean throttleRetryPolling(Optional<Long> millisSinceRetry) {
     if (millisSinceRetry.stream().anyMatch(millis -> millis < retryInterval)) {
       try {
-        Thread.sleep(Math.min(RETRY_POLL_INTERVAL_MSEC, retryInterval - millisSinceRetry.get()));
+        Thread.sleep(Math.min(retryPollInterval, retryInterval - millisSinceRetry.get()));
       } catch (InterruptedException ex) {
         logger.atWarning().withCause(ex).log("Interrupted while waiting for indexing retry");
         return false;

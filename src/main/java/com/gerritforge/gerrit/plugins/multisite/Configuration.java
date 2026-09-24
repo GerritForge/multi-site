@@ -78,6 +78,7 @@ public class Configuration {
   // common parameters to cache and index sections
   private static final int DEFAULT_INDEX_MAX_TRIES = 2;
   private static final int DEFAULT_INDEX_RETRY_INTERVAL = 30000;
+  static final int DEFAULT_INDEX_RETRY_POLL_INTERVAL = 1000;
   private static final long DEFAULT_INDEX_COMMIT_INTERVAL_MS = Duration.ofMinutes(5).toMillis();
 
   private static final long DEFALULT_STREAM_EVENT_PUBLISH_TIMEOUT = 30000;
@@ -378,6 +379,7 @@ public class Configuration {
     static final String INDEX_SECTION = "index";
     static final String MAX_TRIES_KEY = "maxTries";
     static final String RETRY_INTERVAL_KEY = "retryInterval";
+    static final String RETRY_POLL_INTERVAL_KEY = "retryPollInterval";
     static final String COMMIT_INTERVAL_KEY = "commitInterval";
     static final String SYNCHRONIZE_FORCED_KEY = "synchronizeForced";
     static final String SYNCHRONIZE_KEY = "synchronize";
@@ -385,6 +387,7 @@ public class Configuration {
 
     private final int threadPoolSize;
     private final int retryInterval;
+    private final int retryPollInterval;
     private final int maxTries;
     private final long commitIntervalMs;
 
@@ -425,6 +428,9 @@ public class Configuration {
           getInt(cfg, INDEX_SECTION, null, THREAD_POOL_SIZE_KEY, DEFAULT_THREAD_POOL_SIZE);
       retryInterval =
           getInt(cfg, INDEX_SECTION, null, RETRY_INTERVAL_KEY, DEFAULT_INDEX_RETRY_INTERVAL);
+      retryPollInterval =
+          getInt(
+              cfg, INDEX_SECTION, null, RETRY_POLL_INTERVAL_KEY, DEFAULT_INDEX_RETRY_POLL_INTERVAL);
       maxTries = getInt(cfg, INDEX_SECTION, null, MAX_TRIES_KEY, DEFAULT_INDEX_MAX_TRIES);
       commitIntervalMs =
           ConfigUtil.getTimeUnit(
@@ -445,6 +451,10 @@ public class Configuration {
 
     public int retryInterval() {
       return retryInterval;
+    }
+
+    public int retryPollInterval() {
+      return retryPollInterval;
     }
 
     public int maxTries() {

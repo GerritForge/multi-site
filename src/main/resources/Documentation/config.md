@@ -87,6 +87,13 @@ Defaults to true.
 
     Defaults to 30000 (30 seconds).
 
+```index.retryPollInterval```
+:   The maximum time in milliseconds to wait between polls while an indexing
+    retry is pending. This throttles polling to avoid looping the local CPU and
+    overloading the broker with retry messages.
+
+    Defaults to 1000 (1 second).
+
 ```index.commitInterval```
 :   The minimum time between acknowledgements and index flushing for each partition-level index
     consumer. The interval is checked as events are processed. Set to `0` to commit the index and

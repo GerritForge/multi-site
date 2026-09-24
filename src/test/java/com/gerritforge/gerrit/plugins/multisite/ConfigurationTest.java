@@ -15,6 +15,7 @@ import static com.gerritforge.gerrit.plugins.multisite.Configuration.Broker.BROK
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Broker.GROUP_ID;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Cache.CACHE_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Cache.PATTERN_KEY;
+import static com.gerritforge.gerrit.plugins.multisite.Configuration.DEFAULT_INDEX_RETRY_POLL_INTERVAL;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.DEFAULT_THREAD_POOL_SIZE;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Event.EVENT_SECTION;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Forwarding.DEFAULT_SYNCHRONIZE;
@@ -22,6 +23,7 @@ import static com.gerritforge.gerrit.plugins.multisite.Configuration.Forwarding.
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.COMMIT_INTERVAL_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.DEFAULT_SYNCHRONIZE_FORCED;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.INDEX_SECTION;
+import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.RETRY_POLL_INTERVAL_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.Index.SYNCHRONIZE_FORCED_KEY;
 import static com.gerritforge.gerrit.plugins.multisite.Configuration.THREAD_POOL_SIZE_KEY;
 import static com.google.common.truth.Truth.assertThat;
@@ -150,6 +152,17 @@ public class ConfigurationTest {
     globalPluginConfig.setString(INDEX_SECTION, null, COMMIT_INTERVAL_KEY, "10 minutes");
 
     assertThat(getConfiguration().index().commitIntervalMs()).isEqualTo(tenMinutes);
+  }
+
+  @Test
+  public void shouldGetIndexRetryPollInterval() {
+    int retryPollInterval = 2000;
+    assertThat(getConfiguration().index().retryPollInterval())
+        .isEqualTo(DEFAULT_INDEX_RETRY_POLL_INTERVAL);
+
+    globalPluginConfig.setInt(INDEX_SECTION, null, RETRY_POLL_INTERVAL_KEY, retryPollInterval);
+
+    assertThat(getConfiguration().index().retryPollInterval()).isEqualTo(retryPollInterval);
   }
 
   @Test
