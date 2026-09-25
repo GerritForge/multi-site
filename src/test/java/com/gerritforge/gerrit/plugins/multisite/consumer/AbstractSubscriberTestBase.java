@@ -23,7 +23,9 @@ import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
+import com.google.common.collect.Iterables;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
@@ -81,6 +83,38 @@ public abstract class AbstractSubscriberTestBase {
       ack = new TestManualAck();
       objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
       verifySkipped(event, ack);
+    }
+  }
+
+  @Test
+  public void shouldConsumeEventsRequeuedByThisInstance()
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    for (MultiSiteEvent multiSiteEvent : multiSiteEvents()) {
+      multiSiteEvent.markRequeued(NODE_INSTANCE_ID);
+      when(projectsFilter.matches(any(String.class))).thenReturn(true);
+      ack = new TestManualAck();
+
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(multiSiteEvent, ack);
+
+      verifyConsumed(multiSiteEvent, ack);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void shouldDropEventsRequeuedByOtherInstance()
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    for (MultiSiteEvent multiSiteEvent : multiSiteEvents()) {
+      multiSiteEvent.markRequeued("requeueing-instance-id");
+      ack = new TestManualAck();
+
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(multiSiteEvent, ack);
+
+      verify(projectsFilter, never()).matches(any(String.class));
+      verify(eventRouter, never()).route(multiSiteEvent);
+      verify(droppedEventListeners).onEventDropped(multiSiteEvent);
+      ack.assertAckAttemptedOnce();
+      reset(projectsFilter, eventRouter, droppedEventListeners);
     }
   }
 
@@ -259,5 +293,9 @@ public abstract class AbstractSubscriberTestBase {
     private static TestManualAck failing() {
       return new TestManualAck(/* fail */ true);
     }
+  }
+
+  private Iterable<MultiSiteEvent> multiSiteEvents() {
+    return Iterables.filter(events(), MultiSiteEvent.class);
   }
 }
