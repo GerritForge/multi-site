@@ -99,6 +99,11 @@ public abstract class AbstractSubscriber {
     } else if (instanceId.equals(sourceInstanceId)) {
       logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
+    } else if (isRequeuedByOtherInstance(event)) {
+      logger.atFiner().log(
+          "Dropping event %s requeued by another instanceId %s",
+          event, ((MultiSiteEvent) event).getRequeuedByInstanceId());
+      handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else if (!shouldConsumeEvent(event)) {
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else {
@@ -123,6 +128,12 @@ public abstract class AbstractSubscriber {
       }
     }
     subscriberMetrics.updateReplicationStatusMetrics(event);
+  }
+
+  private boolean isRequeuedByOtherInstance(Event event) {
+    return event instanceof MultiSiteEvent multiSiteEvent
+        && multiSiteEvent.isRequeued()
+        && !instanceId.equals(multiSiteEvent.getRequeuedByInstanceId());
   }
 
   private void handleDroppedEvent(

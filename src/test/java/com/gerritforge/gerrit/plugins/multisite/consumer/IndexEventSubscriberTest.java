@@ -93,6 +93,22 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
     verify(subscriberMetrics).incrementSubscriberConsumedMessage();
   }
 
+  @Test
+  public void shouldAckWithoutRequeueingPartitionEventRequeuedByOtherInstance() throws Exception {
+    IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
+    event.markRequeued("requeueing-instance-id");
+    AbstractSubscriber.RequeueEventAction requeueAction =
+        mock(AbstractSubscriber.RequeueEventAction.class);
+
+    objectUnderTest.getManualAckConsumer(requeueAction).accept(event, ack);
+
+    verify((IndexEventRouter) eventRouter).ack(event, ack);
+    verify((IndexEventRouter) eventRouter, never()).route(event, ack);
+    verify(requeueAction, never()).requeue(event);
+    verify(droppedEventListeners).onEventDropped(event);
+    verify(subscriberMetrics).incrementSubscriberConsumedMessage();
+  }
+
   @SuppressWarnings("unchecked")
   @Test
   public void shouldConsumeNonProjectAndNonChangeIndexingEventsTypes()
@@ -104,6 +120,20 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
     verify(projectsFilter, never()).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);
     verify(droppedEventListeners, never()).onEventDropped(event);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void shouldDropNonProjectIndexEventRequeuedByOtherInstance()
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
+    event.markRequeued("requeueing-instance-id");
+
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+
+    verify(projectsFilter, never()).matches(any(String.class));
+    verify(eventRouter, never()).route(event);
+    verify(droppedEventListeners).onEventDropped(event);
   }
 
   @SuppressWarnings("unchecked")

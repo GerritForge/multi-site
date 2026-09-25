@@ -23,6 +23,7 @@ import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
@@ -81,6 +82,44 @@ public abstract class AbstractSubscriberTestBase {
       ack = new TestManualAck();
       objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
       verifySkipped(event, ack);
+    }
+  }
+
+  @Test
+  public void shouldConsumeEventsRequeuedByThisInstance()
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    for (Event event : events()) {
+      if (!(event instanceof MultiSiteEvent multiSiteEvent)) {
+        continue;
+      }
+      multiSiteEvent.markRequeued(NODE_INSTANCE_ID);
+      when(projectsFilter.matches(any(String.class))).thenReturn(true);
+      ack = new TestManualAck();
+
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+
+      verifyConsumed(event, ack);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void shouldDropEventsRequeuedByOtherInstance()
+      throws IOException, PermissionBackendException, CacheNotFoundException {
+    for (Event event : events()) {
+      if (!(event instanceof MultiSiteEvent multiSiteEvent)) {
+        continue;
+      }
+      multiSiteEvent.markRequeued("requeueing-instance-id");
+      ack = new TestManualAck();
+
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+
+      verify(projectsFilter, never()).matches(any(String.class));
+      verify(eventRouter, never()).route(event);
+      verify(droppedEventListeners).onEventDropped(event);
+      ack.assertAckAttemptedOnce();
+      reset(projectsFilter, eventRouter, droppedEventListeners);
     }
   }
 
