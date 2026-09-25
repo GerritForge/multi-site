@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d221f03c_24859d79",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-09-25T07:02:43Z",
+      "side": 1,
+      "message": "This logic could be refactored into a single method. Happy to do it in a followup",
+      "range": {
+        "startLine": 99,
+        "startChar": 2,
+        "endLine": 107,
+        "endChar": 44
+      },
+      "revId": "83151fca36db4e597f55ed1b32e19a25c72d16e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
