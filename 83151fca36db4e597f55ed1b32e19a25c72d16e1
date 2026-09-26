@@ -22,6 +22,30 @@
       },
       "revId": "83151fca36db4e597f55ed1b32e19a25c72d16e1",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "883b7151_be5d6616",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-26T10:05:18Z",
+      "side": 1,
+      "message": "Yeah, a follow-up would work.",
+      "parentUuid": "d221f03c_24859d79",
+      "range": {
+        "startLine": 99,
+        "startChar": 2,
+        "endLine": 107,
+        "endChar": 44
+      },
+      "revId": "83151fca36db4e597f55ed1b32e19a25c72d16e1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }

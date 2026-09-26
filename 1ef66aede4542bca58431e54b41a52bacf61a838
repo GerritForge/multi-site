@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c27a2d10_cb731518",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-09-26T10:05:18Z",
+      "side": 1,
+      "message": "This procedural code means _\"For all the multisite events\"_.\n\nTests are not tested; we should avoid procedural code. Can we just express a method called `multiSiteEvents` that just gets the `events` and filters for the multi-site ones instead?",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 7
+      },
+      "revId": "1ef66aede4542bca58431e54b41a52bacf61a838",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
