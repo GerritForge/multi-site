@@ -75,7 +75,7 @@ public class ForwardedIndexProjectHandler
 
   @Override
   protected void attemptToIndex(String id) {
-    reindexAndCheckIsUpToDate(id, projectChecker);
+    reindexIfUpToDate(id, projectChecker);
   }
 
   @Override
