@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite;
 
+
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.validation.ValidationModule;
 import com.google.gerrit.server.ModuleImpl;
