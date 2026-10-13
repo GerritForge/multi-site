@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import com.gerritforge.gerrit.globalrefdb.GlobalRefDatabase;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.ExecutorProvider;
@@ -29,6 +30,7 @@ import com.google.gerrit.acceptance.TestPlugin;
 import com.google.gerrit.acceptance.config.GerritConfig;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.api.projects.ProjectInput;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.extensions.registration.RegistrationHandle;
 import com.google.gerrit.server.cache.CacheRemovalListener;
@@ -75,6 +77,7 @@ public class ForwardedCacheEvictionHandlerIT extends LightweightPluginDaemonTest
     @Override
     protected void configure() {
       install(new ForwarderModule());
+      DynamicItem.itemOf(binder(), GlobalRefDatabase.class);
       install(new CacheModule(TestForwardingExecutorProvider.class));
       install(new RouterModule(config.index()));
       install(new IndexModule());
