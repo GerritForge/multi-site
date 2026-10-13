@@ -12,6 +12,7 @@
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.gerrit.entities.RefNames.changeMetaRef;
 import static com.google.gerrit.testing.GerritJUnit.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -20,8 +21,12 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.globalrefdb.GlobalRefDatabase;
+import com.gerritforge.gerrit.globalrefdb.GlobalRefDbSystemError;
+import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandlerWithRetries.IndexingResult;
@@ -30,6 +35,7 @@ import com.gerritforge.gerrit.plugins.multisite.index.ChangeChecker;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.exceptions.StorageException;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
@@ -40,6 +46,8 @@ import com.google.inject.Provider;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.lib.ObjectId;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,6 +76,8 @@ public class ForwardedIndexChangeHandlerTest {
   private static final boolean CHANGE_OUTDATED = false;
   private static final boolean CHANGE_CONSISTENT = true;
   private static final boolean CHANGE_INCONSISTENT = false;
+  private static final Optional<String> DELETED_META_REF = Optional.of(ObjectId.zeroId().name());
+  private static final Optional<String> UNKNOWN_META_REF = Optional.empty();
 
   @Rule public ExpectedException exception = ExpectedException.none();
   @Mock private ChangeIndexer indexerMock;
@@ -80,8 +90,11 @@ public class ForwardedIndexChangeHandlerTest {
   @Mock private GitRepositoryManager gitRepoMgrMock;
   @Mock private ChangeChecker changeCheckerPresentMock;
   @Mock private Provider<InternalChangeQuery> queryProviderMock;
+  @Mock private GlobalRefDatabase globalRefDb;
   private ForwardedIndexChangeHandler handler;
   private Change.Id id;
+  private final ChangeIndexEvent event =
+      new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
   @Before
   public void setUp() throws Exception {
@@ -90,14 +103,7 @@ public class ForwardedIndexChangeHandlerTest {
     when(configurationMock.index()).thenReturn(index);
     when(index.maxTries()).thenReturn(MAX_INDEX_TRIES);
     when(index.retryPollInterval()).thenReturn(RETRY_POLL_INTERVAL);
-    handler =
-        new ForwardedIndexChangeHandler(
-            indexerMock,
-            configurationMock,
-            indexExecutorMock,
-            ctxMock,
-            changeCheckerPresentMock,
-            queryProviderMock);
+    handler = newHandler();
   }
 
   @Test
@@ -115,13 +121,11 @@ public class ForwardedIndexChangeHandlerTest {
         CHANGE_UP_TO_DATE,
         CHANGE_INCONSISTENT,
         CHANGE_CONSISTENT);
-    ChangeIndexEvent changeIndexEvent =
-        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
-      assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+      assertThat(handler.handleSync(event)).isEqualTo(IndexingResult.RETRY);
     }
-    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.SUCCESS);
+    assertThat(handler.handleSync(event)).isEqualTo(IndexingResult.SUCCESS);
 
     verify(indexerMock).index(changeNotes);
   }
@@ -129,12 +133,63 @@ public class ForwardedIndexChangeHandlerTest {
   @Test
   public void shouldNotIndexSynchronouslyWhenChangeIsNotUpToDate() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_OUTDATED, CHANGE_CONSISTENT);
-    ChangeIndexEvent changeIndexEvent =
-        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
-    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+    assertThat(handler.handleSync(event)).isEqualTo(IndexingResult.RETRY);
 
     verify(indexerMock, never()).index(any(ChangeNotes.class));
+  }
+
+  @Test
+  public void shouldNotRetryMissingChangeWhenDeleted() throws Exception {
+    setGlobalMetaRef(DELETED_META_REF);
+
+    handler.handle(event);
+
+    verifyNoInteractions(indexExecutorMock, indexerMock);
+    assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
+  }
+
+  @Test
+  public void shouldNotRetryOutdatedChangeWhenDeleted() throws Exception {
+    setGlobalMetaRef(DELETED_META_REF);
+    setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_OUTDATED, CHANGE_CONSISTENT);
+
+    handler.handle(event);
+
+    verifyNoInteractions(indexExecutorMock, indexerMock);
+    assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
+  }
+
+  @Test
+  public void shouldIgnoreSynchronousRetryWhenChangeIsDeleted() throws Exception {
+    setGlobalMetaRef(UNKNOWN_META_REF);
+    assertThat(handler.handleSync(event)).isEqualTo(IndexingResult.RETRY);
+
+    setGlobalMetaRef(DELETED_META_REF);
+    assertThat(handler.handleSync(event)).isEqualTo(IndexingResult.IGNORED);
+
+    assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
+  }
+
+  @Test
+  public void shouldRetryWhenGlobalRefDbLookupFails() throws Exception {
+    setGlobalRefDbEnabled(true);
+    when(globalRefDb.get(Project.nameKey(TEST_PROJECT), changeMetaRef(id), String.class))
+        .thenThrow(new GlobalRefDbSystemError("Cannot read meta ref", new IOException()));
+
+    handler.handle(event);
+
+    verify(indexExecutorMock).schedule(any(Runnable.class), anyLong(), any());
+  }
+
+  @Test
+  public void shouldRetryWhenGlobalRefDbIsDisabled() throws Exception {
+    setGlobalRefDbEnabled(false);
+
+    handler.handle(event);
+
+    verifyNoInteractions(globalRefDb);
+    verify(indexExecutorMock).schedule(any(Runnable.class), anyLong(), any());
   }
 
   @Test
@@ -146,12 +201,10 @@ public class ForwardedIndexChangeHandlerTest {
         CHANGE_INCONSISTENT,
         CHANGE_INCONSISTENT);
 
-    ChangeIndexEvent changeIndexEvent =
-        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
-      assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+      assertThat(handler.handleSync(event)).isEqualTo(IndexingResult.RETRY);
     }
-    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.FAILURE);
+    assertThat(handler.handleSync(event)).isEqualTo(IndexingResult.FAILURE);
     assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
 
     verify(indexerMock, never()).index(any(ChangeNotes.class));
@@ -160,20 +213,11 @@ public class ForwardedIndexChangeHandlerTest {
   @Test
   public void shouldNotAttemptSynchronousIndexingAgainBeforeRetryInterval() throws Exception {
     when(index.retryInterval()).thenReturn(RETRY_INTERVAL);
-    handler =
-        new ForwardedIndexChangeHandler(
-            indexerMock,
-            configurationMock,
-            indexExecutorMock,
-            ctxMock,
-            changeCheckerPresentMock,
-            queryProviderMock);
+    handler = newHandler();
     setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_UP_TO_DATE, CHANGE_INCONSISTENT);
-    ChangeIndexEvent changeIndexEvent =
-        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
-    IndexingResult initialAttempt = handler.handleSync(changeIndexEvent);
-    IndexingResult earlyRedelivery = handler.handleSync(changeIndexEvent);
+    IndexingResult initialAttempt = handler.handleSync(event);
+    IndexingResult earlyRedelivery = handler.handleSync(event);
 
     assertThat(initialAttempt).isEqualTo(IndexingResult.RETRY);
     assertThat(earlyRedelivery).isEqualTo(IndexingResult.RETRY);
@@ -285,6 +329,30 @@ public class ForwardedIndexChangeHandlerTest {
         IllegalArgumentException.class,
         () -> handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty()));
     verify(indexerMock, never()).delete(any(), any());
+  }
+
+  private ForwardedIndexChangeHandler newHandler() {
+    return new ForwardedIndexChangeHandler(
+        indexerMock,
+        configurationMock,
+        indexExecutorMock,
+        ctxMock,
+        changeCheckerPresentMock,
+        queryProviderMock);
+  }
+
+  private void setGlobalRefDbEnabled(boolean enabled) {
+    Config config = new Config();
+    config.setBoolean("ref-database", null, "enabled", enabled);
+    when(configurationMock.getSharedRefDbConfiguration())
+        .thenReturn(new SharedRefDbConfiguration(config, "multi-site"));
+    handler.setGlobalRefDatabase(DynamicItem.itemOf(GlobalRefDatabase.class, globalRefDb));
+  }
+
+  private void setGlobalMetaRef(Optional<String> metaRef) {
+    setGlobalRefDbEnabled(true);
+    when(globalRefDb.get(Project.nameKey(TEST_PROJECT), changeMetaRef(id), String.class))
+        .thenReturn(metaRef);
   }
 
   private void setupChangeAccessRelatedMocks(boolean changeExist, boolean changeUpToDate)
