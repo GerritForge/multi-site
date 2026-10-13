@@ -13,7 +13,9 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.DELETE;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
+import static com.google.gerrit.entities.RefNames.changeMetaRef;
 
+import com.gerritforge.gerrit.globalrefdb.GlobalRefDatabase;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -22,6 +24,7 @@ import com.gerritforge.gerrit.plugins.multisite.index.ForwardedIndexExecutor;
 import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.index.change.ChangeIndexer;
 import com.google.gerrit.server.notedb.ChangeNotes;
 import com.google.gerrit.server.query.change.ChangeData;
@@ -35,6 +38,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
+import org.eclipse.jgit.lib.ObjectId;
 
 /**
  * Index a change using {@link ChangeIndexer}. This class is meant to be used on the receiving side
@@ -48,6 +52,8 @@ public class ForwardedIndexChangeHandler
   private final ChangeIndexer indexer;
   private final Provider<InternalChangeQuery> queryProvider;
   private final ChangeChecker changeChecker;
+  private final Configuration configuration;
+  private final DynamicItem<GlobalRefDatabase> globalRefDb;
 
   @Inject
   ForwardedIndexChangeHandler(
@@ -56,11 +62,14 @@ public class ForwardedIndexChangeHandler
       @ForwardedIndexExecutor ScheduledExecutorService indexExecutor,
       OneOffRequestContext oneOffCtx,
       ChangeChecker changeChecker,
-      Provider<InternalChangeQuery> queryProvider) {
+      Provider<InternalChangeQuery> queryProvider,
+      DynamicItem<GlobalRefDatabase> globalRefDb) {
     super(indexExecutor, configuration, oneOffCtx);
     this.indexer = indexer;
     this.changeChecker = changeChecker;
     this.queryProvider = queryProvider;
+    this.configuration = configuration;
+    this.globalRefDb = globalRefDb;
   }
 
   @Override
@@ -88,6 +97,14 @@ public class ForwardedIndexChangeHandler
         return IndexingResult.SUCCESS;
       }
 
+      IndexingRetry retry = indexingRetryTaskMap.get(changeId);
+      if (changeChecker.getChangeNotes(changeId).isEmpty() && isChangeDeleted(event)) {
+        if (retry != null) {
+          indexingRetryTaskMap.remove(changeId, retry);
+        }
+        log.atInfo().log("Ignoring index event for deleted change %s", changeId);
+        return IndexingResult.IGNORED;
+      }
       return indexSyncIfConsistentAndUpToDate(changeId, event, changeChecker);
     }
     return IndexingResult.IGNORED;
@@ -121,12 +138,22 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void attemptToIndex(String id) {
+    IndexingRetry retry = indexingRetryTaskMap.get(id);
+    if (retry == null) {
+      log.atFine().log("Skipping indexing of change %s: no pending retry", id);
+      return;
+    }
     boolean changeIsPresent = changeChecker.getChangeNotes(id).isPresent();
+    if (!changeIsPresent
+        && retry.getEvent().filter(this::isChangeDeleted).isPresent()
+        && indexingRetryTaskMap.remove(id, retry)) {
+      log.atInfo().log("Stopped indexing retries for deleted change %s", id);
+      return;
+    }
     boolean changeIsConsistent = changeChecker.isConsistent(id);
     if (changeIsConsistent) {
       reindexIfUpToDate(id, changeChecker);
     } else {
-      IndexingRetry retry = indexingRetryTaskMap.get(id);
       log.atWarning().log(
           "Change %s %s in local Git repository (event=%s) after %d attempt(s)",
           id,
@@ -140,6 +167,28 @@ public class ForwardedIndexChangeHandler
             "Change %s %s in the local Git repository (event=%s)",
             id, !changeIsPresent ? "could not be found" : "was not consistent", retry.getEvent());
       }
+    }
+  }
+
+  private boolean isChangeDeleted(ChangeIndexEvent event) {
+    if (!configuration.getSharedRefDbConfiguration().getSharedRefDb().isEnabled()) {
+      return false;
+    }
+    try {
+      GlobalRefDatabase refDb =
+          Preconditions.checkNotNull(globalRefDb.get(), "Global-refdb was expected to be bound");
+      return refDb
+          .get(
+              Project.nameKey(event.projectName),
+              changeMetaRef(Change.id(event.changeId)),
+              String.class)
+          .filter(ObjectId.zeroId().name()::equals)
+          .isPresent();
+    } catch (RuntimeException e) {
+      log.atWarning().withCause(e).log(
+          "Unable to check global-refdb for deleted change %s~%d",
+          event.projectName, event.changeId);
+      return false;
     }
   }
 
