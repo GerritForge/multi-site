@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.gerrit.entities.RefNames.changeMetaRef;
 
+import com.gerritforge.gerrit.globalrefdb.GlobalRefDatabase;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
@@ -25,6 +26,7 @@ import com.google.gerrit.acceptance.PushOneCommit;
 import com.google.gerrit.acceptance.TestPlugin;
 import com.google.gerrit.acceptance.config.GerritConfig;
 import com.google.gerrit.entities.Change;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.server.query.change.InternalChangeQuery;
 import com.google.gerrit.server.update.context.RefUpdateContext;
 import com.google.inject.AbstractModule;
@@ -67,6 +69,7 @@ public class ForwardedIndexChangeHandlerIT extends LightweightPluginDaemonTest {
     @Override
     protected void configure() {
       install(new ForwarderModule());
+      DynamicItem.itemOf(binder(), GlobalRefDatabase.class);
       bind(ScheduledExecutorService.class)
           .annotatedWith(ForwardedIndexExecutor.class)
           .toInstance(new ScheduledThreadPoolExecutor(1));
