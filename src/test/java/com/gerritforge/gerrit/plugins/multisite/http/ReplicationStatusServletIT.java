@@ -16,6 +16,7 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assume.assumeTrue;
 
+import com.gerritforge.gerrit.globalrefdb.GlobalRefDatabase;
 import com.gerritforge.gerrit.globalrefdb.validation.Log4jSharedRefLogger;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefDbConfiguration;
 import com.gerritforge.gerrit.globalrefdb.validation.SharedRefLogger;
@@ -35,6 +36,7 @@ import com.google.gerrit.acceptance.RestResponse;
 import com.google.gerrit.acceptance.TestPlugin;
 import com.google.gerrit.acceptance.config.GerritConfig;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.extensions.registration.DynamicItem;
 import com.google.gerrit.httpd.restapi.RestApiServlet;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.AbstractModule;
@@ -65,6 +67,7 @@ public class ReplicationStatusServletIT extends LightweightPluginDaemonTest {
     @Override
     protected void configure() {
       install(new ForwarderModule());
+      DynamicItem.itemOf(binder(), GlobalRefDatabase.class);
       install(new CacheModule());
       install(new RouterModule(config.index()));
       install(new IndexModule());
