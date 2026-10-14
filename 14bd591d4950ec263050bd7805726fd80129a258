@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05d39940_9c96bf56",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-14T18:55:35Z",
+      "side": 1,
+      "message": "I believe this should be a precondition and not a defensive `return false`.\n\nIf you reach this line, it means that the global-refdb is enabled. How come `refDb` is null then?",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 7
+      },
+      "revId": "14bd591d4950ec263050bd7805726fd80129a258",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
