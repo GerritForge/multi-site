@@ -171,6 +171,46 @@
       },
       "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0658499_08edf916",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-14T22:17:01Z",
+      "side": 1,
+      "message": "We should also add a test of `shouldNotRetryMissingChangeWhenAbsentOnGlobalRefdb()`",
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "141166ae_933b7216",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-14T22:17:01Z",
+      "side": 1,
+      "message": "Why should this retry?",
+      "range": {
+        "startLine": 171,
+        "startChar": 63,
+        "endLine": 171,
+        "endChar": 83
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
