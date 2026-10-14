@@ -72,6 +72,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d2439c6_d98d0309",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-14T20:10:49Z",
+      "side": 1,
+      "message": "Yep, good point. If the ref exists locally, we do not even care about checking global-refdb.\n\nI have modified the condition so that we now check locally first.",
+      "parentUuid": "4699e53b_94fc6b76",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 48
+      },
+      "revId": "75af7c091580faf059e3cc26429e9466ab5a8577",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23c51c80_b966499a",
@@ -180,6 +204,30 @@
       "side": 1,
       "message": "I would suggest at most an `Info` rather than `Warning`: the Gerrit admin must take action if there is a warning in the logs, but here there is really nothing to worry about.",
       "parentUuid": "b43ea1cd_f7ccdb0c",
+      "range": {
+        "startLine": 108,
+        "startChar": 12,
+        "endLine": 108,
+        "endChar": 18
+      },
+      "revId": "75af7c091580faf059e3cc26429e9466ab5a8577",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a819f7eb_764bf758",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-14T20:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65084b4a_7ff8fcd9",
       "range": {
         "startLine": 108,
         "startChar": 12,
@@ -322,6 +370,30 @@
       "side": 1,
       "message": "I would suggest at most an `Info` rather than a `Warning`: the Gerrit admin must take action if there is a warning in the logs, but here there is really nothing to worry about.",
       "parentUuid": "85fd46ea_5abd6bcf",
+      "range": {
+        "startLine": 176,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 77
+      },
+      "revId": "75af7c091580faf059e3cc26429e9466ab5a8577",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "331730ab_bacf40b6",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-14T20:10:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1513c18_5f3a5769",
       "range": {
         "startLine": 176,
         "startChar": 0,
