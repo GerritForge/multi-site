@@ -59,6 +59,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ebcb4be_2156586e",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-14T17:01:23Z",
+      "side": 1,
+      "message": "Yeah, I considered this, but I kept `DynamicItem\u003cGlobalRefDatabase\u003e`.\nThe wrapper can fall back to a no-op database, so its presence would not tell us whether a real backend is available.",
+      "parentUuid": "b6317bb3_5f11ec00",
+      "range": {
+        "startLine": 56,
+        "startChar": 2,
+        "endLine": 56,
+        "endChar": 53
+      },
+      "revId": "b5aacf0d92a57d844d011d9e18b70eabe575d587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "189e7266_531b33da",
@@ -82,6 +106,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e9d83fa_9020c281",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-14T17:01:23Z",
+      "side": 1,
+      "message": "Good point. I removed the optional setter and inject the DynamicItem through the constructor, so `@VisibleForTesting` no longer applies.\n\nAs a consequence, the test modules now declare the binding because they create the handler without the normal plugin module.",
+      "parentUuid": "189e7266_531b33da",
+      "range": {
+        "startLine": 74,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 28
+      },
+      "revId": "b5aacf0d92a57d844d011d9e18b70eabe575d587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f28828de_0c19f8a0",
@@ -95,6 +143,30 @@
       "writtenOn": "2026-10-14T16:10:14Z",
       "side": 1,
       "message": "`get()` could return a `ProvisionException`. I think we should move it insdie the try catch.\n\nAlso if we check if it is enabled first, we can avoid to resolve it:\n\n```\n  if (!configuration.getSharedRefDbConfiguration().getSharedRefDb().isEnabled()) {\n    return false;\n  }\n```",
+      "range": {
+        "startLine": 183,
+        "startChar": 71,
+        "endLine": 183,
+        "endChar": 74
+      },
+      "revId": "b5aacf0d92a57d844d011d9e18b70eabe575d587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75fdc147_becf6081",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-14T17:01:23Z",
+      "side": 1,
+      "message": "Agreed.\n\nI have also added a test for a provider failure",
+      "parentUuid": "f28828de_0c19f8a0",
       "range": {
         "startLine": 183,
         "startChar": 71,
