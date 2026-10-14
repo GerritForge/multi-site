@@ -39,6 +39,52 @@
       },
       "revId": "b5aacf0d92a57d844d011d9e18b70eabe575d587",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "189e7266_531b33da",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-14T16:10:14Z",
+      "side": 1,
+      "message": "Should this be `@VisibleForTesting`?\n\nFurthermore, do we need it? Would something like this in the test setup work?\n\n```\nglobalRefDbItem \u003d DynamicItem.itemOf(GlobalRefDatabase.class, globalRefDb);\n\n```",
+      "range": {
+        "startLine": 74,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 28
+      },
+      "revId": "b5aacf0d92a57d844d011d9e18b70eabe575d587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28828de_0c19f8a0",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-14T16:10:14Z",
+      "side": 1,
+      "message": "`get()` could return a `ProvisionException`. I think we should move it insdie the try catch.\n\nAlso if we check if it is enabled first, we can avoid to resolve it:\n\n```\n  if (!configuration.getSharedRefDbConfiguration().getSharedRefDb().isEnabled()) {\n    return false;\n  }\n```",
+      "range": {
+        "startLine": 183,
+        "startChar": 71,
+        "endLine": 183,
+        "endChar": 74
+      },
+      "revId": "b5aacf0d92a57d844d011d9e18b70eabe575d587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
