@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbe358f2_31bfe6a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-14T15:39:13Z",
+      "side": 1,
+      "message": "Build failures are unrelated:\n```\nimport com.google.gerrit.server.index.IndexDir;\n                                     ^\n  symbol:   class IndexDir\n  location: package com.google.gerrit.server.index\nplugins/healthcheck/src/main/java/com/googlesource/gerrit/plugins/healthcheck/check/ChangesIndexHealthCheck.java:54: error: cannot find symbol\n      @IndexDir Path indexDir) {\n```\n\n\nHealthcheck commit fd6057e switched from `SitePaths.index_dir` to the new `@IndexDir` annotation.\n\nGerrit subsequently [reverted that annotation](https://gerrit.googlesource.com/gerrit/+/59f8993e9ce68ca37fd33a6258ce64cb446931b3) and [reimplemented the configuration inside SitePaths](https://gerrit.googlesource.com/gerrit/+/79171682781850fd21d1a5fbbb08f48c29bcfb20).\n\n\nWe have to fix healthcheck to make these tests pass.\nI will do that.",
+      "revId": "b5aacf0d92a57d844d011d9e18b70eabe575d587",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b6317bb3_5f11ec00",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
         "patchSetId": 2
