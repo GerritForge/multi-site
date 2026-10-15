@@ -331,6 +331,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0b8a3dd_7be766dc",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-15T10:02:48Z",
+      "side": 1,
+      "message": "\u003e Yes, if the meta-ref is absent from global-refdb, we cannot tell whether the change was deleted or whether its state has simply not been recorded there yet\n\nIt is impossible that we receive a reindexing event for a ref not yet recorded in the global-refdb.\n\n\u003e or manually removed, etc.\n\nIf it was manually removed, it would have been recreated automatically.\n\n\u003e In this case, I think we should keep retrying.\n\nHow do we expect the global-refdb to appear in the future as all zeros? Is there any hope of retrying?",
+      "parentUuid": "81297fdf_fe9bfb96",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 23
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0658499_08edf916",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
         "patchSetId": 4
@@ -360,6 +384,24 @@
       "side": 1,
       "message": "If the value is not in global-refdb, we just don\u0027t know its status.\nA deleted change is represented by the zero-id in global-refdb.\n\nIf there is a SHA-1 in global-refdb, we don\u0027t know anything about that change, and I think the safest thing to do is not to bail out prematurely.\n\nThis is the same subject discussed in [this conversation](https://review.gerrithub.io/c/GerritForge/multi-site/+/1254261/comment/141166ae_933b7216/)",
       "parentUuid": "d0658499_08edf916",
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8581167_220a33c1",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-15T10:02:48Z",
+      "side": 1,
+      "message": "Yep, it is a situation that may happen, so the tests should cover that situation and declare the expected behaviour.",
+      "parentUuid": "788affab_7c8e0d3d",
       "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
