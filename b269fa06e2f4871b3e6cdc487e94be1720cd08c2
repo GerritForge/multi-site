@@ -41,6 +41,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "23d18cb9_e0016243",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T08:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "733bc27a_49fb5072",
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "119f116c_20a7a401",
@@ -54,6 +72,30 @@
       "writtenOn": "2026-10-14T22:13:44Z",
       "side": 1,
       "message": "The change was removed; it\u0027s not going to be recreated ever, and it\u0027s not in the global refdb.\nWhat\u0027s the value of using `remove(changeId, retry)` vs. a simple `remove(changeId)`?\n\n\n\n```suggestion\n          indexingRetryTaskMap.remove(changeId);\n```",
+      "range": {
+        "startLine": 103,
+        "startChar": 38,
+        "endLine": 103,
+        "endChar": 53
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54ae94a5_a9c4a11f",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T08:55:40Z",
+      "side": 1,
+      "message": "Yep, any pending retry in the map would be stale; we don\u0027t need to look it up.\nDone.",
+      "parentUuid": "119f116c_20a7a401",
       "range": {
         "startLine": 103,
         "startChar": 38,
@@ -81,6 +123,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fec5b1e3_8f500c14",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T08:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "477511f3_1b513e9c",
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b24f576e_e2e1ba44",
@@ -94,6 +154,30 @@
       "writtenOn": "2026-10-14T22:13:44Z",
       "side": 1,
       "message": "`retry` isn\u0027t needed here, see my comment at L103.",
+      "range": {
+        "startLine": 149,
+        "startChar": 42,
+        "endLine": 149,
+        "endChar": 48
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07ef32d9_1fdb2529",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T08:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b24f576e_e2e1ba44",
       "range": {
         "startLine": 149,
         "startChar": 42,
@@ -127,6 +211,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c77b74f2_b1979fbc",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T08:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "903bb9e8_42e20883",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 5
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25774607_a5184b42",
@@ -140,6 +248,30 @@
       "writtenOn": "2026-10-14T22:13:44Z",
       "side": 1,
       "message": "```suggestion\n  private boolean isChangeDeletedOnGlobalRefdb(ChangeIndexEvent event) {\n```",
+      "range": {
+        "startLine": 173,
+        "startChar": 18,
+        "endLine": 173,
+        "endChar": 33
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8f82190_71208d62",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T08:55:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25774607_a5184b42",
       "range": {
         "startLine": 173,
         "startChar": 18,
