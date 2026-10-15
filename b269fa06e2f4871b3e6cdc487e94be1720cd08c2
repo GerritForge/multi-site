@@ -175,6 +175,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "81297fdf_fe9bfb96",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T07:49:27Z",
+      "side": 1,
+      "message": "Yes, if the meta-ref is absent from global-refdb, we cannot tell whether the change was deleted or whether its state has simply not been recorded there yet, or manually removed, etc.\n\nIn this case, I think we should keep retrying.\n\nOnly a zero-id is uncontroversial, so that is the only case where we stop the retry.",
+      "parentUuid": "ca3e08ee_9b0c11ff",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 23
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0658499_08edf916",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
         "patchSetId": 4
@@ -192,6 +216,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "788affab_7c8e0d3d",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T07:49:27Z",
+      "side": 1,
+      "message": "If the value is not in global-refdb, we just don\u0027t know its status.\nA deleted change is represented by the zero-id in global-refdb.\n\nIf there is a SHA-1 in global-refdb, we don\u0027t know anything about that change, and I think the safest thing to do is not to bail out prematurely.\n\nThis is the same subject discussed in [this conversation](https://review.gerrithub.io/c/GerritForge/multi-site/+/1254261/comment/141166ae_933b7216/)",
+      "parentUuid": "d0658499_08edf916",
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "141166ae_933b7216",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
         "patchSetId": 4
@@ -203,6 +245,30 @@
       "writtenOn": "2026-10-14T22:17:01Z",
       "side": 1,
       "message": "Why should this retry?",
+      "range": {
+        "startLine": 171,
+        "startChar": 63,
+        "endLine": 171,
+        "endChar": 83
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "000aa024_c174a225",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T07:49:27Z",
+      "side": 1,
+      "message": "If we don\u0027t know that the ref has been deleted, we cannot make the decision to stop the reindexing,",
+      "parentUuid": "141166ae_933b7216",
       "range": {
         "startLine": 171,
         "startChar": 63,
