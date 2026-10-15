@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3380ddd_50a30ca5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-15T19:47:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fe6589f_3e3d286a",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 12
+      },
+      "revId": "5c725b5dc07927aeca6b7ec881b90b99cd80ea4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c223e7c_9268c6c3",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-10-15T15:52:44Z",
       "side": 1,
       "message": "```suggestion\nManual-ack consumers can receive requeued updates after the delete.\n```",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 6
+      },
+      "revId": "5c725b5dc07927aeca6b7ec881b90b99cd80ea4c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5ed1c09_7fd902b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-15T19:47:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c223e7c_9268c6c3",
       "range": {
         "startLine": 18,
         "startChar": 0,
