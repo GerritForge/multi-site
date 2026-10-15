@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b7de4e96_afe713ef",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T13:50:19Z",
+      "side": 1,
+      "message": "Yes, I think we should keep processing the delete event.\n\nGlobal-refdb returning no value doesn\u0027t change the fact that we have been told to remove the change from the index (it could simply mean the read failed, for example, see [here](https://github.com/GerritForge/zookeeper-refdb/blob/master/src/main/java/com/gerritforge/gerrit/plugins/validation/dfsrefdb/zookeeper/ZkSharedRefDatabase.java#L243)).",
+      "parentUuid": "9beb1bc2_27391e3e",
+      "range": {
+        "startLine": 95,
+        "startChar": 6,
+        "endLine": 95,
+        "endChar": 24
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "733bc27a_49fb5072",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
         "patchSetId": 4
@@ -355,6 +379,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a2bff2b_06f6bcd5",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandler.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T13:50:19Z",
+      "side": 1,
+      "message": "\u003e \u003e Yes, if the meta-ref is absent from global-refdb, we cannot tell whether the change was deleted or whether its state has simply not been recorded there yet\n\u003e \n\u003e It is impossible that we receive a reindexing event for a ref not yet recorded in the global-refdb.\n\u003e \n\u003e \u003e or manually removed, etc.\n\u003e \n\u003e If it was manually removed, it would have been recreated automatically.\n\nYes, unless it was removed _after_ it was created.\n\n\u003e \n\u003e \u003e In this case, I think we should keep retrying.\n\u003e \n\u003e How do we expect the global-refdb to appear in the future as all zeros? Is there any hope of retrying?\n\nWe aren\u0027t waiting specifically for a zero SHA.\nBut I think assuming that a missing entry means it has been deleted would be wrong; imho the safest thing to do is to retry.",
+      "parentUuid": "f0b8a3dd_7be766dc",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 23
+      },
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0658499_08edf916",
         "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
         "patchSetId": 4
@@ -402,6 +450,24 @@
       "side": 1,
       "message": "Yep, it is a situation that may happen, so the tests should cover that situation and declare the expected behaviour.",
       "parentUuid": "788affab_7c8e0d3d",
+      "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b510e1b_81919c73",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexChangeHandlerTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-15T13:50:19Z",
+      "side": 1,
+      "message": "Agreed. I will add `shouldRetryMissingChangeWhenAbsentOnGlobalRefDb`: an empty result keeps the retry, because it can also mean the read failed (see [here](https://github.com/GerritForge/zookeeper-refdb/blob/master/src/main/java/com/gerritforge/gerrit/plugins/validation/dfsrefdb/zookeeper/ZkSharedRefDatabase.java#L243)).",
+      "parentUuid": "d8581167_220a33c1",
       "revId": "b269fa06e2f4871b3e6cdc487e94be1720cd08c2",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
