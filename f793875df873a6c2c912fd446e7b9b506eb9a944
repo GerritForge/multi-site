@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9240310c_fe002d11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-19T08:34:57Z",
+      "side": 1,
+      "message": "This is dependent on [Issue 573866990](https://issues.gerritcodereview.com/issues/573866990).\n\nWe need to stop relying on the internal retry map and instead understand the retry status of a message by looking at its payload.\n\nThen this change should be adapted.",
+      "revId": "f793875df873a6c2c912fd446e7b9b506eb9a944",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
