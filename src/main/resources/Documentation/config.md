@@ -85,12 +85,19 @@ Defaults to true.
     of the partition can continue. Once `index.maxTries` is reached, the event is
     left unacknowledged so that it can be redelivered by the broker.
 
+    > **NOTE**: Synchronous indexing tracks attempts in the event's `meta.retry`
+    > metadata. `attemptCount` includes the initial failed attempt,
+    > `lastAttemptOn` is its latest attempt timestamp in epoch milliseconds, and
+    > `retryingInstanceId` identifies the instance the retry is for. Requeueing
+    > an event before this interval elapses does not advance the count or
+    > timestamp. The payload preserves this state across consumer restarts.
+
     Defaults to 30000 (30 seconds).
 
 ```index.retryPollInterval```
 :   The maximum time in milliseconds to wait between polls while an indexing
     retry is pending. This throttles polling to avoid looping the local CPU and
-    overloading the broker with retry messages.
+    overloading the broker with requeued messages.
 
     Defaults to 1000 (1 second).
 
