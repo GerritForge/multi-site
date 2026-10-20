@@ -87,10 +87,10 @@ public abstract class AbstractSubscriberTestBase {
   }
 
   @Test
-  public void shouldConsumeEventsRequeuedByThisInstance()
+  public void shouldConsumeRetriesForThisInstance()
       throws IOException, PermissionBackendException, CacheNotFoundException {
     for (MultiSiteEvent multiSiteEvent : multiSiteEvents()) {
-      multiSiteEvent.markRequeued(NODE_INSTANCE_ID);
+      multiSiteEvent.markRetry(NODE_INSTANCE_ID);
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
       ack = new TestManualAck();
 
@@ -102,10 +102,10 @@ public abstract class AbstractSubscriberTestBase {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void shouldDropEventsRequeuedByOtherInstance()
+  public void shouldDropRetriesForOtherInstances()
       throws IOException, PermissionBackendException, CacheNotFoundException {
     for (MultiSiteEvent multiSiteEvent : multiSiteEvents()) {
-      multiSiteEvent.markRequeued("requeueing-instance-id");
+      multiSiteEvent.markRetry("retrying-instance-id");
       ack = new TestManualAck();
 
       objectUnderTest.getConsumer(MANUAL_ACK).accept(multiSiteEvent, ack);
