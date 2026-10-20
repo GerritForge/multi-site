@@ -24,6 +24,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEve
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventManualAckingRouter.RoutingResult;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
 import com.google.common.collect.ImmutableList;
@@ -52,19 +53,17 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   @Test
   public void shouldUseRouterManagedAckForPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
+    when(((IndexEventRouter) eventRouter).route(event, ack)).thenReturn(RoutingResult.COMPLETE);
 
     objectUnderTest.getManualAckConsumer(NO_ACTION).accept(event, ack);
-
     verify((IndexEventRouter) eventRouter).route(event, ack);
-    verify(eventRouter, never()).route(event);
-    verify(subscriberMetrics).incrementSubscriberConsumedMessage();
   }
 
   @Test
   public void shouldAckWhenRequeueSucceeds() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
     MessageAcknowledgement<Event> messageAck = mock(MessageAcknowledgement.class);
-    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(false);
+    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(RoutingResult.RETRY);
 
     objectUnderTest.getManualAckConsumer((e) -> true).accept(event, messageAck);
 
@@ -75,7 +74,7 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   public void shouldNotAckWhenRequeueFails() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
     MessageAcknowledgement<Event> messageAck = mock(MessageAcknowledgement.class);
-    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(false);
+    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(RoutingResult.RETRY);
 
     objectUnderTest.getManualAckConsumer((e) -> false).accept(event, messageAck);
 
@@ -94,9 +93,9 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   }
 
   @Test
-  public void shouldAckWithoutRequeueingPartitionEventRequeuedByOtherInstance() throws Exception {
+  public void shouldAckWithoutRequeueingRetryForOtherInstance() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
-    event.markRequeued("requeueing-instance-id");
+    event.markRetry("retrying-instance-id");
     AbstractSubscriber.RequeueEventAction requeueAction =
         mock(AbstractSubscriber.RequeueEventAction.class);
 
@@ -124,10 +123,10 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void shouldDropNonProjectIndexEventRequeuedByOtherInstance()
+  public void shouldDropNonProjectIndexRetryForOtherInstance()
       throws IOException, PermissionBackendException, CacheNotFoundException {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
-    event.markRequeued("requeueing-instance-id");
+    event.markRetry("retrying-instance-id");
 
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 
