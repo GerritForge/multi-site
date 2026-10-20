@@ -18,8 +18,7 @@ import com.gerritforge.gerrit.plugins.multisite.index.UpToDateChecker;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import com.google.gerrit.server.util.time.TimeUtil;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
@@ -60,6 +59,7 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   public enum IndexingResult {
     SUCCESS,
     RETRY,
+    THROTTLED,
     FAILURE,
     IGNORED
   }
@@ -72,18 +72,14 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
 
   protected IndexingResult indexSyncIfConsistentAndUpToDate(
       T id, E e, IndexEntityChecker<T, E> entityChecker) {
-    IndexingRetry retry =
-        indexingRetryTaskMap.computeIfAbsent(id, (k) -> new IndexingRetry(Optional.of(e)));
-
-    Optional<Instant> lastRetry = retry.getLastRetry();
-    if (!throttleRetryPolling(
-        lastRetry.map(last -> last.until(Instant.now(), ChronoUnit.MILLIS)))) {
+    Optional<Long> millisSinceAttempt =
+        e.isRetry() ? Optional.of(millisSinceLastAttempt(e)) : Optional.empty();
+    if (!throttleRetryPolling(millisSinceAttempt)) {
       return IndexingResult.FAILURE;
     }
 
-    if (lastRetry.stream()
-        .anyMatch(last -> last.until(Instant.now(), ChronoUnit.MILLIS) < retryInterval)) {
-      return IndexingResult.RETRY;
+    if (e.isRetry() && millisSinceLastAttempt(e) < retryInterval) {
+      return IndexingResult.THROTTLED;
     }
 
     if (entityChecker.isConsistent(id) && entityChecker.isUpToDate(Optional.of(e))) {
@@ -91,21 +87,22 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
         reindex(id);
       }
 
-      indexingRetryTaskMap.remove(id);
       return IndexingResult.SUCCESS;
     }
 
-    if (retry.retryNumber >= maxTries) {
-      indexingRetryTaskMap.remove(id, retry);
+    if (e.getRetryCount() >= maxTries) {
       return IndexingResult.FAILURE;
     }
 
-    retry.incrementRetryNumber();
     return IndexingResult.RETRY;
   }
 
+  private long millisSinceLastAttempt(E event) {
+    return TimeUtil.nowMs() - event.getLastAttemptOn();
+  }
+
   private boolean throttleRetryPolling(Optional<Long> millisSinceRetry) {
-    if (millisSinceRetry.stream().anyMatch(millis -> millis < retryInterval)) {
+    if (millisSinceRetry.isPresent() && millisSinceRetry.get() < retryInterval) {
       try {
         Thread.sleep(Math.min(retryPollInterval, retryInterval - millisSinceRetry.get()));
       } catch (InterruptedException ex) {
@@ -200,7 +197,6 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   public class IndexingRetry {
     private final Optional<E> event;
     private int retryNumber = 0;
-    private Instant lastRetry;
 
     public IndexingRetry(Optional<E> event) {
       this.event = event;
@@ -216,11 +212,6 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
 
     public void incrementRetryNumber() {
       ++retryNumber;
-      lastRetry = Instant.now();
-    }
-
-    public Optional<Instant> getLastRetry() {
-      return Optional.ofNullable(lastRetry);
     }
   }
 }

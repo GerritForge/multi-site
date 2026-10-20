@@ -33,6 +33,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEven
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventManualAckingRouter.RoutingResult;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventAckHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventMetrics;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventRouter;
@@ -145,7 +146,7 @@ public class IndexEventRouterTest {
     when(indexChangeHandler.handleSync(eq(event)))
         .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.SUCCESS);
 
-    router.route(event, ack);
+    assertThat(router.route(event, ack)).isEqualTo(RoutingResult.COMPLETE);
 
     verify(indexChangeHandler).handleSync(event);
     verify(ackHandler).ackIfDue(event, ack);
@@ -169,7 +170,7 @@ public class IndexEventRouterTest {
     when(indexChangeHandler.handleSync(eq(event)))
         .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.IGNORED);
 
-    assertThat(router.route(event, ack)).isTrue();
+    assertThat(router.route(event, ack)).isEqualTo(RoutingResult.COMPLETE);
 
     verify(ackHandler).ackIfDue(event, ack);
   }
@@ -185,12 +186,35 @@ public class IndexEventRouterTest {
   }
 
   @Test
+  public void shouldRequestRetryWhenIndexingIsNotReady() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    when(indexChangeHandler.handleSync(event))
+        .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.RETRY);
+
+    assertThat(router.route(event, ack)).isEqualTo(RoutingResult.RETRY);
+
+    assertThat(event.isRetry()).isFalse();
+    verifyNoInteractions(ackHandler);
+  }
+
+  @Test
+  public void shouldDeferThrottledEvent() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    when(indexChangeHandler.handleSync(event))
+        .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.THROTTLED);
+
+    assertThat(router.route(event, ack)).isEqualTo(RoutingResult.DEFERRED);
+
+    verifyNoInteractions(ackHandler);
+  }
+
+  @Test
   public void shouldCountTerminalFailure() throws Exception {
     ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
     when(indexChangeHandler.handleSync(event))
         .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.FAILURE);
 
-    router.route(event, ack);
+    assertThat(router.route(event, ack)).isEqualTo(RoutingResult.COMPLETE);
 
     verify(metrics).incrementManualAckTerminalFailure(ChangeIndexEvent.TYPE);
     verifyNoInteractions(ackHandler);
