@@ -24,12 +24,12 @@ public abstract class MultiSiteEvent extends Event {
   public record Meta(Requeue requeue) {}
 
   public static class Requeue {
-    public int retryCount;
+    public int requeueCount;
     public long requeuedOn;
     public String requeuedByInstanceId;
 
-    public Requeue(int retryCount, long requeuedOn, String requeuedByInstanceId) {
-      this.retryCount = retryCount;
+    public Requeue(int requeueCount, long requeuedOn, String requeuedByInstanceId) {
+      this.requeueCount = requeueCount;
       this.requeuedOn = requeuedOn;
       this.requeuedByInstanceId = requeuedByInstanceId;
     }
@@ -52,7 +52,8 @@ public abstract class MultiSiteEvent extends Event {
   public void markRequeued(String requeuedByInstanceId) {
     meta =
         new Meta(
-            new Requeue(getRetryCount() + 1, Instant.now().getEpochSecond(), requeuedByInstanceId));
+            new Requeue(
+                getRequeueCount() + 1, Instant.now().getEpochSecond(), requeuedByInstanceId));
   }
 
   public abstract MultiSiteEvent copy();
@@ -71,17 +72,17 @@ public abstract class MultiSiteEvent extends Event {
       return null;
     }
     return new Meta(
-        new Requeue(requeue.retryCount, requeue.requeuedOn, requeue.requeuedByInstanceId));
+        new Requeue(requeue.requeueCount, requeue.requeuedOn, requeue.requeuedByInstanceId));
   }
 
   public boolean isRequeued() {
     return getRequeue() != null;
   }
 
-  public int getRetryCount() {
+  public int getRequeueCount() {
     Requeue requeue = getRequeue();
     if (requeue != null) {
-      return requeue.retryCount;
+      return requeue.requeueCount;
     }
     return 0;
   }
@@ -120,7 +121,7 @@ public abstract class MultiSiteEvent extends Event {
     MultiSiteEvent event = (MultiSiteEvent) o;
     return eventCreatedOn == event.eventCreatedOn
         && isRequeued() == event.isRequeued()
-        && getRetryCount() == event.getRetryCount()
+        && getRequeueCount() == event.getRequeueCount()
         && getRequeuedOn() == event.getRequeuedOn()
         && Objects.equals(type, event.type)
         && Objects.equals(instanceId, event.instanceId)
@@ -134,7 +135,7 @@ public abstract class MultiSiteEvent extends Event {
         eventCreatedOn,
         instanceId,
         isRequeued(),
-        getRetryCount(),
+        getRequeueCount(),
         getRequeuedOn(),
         getRequeuedByInstanceId());
   }

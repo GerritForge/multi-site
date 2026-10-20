@@ -123,7 +123,7 @@ public class MultiSiteEventDeserializerTest {
                 + "\"targetSha\":\"%s\","
                 + "\"meta\":{"
                 + "\"requeue\":{"
-                + "\"retryCount\":2,"
+                + "\"requeueCount\":2,"
                 + "\"requeuedOn\":123456789,"
                 + "\"requeuedByInstanceId\":\"requeuing-instance-id\""
                 + "}"
@@ -147,7 +147,7 @@ public class MultiSiteEventDeserializerTest {
 
     assertThat(json).doesNotContain("\"meta\"");
     assertThat(json).doesNotContain("\"requeued\"");
-    assertThat(json).doesNotContain("\"retryCount\"");
+    assertThat(json).doesNotContain("\"requeueCount\"");
     assertThat(json).doesNotContain("\"requeuedOn\"");
     assertThat(json).doesNotContain("\"requeuedByInstanceId\"");
   }

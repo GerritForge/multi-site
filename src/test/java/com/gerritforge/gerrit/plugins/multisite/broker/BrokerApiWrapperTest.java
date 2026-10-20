@@ -105,13 +105,13 @@ public class BrokerApiWrapperTest {
     AccountIndexEvent sentEvent = (AccountIndexEvent) captureRequeueEvent();
     assertThat(multiSiteEvent.isRequeued()).isFalse();
     assertThat(sentEvent.isRequeued()).isTrue();
-    assertThat(sentEvent.getRetryCount()).isEqualTo(1);
+    assertThat(sentEvent.getRequeueCount()).isEqualTo(1);
     assertThat(sentEvent.getRequeuedOn()).isAtLeast(beforeRequeue);
     assertThat(sentEvent.getRequeuedByInstanceId()).isEqualTo(DEFAULT_INSTANCE_ID);
   }
 
   @Test
-  public void shouldIncrementMultiSiteEventRetryCountOnRequeuedCopy() {
+  public void shouldIncrementMultiSiteEventRequeueCountOnRequeuedCopy() {
     brokerReturns(true);
     AccountIndexEvent multiSiteEvent = new AccountIndexEvent(1, null, "other-instance-id", false);
     multiSiteEvent.markRequeued("previous-instance-id");
@@ -119,8 +119,8 @@ public class BrokerApiWrapperTest {
     objectUnderTest.requeue(topic, multiSiteEvent);
 
     AccountIndexEvent sentEvent = (AccountIndexEvent) captureRequeueEvent();
-    assertThat(multiSiteEvent.getRetryCount()).isEqualTo(1);
-    assertThat(sentEvent.getRetryCount()).isEqualTo(2);
+    assertThat(multiSiteEvent.getRequeueCount()).isEqualTo(1);
+    assertThat(sentEvent.getRequeueCount()).isEqualTo(2);
   }
 
   @Test

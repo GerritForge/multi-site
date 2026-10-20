@@ -85,12 +85,16 @@ Defaults to true.
     of the partition can continue. Once `index.maxTries` is reached, the event is
     left unacknowledged so that it can be redelivered by the broker.
 
+    > **NOTE**: An event can also be requeued while waiting for
+    > `index.retryInterval` to elapse, without attempting indexing. The event's
+    > `meta.requeue.requeueCount` counts requeues, not indexing retries.
+
     Defaults to 30000 (30 seconds).
 
 ```index.retryPollInterval```
 :   The maximum time in milliseconds to wait between polls while an indexing
     retry is pending. This throttles polling to avoid looping the local CPU and
-    overloading the broker with retry messages.
+    overloading the broker with requeued messages.
 
     Defaults to 1000 (1 second).
 

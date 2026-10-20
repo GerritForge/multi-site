@@ -166,9 +166,9 @@ public class MultiSiteEventTest {
     DerivedEvent copy = event.copy();
     copy.markRequeued("new-instance-id");
 
-    assertThat(event.getRetryCount()).isEqualTo(1);
+    assertThat(event.getRequeueCount()).isEqualTo(1);
     assertThat(event.getRequeuedByInstanceId()).isEqualTo("previous-instance-id");
-    assertThat(copy.getRetryCount()).isEqualTo(2);
+    assertThat(copy.getRequeueCount()).isEqualTo(2);
     assertThat(copy.getRequeuedByInstanceId()).isEqualTo("new-instance-id");
   }
 
