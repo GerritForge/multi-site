@@ -127,6 +127,7 @@ public class ForwardedIndexChangeHandlerTest {
 
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
       assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+      changeIndexEvent.markRetry("instance-id");
     }
     assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.SUCCESS);
 
@@ -145,7 +146,7 @@ public class ForwardedIndexChangeHandlerTest {
   }
 
   @Test
-  public void shouldFailSynchronousIndexingWhenChangeIsNotReady() throws Exception {
+  public void shouldNotResetRetriesWhenHandlerIsRecreated() throws Exception {
     setupChangeAccessRelatedMocks(
         CHANGE_EXISTS,
         DO_NOT_THROW_STORAGE_EXCEPTION,
@@ -157,7 +158,16 @@ public class ForwardedIndexChangeHandlerTest {
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
       assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+      changeIndexEvent.markRetry("instance-id");
     }
+    handler =
+        new ForwardedIndexChangeHandler(
+            indexerMock,
+            configurationMock,
+            indexExecutorMock,
+            ctxMock,
+            changeCheckerPresentMock,
+            queryProviderMock);
     assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.FAILURE);
     assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
 
@@ -180,10 +190,25 @@ public class ForwardedIndexChangeHandlerTest {
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
     IndexingResult initialAttempt = handler.handleSync(changeIndexEvent);
+    changeIndexEvent.markRetry("instance-id");
     IndexingResult earlyRedelivery = handler.handleSync(changeIndexEvent);
 
     assertThat(initialAttempt).isEqualTo(IndexingResult.RETRY);
-    assertThat(earlyRedelivery).isEqualTo(IndexingResult.RETRY);
+    assertThat(earlyRedelivery).isEqualTo(IndexingResult.THROTTLED);
+  }
+
+  @Test
+  public void shouldTrackSynchronousRetriesIndependentlyForEachEvent() throws Exception {
+    ChangeIndexEvent firstEvent =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    assertThat(handler.handleSync(firstEvent)).isEqualTo(IndexingResult.RETRY);
+    firstEvent.markRetry("instance-id");
+
+    ChangeIndexEvent anotherEvent =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    assertThat(handler.handleSync(anotherEvent)).isEqualTo(IndexingResult.RETRY);
+
+    assertThat(handler.indexingRetryTaskMap).isEmpty();
   }
 
   @Test

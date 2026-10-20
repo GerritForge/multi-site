@@ -75,7 +75,7 @@ public class IndexEventRouter
   }
 
   @Override
-  public boolean route(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+  public RoutingResult route(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
       throws IOException {
     ForwardedIndexingHandler<?, ? extends IndexEvent> handler =
         indexHandlers.get(GERRIT, sourceEvent.getType());
@@ -86,24 +86,30 @@ public class IndexEventRouter
 
     metrics.incrementEventsPendingAcknowledgement(sourceEvent.getType());
     switch (handler.handleSync(sourceEvent)) {
+      case IndexingResult.RETRY:
+        return RoutingResult.RETRY;
+
+      case IndexingResult.THROTTLED:
+        return RoutingResult.DEFERRED;
+
       case IndexingResult.SUCCESS:
         ack(sourceEvent, ack);
-        return true;
+        return RoutingResult.COMPLETED;
 
       case IndexingResult.IGNORED:
         logger.atWarning().log("Ignoring index event %s", sourceEvent);
         ack(sourceEvent, ack);
-        return true;
+        return RoutingResult.COMPLETED;
 
       case IndexingResult.FAILURE:
         // TODO: Leaving failed events unacknowledged exposes us to
         // https://issues.gerritcodereview.com/issues/529865773
         logger.atWarning().log("Indexing of event %s failed", sourceEvent.getType());
         metrics.incrementManualAckTerminalFailure(sourceEvent.getType());
-        return true;
+        return RoutingResult.COMPLETED;
     }
 
-    return false;
+    return RoutingResult.RETRY;
   }
 
   @Override

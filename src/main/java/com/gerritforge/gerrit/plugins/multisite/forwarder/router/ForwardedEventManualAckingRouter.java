@@ -18,18 +18,24 @@ import com.google.gerrit.server.permissions.PermissionBackendException;
 import java.io.IOException;
 
 public interface ForwardedEventManualAckingRouter<EventType extends Event> {
+  enum RoutingResult {
+    COMPLETED,
+    RETRY,
+    DEFERRED
+  }
+
   /**
    * Route an event through the subscribers for consumption
    *
    * @param event event to be routed
    * @param ack handle to ack events
-   * @return true if the route is complete; false if the event should be retried later
+   * @return the {@link RoutingResult} used to decide whether to requeue and record a retry
    * @throws IOException if any unexpected IO operation failed during routing
    * @throws PermissionBackendException if the backend permissions system failed during routing
    * @throws CacheNotFoundException the cache eviction event was referring to a cache that was not
    *     found
    */
-  boolean route(EventType event, MessageAcknowledgement<Event> ack)
+  RoutingResult route(EventType event, MessageAcknowledgement<Event> ack)
       throws IOException, PermissionBackendException, CacheNotFoundException;
 
   /**
