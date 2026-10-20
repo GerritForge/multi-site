@@ -27,6 +27,7 @@ import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.config.GerritInstanceId;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
+
 import java.io.IOException;
 
 public abstract class AbstractSubscriber {
@@ -99,10 +100,10 @@ public abstract class AbstractSubscriber {
     } else if (instanceId.equals(sourceInstanceId)) {
       logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
-    } else if (isRequeuedByOtherInstance(event)) {
+    } else if (isRetryForOtherInstance(event)) {
       logger.atFiner().log(
-          "Dropping event %s requeued by another instanceId %s",
-          event, ((MultiSiteEvent) event).getRequeuedByInstanceId());
+          "Dropping retry event %s for instanceId %s",
+          event, ((MultiSiteEvent) event).getRetryingInstanceId());
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else if (!shouldConsumeEvent(event)) {
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
@@ -114,7 +115,14 @@ public abstract class AbstractSubscriber {
             break;
 
           case ROUTER_MANAGED:
-            if (!routeManaged(event, messageAcknowledgement) && requeueAction.requeue(event)) {
+            Preconditions.checkArgument(
+                event instanceof MultiSiteEvent,
+                "Router-managed event handling supports only MultiSiteEvent");
+            // Mutate a copy so acknowledgement implementations can still find the original event.
+            MultiSiteEvent processingEvent = ((MultiSiteEvent) event).copy();
+            MessageAcknowledgement<Event> acknowledgeReceivedEvent = _ -> messageAcknowledgement.ack(event);
+            boolean routeComplete = routeManaged(processingEvent, acknowledgeReceivedEvent);
+            if (!routeComplete && requeueAction.requeue(processingEvent)) {
               manualAckingRouter().ack(event, messageAcknowledgement);
             }
             break;
@@ -130,10 +138,10 @@ public abstract class AbstractSubscriber {
     subscriberMetrics.updateReplicationStatusMetrics(event);
   }
 
-  private boolean isRequeuedByOtherInstance(Event event) {
+  private boolean isRetryForOtherInstance(Event event) {
     return event instanceof MultiSiteEvent multiSiteEvent
-        && multiSiteEvent.isRequeued()
-        && !instanceId.equals(multiSiteEvent.getRequeuedByInstanceId());
+        && multiSiteEvent.isRetry()
+        && !instanceId.equals(multiSiteEvent.getRetryingInstanceId());
   }
 
   private void handleDroppedEvent(

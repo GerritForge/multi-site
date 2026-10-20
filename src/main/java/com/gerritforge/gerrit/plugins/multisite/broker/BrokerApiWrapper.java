@@ -16,8 +16,6 @@ import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriber;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithGroupId;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
-import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.FutureCallback;
@@ -81,16 +79,12 @@ public class BrokerApiWrapper implements BrokerApi {
 
   @Override
   public ListenableFuture<Boolean> requeue(String topic, Event message) {
-    Preconditions.checkArgument(
-        message instanceof MultiSiteEvent, "requeue() supports only MultiSiteEvent");
     try {
-      MultiSiteEvent requeuedEvent = ((MultiSiteEvent) message).copy();
-      requeuedEvent.markRequeued(nodeInstanceId);
       return addMetricsCallback(
           topic,
-          requeuedEvent,
+          message,
           MessageLogger.Direction.REQUEUE,
-          apiDelegate.get().requeue(topic, requeuedEvent));
+          apiDelegate.get().requeue(topic, message));
     } catch (RuntimeException e) {
       metrics.incrementBrokerFailedToRequeueMessage(topic, message.getType());
       throw e;
