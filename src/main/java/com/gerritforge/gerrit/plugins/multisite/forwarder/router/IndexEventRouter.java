@@ -86,6 +86,13 @@ public class IndexEventRouter
 
     metrics.incrementEventsPendingAcknowledgement(sourceEvent.getType());
     switch (handler.handleSync(sourceEvent)) {
+      case IndexingResult.RETRY:
+        sourceEvent.markRetry(gerritInstanceId);
+        return false;
+
+      case IndexingResult.THROTTLED:
+        return false;
+
       case IndexingResult.SUCCESS:
         ack(sourceEvent, ack);
         return true;

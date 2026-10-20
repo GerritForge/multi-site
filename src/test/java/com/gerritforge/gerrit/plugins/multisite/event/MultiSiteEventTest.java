@@ -145,7 +145,7 @@ public class MultiSiteEventTest {
     DerivedEvent event = new DerivedEvent(1);
     event.eventCreatedOn = CREATED_ON;
     event.instanceId = INSTANCE_ID;
-    event.markRequeued("previous-instance-id");
+    event.markRetry("previous-instance-id");
 
     DerivedEvent copy = event.copy();
 
@@ -153,23 +153,23 @@ public class MultiSiteEventTest {
     assertThat(copy).isEqualTo(event);
     assertThat(copy.hashCode()).isEqualTo(event.hashCode());
     assertThat(copy.meta).isNotSameInstanceAs(event.meta);
-    assertThat(copy.meta.requeue()).isNotSameInstanceAs(event.meta.requeue());
+    assertThat(copy.meta.retry()).isNotSameInstanceAs(event.meta.retry());
   }
 
   @Test
-  public void copyDoesNotShareRequeueMetadataWithOriginalEvent() {
+  public void copyDoesNotShareRetryMetadataWithOriginalEvent() {
     DerivedEvent event = new DerivedEvent(1);
     event.eventCreatedOn = CREATED_ON;
     event.instanceId = INSTANCE_ID;
-    event.markRequeued("previous-instance-id");
+    event.markRetry("previous-instance-id");
 
     DerivedEvent copy = event.copy();
-    copy.markRequeued("new-instance-id");
+    copy.markRetry("new-instance-id");
 
     assertThat(event.getRetryCount()).isEqualTo(1);
-    assertThat(event.getRequeuedByInstanceId()).isEqualTo("previous-instance-id");
+    assertThat(event.getRetryingInstanceId()).isEqualTo("previous-instance-id");
     assertThat(copy.getRetryCount()).isEqualTo(2);
-    assertThat(copy.getRequeuedByInstanceId()).isEqualTo("new-instance-id");
+    assertThat(copy.getRetryingInstanceId()).isEqualTo("new-instance-id");
   }
 
   @Test
@@ -198,7 +198,7 @@ public class MultiSiteEventTest {
 
   private static void assertCopyPreservesFields(MultiSiteEvent event) {
     event.eventCreatedOn = CREATED_ON;
-    event.markRequeued("previous-instance-id");
+    event.markRetry("previous-instance-id");
 
     MultiSiteEvent copy = event.copy();
 

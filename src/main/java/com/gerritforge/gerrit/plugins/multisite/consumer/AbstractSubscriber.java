@@ -99,10 +99,10 @@ public abstract class AbstractSubscriber {
     } else if (instanceId.equals(sourceInstanceId)) {
       logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
-    } else if (isRequeuedByOtherInstance(event)) {
+    } else if (isRetryForOtherInstance(event)) {
       logger.atFiner().log(
-          "Dropping event %s requeued by another instanceId %s",
-          event, ((MultiSiteEvent) event).getRequeuedByInstanceId());
+          "Dropping retry event %s for instanceId %s",
+          event, ((MultiSiteEvent) event).getRetryingInstanceId());
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else if (!shouldConsumeEvent(event)) {
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
@@ -114,9 +114,7 @@ public abstract class AbstractSubscriber {
             break;
 
           case ROUTER_MANAGED:
-            if (!routeManaged(event, messageAcknowledgement) && requeueAction.requeue(event)) {
-              manualAckingRouter().ack(event, messageAcknowledgement);
-            }
+            routeManaged(event, messageAcknowledgement, requeueAction);
             break;
         }
       } catch (IOException | PermissionBackendException | CacheNotFoundException e) {
@@ -130,10 +128,10 @@ public abstract class AbstractSubscriber {
     subscriberMetrics.updateReplicationStatusMetrics(event);
   }
 
-  private boolean isRequeuedByOtherInstance(Event event) {
+  private boolean isRetryForOtherInstance(Event event) {
     return event instanceof MultiSiteEvent multiSiteEvent
-        && multiSiteEvent.isRequeued()
-        && !instanceId.equals(multiSiteEvent.getRequeuedByInstanceId());
+        && multiSiteEvent.isRetry()
+        && !instanceId.equals(multiSiteEvent.getRetryingInstanceId());
   }
 
   private void handleDroppedEvent(
@@ -159,11 +157,21 @@ public abstract class AbstractSubscriber {
     tryAckAndMarkAsConsumed(event, ack, isAutoAck);
   }
 
-  private boolean routeManaged(Event event, MessageAcknowledgement<Event> ack)
+  private void routeManaged(
+      Event receivedEvent, MessageAcknowledgement<Event> ack, RequeueEventAction requeueAction)
       throws IOException, PermissionBackendException, CacheNotFoundException {
-    boolean routeSuccessful = manualAckingRouter().route(event, ack);
+    // Keep the received event unchanged because Kafka uses it as an acknowledgement map key.
+    MultiSiteEvent processingEvent = ((MultiSiteEvent) receivedEvent).copy();
+    MessageAcknowledgement<Event> acknowledgeReceivedEvent = ignored -> ack.ack(receivedEvent);
+    boolean routeComplete = manualAckingRouter().route(processingEvent, acknowledgeReceivedEvent);
     subscriberMetrics.incrementSubscriberConsumedMessage();
-    return routeSuccessful;
+    if (routeComplete) {
+      return;
+    }
+
+    if (requeueAction.requeue(processingEvent)) {
+      manualAckingRouter().ack(receivedEvent, ack);
+    }
   }
 
   private void tryRouterAck(Event event, MessageAcknowledgement<Event> ack) {
