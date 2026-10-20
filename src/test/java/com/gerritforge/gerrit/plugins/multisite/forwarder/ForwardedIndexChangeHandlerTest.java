@@ -60,8 +60,8 @@ public class ForwardedIndexChangeHandlerTest {
   private static final int RETRY_INTERVAL = 5000;
   private static final int RETRY_POLL_INTERVAL = 1000;
   private static final int EVENT_CHANGE_NUMBER = 1;
-  private static String TEST_PROJECT = "test/project";
-  private static String TEST_CHANGE_ID = TEST_PROJECT + "~" + TEST_CHANGE_NUMBER;
+  private static final String TEST_PROJECT = "test/project";
+  private static final String TEST_CHANGE_ID = TEST_PROJECT + "~" + TEST_CHANGE_NUMBER;
   private static final boolean CHANGE_EXISTS = true;
   private static final boolean CHANGE_DOES_NOT_EXIST = false;
   private static final boolean DO_NOT_THROW_STORAGE_EXCEPTION = false;
