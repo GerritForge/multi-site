@@ -108,11 +108,10 @@ public class MultiSiteEventDeserializerTest {
   }
 
   @Test
-  public void eventDeserializerShouldParseRequeuedAccountIndexEvent() {
+  public void eventDeserializerShouldParseRetriedAccountIndexEvent() {
     AccountIndexEvent testAccountIndexEvent =
         new AccountIndexEvent(TEST_ACCOUNT_ID, TEST_SHA1, TEST_INSTANCE_ID, false);
-    MultiSiteEvent.Requeue requeue =
-        new MultiSiteEvent.Requeue(2, 123456789L, "requeuing-instance-id");
+    MultiSiteEvent.Retry retry = new MultiSiteEvent.Retry(2, 123456789L, "retrying-instance-id");
     String eventJson =
         String.format(
             "{"
@@ -122,10 +121,10 @@ public class MultiSiteEventDeserializerTest {
                 + "\"accountId\":%d,"
                 + "\"targetSha\":\"%s\","
                 + "\"meta\":{"
-                + "\"requeue\":{"
+                + "\"retry\":{"
                 + "\"retryCount\":2,"
-                + "\"requeuedOn\":123456789,"
-                + "\"requeuedByInstanceId\":\"requeuing-instance-id\""
+                + "\"lastAttemptOn\":123456789,"
+                + "\"retryingInstanceId\":\"retrying-instance-id\""
                 + "}"
                 + "}"
                 + "}",
@@ -134,22 +133,22 @@ public class MultiSiteEventDeserializerTest {
             testAccountIndexEvent.eventCreatedOn,
             TEST_ACCOUNT_ID,
             TEST_SHA1);
-    testAccountIndexEvent.meta = new MultiSiteEvent.Meta(requeue);
+    testAccountIndexEvent.meta = new MultiSiteEvent.Meta(retry);
     assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
   }
 
   @Test
-  public void eventSerializerShouldOmitMetaWhenEventWasNotRequeued() {
+  public void eventSerializerShouldOmitMetaWhenEventWasNotRetried() {
     AccountIndexEvent accountIndexEvent =
         new AccountIndexEvent(TEST_ACCOUNT_ID, TEST_SHA1, TEST_INSTANCE_ID, false);
 
     String json = gson.toJson(accountIndexEvent, Event.class);
 
     assertThat(json).doesNotContain("\"meta\"");
-    assertThat(json).doesNotContain("\"requeued\"");
+    assertThat(json).doesNotContain("\"retry\"");
     assertThat(json).doesNotContain("\"retryCount\"");
-    assertThat(json).doesNotContain("\"requeuedOn\"");
-    assertThat(json).doesNotContain("\"requeuedByInstanceId\"");
+    assertThat(json).doesNotContain("\"lastAttemptOn\"");
+    assertThat(json).doesNotContain("\"retryingInstanceId\"");
   }
 
   private static void assertAccountIndexEventEquals(
