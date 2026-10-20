@@ -11,7 +11,11 @@
 
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -52,10 +56,23 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   @Test
   public void shouldUseRouterManagedAckForPartitionEvents() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
+    MessageAcknowledgement<Event> messageAck = mock(MessageAcknowledgement.class);
+    doAnswer(
+            invocation -> {
+              IndexEvent processingEvent = invocation.getArgument(0);
+              MessageAcknowledgement<Event> processingAck = invocation.getArgument(1);
+              assertThat(processingEvent).isNotSameInstanceAs(event);
+              processingEvent.markRetry(NODE_INSTANCE_ID);
+              processingAck.ack(processingEvent);
+              return true;
+            })
+        .when((IndexEventRouter) eventRouter)
+        .route(eq(event), any());
 
-    objectUnderTest.getManualAckConsumer(NO_ACTION).accept(event, ack);
+    objectUnderTest.getManualAckConsumer(NO_ACTION).accept(event, messageAck);
 
-    verify((IndexEventRouter) eventRouter).route(event, ack);
+    assertThat(event.isRetry()).isFalse();
+    verify(messageAck).ack(same(event));
     verify(eventRouter, never()).route(event);
     verify(subscriberMetrics).incrementSubscriberConsumedMessage();
   }
@@ -64,18 +81,31 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   public void shouldAckWhenRequeueSucceeds() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
     MessageAcknowledgement<Event> messageAck = mock(MessageAcknowledgement.class);
-    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(false);
+    doAnswer(
+            invocation -> {
+              IndexEvent processingEvent = invocation.getArgument(0);
+              processingEvent.markRetry(NODE_INSTANCE_ID);
+              return false;
+            })
+        .when((IndexEventRouter) eventRouter)
+        .route(eq(event), any());
 
-    objectUnderTest.getManualAckConsumer((e) -> true).accept(event, messageAck);
+    objectUnderTest
+        .getManualAckConsumer(
+            retry -> {
+              assertThat(((IndexEvent) retry).getRetryCount()).isEqualTo(1);
+              return true;
+            })
+        .accept(event, messageAck);
 
-    verify((IndexEventRouter) eventRouter).ack(event, messageAck);
+    assertThat(event.isRetry()).isFalse();
+    verify((IndexEventRouter) eventRouter).ack(same(event), same(messageAck));
   }
 
   @Test
   public void shouldNotAckWhenRequeueFails() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
     MessageAcknowledgement<Event> messageAck = mock(MessageAcknowledgement.class);
-    when(((IndexEventRouter) eventRouter).route(event, messageAck)).thenReturn(false);
 
     objectUnderTest.getManualAckConsumer((e) -> false).accept(event, messageAck);
 
@@ -94,9 +124,9 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
   }
 
   @Test
-  public void shouldAckWithoutRequeueingPartitionEventRequeuedByOtherInstance() throws Exception {
+  public void shouldAckWithoutRequeueingRetryForOtherInstance() throws Exception {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
-    event.markRequeued("requeueing-instance-id");
+    event.markRetry("retrying-instance-id");
     AbstractSubscriber.RequeueEventAction requeueAction =
         mock(AbstractSubscriber.RequeueEventAction.class);
 
@@ -124,10 +154,10 @@ public class IndexEventSubscriberTest extends AbstractSubscriberTestBase {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void shouldDropNonProjectIndexEventRequeuedByOtherInstance()
+  public void shouldDropNonProjectIndexRetryForOtherInstance()
       throws IOException, PermissionBackendException, CacheNotFoundException {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
-    event.markRequeued("requeueing-instance-id");
+    event.markRetry("retrying-instance-id");
 
     objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
 

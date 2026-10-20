@@ -20,6 +20,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
@@ -37,11 +38,14 @@ import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.InternalChangeQuery;
 import com.google.gerrit.server.util.ManualRequestContext;
 import com.google.gerrit.server.util.OneOffRequestContext;
+import com.google.gerrit.server.util.time.TimeUtil;
 import com.google.inject.Provider;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicLong;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -59,6 +63,7 @@ public class ForwardedIndexChangeHandlerTest {
   private static final int MAX_INDEX_TRIES = 1;
   private static final int RETRY_INTERVAL = 5000;
   private static final int RETRY_POLL_INTERVAL = 1000;
+  private static final long START_TIME = 1000;
   private static final int EVENT_CHANGE_NUMBER = 1;
   private static String TEST_PROJECT = "test/project";
   private static String TEST_CHANGE_ID = TEST_PROJECT + "~" + TEST_CHANGE_NUMBER;
@@ -86,24 +91,24 @@ public class ForwardedIndexChangeHandlerTest {
   @Mock private ChangeData changeDataMock;
   private ForwardedIndexChangeHandler handler;
   private Change.Id id;
+  private final AtomicLong now = new AtomicLong(START_TIME);
   private final ChangeIndexEvent deleteEvent =
       new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, true, "instance-id");
 
   @Before
   public void setUp() throws Exception {
+    TimeUtil.setCurrentMillisSupplier(now::get);
     when(ctxMock.open()).thenReturn(manualRequestContextMock);
     id = Change.id(TEST_CHANGE_NUMBER);
     when(configurationMock.index()).thenReturn(index);
     when(index.maxTries()).thenReturn(MAX_INDEX_TRIES);
     when(index.retryPollInterval()).thenReturn(RETRY_POLL_INTERVAL);
-    handler =
-        new ForwardedIndexChangeHandler(
-            indexerMock,
-            configurationMock,
-            indexExecutorMock,
-            ctxMock,
-            changeCheckerPresentMock,
-            queryProviderMock);
+    handler = newHandler();
+  }
+
+  @After
+  public void tearDown() {
+    TimeUtil.resetCurrentMillisSupplier();
   }
 
   @Test
@@ -126,6 +131,7 @@ public class ForwardedIndexChangeHandlerTest {
 
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
       assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+      changeIndexEvent.markRetry("instance-id");
     }
     assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.SUCCESS);
 
@@ -140,11 +146,12 @@ public class ForwardedIndexChangeHandlerTest {
 
     assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
 
+    assertThat(changeIndexEvent.meta).isNull();
     verify(indexerMock, never()).index(any(ChangeNotes.class));
   }
 
   @Test
-  public void shouldFailSynchronousIndexingWhenChangeIsNotReady() throws Exception {
+  public void shouldNotResetRetriesWhenHandlerIsRecreated() throws Exception {
     setupChangeAccessRelatedMocks(
         CHANGE_EXISTS,
         DO_NOT_THROW_STORAGE_EXCEPTION,
@@ -156,7 +163,9 @@ public class ForwardedIndexChangeHandlerTest {
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
       assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+      changeIndexEvent.markRetry("instance-id");
     }
+    handler = newHandler();
     assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.FAILURE);
     assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
 
@@ -166,23 +175,33 @@ public class ForwardedIndexChangeHandlerTest {
   @Test
   public void shouldNotAttemptSynchronousIndexingAgainBeforeRetryInterval() throws Exception {
     when(index.retryInterval()).thenReturn(RETRY_INTERVAL);
-    handler =
-        new ForwardedIndexChangeHandler(
-            indexerMock,
-            configurationMock,
-            indexExecutorMock,
-            ctxMock,
-            changeCheckerPresentMock,
-            queryProviderMock);
-    setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_UP_TO_DATE, CHANGE_INCONSISTENT);
+    when(index.retryPollInterval()).thenReturn(0);
+    handler = newHandler();
     ChangeIndexEvent changeIndexEvent =
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    changeIndexEvent.markRetry("instance-id");
 
-    IndexingResult initialAttempt = handler.handleSync(changeIndexEvent);
-    IndexingResult earlyRedelivery = handler.handleSync(changeIndexEvent);
+    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.THROTTLED);
 
-    assertThat(initialAttempt).isEqualTo(IndexingResult.RETRY);
-    assertThat(earlyRedelivery).isEqualTo(IndexingResult.RETRY);
+    verifyNoInteractions(changeCheckerPresentMock, indexerMock);
+
+    now.addAndGet(RETRY_INTERVAL);
+    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.FAILURE);
+    verify(changeCheckerPresentMock).isConsistent(TEST_CHANGE_ID);
+  }
+
+  @Test
+  public void shouldTrackSynchronousRetriesIndependentlyForEachEvent() throws Exception {
+    ChangeIndexEvent firstEvent =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    assertThat(handler.handleSync(firstEvent)).isEqualTo(IndexingResult.RETRY);
+    firstEvent.markRetry("instance-id");
+
+    ChangeIndexEvent anotherEvent =
+        new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    assertThat(handler.handleSync(anotherEvent)).isEqualTo(IndexingResult.RETRY);
+
+    assertThat(handler.indexingRetryTaskMap).isEmpty();
   }
 
   @Test
@@ -318,6 +337,16 @@ public class ForwardedIndexChangeHandlerTest {
         IllegalArgumentException.class,
         () -> handler.index(TEST_CHANGE_ID, Operation.DELETE, Optional.empty()));
     verify(indexerMock, never()).delete(any(), any());
+  }
+
+  private ForwardedIndexChangeHandler newHandler() {
+    return new ForwardedIndexChangeHandler(
+        indexerMock,
+        configurationMock,
+        indexExecutorMock,
+        ctxMock,
+        changeCheckerPresentMock,
+        queryProviderMock);
   }
 
   private void scheduleIndexingRetryForOutdatedChange() throws Exception {

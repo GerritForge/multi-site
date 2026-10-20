@@ -15,23 +15,23 @@ import static com.google.gerrit.server.events.EventTypes.register;
 
 import com.google.gerrit.common.Nullable;
 import com.google.gerrit.server.events.Event;
-import java.time.Instant;
+import com.google.gerrit.server.util.time.TimeUtil;
 import java.util.Objects;
 
 public abstract class MultiSiteEvent extends Event {
   @Nullable public Meta meta;
 
-  public record Meta(Requeue requeue) {}
+  public record Meta(Retry retry) {}
 
-  public static class Requeue {
-    public int retryCount;
-    public long requeuedOn;
-    public String requeuedByInstanceId;
+  public static class Retry {
+    public int attemptCount;
+    public long lastAttemptOn;
+    public String retryingInstanceId;
 
-    public Requeue(int retryCount, long requeuedOn, String requeuedByInstanceId) {
-      this.retryCount = retryCount;
-      this.requeuedOn = requeuedOn;
-      this.requeuedByInstanceId = requeuedByInstanceId;
+    public Retry(int attemptCount, long lastAttemptOn, String retryingInstanceId) {
+      this.attemptCount = attemptCount;
+      this.lastAttemptOn = lastAttemptOn;
+      this.retryingInstanceId = retryingInstanceId;
     }
   }
 
@@ -49,10 +49,8 @@ public abstract class MultiSiteEvent extends Event {
     this.instanceId = instanceId;
   }
 
-  public void markRequeued(String requeuedByInstanceId) {
-    meta =
-        new Meta(
-            new Requeue(getRetryCount() + 1, Instant.now().getEpochSecond(), requeuedByInstanceId));
+  public void markRetry(String retryingInstanceId) {
+    meta = new Meta(new Retry(getRetryCount() + 1, TimeUtil.nowMs(), retryingInstanceId));
   }
 
   public abstract MultiSiteEvent copy();
@@ -66,47 +64,46 @@ public abstract class MultiSiteEvent extends Event {
 
   @Nullable
   private Meta copyMeta() {
-    Requeue requeue = getRequeue();
-    if (requeue == null) {
+    Retry retry = getRetry();
+    if (retry == null) {
       return null;
     }
-    return new Meta(
-        new Requeue(requeue.retryCount, requeue.requeuedOn, requeue.requeuedByInstanceId));
+    return new Meta(new Retry(retry.attemptCount, retry.lastAttemptOn, retry.retryingInstanceId));
   }
 
-  public boolean isRequeued() {
-    return getRequeue() != null;
+  public boolean isRetry() {
+    return getRetry() != null;
   }
 
   public int getRetryCount() {
-    Requeue requeue = getRequeue();
-    if (requeue != null) {
-      return requeue.retryCount;
+    Retry retry = getRetry();
+    if (retry != null) {
+      return retry.attemptCount;
     }
     return 0;
   }
 
-  public long getRequeuedOn() {
-    Requeue requeue = getRequeue();
-    if (requeue != null) {
-      return requeue.requeuedOn;
+  public long getLastAttemptOn() {
+    Retry retry = getRetry();
+    if (retry != null) {
+      return retry.lastAttemptOn;
     }
     return 0;
   }
 
-  public String getRequeuedByInstanceId() {
-    Requeue requeue = getRequeue();
-    if (requeue != null) {
-      return requeue.requeuedByInstanceId;
+  public String getRetryingInstanceId() {
+    Retry retry = getRetry();
+    if (retry != null) {
+      return retry.retryingInstanceId;
     }
     return null;
   }
 
-  private Requeue getRequeue() {
+  private Retry getRetry() {
     if (meta == null) {
       return null;
     }
-    return meta.requeue;
+    return meta.retry;
   }
 
   @Override
@@ -119,12 +116,12 @@ public abstract class MultiSiteEvent extends Event {
     }
     MultiSiteEvent event = (MultiSiteEvent) o;
     return eventCreatedOn == event.eventCreatedOn
-        && isRequeued() == event.isRequeued()
+        && isRetry() == event.isRetry()
         && getRetryCount() == event.getRetryCount()
-        && getRequeuedOn() == event.getRequeuedOn()
+        && getLastAttemptOn() == event.getLastAttemptOn()
         && Objects.equals(type, event.type)
         && Objects.equals(instanceId, event.instanceId)
-        && Objects.equals(getRequeuedByInstanceId(), event.getRequeuedByInstanceId());
+        && Objects.equals(getRetryingInstanceId(), event.getRetryingInstanceId());
   }
 
   @Override
@@ -133,9 +130,9 @@ public abstract class MultiSiteEvent extends Event {
         type,
         eventCreatedOn,
         instanceId,
-        isRequeued(),
+        isRetry(),
         getRetryCount(),
-        getRequeuedOn(),
-        getRequeuedByInstanceId());
+        getLastAttemptOn(),
+        getRetryingInstanceId());
   }
 }
