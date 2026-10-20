@@ -32,6 +32,7 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEve
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
+import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventAckHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.IndexEventMetrics;
@@ -41,6 +42,7 @@ import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.registration.PrivateInternals_DynamicMapImpl;
 import com.google.gerrit.server.config.AllUsersName;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.util.time.TimeUtil;
 import com.google.inject.util.Providers;
 import com.googlesource.gerrit.plugins.replication.events.RefReplicationDoneEvent;
 import java.io.IOException;
@@ -54,6 +56,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class IndexEventRouterTest {
   private static final String INSTANCE_ID = "instance-id";
+  private static final long LAST_ATTEMPT_ON = 1000;
   private IndexEventRouter router;
   @Mock private ForwardedIndexAccountHandler indexAccountHandler;
   @Mock private ForwardedIndexChangeHandler indexChangeHandler;
@@ -181,6 +184,51 @@ public class IndexEventRouterTest {
 
     assertThrows(IOException.class, () -> router.route(event, ack));
 
+    verifyNoInteractions(ackHandler);
+  }
+
+  @Test
+  public void shouldRecordAttemptWhenRoutingRequiresRetry() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    assertThat(event.getRetryCount()).isEqualTo(0);
+    when(indexChangeHandler.handleSync(event))
+        .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.RETRY);
+    long beforeAttempt = TimeUtil.nowMs();
+
+    assertThat(router.route(event, ack)).isFalse();
+
+    assertThat(event.getRetryCount()).isEqualTo(1);
+    assertThat(event.getLastAttemptOn()).isAtLeast(beforeAttempt);
+    assertThat(event.getRetryingInstanceId()).isEqualTo(INSTANCE_ID);
+    verifyNoInteractions(ackHandler);
+  }
+
+  @Test
+  public void shouldIncrementRetryCountWhenRoutingRequiresAnotherAttempt() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    event.markRetry(INSTANCE_ID);
+    assertThat(event.getRetryCount()).isEqualTo(1);
+    when(indexChangeHandler.handleSync(event))
+        .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.RETRY);
+
+    assertThat(router.route(event, ack)).isFalse();
+
+    assertThat(event.getRetryCount()).isEqualTo(2);
+    verifyNoInteractions(ackHandler);
+  }
+
+  @Test
+  public void shouldPreserveRetryMetadataWhenThrottled() throws Exception {
+    ChangeIndexEvent event = new ChangeIndexEvent("projectName", 3, false, INSTANCE_ID);
+    event.meta = new MultiSiteEvent.Meta(new MultiSiteEvent.Retry(1, LAST_ATTEMPT_ON, INSTANCE_ID));
+    when(indexChangeHandler.handleSync(event))
+        .thenReturn(ForwardedIndexingHandlerWithRetries.IndexingResult.THROTTLED);
+
+    assertThat(router.route(event, ack)).isFalse();
+
+    assertThat(event.getRetryCount()).isEqualTo(1);
+    assertThat(event.getLastAttemptOn()).isEqualTo(LAST_ATTEMPT_ON);
+    assertThat(event.getRetryingInstanceId()).isEqualTo(INSTANCE_ID);
     verifyNoInteractions(ackHandler);
   }
 
