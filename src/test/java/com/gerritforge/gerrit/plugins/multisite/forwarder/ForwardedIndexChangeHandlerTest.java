@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -235,28 +236,28 @@ public class ForwardedIndexChangeHandlerTest {
   @Test
   public void shouldStopPendingRetryWhenLocallyPresentChangeIsDeleted() throws Exception {
     setupChangePresentInIndex();
-
     scheduleIndexingRetryForOutdatedChange();
-    handleChangeDeletion();
-    handler.attemptToIndex(TEST_CHANGE_ID);
 
-    assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
-    verify(indexerMock).delete(Project.nameKey(TEST_PROJECT), id);
-    verify(indexExecutorMock).schedule(any(Runnable.class), anyLong(), any());
-    verify(changeCheckerPresentMock).getChangeNotes(TEST_CHANGE_ID);
+    reset(indexExecutorMock);
+    handleChangeDeletion();
+    verifyChangeDeletedFromIndex(TEST_PROJECT, id);
+    assertNoRetryingOrScheduledIndexingTasks();
+
+    handler.attemptToIndex(TEST_CHANGE_ID);
+    assertNoRetryingOrScheduledIndexingTasks();
   }
 
   @Test
   public void shouldStopPendingRetryWhenDeletedChangeIsAlreadyAbsentFromIndex() throws Exception {
     setupChangeAbsentFromIndex();
-
     scheduleIndexingRetryForMissingChange();
-    handleChangeDeletion();
-    handler.attemptToIndex(TEST_CHANGE_ID);
 
-    assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
-    verify(indexExecutorMock).schedule(any(Runnable.class), anyLong(), any());
-    verify(changeCheckerPresentMock).getChangeNotes(TEST_CHANGE_ID);
+    reset(indexExecutorMock);
+    handleChangeDeletion();
+    assertNoRetryingOrScheduledIndexingTasks();
+
+    handler.attemptToIndex(TEST_CHANGE_ID);
+    assertNoRetryingOrScheduledIndexingTasks();
   }
 
   @Test
@@ -320,16 +321,27 @@ public class ForwardedIndexChangeHandlerTest {
     verify(indexerMock, never()).delete(any(), any());
   }
 
+  private void verifyChangeDeletedFromIndex(String projectName, Change.Id id) {
+    verify(indexerMock).delete(Project.nameKey(projectName), id);
+  }
+
+  private void assertNoRetryingOrScheduledIndexingTasks() {
+    assertThat(handler.indexingRetryTaskMap).isEmpty();
+    verify(indexExecutorMock, never()).schedule(any(Runnable.class), anyLong(), any());
+  }
+
   private void scheduleIndexingRetryForOutdatedChange() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_EXISTS, CHANGE_OUTDATED);
     handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
     assertThat(handler.indexingRetryTaskMap).containsKey(TEST_CHANGE_ID);
+    verify(indexExecutorMock).schedule(any(Runnable.class), anyLong(), any());
   }
 
   private void scheduleIndexingRetryForMissingChange() throws Exception {
     setupChangeAccessRelatedMocks(CHANGE_DOES_NOT_EXIST, CHANGE_OUTDATED);
     handler.index(TEST_CHANGE_ID, Operation.INDEX, Optional.empty());
     assertThat(handler.indexingRetryTaskMap).containsKey(TEST_CHANGE_ID);
+    verify(indexExecutorMock).schedule(any(Runnable.class), anyLong(), any());
   }
 
   private void handleChangeDeletion() throws IOException {
