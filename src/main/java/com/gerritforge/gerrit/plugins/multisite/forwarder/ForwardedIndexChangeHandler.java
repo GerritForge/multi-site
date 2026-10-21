@@ -164,6 +164,9 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
+    if (indexingRetryTaskMap.remove(id) != null) {
+      log.atInfo().log("Removed pending indexing retry for change %s: received delete event", id);
+    }
     Preconditions.checkArgument(
         indexEvent.isPresent(), "No event found when deleting change %s", id);
     ChangeIndexEvent event = indexEvent.get();
