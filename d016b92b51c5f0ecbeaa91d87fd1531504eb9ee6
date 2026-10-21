@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a55850a_1416e36b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "```suggestion\nIn manual-acking (synchronous) mode, index events used an in-memory\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 50,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9cfd7b8_7ded0232",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "```suggestion\nKeeping this state in memory was a problem because restarting Gerrit or\n```",
+      "range": {
+        "startLine": 12,
+        "startChar": 29,
+        "endLine": 12,
+        "endChar": 41
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8bfd356_c9fc01c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "We use the imperative form.\n\n\n\n```suggestion\nInstead of relying on this in-memory map, look at the\n```",
+      "range": {
+        "startLine": 17,
+        "startChar": 42,
+        "endLine": 17,
+        "endChar": 62
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfbe32db_8048af60",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "```suggestion\nHowever, the existing `Requeue` metadata wrongly tied retry information\n```",
+      "range": {
+        "startLine": 20,
+        "startChar": 41,
+        "endLine": 20,
+        "endChar": 59
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20bf6e0f_7dba3786",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "```suggestion\nBug: Issue 573866990\n```",
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1059b3dc_4019dd57",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "This isn\u0027t necessarily an event that has already been requeued: the `requeue` method will put it back on the queue.\n\n\n\n```suggestion\n  public ListenableFuture\u003cBoolean\u003e requeue(String topic, Event eventToRequeue) {\n```",
+      "range": {
+        "startLine": 81,
+        "startChar": 63,
+        "endLine": 81,
+        "endChar": 76
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1481cd59_83104f8d",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "This block is forced to use `Optional\u003cLong\u003e` all throughout the block and on the `throttleRetryPolling()` because of the condition of being executed only when `e.isRetry() \u003d\u003d true`.\n\nUsing `Optional\u003cLong\u003e` as a parameter is an anti-pattern in Java and makes the code much less readable.\n\nThe whole block makes sense only when `e.isRetry() \u003d\u003d true`; why not simply use a traditional and more readable `if()` statement instead?\n\n\n\n```suggestion\n      T id, E e, IndexEntityChecker\u003cT, E\u003e entityChecker) {\n    if (e.isRetry()) {\n      long millisSinceAttempt \u003d millisSinceLastAttempt(e);\n      if (!throttleRetryPolling(millisSinceAttempt)) {\n        return IndexingResult.FAILURE;\n      }\n\n      if (millisSinceAttempt \u003c retryInterval) {\n        return IndexingResult.THROTTLED;\n      }\n    }\n```",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 5
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8aac5ad_337798cc",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T20:56:30Z",
+      "side": 1,
+      "message": "Do not use `Optional\u003cLong\u003e` as it is less readable than just using a plain `long`.\n\nThis method won\u0027t be called anymore for non-retry if you add a simple `if()` statement above.\n\n\n\n```suggestion\n  private boolean throttleRetryPolling(long millisSinceRetry) {\n    if (millisSinceRetry \u003c retryInterval) {\n      try {\n        Thread.sleep(Math.min(retryPollInterval, retryInterval - millisSinceRetry));\n```",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 90
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
