@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a196a2_4da11e17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-10-21T11:35:44Z",
+      "side": 1,
+      "message": "The build failure was unrelated to the multi-site plugin merge-up.",
+      "revId": "7629e68c64ab46e4fc58ab6e414685e36170e7fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
