@@ -92,6 +92,11 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void attemptToIndex(String id) {
+    IndexingRetry retry = indexingRetryTaskMap.get(id);
+    if (retry == null) {
+      log.info("Skipping indexing of change {}: no pending retry", id);
+      return;
+    }
     ChangeChecker checker = changeCheckerFactory.create(id);
     Optional<ChangeNotes> changeNotes = checker.getChangeNotes();
     boolean changeIsPresent = changeNotes.isPresent();
@@ -99,7 +104,6 @@ public class ForwardedIndexChangeHandler
     if (changeIsPresent && changeIsConsistent) {
       reindexIfUpToDate(id, checker);
     } else {
-      IndexingRetry retry = indexingRetryTaskMap.get(id);
       log.warn(
           "Change {} {} in local Git repository (event={}) after {} attempt(s)",
           id,
@@ -140,6 +144,9 @@ public class ForwardedIndexChangeHandler
 
   @Override
   protected void doDelete(String id, Optional<ChangeIndexEvent> indexEvent) {
+    if (indexingRetryTaskMap.remove(id) != null) {
+      log.info("Removed pending indexing retry for change {}: received delete event", id);
+    }
     indexer.delete(parseChangeId(id));
     log.debug("Change {} successfully deleted from index", id);
   }
