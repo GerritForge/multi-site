@@ -135,6 +135,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "02d3dd65_8741211b",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-21T22:19:26Z",
+      "side": 1,
+      "message": "Can we check the Event is a `MultiSiteEvent`?\nThis way, we could fail fast and avoid the rest of the computation.",
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1481cd59_83104f8d",
         "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
         "patchSetId": 13
@@ -175,6 +192,138 @@
         "endLine": 107,
         "endChar": 90
       },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9beffd12_650ce725",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/ForwardedEventManualAckingRouter.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-21T22:19:26Z",
+      "side": 1,
+      "message": "```suggestion\n    COMPLETED,\n    RETRIED,\n```",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbc40134_f90238b7",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/ForwardedEventManualAckingRouter.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-21T22:19:26Z",
+      "side": 1,
+      "message": "```suggestion\n   * @return the {@link RoutingResult} used to decide whether to requeue and record a retry\n```",
+      "range": {
+        "startLine": 32,
+        "startChar": 17,
+        "endLine": 32,
+        "endChar": 32
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "320e78f1_c572e656",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-21T22:19:26Z",
+      "side": 1,
+      "message": "```suggestion\n    IndexEvent originalEvent \u003d new AccountIndexEvent(1, null, INSTANCE_ID, false);\n```",
+      "range": {
+        "startLine": 80,
+        "startChar": 15,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e1ec6c2_79cb961e",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-21T22:19:26Z",
+      "side": 1,
+      "message": "```suggestion\n    IndexEvent retriedEvent \u003d requeuedEvent.getValue();\n```",
+      "range": {
+        "startLine": 89,
+        "startChar": 15,
+        "endLine": 89,
+        "endChar": 20
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "577d06b5_b9d7bf04",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-21T22:19:26Z",
+      "side": 1,
+      "message": "```suggestion\n    assertThat(retriedEvent.getRetryingInstanceId()).isEqualTo(NODE_INSTANCE_ID);\n    assertThat(retriedEvent.isRetry()).isTrue();\n```",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 74
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aec3b13_a57925de",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/event/MultiSiteEventTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-10-21T22:19:26Z",
+      "side": 1,
+      "message": "Worth adding a test to check that calling \u0027 markRetry \u0027 multiple times correctly increments the retry number? I thnk it was missing from my patch. No big deal anyway.",
       "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
