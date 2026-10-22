@@ -247,6 +247,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46004883_11c68765",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/broker/BrokerApiWrapper.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1059b3dc_4019dd57",
+      "range": {
+        "startLine": 81,
+        "startChar": 63,
+        "endLine": 81,
+        "endChar": 76
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02d3dd65_8741211b",
@@ -264,6 +288,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20763a8e_1111beb4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriber.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "Yep agreed.\nI have moved the pre-checked condition here, when resolving [this comment](https://review.gerrithub.io/c/GerritForge/multi-site/+/1255238/comment/24cc98b0_0dcbcf48/)",
+      "parentUuid": "02d3dd65_8741211b",
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1481cd59_83104f8d",
@@ -277,6 +319,30 @@
       "writtenOn": "2026-10-21T20:56:30Z",
       "side": 1,
       "message": "This block is forced to use `Optional\u003cLong\u003e` all throughout the block and on the `throttleRetryPolling()` because of the condition of being executed only when `e.isRetry() \u003d\u003d true`.\n\nUsing `Optional\u003cLong\u003e` as a parameter is an anti-pattern in Java and makes the code much less readable.\n\nThe whole block makes sense only when `e.isRetry() \u003d\u003d true`; why not simply use a traditional and more readable `if()` statement instead?\n\n\n\n```suggestion\n      T id, E e, IndexEntityChecker\u003cT, E\u003e entityChecker) {\n    if (e.isRetry()) {\n      long millisSinceAttempt \u003d millisSinceLastAttempt(e);\n      if (!throttleRetryPolling(millisSinceAttempt)) {\n        return IndexingResult.FAILURE;\n      }\n\n      if (millisSinceAttempt \u003c retryInterval) {\n        return IndexingResult.THROTTLED;\n      }\n    }\n```",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 5
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b446c4ba_44e75636",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1481cd59_83104f8d",
       "range": {
         "startLine": 74,
         "startChar": 0,
@@ -310,6 +376,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5a8d55e_86045737",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/ForwardedIndexingHandlerWithRetries.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8aac5ad_337798cc",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 90
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9beffd12_650ce725",
@@ -323,6 +413,30 @@
       "writtenOn": "2026-10-21T22:19:26Z",
       "side": 1,
       "message": "```suggestion\n    COMPLETED,\n    RETRIED,\n```",
+      "range": {
+        "startLine": 22,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 10
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4976cdbf_f97498da",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/ForwardedEventManualAckingRouter.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "I think `RETRY` is a more accurate name because the event has not been `RETRIED` yet. `RETRIED` would suggest it has already happened.\n\nI have renamed `COMPLETE` to `COMPLETED`, though.",
+      "parentUuid": "9beffd12_650ce725",
       "range": {
         "startLine": 22,
         "startChar": 4,
@@ -403,6 +517,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "679e1509_ff2861a4",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "320e78f1_c572e656",
+      "range": {
+        "startLine": 80,
+        "startChar": 15,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e1ec6c2_79cb961e",
@@ -416,6 +554,30 @@
       "writtenOn": "2026-10-21T22:19:26Z",
       "side": 1,
       "message": "```suggestion\n    IndexEvent retriedEvent \u003d requeuedEvent.getValue();\n```",
+      "range": {
+        "startLine": 89,
+        "startChar": 15,
+        "endLine": 89,
+        "endChar": 20
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "212d7d9a_96d535e7",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e1ec6c2_79cb961e",
       "range": {
         "startLine": 89,
         "startChar": 15,
@@ -449,6 +611,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c511ca6_201ee3a3",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/IndexEventSubscriberTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "577d06b5_b9d7bf04",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 74
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aec3b13_a57925de",
@@ -462,6 +648,24 @@
       "writtenOn": "2026-10-21T22:19:26Z",
       "side": 1,
       "message": "Worth adding a test to check that calling \u0027 markRetry \u0027 multiple times correctly increments the retry number? I thnk it was missing from my patch. No big deal anyway.",
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5266b29e_fadf75c9",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/event/MultiSiteEventTest.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T10:31:39Z",
+      "side": 1,
+      "message": "This is already covered by `copyDoesNotShareRetryMetadataWithOriginalEvent` in `MultiSiteEventTest`.",
+      "parentUuid": "3aec3b13_a57925de",
       "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
