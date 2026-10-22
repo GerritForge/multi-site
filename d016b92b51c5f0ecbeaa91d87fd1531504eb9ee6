@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2b2ca72_096b43a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T07:44:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "1a55850a_1416e36b",
+      "range": {
+        "startLine": 9,
+        "startChar": 50,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9cfd7b8_7ded0232",
@@ -37,6 +61,30 @@
       "writtenOn": "2026-10-21T20:56:30Z",
       "side": 1,
       "message": "```suggestion\nKeeping this state in memory was a problem because restarting Gerrit or\n```",
+      "range": {
+        "startLine": 12,
+        "startChar": 29,
+        "endLine": 12,
+        "endChar": 41
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51e83b2a_4a611121",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T07:44:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "b9cfd7b8_7ded0232",
       "range": {
         "startLine": 12,
         "startChar": 29,
@@ -70,6 +118,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fee1b747_d8811fd7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T07:44:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "f8bfd356_c9fc01c3",
+      "range": {
+        "startLine": 17,
+        "startChar": 42,
+        "endLine": 17,
+        "endChar": 62
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cfbe32db_8048af60",
@@ -93,6 +165,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "237ff1c2_55d14201",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T07:44:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "cfbe32db_8048af60",
+      "range": {
+        "startLine": 20,
+        "startChar": 41,
+        "endLine": 20,
+        "endChar": 59
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20bf6e0f_7dba3786",
@@ -106,6 +202,24 @@
       "writtenOn": "2026-10-21T20:56:30Z",
       "side": 1,
       "message": "```suggestion\nBug: Issue 573866990\n```",
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d792dee3_fc47c14f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T07:44:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "20bf6e0f_7dba3786",
       "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
@@ -232,6 +346,30 @@
       "writtenOn": "2026-10-21T22:19:26Z",
       "side": 1,
       "message": "```suggestion\n   * @return the {@link RoutingResult} used to decide whether to requeue and record a retry\n```",
+      "range": {
+        "startLine": 32,
+        "startChar": 17,
+        "endLine": 32,
+        "endChar": 32
+      },
+      "revId": "d016b92b51c5f0ecbeaa91d87fd1531504eb9ee6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "556b4c73_2be42ab4",
+        "filename": "src/main/java/com/gerritforge/gerrit/plugins/multisite/forwarder/router/ForwardedEventManualAckingRouter.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-10-22T07:44:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "dbc40134_f90238b7",
       "range": {
         "startLine": 32,
         "startChar": 17,
