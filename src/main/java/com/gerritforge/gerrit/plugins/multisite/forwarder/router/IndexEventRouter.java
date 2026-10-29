@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 import static com.google.gerrit.extensions.registration.PluginName.GERRIT;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexAccountHandler;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler;
@@ -75,7 +76,8 @@ public class IndexEventRouter
   }
 
   @Override
-  public RoutingResult route(IndexEvent sourceEvent, MessageAcknowledgement<Event> ack)
+  public RoutingResult route(
+      IndexEvent sourceEvent, EventMetadata metadata, MessageAcknowledgement<Event> ack)
       throws IOException {
     ForwardedIndexingHandler<?, ? extends IndexEvent> handler =
         indexHandlers.get(GERRIT, sourceEvent.getType());
@@ -85,7 +87,7 @@ public class IndexEventRouter
     }
 
     metrics.incrementEventsPendingAcknowledgement(sourceEvent.getType());
-    switch (handler.handleSync(sourceEvent)) {
+    switch (handler.handleSync(sourceEvent, metadata)) {
       case IndexingResult.RETRY:
         return RoutingResult.RETRY;
 

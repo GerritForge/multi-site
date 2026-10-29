@@ -18,6 +18,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
@@ -75,7 +76,7 @@ public class ForwardedIndexAccountHandlerTest {
     when(accountChecker.isConsistent(id)).thenReturn(true);
     when(accountChecker.isUpToDate(Optional.of(event))).thenReturn(true);
 
-    assertThat(handler.handleSync(event))
+    assertThat(handler.handleSync(event, EventMetadata.EMPTY))
         .isEqualTo(ForwardedIndexingHandlerWithRetries.IndexingResult.SUCCESS);
 
     verify(indexerMock).index(id);
@@ -86,7 +87,7 @@ public class ForwardedIndexAccountHandlerTest {
     AccountIndexEvent event = new AccountIndexEvent(id.get(), "target-sha", "instance-id", false);
     when(accountChecker.isConsistent(id)).thenReturn(false);
 
-    assertThat(handler.handleSync(event))
+    assertThat(handler.handleSync(event, EventMetadata.EMPTY))
         .isEqualTo(ForwardedIndexingHandlerWithRetries.IndexingResult.FAILURE);
     verify(indexerMock, never()).index(id);
   }
@@ -95,7 +96,7 @@ public class ForwardedIndexAccountHandlerTest {
   public void shouldDeleteSynchronously() throws IOException {
     AccountIndexEvent event = new AccountIndexEvent(id.get(), null, "instance-id", true);
 
-    assertThat(handler.handleSync(event))
+    assertThat(handler.handleSync(event, EventMetadata.EMPTY))
         .isEqualTo(ForwardedIndexingHandlerWithRetries.IndexingResult.SUCCESS);
 
     verify(indexerMock).index(id);
