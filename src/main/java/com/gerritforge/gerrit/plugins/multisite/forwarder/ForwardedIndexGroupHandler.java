@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -59,9 +60,10 @@ public class ForwardedIndexGroupHandler
   }
 
   @Override
-  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+  public IndexingResult handleSync(IndexEvent sourceEvent, EventMetadata metadata)
+      throws IOException {
     if (sourceEvent instanceof GroupIndexEvent event) {
-      return indexSyncIfConsistentAndUpToDate(event.groupUUID, event, groupChecker);
+      return indexSyncIfConsistentAndUpToDate(event.groupUUID, event, metadata, groupChecker);
     }
     return IndexingResult.IGNORED;
   }
