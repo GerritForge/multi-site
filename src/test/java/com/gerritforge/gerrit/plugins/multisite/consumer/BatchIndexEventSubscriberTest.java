@@ -16,6 +16,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
@@ -37,10 +38,10 @@ public class BatchIndexEventSubscriberTest extends AbstractSubscriberTestBase {
   @SuppressWarnings("unchecked")
   @Test
   public void shouldConsumeNonProjectAndNonChangeIndexingEventsTypes()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
 
-    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
     verify(projectsFilter, never()).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);

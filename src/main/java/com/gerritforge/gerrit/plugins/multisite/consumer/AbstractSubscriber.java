@@ -12,11 +12,11 @@
 package com.gerritforge.gerrit.plugins.multisite.consumer;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventManualAckingRouter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventManualAckingRouter.RoutingResult;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
@@ -46,7 +46,7 @@ public abstract class AbstractSubscriber {
   @FunctionalInterface
   public interface RequeueEventAction {
 
-    boolean requeue(Event t);
+    boolean requeue(Event event, EventMetadata metadata);
   }
 
   public AbstractSubscriber(
@@ -65,17 +65,19 @@ public abstract class AbstractSubscriber {
   protected abstract Boolean shouldConsumeEvent(Event event);
 
   public AckAwareConsumer<Event> getConsumer(boolean isAutoAck) {
-    return (event, messageAcknowledgement) ->
-        processRecord(event, messageAcknowledgement, isAutoAck, AckMode.SUBSCRIBER_MANAGED, null);
+    return (event, metadata, messageAcknowledgement) ->
+        processRecord(
+            event, metadata, messageAcknowledgement, isAutoAck, AckMode.SUBSCRIBER_MANAGED, null);
   }
 
   public AckAwareConsumer<Event> getManualAckConsumer(RequeueEventAction requeueAction) {
     if (!(eventRouter instanceof ForwardedEventManualAckingRouter<?>)) {
       throw new IllegalStateException("Router does not support manual acknowledgement");
     }
-    return (event, messageAcknowledgement) ->
+    return (event, metadata, messageAcknowledgement) ->
         processRecord(
             event,
+            metadata,
             messageAcknowledgement, /* isAutoAck */
             false,
             AckMode.ROUTER_MANAGED,
@@ -84,14 +86,13 @@ public abstract class AbstractSubscriber {
 
   private void processRecord(
       Event event,
+      EventMetadata metadata,
       MessageAcknowledgement<Event> messageAcknowledgement,
       boolean isAutoAck,
       AckMode ackMode,
       @Nullable RequeueEventAction requeueAction) {
     if (ackMode == AckMode.ROUTER_MANAGED) {
       Preconditions.checkNotNull(requeueAction, "requeueAction is mandatory in ROUTER_MANAGED ack");
-      Preconditions.checkArgument(
-          event instanceof MultiSiteEvent, "Requeueing supports only MultiSiteEvent");
     }
 
     String sourceInstanceId = event.instanceId;
@@ -102,10 +103,10 @@ public abstract class AbstractSubscriber {
     } else if (instanceId.equals(sourceInstanceId)) {
       logger.atFiner().log("Dropping event %s produced by our instanceId %s", event, instanceId);
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
-    } else if (isRetryForOtherInstance(event)) {
+    } else if (isRetryForOtherInstance(metadata)) {
       logger.atFiner().log(
           "Dropping retry event %s for instanceId %s",
-          event, ((MultiSiteEvent) event).getRetryingInstanceId());
+          event, metadata.retry().retryingInstanceId());
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
     } else if (!shouldConsumeEvent(event)) {
       handleDroppedEvent(event, messageAcknowledgement, isAutoAck, ackMode);
@@ -117,17 +118,13 @@ public abstract class AbstractSubscriber {
             break;
 
           case ROUTER_MANAGED:
-            RoutingResult result = routeManaged(event, messageAcknowledgement);
+            RoutingResult result = routeManaged(event, metadata, messageAcknowledgement);
             if (result == RoutingResult.COMPLETED) {
               break;
             }
-            MultiSiteEvent eventToRequeue = (MultiSiteEvent) event;
-            if (result == RoutingResult.RETRY) {
-              // Mutate a copy so acknowledgement implementations can still find the original event.
-              eventToRequeue = eventToRequeue.copy();
-              eventToRequeue.markRetry(instanceId);
-            }
-            if (requeueAction.requeue(eventToRequeue)) {
+            EventMetadata metadataToRequeue =
+                result == RoutingResult.RETRY ? metadata.nextRetry(instanceId) : metadata;
+            if (requeueAction.requeue(event, metadataToRequeue)) {
               manualAckingRouter().ack(event, messageAcknowledgement);
             }
             break;
@@ -143,10 +140,8 @@ public abstract class AbstractSubscriber {
     subscriberMetrics.updateReplicationStatusMetrics(event);
   }
 
-  private boolean isRetryForOtherInstance(Event event) {
-    return event instanceof MultiSiteEvent multiSiteEvent
-        && multiSiteEvent.isRetry()
-        && !instanceId.equals(multiSiteEvent.getRetryingInstanceId());
+  private boolean isRetryForOtherInstance(EventMetadata metadata) {
+    return metadata.isRetry() && !instanceId.equals(metadata.retry().retryingInstanceId());
   }
 
   private void handleDroppedEvent(
@@ -172,9 +167,10 @@ public abstract class AbstractSubscriber {
     tryAckAndMarkAsConsumed(event, ack, isAutoAck);
   }
 
-  private RoutingResult routeManaged(Event event, MessageAcknowledgement<Event> ack)
+  private RoutingResult routeManaged(
+      Event event, EventMetadata metadata, MessageAcknowledgement<Event> ack)
       throws IOException, PermissionBackendException, CacheNotFoundException {
-    RoutingResult result = manualAckingRouter().route(event, ack);
+    RoutingResult result = manualAckingRouter().route(event, metadata, ack);
     subscriberMetrics.incrementSubscriberConsumedMessage();
     return result;
   }

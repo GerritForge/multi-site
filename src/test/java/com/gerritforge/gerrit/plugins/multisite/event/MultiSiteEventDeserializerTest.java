@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.event;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.gerritforge.gerrit.eventbroker.EventDeserializer;
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.google.gerrit.server.events.Event;
@@ -61,9 +62,7 @@ public class MultiSiteEventDeserializerTest {
             TEST_ACCOUNT_ID,
             TEST_SHA1);
 
-    MultiSiteEvent event = (MultiSiteEvent) deserializer.deserialize(eventJson);
-    assertAccountIndexEventEquals(event, testAccountIndexEvent);
-    assertThat(event.meta).isNull();
+    assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
   }
 
   @Test
@@ -111,7 +110,6 @@ public class MultiSiteEventDeserializerTest {
   public void eventDeserializerShouldParseRetriedAccountIndexEvent() {
     AccountIndexEvent testAccountIndexEvent =
         new AccountIndexEvent(TEST_ACCOUNT_ID, TEST_SHA1, TEST_INSTANCE_ID, false);
-    MultiSiteEvent.Retry retry = new MultiSiteEvent.Retry(2, 123456789L, "retrying-instance-id");
     String eventJson =
         String.format(
             "{"
@@ -120,7 +118,7 @@ public class MultiSiteEventDeserializerTest {
                 + "\"eventCreatedOn\":%d,"
                 + "\"accountId\":%d,"
                 + "\"targetSha\":\"%s\","
-                + "\"meta\":{"
+                + "\"brokerMeta\":{"
                 + "\"retry\":{"
                 + "\"retryCount\":2,"
                 + "\"lastAttemptOn\":123456789,"
@@ -133,8 +131,11 @@ public class MultiSiteEventDeserializerTest {
             testAccountIndexEvent.eventCreatedOn,
             TEST_ACCOUNT_ID,
             TEST_SHA1);
-    testAccountIndexEvent.meta = new MultiSiteEvent.Meta(retry);
-    assertAccountIndexEventEquals(deserializer.deserialize(eventJson), testAccountIndexEvent);
+    EventDeserializer.Message message = deserializer.deserializeMessage(eventJson);
+    assertAccountIndexEventEquals(message.event(), testAccountIndexEvent);
+    assertThat(message.metadata())
+        .isEqualTo(
+            new EventMetadata(new EventMetadata.Retry(2, 123456789L, "retrying-instance-id")));
   }
 
   @Test
@@ -144,7 +145,7 @@ public class MultiSiteEventDeserializerTest {
 
     String json = gson.toJson(accountIndexEvent, Event.class);
 
-    assertThat(json).doesNotContain("\"meta\"");
+    assertThat(json).doesNotContain("\"brokerMeta\"");
     assertThat(json).doesNotContain("\"retry\"");
     assertThat(json).doesNotContain("\"retryCount\"");
     assertThat(json).doesNotContain("\"lastAttemptOn\"");

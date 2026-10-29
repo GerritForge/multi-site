@@ -70,11 +70,6 @@ public class BrokerForwarderTest {
     protected TestEvent() {
       super("test", "instance-id");
     }
-
-    @Override
-    public TestEvent copy() {
-      return copyBaseTo(new TestEvent());
-    }
   }
 
   @Before
