@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.consumer;
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
 import com.gerritforge.gerrit.eventbroker.BrokerApiPluginListener;
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.eventbroker.EventsBrokerConfiguration;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.broker.BrokerApiWrapper;
@@ -21,7 +22,6 @@ import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEve
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.EventTopic;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.GroupIndexEvent;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ProjectIndexEvent;
 import com.google.common.base.Preconditions;
 import com.google.common.flogger.FluentLogger;
@@ -115,7 +115,7 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
                   new IllegalStateException(
                       "broker.groupId is required for partition-aware subscriptions"));
       AckAwareConsumer<Event> consumer =
-          subscriber.getManualAckConsumer((e) -> requeue(topic, (MultiSiteEvent) e));
+          subscriber.getManualAckConsumer((e, metadata) -> requeue(topic, e, metadata));
       INDEX_PARTITIONS.forEach(
           partition ->
               brokerApiWrapper.receiveAsyncWithPartition(
@@ -131,9 +131,9 @@ public class MultiSiteConsumerRunner implements LifecycleListener, BrokerApiPlug
     }
   }
 
-  private boolean requeue(String topic, MultiSiteEvent event) {
+  private boolean requeue(String topic, Event event, EventMetadata metadata) {
     try {
-      return brokerApiWrapper.requeue(topic, event).get();
+      return brokerApiWrapper.requeue(topic, event, metadata).get();
     } catch (Exception e) {
       logger.atSevere().withCause(e).log("Cannot requeue event %s to topic %s", event, topic);
       return false;

@@ -13,6 +13,7 @@ package com.gerritforge.gerrit.plugins.multisite.broker;
 
 import com.gerritforge.gerrit.eventbroker.AckAwareConsumer;
 import com.gerritforge.gerrit.eventbroker.BrokerApi;
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriber;
 import com.gerritforge.gerrit.eventbroker.TopicSubscriberWithGroupId;
 import com.gerritforge.gerrit.eventbroker.log.MessageLogger;
@@ -78,13 +79,14 @@ public class BrokerApiWrapper implements BrokerApi {
   }
 
   @Override
-  public ListenableFuture<Boolean> requeue(String topic, Event eventToRequeue) {
+  public ListenableFuture<Boolean> requeue(
+      String topic, Event eventToRequeue, EventMetadata metadata) {
     try {
       return addMetricsCallback(
           topic,
           eventToRequeue,
           MessageLogger.Direction.REQUEUE,
-          apiDelegate.get().requeue(topic, eventToRequeue));
+          apiDelegate.get().requeue(topic, eventToRequeue, metadata));
     } catch (RuntimeException e) {
       metrics.incrementBrokerFailedToRequeueMessage(topic, eventToRequeue.getType());
       throw e;
