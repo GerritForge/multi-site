@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.google.common.flogger.FluentLogger;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public abstract class ForwardedIndexingHandler<T, E> {
   public abstract void handle(IndexEvent sourceEvent) throws IOException;
 
   public abstract ForwardedIndexingHandlerWithRetries.IndexingResult handleSync(
-      IndexEvent sourceEvent) throws IOException;
+      IndexEvent sourceEvent, EventMetadata metadata) throws IOException;
 
   protected abstract void doIndex(T id, Optional<E> indexEvent);
 

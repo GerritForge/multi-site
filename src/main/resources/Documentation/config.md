@@ -85,8 +85,9 @@ Defaults to true.
     of the partition can continue. Once `index.maxTries` is reached, the event is
     left unacknowledged so that it can be redelivered by the broker.
 
-    > **NOTE**: Synchronous indexing tracks attempts in the event's `meta.retry`
-    > metadata. `retryCount` includes the initial failed attempt,
+    > **NOTE**: Synchronous indexing tracks attempts in the `brokerMeta.retry`
+    > message metadata, exposed by events-broker as `EventMetadata` to every
+    > consumer of the message. `retryCount` includes the initial failed attempt,
     > `lastAttemptOn` is its latest attempt timestamp in epoch milliseconds, and
     > `retryingInstanceId` identifies the instance the retry is for. Requeueing
     > an event before this interval elapses does not advance the count or

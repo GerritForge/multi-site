@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.DELETE;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -68,14 +69,15 @@ public class ForwardedIndexAccountHandler
   }
 
   @Override
-  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+  public IndexingResult handleSync(IndexEvent sourceEvent, EventMetadata metadata)
+      throws IOException {
     if (sourceEvent instanceof AccountIndexEvent event) {
       Account.Id id = Account.id(event.accountId);
       if (event.deleted) {
         index(id, DELETE, Optional.of(event));
         return IndexingResult.SUCCESS;
       }
-      return indexSyncIfConsistentAndUpToDate(id, event, accountChecker);
+      return indexSyncIfConsistentAndUpToDate(id, event, metadata, accountChecker);
     }
     return IndexingResult.IGNORED;
   }

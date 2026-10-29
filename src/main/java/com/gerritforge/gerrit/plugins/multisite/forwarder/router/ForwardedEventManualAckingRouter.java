@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder.router;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.google.gerrit.server.events.Event;
@@ -28,6 +29,7 @@ public interface ForwardedEventManualAckingRouter<EventType extends Event> {
    * Route an event through the subscribers for consumption
    *
    * @param event event to be routed
+   * @param metadata metadata of the message carrying the event
    * @param ack handle to ack events
    * @return the {@link RoutingResult} used to decide whether to requeue and record a retry
    * @throws IOException if any unexpected IO operation failed during routing
@@ -35,7 +37,7 @@ public interface ForwardedEventManualAckingRouter<EventType extends Event> {
    * @throws CacheNotFoundException the cache eviction event was referring to a cache that was not
    *     found
    */
-  RoutingResult route(EventType event, MessageAcknowledgement<Event> ack)
+  RoutingResult route(EventType event, EventMetadata metadata, MessageAcknowledgement<Event> ack)
       throws IOException, PermissionBackendException, CacheNotFoundException;
 
   /**

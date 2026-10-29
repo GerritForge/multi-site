@@ -19,13 +19,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgement;
 import com.gerritforge.gerrit.eventbroker.MessageAcknowledgementException;
 import com.gerritforge.gerrit.globalrefdb.validation.ProjectsFilter;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
-import com.gerritforge.gerrit.plugins.multisite.forwarder.events.MultiSiteEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.router.ForwardedEventRouter;
-import com.google.common.collect.Iterables;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.permissions.PermissionBackendException;
@@ -41,7 +40,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 @Ignore
 public abstract class AbstractSubscriberTestBase {
-  protected static final AbstractSubscriber.RequeueEventAction NO_ACTION = (e) -> true;
+  protected static final AbstractSubscriber.RequeueEventAction NO_ACTION = (e, m) -> true;
   protected static final String NODE_INSTANCE_ID = "node-instance-id";
   protected static final String INSTANCE_ID = "other-node-instance-id";
   protected static final String PROJECT_NAME = "project-name";
@@ -66,53 +65,53 @@ public abstract class AbstractSubscriberTestBase {
 
   @Test
   public void shouldConsumeEventsWhenNotFilteredByProjectName()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     for (Event event : events()) {
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
       ack = new TestManualAck();
-      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
       verifyConsumed(event, ack);
     }
   }
 
   @Test
   public void shouldSkipEventsWhenFilteredByProjectName()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     for (Event event : events()) {
       when(projectsFilter.matches(any(String.class))).thenReturn(false);
       ack = new TestManualAck();
-      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
       verifySkipped(event, ack);
     }
   }
 
   @Test
   public void shouldConsumeRetriesForThisInstance()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
-    for (MultiSiteEvent multiSiteEvent : multiSiteEvents()) {
-      multiSiteEvent.markRetry(NODE_INSTANCE_ID);
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
+    for (Event event : events()) {
+      EventMetadata metadata = EventMetadata.EMPTY.nextRetry(NODE_INSTANCE_ID);
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
       ack = new TestManualAck();
 
-      objectUnderTest.getConsumer(MANUAL_ACK).accept(multiSiteEvent, ack);
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, metadata, ack);
 
-      verifyConsumed(multiSiteEvent, ack);
+      verifyConsumed(event, ack);
     }
   }
 
   @SuppressWarnings("unchecked")
   @Test
   public void shouldDropRetriesForOtherInstances()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
-    for (MultiSiteEvent multiSiteEvent : multiSiteEvents()) {
-      multiSiteEvent.markRetry("retrying-instance-id");
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
+    for (Event event : events()) {
+      EventMetadata metadata = EventMetadata.EMPTY.nextRetry("retrying-instance-id");
       ack = new TestManualAck();
 
-      objectUnderTest.getConsumer(MANUAL_ACK).accept(multiSiteEvent, ack);
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, metadata, ack);
 
       verify(projectsFilter, never()).matches(any(String.class));
-      verify(eventRouter, never()).route(multiSiteEvent);
-      verify(droppedEventListeners).onEventDropped(multiSiteEvent);
+      verify(eventRouter, never()).route(event);
+      verify(droppedEventListeners).onEventDropped(event);
       ack.assertAckAttemptedOnce();
       reset(projectsFilter, eventRouter, droppedEventListeners);
     }
@@ -120,11 +119,11 @@ public abstract class AbstractSubscriberTestBase {
 
   @Test
   public void shouldCountDroppedMessageAsConsumed()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     Event event = events().getFirst();
     when(projectsFilter.matches(any(String.class))).thenReturn(false);
 
-    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
     verifySkipped(event, ack);
     verify(subscriberMetrics, times(1)).incrementSubscriberConsumedMessage();
@@ -134,13 +133,13 @@ public abstract class AbstractSubscriberTestBase {
   @SuppressWarnings("unchecked")
   @Test
   public void shouldSkipLocalEvents()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     for (Event event : events()) {
       event.instanceId = NODE_INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
       ack = new TestManualAck();
-      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
       verify(projectsFilter, never()).matches(PROJECT_NAME);
       verify(eventRouter, never()).route(event);
@@ -151,13 +150,13 @@ public abstract class AbstractSubscriberTestBase {
   }
 
   @Test
-  public void shouldUpdateReplicationMetricsWithLocalEvents() {
+  public void shouldUpdateReplicationMetricsWithLocalEvents() throws InterruptedException {
     for (Event event : events()) {
       event.instanceId = NODE_INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
       ack = new TestManualAck();
-      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
       reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
@@ -165,13 +164,13 @@ public abstract class AbstractSubscriberTestBase {
   }
 
   @Test
-  public void shouldUpdateReplicationMetricsWithNonLocalEvents() {
+  public void shouldUpdateReplicationMetricsWithNonLocalEvents() throws InterruptedException {
     for (Event event : events()) {
       event.instanceId = INSTANCE_ID;
       when(projectsFilter.matches(any(String.class))).thenReturn(true);
 
       ack = new TestManualAck();
-      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+      objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
       verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
       reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);
@@ -180,12 +179,12 @@ public abstract class AbstractSubscriberTestBase {
 
   @Test
   public void shouldNotAckWhenMessageIsAutoAcked()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     Event event = events().getFirst();
     when(projectsFilter.matches(any(String.class))).thenReturn(true);
     ack = new TestAutoAck();
 
-    objectUnderTest.getConsumer(true).accept(event, ack);
+    objectUnderTest.getConsumer(true).accept(event, EventMetadata.EMPTY, ack);
 
     verifyConsumed(event, ack);
     ack.assertNotAcked();
@@ -194,12 +193,12 @@ public abstract class AbstractSubscriberTestBase {
   @Test
   @SuppressWarnings("unchecked")
   public void shouldNotCountConsumedMessageWhenAckFails()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     Event event = events().getFirst();
     when(projectsFilter.matches(any(String.class))).thenReturn(true);
     ack = TestManualAck.failing();
 
-    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
     verify(projectsFilter, times(1)).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);
@@ -293,9 +292,5 @@ public abstract class AbstractSubscriberTestBase {
     private static TestManualAck failing() {
       return new TestManualAck(/* fail */ true);
     }
-  }
-
-  private Iterable<MultiSiteEvent> multiSiteEvents() {
-    return Iterables.filter(events(), MultiSiteEvent.class);
   }
 }

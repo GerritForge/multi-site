@@ -30,11 +30,6 @@ public class AccountIndexEvent extends IndexEvent {
   }
 
   @Override
-  public AccountIndexEvent copy() {
-    return copyBaseTo(new AccountIndexEvent(accountId, targetSha, instanceId, deleted));
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;

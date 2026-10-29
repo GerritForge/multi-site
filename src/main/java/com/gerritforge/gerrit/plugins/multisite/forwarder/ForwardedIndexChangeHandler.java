@@ -14,6 +14,7 @@ package com.gerritforge.gerrit.plugins.multisite.forwarder;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.DELETE;
 import static com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation.INDEX;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.ChangeIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -75,7 +76,8 @@ public class ForwardedIndexChangeHandler
   }
 
   @Override
-  public IndexingResult handleSync(IndexEvent sourceEvent) throws IOException {
+  public IndexingResult handleSync(IndexEvent sourceEvent, EventMetadata metadata)
+      throws IOException {
     if (sourceEvent instanceof ChangeIndexEvent event) {
       if (ChangeIndexEvent.isAllChangesDeletedForProject(event)) {
         deleteAllChangesForProject(event.projectName);
@@ -88,7 +90,7 @@ public class ForwardedIndexChangeHandler
         return IndexingResult.SUCCESS;
       }
 
-      return indexSyncIfConsistentAndUpToDate(changeId, event, changeChecker);
+      return indexSyncIfConsistentAndUpToDate(changeId, event, metadata, changeChecker);
     }
     return IndexingResult.IGNORED;
   }
