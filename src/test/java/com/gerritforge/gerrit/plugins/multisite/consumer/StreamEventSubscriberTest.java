@@ -19,6 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.CacheNotFoundException;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.AccountIndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
@@ -70,10 +71,10 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
   @SuppressWarnings("unchecked")
   @Test
   public void shouldNotConsumeNonProjectEventTypeEvents()
-      throws IOException, PermissionBackendException, CacheNotFoundException {
+      throws IOException, PermissionBackendException, CacheNotFoundException, InterruptedException {
     IndexEvent event = new AccountIndexEvent(1, null, INSTANCE_ID, false);
 
-    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
     verify(projectsFilter, never()).matches(PROJECT_NAME);
     verify(eventRouter, times(1)).route(event);
@@ -81,7 +82,7 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
   }
 
   @Test
-  public void shouldUpdateReplicationMetricsWithRemoteRefEvent() {
+  public void shouldUpdateReplicationMetricsWithRemoteRefEvent() throws InterruptedException {
     Event event =
         new RefEvent("ref-replicated") {
 
@@ -99,7 +100,7 @@ public class StreamEventSubscriberTest extends AbstractSubscriberTestBase {
     event.instanceId = INSTANCE_ID;
     when(projectsFilter.matches(eq(PROJECT_NAME))).thenReturn(true);
 
-    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, ack);
+    objectUnderTest.getConsumer(MANUAL_ACK).accept(event, EventMetadata.EMPTY, ack);
 
     verify(subscriberMetrics, times(1)).updateReplicationStatusMetrics(event);
     reset(projectsFilter, eventRouter, droppedEventListeners, subscriberMetrics);

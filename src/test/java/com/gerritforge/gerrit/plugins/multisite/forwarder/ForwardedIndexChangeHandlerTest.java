@@ -23,6 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandler.Operation;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.ForwardedIndexingHandlerWithRetries.IndexingResult;
@@ -125,11 +126,12 @@ public class ForwardedIndexChangeHandlerTest {
     ChangeIndexEvent changeIndexEvent =
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
+    EventMetadata metadata = EventMetadata.EMPTY;
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
-      assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
-      changeIndexEvent.markRetry("instance-id");
+      assertThat(handler.handleSync(changeIndexEvent, metadata)).isEqualTo(IndexingResult.RETRY);
+      metadata = metadata.nextRetry("instance-id");
     }
-    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.SUCCESS);
+    assertThat(handler.handleSync(changeIndexEvent, metadata)).isEqualTo(IndexingResult.SUCCESS);
 
     verify(indexerMock).index(changeNotes);
   }
@@ -140,7 +142,8 @@ public class ForwardedIndexChangeHandlerTest {
     ChangeIndexEvent changeIndexEvent =
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
-    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
+    assertThat(handler.handleSync(changeIndexEvent, EventMetadata.EMPTY))
+        .isEqualTo(IndexingResult.RETRY);
 
     verify(indexerMock, never()).index(any(ChangeNotes.class));
   }
@@ -156,9 +159,10 @@ public class ForwardedIndexChangeHandlerTest {
 
     ChangeIndexEvent changeIndexEvent =
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
+    EventMetadata metadata = EventMetadata.EMPTY;
     for (int i = 0; i < MAX_INDEX_TRIES; i++) {
-      assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.RETRY);
-      changeIndexEvent.markRetry("instance-id");
+      assertThat(handler.handleSync(changeIndexEvent, metadata)).isEqualTo(IndexingResult.RETRY);
+      metadata = metadata.nextRetry("instance-id");
     }
     handler =
         new ForwardedIndexChangeHandler(
@@ -168,7 +172,7 @@ public class ForwardedIndexChangeHandlerTest {
             ctxMock,
             changeCheckerPresentMock,
             queryProviderMock);
-    assertThat(handler.handleSync(changeIndexEvent)).isEqualTo(IndexingResult.FAILURE);
+    assertThat(handler.handleSync(changeIndexEvent, metadata)).isEqualTo(IndexingResult.FAILURE);
     assertThat(handler.indexingRetryTaskMap).doesNotContainKey(TEST_CHANGE_ID);
 
     verify(indexerMock, never()).index(any(ChangeNotes.class));
@@ -189,9 +193,10 @@ public class ForwardedIndexChangeHandlerTest {
     ChangeIndexEvent changeIndexEvent =
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
 
-    IndexingResult initialAttempt = handler.handleSync(changeIndexEvent);
-    changeIndexEvent.markRetry("instance-id");
-    IndexingResult earlyRedelivery = handler.handleSync(changeIndexEvent);
+    EventMetadata metadata = EventMetadata.EMPTY;
+    IndexingResult initialAttempt = handler.handleSync(changeIndexEvent, metadata);
+    metadata = metadata.nextRetry("instance-id");
+    IndexingResult earlyRedelivery = handler.handleSync(changeIndexEvent, metadata);
 
     assertThat(initialAttempt).isEqualTo(IndexingResult.RETRY);
     assertThat(earlyRedelivery).isEqualTo(IndexingResult.THROTTLED);
@@ -201,19 +206,21 @@ public class ForwardedIndexChangeHandlerTest {
   public void shouldTrackSynchronousRetriesIndependentlyForEachEvent() throws Exception {
     ChangeIndexEvent firstEvent =
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
-    assertThat(handler.handleSync(firstEvent)).isEqualTo(IndexingResult.RETRY);
-    firstEvent.markRetry("instance-id");
+    assertThat(handler.handleSync(firstEvent, EventMetadata.EMPTY)).isEqualTo(IndexingResult.RETRY);
 
     ChangeIndexEvent anotherEvent =
         new ChangeIndexEvent(TEST_PROJECT, TEST_CHANGE_NUMBER, false, "instance-id");
-    assertThat(handler.handleSync(anotherEvent)).isEqualTo(IndexingResult.RETRY);
+    assertThat(handler.handleSync(anotherEvent, EventMetadata.EMPTY))
+        .isEqualTo(IndexingResult.RETRY);
 
     assertThat(handler.indexingRetryTaskMap).isEmpty();
   }
 
   @Test
   public void shouldDeleteAllProjectChangesSynchronously() throws Exception {
-    handler.handleSync(ChangeIndexEvent.allChangesDeletedForProject(TEST_PROJECT, "instance-id"));
+    handler.handleSync(
+        ChangeIndexEvent.allChangesDeletedForProject(TEST_PROJECT, "instance-id"),
+        EventMetadata.EMPTY);
 
     verify(indexerMock).deleteAllForProject(Project.nameKey(TEST_PROJECT));
   }
