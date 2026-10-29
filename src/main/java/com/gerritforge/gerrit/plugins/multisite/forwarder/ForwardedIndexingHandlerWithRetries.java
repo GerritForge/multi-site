@@ -11,6 +11,7 @@
 
 package com.gerritforge.gerrit.plugins.multisite.forwarder;
 
+import com.gerritforge.gerrit.eventbroker.EventMetadata;
 import com.gerritforge.gerrit.plugins.multisite.Configuration;
 import com.gerritforge.gerrit.plugins.multisite.forwarder.events.IndexEvent;
 import com.gerritforge.gerrit.plugins.multisite.index.IndexEntityChecker;
@@ -71,13 +72,13 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
   protected abstract void attemptToIndex(T id);
 
   protected IndexingResult indexSyncIfConsistentAndUpToDate(
-      T id, E e, IndexEntityChecker<T, E> entityChecker) {
-    if (e.isRetry()) {
-      if (!throttleRetryPolling(millisSinceLastAttempt(e))) {
+      T id, E e, EventMetadata metadata, IndexEntityChecker<T, E> entityChecker) {
+    if (metadata.isRetry()) {
+      if (!throttleRetryPolling(millisSinceLastAttempt(metadata.retry()))) {
         return IndexingResult.FAILURE;
       }
 
-      if (millisSinceLastAttempt(e) < retryInterval) {
+      if (millisSinceLastAttempt(metadata.retry()) < retryInterval) {
         return IndexingResult.THROTTLED;
       }
     }
@@ -90,15 +91,16 @@ public abstract class ForwardedIndexingHandlerWithRetries<T, E extends IndexEven
       return IndexingResult.SUCCESS;
     }
 
-    if (e.getRetryCount() >= maxTries) {
+    int retryCount = metadata.isRetry() ? metadata.retry().retryCount() : 0;
+    if (retryCount >= maxTries) {
       return IndexingResult.FAILURE;
     }
 
     return IndexingResult.RETRY;
   }
 
-  private long millisSinceLastAttempt(E event) {
-    return TimeUtil.nowMs() - event.getLastAttemptOn();
+  private static long millisSinceLastAttempt(EventMetadata.Retry retry) {
+    return TimeUtil.nowMs() - retry.lastAttemptOn();
   }
 
   private boolean throttleRetryPolling(long millisSinceRetry) {
