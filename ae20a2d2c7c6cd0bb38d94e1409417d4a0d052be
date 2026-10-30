@@ -16,6 +16,24 @@
       "message": "Could we add a test using a plain Gerrit Event to verify retries filtering (and requeueing) work for non-MultiSiteEvent types as well now?",
       "revId": "ae20a2d2c7c6cd0bb38d94e1409417d4a0d052be",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d370c80d_211771f6",
+        "filename": "src/test/java/com/gerritforge/gerrit/plugins/multisite/consumer/AbstractSubscriberTestBase.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1020677
+      },
+      "writtenOn": "2026-10-30T15:59:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ead0c9b_77e61b84",
+      "revId": "ae20a2d2c7c6cd0bb38d94e1409417d4a0d052be",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
