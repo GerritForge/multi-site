@@ -40,9 +40,23 @@ function check_application_requirements {
   type git >/dev/null 2>&1 || { echo >&2 "Require git but it's not installed. Aborting."; exit 1; }
 }
 
+case "$(uname -s)" in
+  Linux)
+    DOCKER_COMPOSE="docker compose"
+    ;;
+  Darwin)
+    DOCKER_COMPOSE=/Applications/Docker.app/Contents/Resources/cli-plugins/docker-compose
+    ;;
+  *)
+    echo >&2 "Unsupported operating system: $(uname -s)"
+    exit 1
+    ;;
+esac
+
+(test $(uname -s) '=' Linux && echo 'docker compose') || (test $(uname -s) '=' Darwin && echo '/Applications/Docker.app/Contents/Resources/cli-plugins/docker-compose'))
+
 function compose {
-  docker compose "$@" 2>/dev/null ||
-    /Applications/Docker.app/Contents/Resources/cli-plugins/docker-compose "$@"
+  $DOCKER_COMPOSE "$@"
 }
 
 function setup_zookeeper_config {
