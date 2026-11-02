@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe195e88_8dff6437",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-11-02T10:37:58Z",
+      "side": 1,
+      "message": "Currently, we are not explicitly failing. I still think it is correct but we should implement it in the script.",
+      "range": {
+        "startLine": 13,
+        "startChar": 30,
+        "endLine": 14,
+        "endChar": 33
+      },
+      "revId": "6b0e95cbb945c6b7e6e560d74b5f6c0b9a7a3708",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf5a41a2_992518da",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1012541
+      },
+      "writtenOn": "2026-11-02T10:37:58Z",
+      "side": 1,
+      "message": "What about a switch case? It would read better and easily handle unsupported OS, which we are not currently doing:\n\n```bash\ncase \"$(uname -s)\" in\n  Linux)\n    DOCKER_COMPOSE\u003d(docker compose)\n    ;;\n  Darwin)\n    DOCKER_COMPOSE\u003d(\n      /Applications/Docker.app/Contents/Resources/cli-plugins/docker-compose\n    )\n    ;;\n  *)\n    echo \u003e\u00262 \"Unsupported operating system: $(uname -s)\"\n    exit 1\n    ;;\nesac\n```",
+      "revId": "6b0e95cbb945c6b7e6e560d74b5f6c0b9a7a3708",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
