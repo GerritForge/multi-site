@@ -39,6 +39,30 @@
       },
       "revId": "3425216942d0500f5672d1ac236bdad288815b91",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18d73977_a2326f94",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1015244
+      },
+      "writtenOn": "2026-11-02T16:37:10Z",
+      "side": 1,
+      "message": "Good point. The fallback was intended to handle a missing Docker Compose\ninstallation, but it also runs when a Compose command fails for another\nreason, potentially hiding the original error.\n\nFor the reader, a fix is available at [1].\n\n[1] https://review.gerrithub.io/c/GerritForge/multi-site/+/1257443",
+      "parentUuid": "e835e515_c7901214",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 79
+      },
+      "revId": "3425216942d0500f5672d1ac236bdad288815b91",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ],
   "submitRequirementResults": []
