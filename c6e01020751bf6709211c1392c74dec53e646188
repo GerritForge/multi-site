@@ -22,6 +22,30 @@
       },
       "revId": "c6e01020751bf6709211c1392c74dec53e646188",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d133f9b_81398558",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-11-03T18:02:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2cfe584_d4168fe3",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 168
+      },
+      "revId": "c6e01020751bf6709211c1392c74dec53e646188",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
