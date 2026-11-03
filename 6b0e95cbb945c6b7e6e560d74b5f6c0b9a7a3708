@@ -24,6 +24,30 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1242e12_7bd13d85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-11-03T08:47:37Z",
+      "side": 1,
+      "message": "We run `exit 1`, which is a failure (exit code \u003d 0 is success; anything different from zero is a failure).",
+      "parentUuid": "fe195e88_8dff6437",
+      "range": {
+        "startLine": 13,
+        "startChar": 30,
+        "endLine": 14,
+        "endChar": 33
+      },
+      "revId": "6b0e95cbb945c6b7e6e560d74b5f6c0b9a7a3708",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf5a41a2_992518da",
@@ -37,6 +61,24 @@
       "writtenOn": "2026-11-02T10:37:58Z",
       "side": 1,
       "message": "What about a switch case? It would read better and easily handle unsupported OS, which we are not currently doing:\n\n```bash\ncase \"$(uname -s)\" in\n  Linux)\n    DOCKER_COMPOSE\u003d(docker compose)\n    ;;\n  Darwin)\n    DOCKER_COMPOSE\u003d(\n      /Applications/Docker.app/Contents/Resources/cli-plugins/docker-compose\n    )\n    ;;\n  *)\n    echo \u003e\u00262 \"Unsupported operating system: $(uname -s)\"\n    exit 1\n    ;;\nesac\n```",
+      "revId": "6b0e95cbb945c6b7e6e560d74b5f6c0b9a7a3708",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aab4a1a8_e9010ff4",
+        "filename": "e2e-tests/test.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2026-11-03T08:47:37Z",
+      "side": 1,
+      "message": "Sure, done.",
+      "parentUuid": "bf5a41a2_992518da",
       "revId": "6b0e95cbb945c6b7e6e560d74b5f6c0b9a7a3708",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
